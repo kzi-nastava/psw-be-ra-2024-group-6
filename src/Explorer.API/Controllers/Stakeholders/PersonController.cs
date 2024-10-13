@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
 
 namespace Explorer.API.Controllers.Stakeholders
 {
@@ -17,12 +18,19 @@ namespace Explorer.API.Controllers.Stakeholders
         }
 
         [HttpGet("{userId:int}")]
-        public ActionResult<Person> Get(int userId)
+        public ActionResult<Person> GetByUserId(int userId)
         {
-            var result = _personService.Get(userId);
+            var result = _personService.GetByUserId(userId);
 
             return CreateResponse(result);
 
+        }
+
+        [HttpPut]
+        public ActionResult<PersonDto> Update([FromBody] PersonDto person)
+        {
+            var result = _personService.Update(person);
+            return CreateResponse(result);
         }
 
     }

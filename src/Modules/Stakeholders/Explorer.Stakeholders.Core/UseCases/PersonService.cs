@@ -25,10 +25,16 @@ namespace Explorer.Stakeholders.Core.UseCases
             this.mapper = mapper;
         }
 
-        Result<PersonDto> IPersonService.Get(int id)
+        Result<PersonDto> IPersonService.GetByUserId(int id)
         {
-            var el = MapToDto(_personRepository.Get(id));
+            var el = MapToDto(_personRepository.GetByUserId(id));
             return el;
+        }
+
+        Result<PersonDto> IPersonService.Update(PersonDto person)
+        {
+            var el = _personRepository.Update(MapToDomain(person));
+            return MapToDto(el);
         }
     }
 }
