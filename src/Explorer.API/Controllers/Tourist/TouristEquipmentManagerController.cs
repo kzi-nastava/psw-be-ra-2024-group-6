@@ -17,7 +17,7 @@ public class TouristEquipmentManagerController : BaseApiController
     }
 
     [HttpGet]
-    public ActionResult<List<TouristEquipmentManagerDto>> GetTouristEquipment(int touristId)
+    public ActionResult<List<TouristEquipmentManagerDto>> GetTouristEquipment([FromQuery] int touristId)
     {
         var result = _touristEquipmentManagerService.GetTouristEquipment(touristId);
         return CreateResponse(result);
