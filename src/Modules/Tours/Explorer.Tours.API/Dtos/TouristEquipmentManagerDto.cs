@@ -9,7 +9,7 @@ namespace Explorer.Tours.API.Dtos;
 
 public class TouristEquipmentManagerDto
 {
+    public int Id { get; set; }
     public int TouristId { get; set; }
-    public Collection<EquipmentDto> EquipmentList { get; set; }
-    public Collection<EquipmentDto> PersonalCollection { get; set; }
+    public int EquipmentId { get; set; }
 }

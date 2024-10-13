@@ -11,8 +11,7 @@ namespace Explorer.Tours.API.Public;
 
 public interface ITouristEquipmentManagerService
 {
-    Result<PagedResult<TouristEquipmentManagerDto>> GetPaged(int page, int pageSize);
-    Result<TouristEquipmentManagerDto> Update(TouristEquipmentManagerDto equipment);
+    Result<List<TouristEquipmentManagerDto>> GetTouristEquipment(int touristId);
     Result<TouristEquipmentManagerDto> Create(TouristEquipmentManagerDto equipment);
-    Result Delete(int id);
+    Result Delete(int touristId, int equipmentId);
 }
