@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Tours.Core.UseCases.TouristEquipmentManagement;
+namespace Explorer.Tours.Core.UseCases.Administration;
 
 public class TouristEquipmentManagerService : BaseService<TouristEquipmentManagerDto, TouristEquipmentManager>, ITouristEquipmentManagerService
 {
