@@ -27,6 +27,10 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<ClubDto> Create([FromBody] ClubDto club)
         {
+            var id = HttpContext.User.Claims.First(x => x.Type == "id");
+            long longValue;
+            long.TryParse(id.Value, out longValue);
+            club.OwnerId = longValue;
             var result = _clubService.Create(club);
             return CreateResponse(result);
         }

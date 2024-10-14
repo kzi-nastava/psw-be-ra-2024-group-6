@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.API.Controllers.Tourist;
@@ -8,6 +9,7 @@ using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Tours.Infrastructure.Database;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -91,7 +93,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Clubs
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(updatedCLub.Id);
+            result.Id.ShouldBe(-10);
             result.Name.ShouldBe(updatedCLub.Name);
             result.Description.ShouldBe(updatedCLub.Description);
 
@@ -133,13 +135,13 @@ namespace Explorer.Stakeholders.Tests.Integration.Clubs
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(-10); 
+            var result = (OkResult)controller.Delete(-20); 
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedClub = dbContext.Clubs.FirstOrDefault(i => i.Id == -10);
+            var storedClub = dbContext.Clubs.FirstOrDefault(i => i.Id == -20);
             storedClub.ShouldBeNull();
         }
 
@@ -158,11 +160,26 @@ namespace Explorer.Stakeholders.Tests.Integration.Clubs
             result.StatusCode.ShouldBe(404);
         }
 
-        private static ClubController CreateController(IServiceScope scope)
+        private static ClubController CreateController(IServiceScope scope, string userId = "-21")
         {
-            return new ClubController(scope.ServiceProvider.GetRequiredService<IClubService>())
+            var controller = new ClubController(scope.ServiceProvider.GetRequiredService<IClubService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildLocalContext(userId)
+            };
+            return controller;
+        }
+
+        private static ControllerContext BuildLocalContext(string userId)
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("id", userId), 
+                new Claim(ClaimTypes.Role, "tourist") 
+            }, "mock"));
+
+            return new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext { User = user }
             };
         }
 
