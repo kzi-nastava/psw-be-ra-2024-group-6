@@ -9,9 +9,11 @@ namespace Explorer.Stakeholders.API.Dtos
 {
     public class UserDto
     {
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }    //Could not set it to UserRole
         public bool IsActive { get; set; }
+        public bool IsBlocked {  get; set; }
     }
 }

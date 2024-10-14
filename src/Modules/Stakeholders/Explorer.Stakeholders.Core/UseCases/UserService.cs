@@ -23,15 +23,17 @@ namespace Explorer.Stakeholders.Core.UseCases
             this.mapper = mapper;
         }
 
-        public Result<UserDto> Update(int id) //void??
+        public new Result<UserDto> Update(UserDto user)
         {
-            User user = _crudRepository.Get(id); //might need to be separated into a separate function
-            var result = MapToDto(_crudRepository.Update(user));
+            
+            var result = MapToDto(_crudRepository.Update(MapToDomain(user)));
             return result;
         }
 
-        public new PagedResult<UserDto> GetPaged(int page, int pageSize) //might not work not sure
+        public PagedResult<UserDto> GetPaged() //might not work not sure
         {
+            int page = 1;
+            int pageSize = 10;
             var result = MapToDto(_crudRepository.GetPaged(page, pageSize));
             if(result.IsFailed)
             {
