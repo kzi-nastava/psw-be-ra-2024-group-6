@@ -8,12 +8,55 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
-    public class RequiredEquipmentService : CrudService<RequiredEquipmentDto, RequiredEquipment>, IRequiredEquipmentService
+    public class RequiredEquipmentService : BaseService<RequiredEquipmentDto, RequiredEquipment>, IRequiredEquipmentService
     {
-        public RequiredEquipmentService(ICrudRepository<RequiredEquipment> crudRepository, IMapper mapper) : base(crudRepository, mapper) {}
+        private readonly IRequiredEquipmentRepository _requiredEquipmentRepository;
+        public RequiredEquipmentService(IRequiredEquipmentRepository requiredEquipmentRepository, IMapper mapper) : base(mapper)
+        {
+            _requiredEquipmentRepository = requiredEquipmentRepository;
+        }
+        public Result<RequiredEquipmentDto> Create(RequiredEquipmentDto requiredEquipment)
+        {
+            try
+            {
+                var result = _requiredEquipmentRepository.Create(MapToDomain(requiredEquipment));
+                return MapToDto(result);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result Delete(int id)
+        {
+            try
+            {
+                _requiredEquipmentRepository.Delete(id);
+                return Result.Ok();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<RequiredEquipmentDto>> GetAllByTour(int tourId)
+        {
+            try
+            {
+                var result = _requiredEquipmentRepository.GetAllByTour(tourId).ToList();
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

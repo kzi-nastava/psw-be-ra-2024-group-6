@@ -12,18 +12,18 @@ namespace Explorer.Tours.Core.Domain
     public class RequiredEquipment : Entity
     {
         public int TourId { get; private set; }
-        public ICollection<int> EquipmentIds { get; private set; }
+        public int EquipmentId { get; private set; }
 
-        public RequiredEquipment(int tourId, ICollection<int> equipmentIds)
+        public RequiredEquipment(int tourId, int equipmentId)
         {
             TourId = tourId;
-            EquipmentIds = equipmentIds;
+            EquipmentId = equipmentId;
         }
 
         private void Validate()
         {
             if (TourId <= 0) throw new ArgumentException("Invalid TourId");
-            if (EquipmentIds == null) throw new ArgumentException("EquipmentIds must be initialized");
+            if (EquipmentId <= 0) throw new ArgumentException("Invalid EquipmentId");
         }
     }
 }

@@ -1,0 +1,8 @@
+﻿namespace Explorer.Tours.Core.Domain.RepositoryInterfaces;
+
+public interface IRequiredEquipmentRepository
+{
+    public RequiredEquipment Create(RequiredEquipment requiredEquipment);
+    public bool Delete(long id);
+    public ICollection<RequiredEquipment> GetAllByTour(int tourId);
+}

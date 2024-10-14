@@ -11,10 +11,8 @@ namespace Explorer.Tours.API.Public.Administration
 {
     public interface IRequiredEquipmentService
     {
-        public Result<PagedResult<RequiredEquipmentDto>> GetPaged(int page, int pageSize);
-        public Result<RequiredEquipmentDto> Get(int id);
+        public Result<List<RequiredEquipmentDto>> GetAllByTour(int tourId);
         public Result<RequiredEquipmentDto> Create(RequiredEquipmentDto requiredEquipment);
-        public Result<RequiredEquipmentDto> Update(RequiredEquipmentDto requiredEquipment);
         public Result Delete(int id);
     }
 }
