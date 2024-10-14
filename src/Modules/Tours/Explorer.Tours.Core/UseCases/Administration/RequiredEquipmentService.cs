@@ -37,10 +37,9 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
-                _requiredEquipmentRepository.Delete(id);
-                return Result.Ok();
+                return _requiredEquipmentRepository.Delete(id) ? Result.Ok() : Result.Fail(FailureCode.NotFound);
             }
-            catch (KeyNotFoundException e)
+            catch (ArgumentNullException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
