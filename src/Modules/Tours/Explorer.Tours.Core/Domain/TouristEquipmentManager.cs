@@ -11,9 +11,9 @@ namespace Explorer.Tours.Core.Domain;
 public class TouristEquipmentManager : Entity
 {
     public int TouristId { get; private set; }
-    public int EquipmentId {  get; private set; }
+    public long EquipmentId {  get; private set; }
 
-    public TouristEquipmentManager(int touristId, int equipmentId)
+    public TouristEquipmentManager(int touristId, long equipmentId)
     {
         TouristId = touristId;
         EquipmentId = equipmentId;
@@ -22,6 +22,5 @@ public class TouristEquipmentManager : Entity
     private void Validate()
     {
         if (TouristId <= 0) throw new Exception("TouristId must be a positive integer.");
-        if (EquipmentId <= 0) throw new Exception("EquipmentId must be a positive integer.");
     }
 }
