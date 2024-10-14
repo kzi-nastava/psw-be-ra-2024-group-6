@@ -10,5 +10,5 @@ public interface ITouristEquipmentManagerRepository
 {
     List<TouristEquipmentManager> GetAllByTouristId(int touristId);
     TouristEquipmentManager Create(TouristEquipmentManager equipment);
-    bool Delete(int touristId, int equipmentId);
+    void Delete(int touristId, int equipmentId);
 }

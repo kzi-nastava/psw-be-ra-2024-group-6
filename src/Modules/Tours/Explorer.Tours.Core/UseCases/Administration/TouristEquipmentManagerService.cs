@@ -36,32 +36,27 @@ public class TouristEquipmentManagerService : BaseService<TouristEquipmentManage
             _touristEquipmentManagerRepository.Create(equipmentEntity);
 
 
-            // Map the created entity back to DTO and return success
             var createdDto = MapToDto(equipmentEntity);
-            return Result.Ok(equipmentDto).WithSuccess("Creation successful");
+            return createdDto;
         }
-        catch (Exception ex)
+        catch (ArgumentException e)
         {
-            return Result.Fail<TouristEquipmentManagerDto>($"Error creating TouristEquipmentManager: {ex.Message}");
+            return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
         }
     }
     public Result Delete(int touristId, int equipmentId)
     {
         try
         {
-            var success = _touristEquipmentManagerRepository.Delete(touristId, equipmentId);
+            _touristEquipmentManagerRepository.Delete(touristId, equipmentId);
 
-            if (!success)
-            {
-                return Result.Fail("TouristEquipmentManager not found.");
-            }
-
-            return Result.Ok().WithSuccess("Deletion successful.");
+            return Result.Ok();
         }
-        catch (Exception ex)
+        catch(ArgumentNullException e)
         {
-            return Result.Fail($"Error deleting TouristEquipmentManager: {ex.Message}");
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
         }
+
     }
 
 

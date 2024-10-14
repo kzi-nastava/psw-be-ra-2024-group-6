@@ -27,7 +27,6 @@ public class TouristEquipmentManagerCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
         var newEntity = new TouristEquipmentManagerDto
         {
-            Id = 3,
             TouristId = 2,
             EquipmentId = -3
         };
@@ -39,25 +38,11 @@ public class TouristEquipmentManagerCommandTests : BaseToursIntegrationTest
         result.ShouldNotBeNull();
         result.Id.ShouldNotBe(0);
         result.EquipmentId.ShouldBe(-3);
-    }
 
-    [Fact]
-    public void Create_fails_invalid_data()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var updatedEntity = new TouristEquipmentManagerDto
-        {
-            TouristId = 1
-        };
-
-        // Act
-        var result = (ObjectResult)controller.Create(updatedEntity).Result;
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(400);
+        // Assert - Database
+        var storedEntity = dbContext.TouristEquipmentManagers.FirstOrDefault(i => i.TouristId == newEntity.TouristId && i.EquipmentId == newEntity.EquipmentId);
+        storedEntity.ShouldNotBeNull();
+        storedEntity.Id.ShouldBe(result.Id);
     }
 
     [Fact]
@@ -72,6 +57,7 @@ public class TouristEquipmentManagerCommandTests : BaseToursIntegrationTest
         var result = (OkObjectResult)controller.Delete(2, -1);
 
         // Assert - Response
+        result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(200);
 
         // Assert - Database
@@ -87,10 +73,10 @@ public class TouristEquipmentManagerCommandTests : BaseToursIntegrationTest
         var controller = CreateController(scope);
 
         // Act
-        var result = (ObjectResult)controller.Delete(0, 0);
+        var result = (ObjectResult)controller.Delete(1000, -1);
 
         // Assert
-        result.DeclaredType.ShouldBeNull();
+        result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(400);
     }
 

@@ -29,19 +29,12 @@ public class TouristEquipmentManagerRepository : ITouristEquipmentManagerReposit
         _context.SaveChanges();
         return equipment;
     }
-    public bool Delete(int touristId, int equipmentId)
+    public void Delete(int touristId, int equipmentId)
     {
         var equipment = _context.TouristEquipmentManagers
                                 .FirstOrDefault(t => t.TouristId == touristId && t.EquipmentId == equipmentId);
 
-        if (equipment == null)
-        {
-            return false;
-        }
-
         _context.TouristEquipmentManagers.Remove(equipment);
         _context.SaveChanges();
-
-        return true;
     }
 }
