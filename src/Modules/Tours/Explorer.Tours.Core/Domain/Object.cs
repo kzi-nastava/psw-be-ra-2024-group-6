@@ -14,8 +14,8 @@ public class Object : Entity
     public string ImageUrl { get; private set; }
     public string Description { get; private set; }
     public Category Category { get; private set; }
-    public int LocationId {  get; private set; } 
-    public int TourId { get; private set; }
+    public long LocationId {  get; private set; } 
+    public long TourId { get; private set; }
 }
 
 public enum Category
