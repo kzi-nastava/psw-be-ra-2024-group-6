@@ -10,11 +10,15 @@ namespace Explorer.Blog.Core.Domain
     public class BlogPicture : Entity
     {
         public string Url {  get; private set; }
-        public int BlogId { get; private set; }
+        public long BlogId { get; private set; }
+        public Blog Blog { get; private set; }
 
-        public BlogPicture(string url, int blogId) {
+        public BlogPicture() { }
+        public BlogPicture(string url, long blogId, Blog blog = null)
+        {
             Url = url;
             BlogId = blogId;
+            Blog = blog;
         }
     }
 }

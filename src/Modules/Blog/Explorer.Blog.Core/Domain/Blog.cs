@@ -23,6 +23,7 @@ namespace Explorer.Blog.Core.Domain
 
         public List<BlogPicture> Pictures { get; private set; }
 
+        private Blog() { }
 
         public Blog(string title, string description, Status status, int userId, List<BlogPicture> pictures = null) { 
             if(string.IsNullOrWhiteSpace(title)) throw new ArgumentNullException("Invalid title.");
