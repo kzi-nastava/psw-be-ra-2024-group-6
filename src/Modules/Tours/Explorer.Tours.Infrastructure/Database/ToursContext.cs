@@ -15,6 +15,13 @@ public class ToursContext : DbContext
         modelBuilder.HasDefaultSchema("tours");
 
         modelBuilder.Entity<TouristEquipmentManager>()
+        .HasKey(te => te.Id);
+
+        modelBuilder.Entity<TouristEquipmentManager>()
+        .HasIndex(te => new { te.TouristId, te.EquipmentId })
+        .IsUnique();
+
+        modelBuilder.Entity<TouristEquipmentManager>()
                 .HasOne<Equipment>()
                 .WithMany()
                 .HasForeignKey(t => t.EquipmentId)

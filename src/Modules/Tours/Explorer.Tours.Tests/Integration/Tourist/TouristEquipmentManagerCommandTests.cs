@@ -1,6 +1,7 @@
 ﻿using Explorer.API.Controllers.Tourist;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
+using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,7 +83,7 @@ public class TouristEquipmentManagerCommandTests : BaseToursIntegrationTest
 
     private static TouristEquipmentManagerController CreateController(IServiceScope scope)
     {
-        return new TouristEquipmentManagerController(scope.ServiceProvider.GetRequiredService<ITouristEquipmentManagerService>())
+        return new TouristEquipmentManagerController(scope.ServiceProvider.GetRequiredService<ITouristEquipmentManagerService>(), scope.ServiceProvider.GetRequiredService<IEquipmentService>())
         {
             ControllerContext = BuildContext("-1")
         };
