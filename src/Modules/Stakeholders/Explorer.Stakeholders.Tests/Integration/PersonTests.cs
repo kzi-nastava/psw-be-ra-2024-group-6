@@ -33,7 +33,8 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Surname = "Surname updated",
                 Description = "Description updated",
                 Motto = "Motto updated",
-                Email = "updated@gmail.com"
+                Email = "updated@gmail.com",
+                PictureURL = "updatedpicture.png"
 
             };
 
@@ -47,6 +48,7 @@ namespace Explorer.Stakeholders.Tests.Integration
             result.Surname.ShouldBe(updatedEntity.Surname);
             result.Email.ShouldBe(updatedEntity.Email);
             result.Motto.ShouldBe(updatedEntity.Motto);
+            result.PictureURL.ShouldBe(updatedEntity.PictureURL);
 
             
         }

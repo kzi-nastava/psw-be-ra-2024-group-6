@@ -12,6 +12,8 @@ public class Person : Entity
     public string Description { get; init; }
     public string Motto { get; init; }
 
+    public string PictureURL {  get; init; }
+
 
 
 
@@ -23,11 +25,12 @@ public class Person : Entity
         Email = email;
         Description = "";
         Motto = "";
+        PictureURL = "";
         Validate();
 
     }
 
-    public Person(long userId,string name, string surname, string email,string description,string motto)
+    public Person(long userId,string name, string surname, string email,string description,string motto,string picture)
     {
         UserId = userId;
         Name = name;
@@ -35,6 +38,7 @@ public class Person : Entity
         Email = email;
         Description =description;
         Motto = motto;
+        PictureURL = picture;
         Validate();
 
     }
