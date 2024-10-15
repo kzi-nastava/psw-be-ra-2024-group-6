@@ -25,6 +25,10 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpPut]
         public ActionResult<User> Update([FromBody] UserDto user)
         {
+            if(string.IsNullOrWhiteSpace(user.Username) || string.IsNullOrWhiteSpace(user.Password) || string.IsNullOrWhiteSpace(user.Role))
+            {
+                return BadRequest("Username, Password, and Role are required.");
+            }
             var result = _userService.Update(user);
             return CreateResponse(result);
         }

@@ -23,7 +23,7 @@ namespace Explorer.Stakeholders.Tests.Integration.User
         public UserTests(StakeholdersTestFactory factory) : base(factory) { }
 
         [Fact]
-        public void GetPaged_users_sucessfull()
+        public void GetPaged_users_successful()
         {
 
             // Arrange
@@ -39,7 +39,29 @@ namespace Explorer.Stakeholders.Tests.Integration.User
             result.TotalCount.ShouldBe(7);
         }
         [Fact]
-        public void Update_sucessfull()
+        public void GetPaged_users_unsuccessful_empty_database()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
+            var controller = CreateController(scope);
+
+            using var transaction = dbContext.Database.BeginTransaction(); //prevents the database from being deleted for other tests
+
+            dbContext.Users.RemoveRange(dbContext.Users);
+            dbContext.SaveChanges();
+
+            // Act
+            var result = ((ObjectResult)controller.GetPaged().Result)?.Value as PagedResult<UserDto>;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Results.Count.ShouldBe(0);
+            result.TotalCount.ShouldBe(0);
+        }
+
+        [Fact]
+        public void Update_successful()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
@@ -74,7 +96,30 @@ namespace Explorer.Stakeholders.Tests.Integration.User
             var oldEntity = dbContext.Users.FirstOrDefault(i => i.Username == "admin@gmail.com");
             oldEntity.ShouldBeNull();
         }
+        [Fact]
+        public void Update_unsuccessful_invalid_user()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var invalidUser = new UserDto
+            {
+                Id = -1,
+                Username = "",
+                Password = "IdeGas123",
+                Role = "Administrator",
+                IsActive = true,
+                IsBlocked = false
+            };
 
+            // Act
+            var result = controller.Update(invalidUser).Result;
+
+            // Assert
+            result.ShouldNotBeNull();
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Username, Password, and Role are required.", badRequestResult.Value);
+        }
         private static UserController CreateController(IServiceScope scope)
         {
             return new UserController(scope.ServiceProvider.GetRequiredService<IUserService>())

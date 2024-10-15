@@ -25,14 +25,13 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public new Result<UserDto> Update(UserDto user)
         {
-            
             var result = MapToDto(_crudRepository.Update(MapToDomain(user)));
             return result;
         }
 
-        public PagedResult<UserDto> GetPaged() //might not work not sure
+        public PagedResult<UserDto> GetPaged()
         {
-            int page = 1;
+            int page = 1;       //fixed values, change if needed
             int pageSize = 10;
             var result = MapToDto(_crudRepository.GetPaged(page, pageSize));
             if(result.IsFailed)
