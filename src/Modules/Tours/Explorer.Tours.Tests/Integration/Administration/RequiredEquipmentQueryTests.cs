@@ -25,7 +25,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetAllByTourId(1).Result)?.Value as ICollection<RequiredEquipmentDto>;
+            var result = ((ObjectResult)controller.GetAllByTourId(-1).Result)?.Value as ICollection<RequiredEquipmentDto>;
 
             // Assert
             result.ShouldNotBeNull();

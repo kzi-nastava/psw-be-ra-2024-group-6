@@ -26,8 +26,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var newEntity = new RequiredEquipmentDto
             {
-                TourId = 5,
-                EquipmentId = 5
+                TourId = -3,
+                EquipmentId = -3
             };
 
             // Act

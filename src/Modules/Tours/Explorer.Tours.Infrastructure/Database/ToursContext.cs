@@ -13,5 +13,28 @@ public class ToursContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("tours");
+
+        ConfigureRequiredEquipment(modelBuilder);
+    }
+
+    private static void ConfigureRequiredEquipment(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RequiredEquipment>(entity =>
+        {
+            entity.HasKey(re => re.Id);
+
+            entity.HasOne<Tour>()
+                .WithMany()
+                .HasForeignKey(re => re.TourId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Equipment>()
+                .WithMany()
+                .HasForeignKey(re => re.EquipmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(re => new { re.TourId, re.EquipmentId })
+                .IsUnique();
+        });
     }
 }

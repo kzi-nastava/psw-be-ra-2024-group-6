@@ -11,10 +11,10 @@ namespace Explorer.Tours.Core.Domain
 {
     public class RequiredEquipment : Entity
     {
-        public int TourId { get; private set; }
-        public int EquipmentId { get; private set; }
+        public long TourId { get; private set; }
+        public long EquipmentId { get; private set; }
 
-        public RequiredEquipment(int tourId, int equipmentId)
+        public RequiredEquipment(long tourId, long equipmentId)
         {
             TourId = tourId;
             EquipmentId = equipmentId;
