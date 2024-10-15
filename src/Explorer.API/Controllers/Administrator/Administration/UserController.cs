@@ -17,13 +17,13 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpGet]
-        public ActionResult<User> Get()
+        public ActionResult<User> GetPaged()
         {
             var result = _userService.GetPaged();
             return Ok(result);
         }
         [HttpPut]
-        public ActionResult<User> Put([FromBody] UserDto user)
+        public ActionResult<User> Update([FromBody] UserDto user)
         {
             var result = _userService.Update(user);
             return CreateResponse(result);
