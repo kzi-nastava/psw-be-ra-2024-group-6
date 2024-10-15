@@ -14,10 +14,29 @@ public class Object : Entity
     public string ImageUrl { get; private set; }
     public string Description { get; private set; }
     public Category Category { get; private set; }
-    public long LocationId {  get; private set; } 
+    public long LocationId { get; private set; }
     public long TourId { get; private set; }
-}
 
+    public Object(string name, string imageUrl, string description, Category category,long locationId, long tourId)
+    {
+        Name = name;
+        ImageUrl = imageUrl;
+        Description = description;
+        Category = category;
+        LocationId = locationId;
+        TourId = tourId;
+        Validate();
+    }
+    private void Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Invalid Name.");
+        if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
+        if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
+        if ((int)Category < 0 || (int)Category > 3) throw new ArgumentException("Invalid category");
+        if (LocationId < 0) throw new ArgumentException("Invalid locationId");
+        if (TourId < 0) throw new ArgumentException("Invalid tourId");
+    }
+}
 public enum Category
 {
     WC, Restaurant, Parking, Other
