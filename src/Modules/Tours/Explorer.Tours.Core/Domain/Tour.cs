@@ -24,23 +24,23 @@ namespace Explorer.Tours.Core.Domain
 
     public class Tour : Entity
     {
-        public int TourId { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set;}
         public Difficulty Difficulty { get; private set; }
         public List<string> Tags { get; private set; } // Lista tagova koji opisuju turu
         public double Cost { get; private set; } = 0; // Default cena je 0
         public Status Status { get; private set; } = Status.Draft; // Default status je Draft
+        
+        public long AuthorId { get; private set; }
 
 
-        public Tour(int tourId,string name, string description, Difficulty difficulty, List<string> tags)
+        public Tour(string name, string description, Difficulty difficulty, List<string> tags,long authorId)
         {
-            TourId = tourId;
             Name = name;
             Description = description;
             Difficulty = difficulty;
             Tags = new List<string>(tags); // Kreira kopiju liste tagova
-
+            AuthorId = authorId;
             Validate();
         }
 

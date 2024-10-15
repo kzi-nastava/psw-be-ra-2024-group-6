@@ -21,12 +21,13 @@ namespace Explorer.Tours.API.Dtos
     }
     public class TourDto
     {
-        public int TourId { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Difficulty Difficulty { get; set; }
-        public List<string> Tags { get; set; } // Lista tagova koji opisuju turu
+        public List<string> Tags { get; set; } = new List<string>(); // Lista tagova koji opisuju turu
         public double Cost { get; set; } = 0; // Default cena je 0
         public Status Status { get; set; } = Status.Draft; // Default status je Draft
+        public long AuthorId { get; set; }
     }
 }

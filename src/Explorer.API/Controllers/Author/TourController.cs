@@ -27,7 +27,25 @@ namespace Explorer.API.Controllers.Author
         [HttpPost]
         public ActionResult<TourDto> Create([FromBody] TourDto tour)
         {
+            var id = HttpContext.User.Claims.First(x => x.Type == "id");
+            long longValue;
+            long.TryParse(id.Value, out longValue);
+            tour.AuthorId = longValue;
             var result = _tourService.Create(tour);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<TourDto> Update([FromBody] TourDto tour)
+        {
+            var result = _tourService.Update(tour);
+            return CreateResponse(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            var result = _tourService.Delete(id);
             return CreateResponse(result);
         }
 
