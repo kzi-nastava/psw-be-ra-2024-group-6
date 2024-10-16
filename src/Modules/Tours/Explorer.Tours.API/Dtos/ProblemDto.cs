@@ -12,8 +12,8 @@ namespace Explorer.Tours.API.Dtos
         public string Priority { get;  set; }
         public DateTime Date { get;  set; }
         public string Description { get; set; }
-        public int TourId { get;  set; }
-        public int TouristId { get; set; }
+        public long TourId { get;  set; }
+        public long TouristId { get; set; }
 
     }
 }
