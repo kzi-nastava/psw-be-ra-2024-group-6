@@ -27,14 +27,39 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         Result<PersonDto> IPersonService.GetByUserId(int id)
         {
-            var el = MapToDto(_personRepository.GetByUserId(id));
-            return el;
+            try
+            {
+                var el = MapToDto(_personRepository.GetByUserId(id));
+                return el;
+            }
+            catch(KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch(ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
         }
 
         Result<PersonDto> IPersonService.Update(PersonDto person)
         {
-            var el = _personRepository.Update(MapToDomain(person));
-            return MapToDto(el);
+            try
+            {
+                var el = _personRepository.Update(MapToDomain(person));
+                return MapToDto(el);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+
+            }
+
         }
     }
 }

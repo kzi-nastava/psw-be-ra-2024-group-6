@@ -10,6 +10,7 @@ using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Microsoft.OpenApi.Validations;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
@@ -19,7 +20,6 @@ namespace Explorer.Stakeholders.Tests.Integration
         public PersonTests(StakeholdersTestFactory factory) : base(factory) { }
 
         [Fact]
-
         public void Updates()
         {
             using var scope = Factory.Services.CreateScope();
@@ -50,7 +50,53 @@ namespace Explorer.Stakeholders.Tests.Integration
             result.Motto.ShouldBe(updatedEntity.Motto);
             result.PictureURL.ShouldBe(updatedEntity.PictureURL);
 
+            var storedEntity = dbContext.People.FirstOrDefault(i => i.Id == result.Id);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Email.ShouldBe(updatedEntity.Email);
+            storedEntity.Name.ShouldBe(updatedEntity.Name);
+            var oldEntity = dbContext.People.FirstOrDefault(i => i.Name == "Ana");
+            oldEntity.ShouldBeNull();
             
+        }
+
+
+        [Fact]
+        public void Update_fails_bad_id()
+        {
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var updatedEntity = new PersonDto
+            {
+                Id = -1000,
+                UserId = -11, 
+                Name = "tfw",
+                Description = "tfw",
+                Surname = "ship it",
+                Motto   = "ok",
+                PictureURL = "pic",
+                Email = "k@gmail.com"
+            };
+
+            var result = (ObjectResult)controller.Update(updatedEntity).Result;
+
+            //assert
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(404);
+            
+           
+        }
+
+        [Fact]
+        public void gets_bad_user_id()
+        {
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var userId = 0;
+
+            var result = (ObjectResult)controller.GetByUserId(userId).Result;
+
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(200);
         }
 
         private static PersonController CreateController(IServiceScope scope)
