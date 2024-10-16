@@ -22,7 +22,7 @@ public class TouristEquipmentManagerService : BaseService<TouristEquipmentManage
         _touristEquipmentManagerRepository = touristEquipmentManagerRepository;
     }
 
-    public Result<List<TouristEquipmentManagerDto>> GetTouristEquipment(int touristId)
+    public Result<List<TouristEquipmentManagerDto>> GetAllTouristEquipments(int touristId)
     {
 
         return MapToDto(_touristEquipmentManagerRepository.GetAllByTouristId(touristId));
