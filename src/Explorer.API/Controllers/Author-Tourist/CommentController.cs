@@ -12,11 +12,11 @@ namespace Explorer.API.Controllers.Author_Tourist
     public class BlogController : BaseApiController
     {
         private readonly ICommentService _commentService;
-        private readonly ICrudRepository<Comment> _commentRepository;
 
         public BlogController(ICommentService commentService)
         {
             _commentService = commentService;
+            
         }
 
         [HttpPost]
@@ -31,7 +31,6 @@ namespace Explorer.API.Controllers.Author_Tourist
         public ActionResult<CommentDto> Update([FromBody] CommentDto comment)
         {
             var result = _commentService.Update(comment);
-            comment.CreationDate = _commentRepository.Get(comment.Id).CreationDate;
             return CreateResponse(result);
         }
 
@@ -41,10 +40,10 @@ namespace Explorer.API.Controllers.Author_Tourist
             return CreateResponse(_commentService.Get(id));
         }
 
-        [HttpDelete("{id:int}")]
+        /*[HttpDelete("{id:int}")]
         public ActionResult<CommentDto> Delete([FromQuery] int id)
         {
             return CreateResponse(_commentService.Delete(id));
-        }
+        }*/
     }
 }
