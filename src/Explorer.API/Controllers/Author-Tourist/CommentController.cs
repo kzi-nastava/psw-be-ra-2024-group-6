@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Blog.Core.Domain;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.API.Controllers.Author_Tourist
 {
@@ -37,6 +38,13 @@ namespace Explorer.API.Controllers.Author_Tourist
         public ActionResult<CommentDto> Get([FromQuery] int id)
         {
             return CreateResponse(_commentService.Get(id));
+        }
+
+        [HttpGet]
+        public ActionResult<PagedResult<EquipmentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _commentService.GetPaged(page, pageSize);
+            return CreateResponse(result);
         }
 
         [HttpDelete("{id:int}")]

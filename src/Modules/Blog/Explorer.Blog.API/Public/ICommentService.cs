@@ -1,4 +1,5 @@
 ﻿using Explorer.Blog.API.Dtos;
+using Explorer.BuildingBlocks.Core.UseCases;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Explorer.Blog.API.Public
         Result<CommentDto> Update(CommentDto comment);
         Result Delete(int id);
         Result<CommentDto> Get(int id);
+        Result<PagedResult<CommentDto>> GetPaged(int page, int pageSize);
 
     }
 }

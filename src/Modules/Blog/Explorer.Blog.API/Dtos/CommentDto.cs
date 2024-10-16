@@ -18,6 +18,8 @@ namespace Explorer.Blog.API.Dtos
 
         public int UserId { get; set; }
 
+        public int BlogId { get; set; }
+
     }
 
 }
