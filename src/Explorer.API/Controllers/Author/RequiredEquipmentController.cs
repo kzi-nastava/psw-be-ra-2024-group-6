@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Author
 {
     [Authorize(Policy = "authorPolicy")]
-    [Route("api/author/requiredEquipment")]
+    [Route("api/author/required-equipment")]
     public class RequiredEquipmentController : BaseApiController
     {
         private readonly IRequiredEquipmentService _requiredEquipmentService;
