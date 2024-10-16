@@ -8,13 +8,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
     public class ProblemService : CrudService<ProblemDto, Problem> , IProblemService
     {
+
         public ProblemService(ICrudRepository<Problem> crudRepository, IMapper mapper) : base(crudRepository, mapper)
         {
+        }
+
+        public Result<PagedResult<ProblemDto>> GetByTourId(int tourid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Result<PagedResult<ProblemDto>> GetByTouristId(int touristid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

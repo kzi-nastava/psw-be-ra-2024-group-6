@@ -15,5 +15,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<ProblemDto> Create(ProblemDto equipment);
         Result<ProblemDto> Update(ProblemDto equipment);
         Result Delete(int id);
+        Result<PagedResult<ProblemDto>> GetByTourId(int tourid);
+        Result<PagedResult<ProblemDto>> GetByTouristId(int touristid);
     }
 }
