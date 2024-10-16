@@ -28,7 +28,7 @@ namespace Explorer.Stakeholders.Core.Domain
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Invalid Name");
-            if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
+            //if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         }
     }
 }
