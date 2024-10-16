@@ -9,6 +9,7 @@ public class BlogContext : DbContext
 {
     public DbSet<BlogDomain.Blog> Blogs { get; set; }
     public DbSet<BlogPicture> BlogPictures { get; set; }
+
     public BlogContext(DbContextOptions<BlogContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -12,6 +12,13 @@ namespace Explorer.Blog.API.Dtos
         public string Url { get; set; }
         public int BlogId { get; set; }
 
-
+        
+        public BlogPictureDto() { }
+        public BlogPictureDto(string url, int blogId)
+        {
+            Url = url;
+            BlogId = blogId;
+        }
+        
     }
 }
