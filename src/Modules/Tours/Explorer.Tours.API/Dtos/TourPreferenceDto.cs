@@ -6,19 +6,12 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.API.Dtos
 {
-    public enum Difficulty
-    {
-        Easy, Medium, Hard
-    }
-    public enum TransportOptions
-    {
-        Walk, Bicycle, Car, Boat
-    }
     public class TourPreferenceDto
     {
+        public List<TransportOptionScoreDto> TransportOptionScores { get; set; }
         public int TourId { get; set; }
-        public Difficulty Difficulty { get; set; }
-        public Dictionary<TransportOptions, int> TransportOptionsScore { get; set; }
+        public long Id { get; set; }
+        public string Difficulty { get; set; }
         public List<string> Tags { get; set; }
     }
 }

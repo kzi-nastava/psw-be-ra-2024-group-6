@@ -9,6 +9,7 @@ public class ToursProfile : Profile
     public ToursProfile()
     {
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
+        CreateMap<TransportOptionScoreDto, TransportOptionScore>().ReverseMap();
         CreateMap<TourPreferenceDto, TourPreference>().ReverseMap();
     }
 }
