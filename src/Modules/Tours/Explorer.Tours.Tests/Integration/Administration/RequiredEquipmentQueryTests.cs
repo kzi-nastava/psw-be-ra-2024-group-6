@@ -29,13 +29,14 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
             // Assert
             result.ShouldNotBeNull();
-            result.Count.ShouldBe(2);
+            result.Count.ShouldBe(1);
         }
 
         private static RequiredEquipmentController CreateController(IServiceScope scope)
         {
             return new RequiredEquipmentController(
-                scope.ServiceProvider.GetRequiredService<IRequiredEquipmentService>())
+                scope.ServiceProvider.GetRequiredService<IRequiredEquipmentService>(),
+                scope.ServiceProvider.GetRequiredService<IEquipmentService>())
             {
                 ControllerContext = BuildContext("-1")
             };

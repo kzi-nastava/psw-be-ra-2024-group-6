@@ -10,10 +10,12 @@ namespace Explorer.Tours.Core.Domain
     public class Tour : Entity
     {
         public string Name { get; private set; }
+        public int AuthorId { get; private set; }
 
-        public Tour(string name)
+        public Tour(string name, int authorId)
         {
             Name = name;
+            AuthorId = authorId;
         }
     }
 }

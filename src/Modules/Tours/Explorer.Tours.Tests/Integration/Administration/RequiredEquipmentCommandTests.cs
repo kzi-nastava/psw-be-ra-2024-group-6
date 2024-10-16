@@ -10,6 +10,7 @@ using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Xunit.Abstractions;
 
 namespace Explorer.Tours.Tests.Integration.Administration
 {
@@ -39,7 +40,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.TourId.ShouldBe(newEntity.TourId);
 
             // Assert - Database
-            var storedEntity = dbContext.RequiredEquipments.FirstOrDefault(i => i.TourId == newEntity.TourId);
+            var storedEntity = dbContext.RequiredEquipments.FirstOrDefault(i => i.TourId == newEntity.TourId && i.EquipmentId == newEntity.EquipmentId);
             storedEntity.ShouldNotBeNull();
             storedEntity.Id.ShouldBe(result.Id);
         }
@@ -53,14 +54,14 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(-3);
+            var result = (OkResult)controller.Delete(-2);
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedCourse = dbContext.RequiredEquipments.FirstOrDefault(i => i.Id == -3);
+            var storedCourse = dbContext.RequiredEquipments.FirstOrDefault(i => i.Id == -2);
             storedCourse.ShouldBeNull();
         }
 
@@ -81,7 +82,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
         private static RequiredEquipmentController CreateController(IServiceScope scope)
         {
-            return new RequiredEquipmentController(scope.ServiceProvider.GetRequiredService<IRequiredEquipmentService>())
+            return new RequiredEquipmentController(scope.ServiceProvider.GetRequiredService<IRequiredEquipmentService>(), scope.ServiceProvider.GetRequiredService<IEquipmentService>())
             {
                 ControllerContext = BuildContext("-1")
             };

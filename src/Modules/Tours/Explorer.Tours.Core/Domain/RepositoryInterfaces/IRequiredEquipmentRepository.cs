@@ -3,6 +3,6 @@
 public interface IRequiredEquipmentRepository
 {
     public RequiredEquipment Create(RequiredEquipment requiredEquipment);
-    public bool Delete(long id);
+    public void Delete(long id);
     public ICollection<RequiredEquipment> GetAllByTour(int tourId);
 }

@@ -1,4 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -12,10 +14,19 @@ namespace Explorer.API.Controllers.Author
     public class RequiredEquipmentController : BaseApiController
     {
         private readonly IRequiredEquipmentService _requiredEquipmentService;
+        private readonly IEquipmentService _equipmentService;
 
-        public RequiredEquipmentController(IRequiredEquipmentService requiredEquipmentService)
+        public RequiredEquipmentController(IRequiredEquipmentService requiredEquipmentService, IEquipmentService equipmentService)
         {
             _requiredEquipmentService = requiredEquipmentService;
+            _equipmentService = equipmentService;
+        }
+
+        [HttpGet("all-equipments")]
+        public ActionResult GetAllEquipments()
+        {
+            var result = _equipmentService.GetPaged(0, 0);
+            return CreateResponse(result);
         }
 
         [HttpGet]

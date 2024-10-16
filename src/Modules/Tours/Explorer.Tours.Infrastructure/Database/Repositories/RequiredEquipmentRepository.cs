@@ -23,14 +23,12 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return requiredEquipment;
         }
 
-        public bool Delete(long id)
+        public void Delete(long id)
         {
             var requiredEquipment = _context.RequiredEquipments.Find(id);
-            if (requiredEquipment == null) return false;
+            if (requiredEquipment == null) throw new KeyNotFoundException("Not found: " + id);
             _context.RequiredEquipments.Remove(requiredEquipment);
             _context.SaveChanges();
-            return true;
-
         }
 
         public ICollection<RequiredEquipment> GetAllByTour(int tourId)
