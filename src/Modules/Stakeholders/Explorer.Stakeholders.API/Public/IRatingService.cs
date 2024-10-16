@@ -15,5 +15,6 @@ namespace Explorer.Stakeholders.API.Public
         Result<PagedResult<RatingDto>> GetPaged(int page, int pageSize);
         Result<RatingDto> Create(RatingDto rating);
         Result<RatingDto> Update(RatingDto rating);
+        Result Delete(int id);
     }
 }

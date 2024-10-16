@@ -37,5 +37,12 @@ namespace Explorer.API.Controllers.Tourist
             var updateResult = _ratingService.Update(ratingDto);
             return CreateResponse(updateResult);
         }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            var deleteResult = _ratingService.Delete(id);
+            return CreateResponse(deleteResult);
+        }
     }
 }
