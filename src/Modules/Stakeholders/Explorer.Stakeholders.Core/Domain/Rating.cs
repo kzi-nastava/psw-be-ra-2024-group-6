@@ -30,7 +30,7 @@ namespace Explorer.Stakeholders.Core.Domain
         {
             RatingId = ratingId;
             UserId = userId;
-            starRating = StarRating;
+            StarRating = starRating;
             Comment = comment;
             PostedAt = DateTime.Now;
         }
