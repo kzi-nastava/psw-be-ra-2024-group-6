@@ -30,5 +30,12 @@ namespace Explorer.API.Controllers.Tourist
             var createdRating = _ratingService.Create(ratingDto);
             return CreateResponse(createdRating);
         }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<RatingDto> Update([FromBody] RatingDto ratingDto)
+        {
+            var updateResult = _ratingService.Update(ratingDto);
+            return CreateResponse(updateResult);
+        }
     }
 }
