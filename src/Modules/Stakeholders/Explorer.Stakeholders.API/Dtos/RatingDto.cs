@@ -18,7 +18,7 @@ namespace Explorer.Stakeholders.API.Dtos
 
     public class RatingDto
     {
-        public int RatingId { get; set; }
+        public int Id { get; set; }
         public int UserId { get; set; }
         public StarRating StarRating { get; set; }
         public string Comment { get; set; }

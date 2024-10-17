@@ -27,10 +27,6 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<RatingDto> Create([FromBody] RatingDto ratingDto)
         {
-            if (!Enum.IsDefined(typeof(StarRating), ratingDto.StarRating))
-            {
-                return BadRequest("Invalid star rating provided.");
-            }
             var createdRating = _ratingService.Create(ratingDto);
             return CreateResponse(createdRating);
         }
@@ -38,10 +34,6 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPut("{id:int}")]
         public ActionResult<RatingDto> Update([FromBody] RatingDto ratingDto)
         {
-            if (!Enum.IsDefined(typeof(StarRating), ratingDto.StarRating))
-            {
-                return BadRequest("Invalid star rating provided.");
-            }
             var updateResult = _ratingService.Update(ratingDto);
             return CreateResponse(updateResult);
         }
