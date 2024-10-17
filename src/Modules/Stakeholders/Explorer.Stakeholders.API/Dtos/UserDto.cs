@@ -15,5 +15,6 @@ namespace Explorer.Stakeholders.API.Dtos
         public string Role { get; set; }    //Could not set it to UserRole
         public bool IsActive { get; set; }
         public bool IsBlocked {  get; set; }
+        public string Email { get; set; }
     }
 }

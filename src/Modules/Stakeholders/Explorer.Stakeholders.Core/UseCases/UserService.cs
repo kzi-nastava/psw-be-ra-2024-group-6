@@ -16,10 +16,12 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class UserService : CrudService<UserDto, User>, IUserService
     {
         private readonly ICrudRepository<User> _crudRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper mapper;
-        public UserService(ICrudRepository<User> crudRepository, IMapper mapper) : base(crudRepository,mapper)
+        public UserService(ICrudRepository<User> crudRepository, IUserRepository userRepository, IMapper mapper) : base(crudRepository,mapper)
         {
             _crudRepository = crudRepository;
+            _userRepository = userRepository;
             this.mapper = mapper;
         }
 
@@ -38,6 +40,23 @@ namespace Explorer.Stakeholders.Core.UseCases
             {
                 throw new Exception("Failed to map");
             }
+            var users = result.Value.Results;
+
+            foreach(var userDto in users)
+            {
+                var email = _userRepository.GetUserEmail(userDto.Id);
+
+                if(!string.IsNullOrEmpty(email))
+                {
+                    userDto.Email = email;
+                }
+                else
+                {
+                    userDto.Email = "N/A";
+                }
+
+            }
+
             return result.Value;
         }
     }
