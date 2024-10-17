@@ -9,5 +9,6 @@ public class StakeholderProfile : Profile
     public StakeholderProfile()
     {
         CreateMap<PersonDto, Person>().ReverseMap();
+        CreateMap<UserDto, User>().ReverseMap();
     }
 }
