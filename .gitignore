@@ -8,6 +8,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#ignore db connection string configuration
+src/BuildingBlocks/Explorer.BuildingBlocks.Infrastructure/Database/DbConnectionStringBuilder.cs
+src/BuildingBlocks/Explorer.BuildingBlocks.Tests/BaseTestFactory.cs
+
 # User-specific files
 *.rsuser
 *.suo
