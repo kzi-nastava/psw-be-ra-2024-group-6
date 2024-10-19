@@ -7,7 +7,7 @@ namespace Explorer.Tours.Infrastructure.Database;
 public class ToursContext : DbContext
 {
     public DbSet<Equipment> Equipment { get; set; }
-    public DbSet<Problem> Problems { get; set; }
+    
     public DbSet<Tour> Tours { get; set; }
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
@@ -19,10 +19,7 @@ public class ToursContext : DbContext
     private static void ConfigureTour(ModelBuilder modelBuilder)
     {
         
-        modelBuilder.Entity<Problem>()
-            .HasOne<Tour>()
-            .WithMany()
-            .HasForeignKey(p => p.TourId);
+        
         
     }
 }

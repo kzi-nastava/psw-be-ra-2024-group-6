@@ -1,12 +1,13 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Explorer.Tours.Core.Domain
+namespace Explorer.Stakeholders.Core.Domain
 {
     public class Problem : Entity
     {
@@ -32,8 +33,6 @@ namespace Explorer.Tours.Core.Domain
             if (string.IsNullOrWhiteSpace(Category)) throw new ArgumentException("Invalid Category.");
             if (string.IsNullOrWhiteSpace(Priority)) throw new ArgumentException("Invalid Priority");
             if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
-            if (TourId < 0) throw new ArgumentException("Invalid tourId");
-            if (TouristId < 0) throw new ArgumentException("Invalid touristId");
         }
 
     }

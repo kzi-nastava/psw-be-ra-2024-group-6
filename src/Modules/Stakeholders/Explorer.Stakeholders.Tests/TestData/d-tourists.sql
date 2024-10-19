@@ -1,9 +1,9 @@
 ﻿INSERT INTO stakeholders."Tourists"(
 	"Id", "UserId")
-	VALUES (0, -21);
+	VALUES (-1, -21);
 INSERT INTO stakeholders."Tourists"(
 	"Id", "UserId")
-	VALUES (1, -23);
+	VALUES (-2, -23);
 INSERT INTO stakeholders."Tourists"(
 	"Id", "UserId")
-	VALUES (2, -22);
+	VALUES (-3, -22);

@@ -1,9 +1,11 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.API.Public.Administration;
+using Explorer.Stakeholders.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -27,6 +29,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<ProblemDto> Create([FromBody] ProblemDto problem)
         {
+            Debug.WriteLine(problem.Id);
             var result = _problemService.Create(problem);
             return CreateResponse(result);
         }
@@ -41,6 +44,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
+            Debug.WriteLine(id);
             var result = _problemService.Delete(id);
             return CreateResponse(result);
         }
