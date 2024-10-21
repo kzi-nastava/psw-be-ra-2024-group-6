@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.Core.Domain;
+﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Explorer.Stakeholders.Core.Domain;
 
@@ -9,8 +10,9 @@ public class ToursContext : DbContext
 {
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Tour> Tours { get; set; }
-    //public DbSet<User> Users { get; set; }
-    //public DbSet<Person> People { get; set; }
+
+    public DbSet<RequiredEquipment> RequiredEquipments { get; set; }
+    public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
@@ -18,27 +20,51 @@ public class ToursContext : DbContext
     {
         modelBuilder.HasDefaultSchema("tours");
 
-        //modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
-
-        //ConfigureStakeholder(modelBuilder);
-
+        ConfigureTour(modelBuilder);
     }
-
-
-    private static void ConfigureStakeholder(ModelBuilder modelBuilder)
+    private static void ConfigureTour(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Person>()
-            .HasOne<User>()
-            .WithOne()
-            .HasForeignKey<Person>(s => s.UserId);
+        
+        modelBuilder.Entity<TouristEquipmentManager>()
+        .HasKey(te => te.Id);
 
+        modelBuilder.Entity<TouristEquipmentManager>()
+        .HasIndex(te => new { te.TouristId, te.EquipmentId })
+        .IsUnique();
 
-        modelBuilder.Entity<Tour>()
-            .HasOne<User>()
-            .WithMany()
-            .HasForeignKey(c => c.AuthorId)
-            ;
+        modelBuilder.Entity<TouristEquipmentManager>()
+                .HasOne<Equipment>()
+                .WithMany()
+                .HasForeignKey(t => t.EquipmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+        ConfigureRequiredEquipment(modelBuilder);
     }
+
+    private static void ConfigureRequiredEquipment(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RequiredEquipment>(entity =>
+        {
+            entity.HasKey(re => re.Id);
+
+            entity.HasOne<Tour>()
+                .WithMany()
+                .HasForeignKey(re => re.TourId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Equipment>()
+                .WithMany()
+                .HasForeignKey(re => re.EquipmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(re => new { re.TourId, re.EquipmentId })
+                .IsUnique();
+        });
+
+    }
+
+
+    
 
 
 }

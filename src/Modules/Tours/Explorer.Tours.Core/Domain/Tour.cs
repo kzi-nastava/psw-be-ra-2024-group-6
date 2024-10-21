@@ -1,4 +1,6 @@
-﻿using System;
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,6 +51,7 @@ namespace Explorer.Tours.Core.Domain
             if (string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Name is required.");
             if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Description is required.");
             if (Tags == null || Tags.Count == 0) throw new ArgumentException("At least one tag is required.");
+
         }
 
     }
