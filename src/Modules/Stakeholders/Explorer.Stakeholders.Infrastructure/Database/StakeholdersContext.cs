@@ -8,6 +8,8 @@ public class StakeholdersContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Person> People { get; set; }
 
+    public DbSet<Author> Author { get; set; }
+
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,5 +27,12 @@ public class StakeholdersContext : DbContext
             .HasOne<User>()
             .WithOne()
             .HasForeignKey<Person>(s => s.UserId);
+
+        modelBuilder.Entity<Author>()
+            .HasOne<User>()
+            .WithOne()
+            .HasForeignKey<Author>(a => a.UserId);
     }
+
+
 }

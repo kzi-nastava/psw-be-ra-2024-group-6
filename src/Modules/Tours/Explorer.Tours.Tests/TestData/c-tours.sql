@@ -10,5 +10,3 @@ INSERT INTO tours."Tours"(
 INSERT INTO tours."Tours"(
 	"Id", "Name", "Description", "Difficulty", "Tags", "Cost", "Status", "AuthorId")
 	VALUES (-4, 'Tura4', 'Opis4', 0 ,'{{park,tvrdjava}}', 1.0, 1,1);
-
-
