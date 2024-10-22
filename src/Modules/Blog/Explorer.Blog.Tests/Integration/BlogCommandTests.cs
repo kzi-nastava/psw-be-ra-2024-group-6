@@ -66,7 +66,7 @@ namespace Explorer.Blog.Tests.Integration
             var controller = CreateController(scope);
             var updatedEntity = new BlogDto
             {
-                Description = "Test"
+                
             };
 
             // Act

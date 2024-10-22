@@ -26,8 +26,7 @@ namespace Explorer.Blog.Core.Domain
         private Blog() { }
 
         public Blog(string title, string description, Status status, int userId, List<BlogPicture> pictures = null) { 
-            if(string.IsNullOrWhiteSpace(title)) throw new ArgumentNullException("Invalid title.");
-            if(string.IsNullOrWhiteSpace(description)) throw new ArgumentNullException("Invalid description.");
+            if(string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(description)) throw new ArgumentNullException("Invalid title.");
             if(status == null) throw new ArgumentNullException("Invalid status.");
             Title = title;
             Description = description;
