@@ -30,8 +30,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
             {
                 Name = "Obuća za grub teren",
                 Description = "Patike sa tvrdim đonom i kramponima koje daju stabilnost na neravnom i rastresitom terenu.",
-                LocationId = 1,
-                TourId = 1,
+                LocationId = -1000,
+                TourId = -3,
                 ImageUrl = "neka/putanja"
 
             };
@@ -45,7 +45,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.Name.ShouldBe(newEntity.Name);
 
             // Assert - Database
-            var storedEntity = dbContext.Checkpoint.FirstOrDefault(i => i.Name == newEntity.Name);
+            var storedEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == newEntity.Name);
             storedEntity.ShouldNotBeNull();
             storedEntity.Id.ShouldBe(result.Id);
         }
@@ -79,11 +79,11 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var updatedEntity = new CheckpointDto
             {
-                Id = 1,
+                Id = -2,
                 Name = "Big",
                 Description = "Predaleko je",
-                LocationId = 0,
-                TourId = 0,
+                LocationId = -2,
+                TourId = -2,
                 ImageUrl = "neka/putanja/doslike"
 
             };
@@ -93,15 +93,15 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(1);
+            result.Id.ShouldBe(-2);
             result.Name.ShouldBe(updatedEntity.Name);
             result.Description.ShouldBe(updatedEntity.Description);
 
             // Assert - Database
-            var storedEntity = dbContext.Checkpoint.FirstOrDefault(i => i.Name == "Big");
+            var storedEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Big");
             storedEntity.ShouldNotBeNull();
             storedEntity.Description.ShouldBe(updatedEntity.Description);
-            var oldEntity = dbContext.Checkpoint.FirstOrDefault(i => i.Name == "Promenada");
+            var oldEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Promenada");
             oldEntity.ShouldBeNull();
         }
 
@@ -138,14 +138,14 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(2);
+            var result = (OkResult)controller.Delete(-1000);
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedCourse = dbContext.Equipment.FirstOrDefault(i => i.Id == 2);
+            var storedCourse = dbContext.Equipment.FirstOrDefault(i => i.Id == -1000);
             storedCourse.ShouldBeNull();
         }
 
@@ -157,7 +157,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
 
             // Act
-            var result = (ObjectResult)controller.Delete(-1000);
+            var result = (ObjectResult)controller.Delete(-2000);
 
             // Assert
             result.ShouldNotBeNull();

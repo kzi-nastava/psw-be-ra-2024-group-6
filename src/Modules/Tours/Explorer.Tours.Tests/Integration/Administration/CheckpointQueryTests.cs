@@ -26,11 +26,11 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
             // Act
-            var result = ((ObjectResult)controller.GetAll(0, 1).Result)?.Value as PagedResult<CheckpointDto>;
+            var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<CheckpointDto>;
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(2);
-            result.TotalCount.ShouldBe(2);
+            result.Results.Count.ShouldBe(3);
+            result.TotalCount.ShouldBe(3);
         }
         private static CheckpointController CreateController(IServiceScope scope)
         {

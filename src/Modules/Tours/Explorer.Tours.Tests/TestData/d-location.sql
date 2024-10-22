@@ -1,6 +1,8 @@
 ﻿INSERT INTO tours."Locations"("Id", "latitude", "longitude")
-	VALUES (0, 1000, 2000);
+	VALUES (-1, 1000, 2000);
 INSERT INTO tours."Locations"("Id", "latitude", "longitude")
-	VALUES (1, 6, 6);
+	VALUES (-2, 6, 6);
 INSERT INTO tours."Locations"("Id", "latitude", "longitude")
-	VALUES (2, 1, 1);
+	VALUES (-3, 1, 1);
+INSERT INTO tours."Locations"("Id", "latitude", "longitude")
+	VALUES (-1000, 5, 5);
