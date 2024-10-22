@@ -3,8 +3,6 @@ using Explorer.BuildingBlocks.Infrastructure.Database;
 
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Explorer.Stakeholders.Core.UseCases;
-
-
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
@@ -35,9 +33,8 @@ public static class ToursStartup
     {
         services.AddScoped<IEquipmentService, EquipmentService>();
         services.AddScoped<IObjectService, ObjectService>();
-
+        services.AddScoped<ICheckpointService, CheckpointService>();
         services.AddScoped<ITourService,TourService>();
-
         services.AddScoped<IRequiredEquipmentService, RequiredEquipmentService>();
         services.AddScoped<ITouristEquipmentManagerService, TouristEquipmentManagerService>();
 
@@ -48,6 +45,10 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<Equipment>), typeof(CrudDatabaseRepository<Equipment, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<Object>), typeof(CrudDatabaseRepository<Object, ToursContext>));
         services.AddScoped<IObjectRepository, ObjectDatabaseRepository>();
+        services.AddScoped(typeof(ICrudRepository<Checkpoint>), typeof(CrudDatabaseRepository<Checkpoint, ToursContext>));
+        services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
+        services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
+        services.AddScoped<ICheckpointRepository, CheckpointDatabaseRepository>();
 
 
         services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour,ToursContext>));
@@ -55,8 +56,6 @@ public static class ToursStartup
         services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
         services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
         services.AddScoped<ITourRepository, TourDatabaseRepository>();
-
-
 
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),

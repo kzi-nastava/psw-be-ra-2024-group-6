@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Explorer.BuildingBlocks.Core.Domain;
-
 namespace Explorer.Tours.Core.Domain
 {
     public enum Difficulty
@@ -52,6 +50,5 @@ namespace Explorer.Tours.Core.Domain
             if (Tags == null || Tags.Count == 0) throw new ArgumentException("At least one tag is required.");
 
         }
-
     }
 }
