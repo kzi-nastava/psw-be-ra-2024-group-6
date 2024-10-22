@@ -11,7 +11,6 @@
     <ProjectReference Include="..\..\Stakeholders\Explorer.Stakeholders.Core\Explorer.Stakeholders.Core.csproj" />
     <ProjectReference Include="..\Explorer.Tours.Core\Explorer.Tours.Core.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Database\Repositories\" />
     <Folder Include="Migrations\" />

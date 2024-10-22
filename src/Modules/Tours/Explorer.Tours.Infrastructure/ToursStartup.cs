@@ -1,11 +1,14 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.UseCases;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Mappers;
+using Explorer.Tours.Core.UseCases;
 using Explorer.Tours.Core.UseCases.Administration;
 using Explorer.Tours.Infrastructure.Database;
 using Explorer.Tours.Infrastructure.Database.Repositories;
@@ -29,8 +32,11 @@ public static class ToursStartup
     {
         services.AddScoped<IEquipmentService, EquipmentService>();
         services.AddScoped<ICheckpointService, CheckpointService>();
+        services.AddScoped<ITourService,TourService>();
         services.AddScoped<IRequiredEquipmentService, RequiredEquipmentService>();
         services.AddScoped<ITouristEquipmentManagerService, TouristEquipmentManagerService>();
+
+
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -40,6 +46,13 @@ public static class ToursStartup
         services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
         services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
         services.AddScoped<ICheckpointRepository, CheckpointDatabaseRepository>();
+
+
+        services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour,ToursContext>));
+
+        services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
+        services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
+        services.AddScoped<ITourRepository, TourDatabaseRepository>();
 
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),
