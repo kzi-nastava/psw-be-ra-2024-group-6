@@ -123,7 +123,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Clubs
 
             // Assert
             result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(400);
+            result.StatusCode.ShouldBe(404);
         }
 
         [Fact]
