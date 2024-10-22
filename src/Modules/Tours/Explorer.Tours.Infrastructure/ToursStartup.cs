@@ -39,6 +39,7 @@ public static class ToursStartup
         services.AddScoped<IRequiredEquipmentService, RequiredEquipmentService>();
         services.AddScoped<ITouristEquipmentManagerService, TouristEquipmentManagerService>();
 
+
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -50,6 +51,7 @@ public static class ToursStartup
 
         services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
         services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
+        services.AddScoped<ITourRepository, TourDatabaseRepository>();
 
 
 
