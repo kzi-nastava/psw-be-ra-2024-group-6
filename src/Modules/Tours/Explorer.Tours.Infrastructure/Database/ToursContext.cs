@@ -7,8 +7,8 @@ namespace Explorer.Tours.Infrastructure.Database;
 public class ToursContext : DbContext
 {
     public DbSet<Equipment> Equipment { get; set; }
-    public DbSet<Checkpoints> Checkpoint { get; set; }
-    public DbSet<Location> Location { get; set; }
+    public DbSet<Checkpoint> Checkpoints { get; set; }
+    public DbSet<Location> Locations { get; set; }
     public DbSet<Tour> Tours { get; set; }
     public DbSet<RequiredEquipment> RequiredEquipments { get; set; }
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
@@ -35,11 +35,11 @@ public class ToursContext : DbContext
                 .HasForeignKey(t => t.EquipmentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Checkpoints>()
+        modelBuilder.Entity<Checkpoint>()
           .HasOne<Location>()
           .WithOne()
-          .HasForeignKey<Checkpoints>(c => c.LocationId);
-        modelBuilder.Entity<Checkpoints>()
+          .HasForeignKey<Checkpoint>(c => c.LocationId);
+        modelBuilder.Entity<Checkpoint>()
             .HasOne<Tour>()
             .WithMany()
             .HasForeignKey(c => c.TourId);

@@ -21,7 +21,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             try
             {
-                var ret = _dbContext.Checkpoint.Where(p => p.TourId == tourId).ToList();
+                var ret = _dbContext.Checkpoints.Where(p => p.TourId == tourId).ToList();
                 return ret;
             }
             catch (Exception ex)
