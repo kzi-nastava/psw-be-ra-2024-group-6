@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.Core.Domain;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 
 namespace Explorer.API.Controllers.Author
 {
@@ -17,11 +20,23 @@ namespace Explorer.API.Controllers.Author
             _tourService = tourService;
         }
 
+        
+
         [HttpGet]
         public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _tourService.GetPaged(page, pageSize);
             return CreateResponse(result);
+        }
+
+        [HttpGet("author")]
+        public ActionResult<List<TourDto>> GetByUserId()
+        {
+            long userId = User.UserId();
+            var result = _tourService.GetByUserId(userId);
+
+            return CreateResponse(result);
+
         }
 
         [HttpPost]
