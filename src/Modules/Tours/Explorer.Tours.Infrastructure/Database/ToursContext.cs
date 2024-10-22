@@ -1,6 +1,8 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
+using Explorer.Stakeholders.Core.Domain;
+
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -8,13 +10,16 @@ public class ToursContext : DbContext
 {
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Tour> Tours { get; set; }
+
     public DbSet<RequiredEquipment> RequiredEquipments { get; set; }
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
+
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("tours");
+
         ConfigureTour(modelBuilder);
     }
     private static void ConfigureTour(ModelBuilder modelBuilder)
@@ -55,5 +60,11 @@ public class ToursContext : DbContext
             entity.HasIndex(re => new { re.TourId, re.EquipmentId })
                 .IsUnique();
         });
+
     }
+
+
+    
+
+
 }
