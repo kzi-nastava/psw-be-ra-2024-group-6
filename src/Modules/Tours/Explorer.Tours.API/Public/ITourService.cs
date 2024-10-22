@@ -11,6 +11,7 @@ namespace Explorer.Tours.API.Public
 {
     public interface ITourService
     {
+        Result<List<TourDto>> GetByUserId(long userId);
         Result<PagedResult<TourDto>> GetPaged(int page, int pageSize);
         Result<TourDto> Create(TourDto tour);
         Result<TourDto> Update(TourDto tour);
