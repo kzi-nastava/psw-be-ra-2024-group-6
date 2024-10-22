@@ -32,6 +32,13 @@ public class ObjectController : BaseApiController
         return CreateResponse(result);
     }
 
+    [HttpPost("{tourId:long}")]
+    public ActionResult<List<ObjectDto>> GetByTourId(long tourId)
+    {
+        var result = _objectService.GetByTourId(tourId);
+        return CreateResponse(result);
+    }
+
     [HttpPut("{id:int}")]
     public ActionResult<ObjectDto> Update([FromBody] ObjectDto obj)
     {

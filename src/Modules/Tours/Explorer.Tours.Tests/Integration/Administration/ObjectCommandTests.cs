@@ -135,6 +135,22 @@ public class ObjectCommandTests : BaseToursIntegrationTest
     }
 
     [Fact]
+    public void Gets_ByTour_Id()
+    {
+        //Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+        //Act
+        var result = (ObjectResult)controller.GetByTourId(1).Result;
+
+        //Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(200);
+    }
+
+    [Fact]
     public void Deletes()
     {
         // Arrange

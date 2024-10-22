@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces;
 
-public interface IObjectRepository : ICrudRepository<Object>
+public interface IObjectRepository
 {
-    List<Object> GetAll();
+    List<Object> GetAllByTourId(long tourId);
 }

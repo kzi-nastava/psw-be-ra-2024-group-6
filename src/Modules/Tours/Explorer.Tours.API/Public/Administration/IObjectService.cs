@@ -15,4 +15,5 @@ public interface IObjectService
     Result<ObjectDto> Create(ObjectDto equipment);
     Result<ObjectDto> Update(ObjectDto equipment);
     Result Delete(int id);
+    Result<List<ObjectDto>> GetByTourId(long tourId);
 }
