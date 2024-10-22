@@ -34,7 +34,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
             Description = "You can relax here ladies",
             Category = "WC",
             LocationId = 3,
-            TourId = 3
+            TourId = -2
         };
 
         // Act
@@ -85,7 +85,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
             Description = "Predaleko je",
             Category = "Restaurant",
             LocationId = 1,
-            TourId = 1
+            TourId = -2
         };
 
         // Act
@@ -122,8 +122,8 @@ public class ObjectCommandTests : BaseToursIntegrationTest
             ImageUrl = "/test",
             Description = "test",
             Category = "WC",
-            LocationId = 1,
-            TourId = 1
+            LocationId = 4,
+            TourId = 5
         };
 
         // Act
@@ -143,7 +143,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         //Act
-        var result = (ObjectResult)controller.GetByTourId(1).Result;
+        var result = (ObjectResult)controller.GetByTourId(-2).Result;
 
         //Assert
         result.ShouldNotBeNull();
@@ -166,7 +166,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         result.StatusCode.ShouldBe(200);
 
         // Assert - Database
-        var storedCourse = dbContext.Equipment.FirstOrDefault(i => i.Id == 2);
+        var storedCourse = dbContext.Objects.FirstOrDefault(i => i.Id == 2);
         storedCourse.ShouldBeNull();
     }
     [Fact]

@@ -33,8 +33,6 @@ public class Object : Entity
         if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
         if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         if ((int)Category < 0 || (int)Category > 3) throw new ArgumentException("Invalid category");
-        if (LocationId < 0) throw new ArgumentException("Invalid locationId");
-        if (TourId < 0) throw new ArgumentException("Invalid tourId");
     }
 }
 public enum Category
