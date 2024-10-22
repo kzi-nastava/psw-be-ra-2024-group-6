@@ -30,8 +30,6 @@ public class Checkpoint : Entity
         if (string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Invalid Name.");
         if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
-        if (LocationId < 0) throw new ArgumentException("Invalid locationId");
-        if (TourId < 0) throw new ArgumentException("Invalid tourId");
     }
 
 }
