@@ -1,8 +1,10 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,15 +21,10 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         }
         public List<Checkpoint> GetByTourId(int tourId)
         {
-            try
-            {
-                var ret = _dbContext.Checkpoints.Where(p => p.TourId == tourId).ToList();
-                return ret;
-            }
-            catch (Exception ex)
-            {
-                throw new KeyNotFoundException(ex.Message);
-            }
+                return _dbContext.Checkpoints
+                    .Where(p => p.TourId == tourId)
+                    .Include(c => c.Location)
+                    .ToList();
         }
     }
 }
