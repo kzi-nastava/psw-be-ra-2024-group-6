@@ -39,13 +39,31 @@ namespace Explorer.API.Controllers.Author
 
         }
 
+        /* [HttpGet("{tourId:int}")]
+         public ActionResult<TourDetailsDto> GetTourDetailsByTourId(int tourId)
+         {
+
+             var result = _tourService.GetTourDetailsByTourId(tourId);
+             return CreateResponse(result);
+
+         }*/
+
+        [HttpPost("details")]
+        public ActionResult<TourCreateDto> CreateTour([FromBody]TourCreateDto tour)
+        {
+            tour.TourInfo.AuthorId = User.UserId();
+            var result = _tourService.CreateTour(tour);
+            return CreateResponse(result);
+
+        }
+
+
+
+
         [HttpPost]
         public ActionResult<TourDto> Create([FromBody] TourDto tour)
         {
-            var id = HttpContext.User.Claims.First(x => x.Type == "id");
-            long longValue;
-            long.TryParse(id.Value, out longValue);
-            tour.AuthorId = longValue;
+            tour.AuthorId = User.UserId();
             var result = _tourService.Create(tour);
             return CreateResponse(result);
         }
