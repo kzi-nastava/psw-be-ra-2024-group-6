@@ -46,7 +46,6 @@ public class RatingCommandTests : BaseStakeholdersIntegrationTest
         var updatedEntity = new RatingDto
         {
             UserId = 1,
-            StarRating = StarRating.Poor,
             Comment = "nista.",
             PostedAt = DateTime.UtcNow
         };
@@ -101,7 +100,10 @@ public class RatingCommandTests : BaseStakeholdersIntegrationTest
         var updatedEntity = new RatingDto
         {
             Id = -1000,
-            Comment = "Test"
+            UserId = 1,
+            Comment = "glupost",
+            PostedAt = DateTime.UtcNow,
+            StarRating = StarRating.Poor
         };
 
         // Act

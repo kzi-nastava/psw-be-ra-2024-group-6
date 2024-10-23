@@ -32,15 +32,18 @@ namespace Explorer.Stakeholders.Core.Domain
             StarRating = starRating;
             Comment = comment;
             PostedAt = DateTime.Now;
+            Validate();
         }
 
-        /*private void Validate()
+        private void Validate()
         {
-            if (StarRating < 1 )
-            {
-                return BadRequest("Invalid star rating provided.");
-            }
-        }*/
+            if (UserId <= 0)
+                throw new ArgumentException("UserId must be greater than 0.");
+
+            // Check if the StarRating is valid
+            if (!Enum.IsDefined(typeof(StarRating), StarRating))
+                throw new ArgumentException("Star Rating must be a valid value between 1 and 5.");
+        }
     }
 }
 
