@@ -9,7 +9,9 @@ public class BlogProfile : Profile
 {
     public BlogProfile()
     {
-        CreateMap<BlogDto, BlogDomain.Blog>().ReverseMap();
+        CreateMap<BlogDto, BlogDomain.Blog>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
+        .ReverseMap()
+        .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
         CreateMap<BlogPictureDto, BlogPicture>().ReverseMap();
     }
 }
