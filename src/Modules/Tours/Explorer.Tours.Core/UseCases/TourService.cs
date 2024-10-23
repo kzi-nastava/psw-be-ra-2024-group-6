@@ -43,11 +43,10 @@ namespace Explorer.Tours.Core.UseCases
                 // Kreirajte novu turu u repozitorijumu
                 Tour newTour = crudRepository.Create(tour);
 
-                // Mapirajte kreirani entitet nazad u DTO
-                TourCreateDto newTourDto = mapper.Map<TourCreateDto>(newTour);
+                
 
                 // Vratite uspešan rezultat sa kreiranim DTO-om
-                return Result.Ok(newTourDto);
+                return Result.Ok(createTour);
             }
             catch (Exception ex)
             {

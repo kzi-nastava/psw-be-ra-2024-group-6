@@ -22,8 +22,8 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => src.TourInfo.AuthorId))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.TourInfo.Status))
             .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => src.TourInfo.Difficulty))
-            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.TourInfo.Description))
-            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.TourInfo.Tags));
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.TourInfo.Description));
+            //.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.TourInfo.Tags));
 
 
 
