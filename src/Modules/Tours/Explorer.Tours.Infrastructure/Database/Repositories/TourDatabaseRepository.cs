@@ -31,5 +31,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
 
         }
+
     }
 }
