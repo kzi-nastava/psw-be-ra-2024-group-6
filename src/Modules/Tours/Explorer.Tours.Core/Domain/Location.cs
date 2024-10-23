@@ -11,4 +11,5 @@ public class Location : Entity
 {
     public long Latitude { get; init; }
     public long Longitude { get; init; }
+    public Location() { }
 }
