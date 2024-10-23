@@ -27,8 +27,8 @@ public class ObjectService : CrudService<ObjectDto, Domain.Object> , IObjectServ
     {
         try
         {
-            List<ObjectReadDto> el = _objectRepository.GetAllByTourId(tourId).Select(x => _mapper.Map<ObjectReadDto>(x)).ToList();
-            return el;
+            List<ObjectReadDto> tourObjects = _objectRepository.GetAllByTourId(tourId).Select(x => _mapper.Map<ObjectReadDto>(x)).ToList();
+            return tourObjects;
         }
         catch (KeyNotFoundException e)
         {
