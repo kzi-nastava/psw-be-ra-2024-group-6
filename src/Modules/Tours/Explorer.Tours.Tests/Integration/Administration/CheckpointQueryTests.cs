@@ -32,6 +32,19 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.Results.Count.ShouldBe(3);
             result.TotalCount.ShouldBe(3);
         }
+        [Fact]
+        public void Retrieves_all_for_tour()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
+            // Act
+            var result = ((ObjectResult)controller.GetByTourId(-2).Result)?.Value as List<CheckpointReadDto>;
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(2);
+        }
         private static CheckpointController CreateController(IServiceScope scope)
         {
             return new CheckpointController(scope.ServiceProvider.GetRequiredService < ICheckpointService>())

@@ -20,5 +20,9 @@ public class BlogContext : DbContext
                     .HasForeignKey(p => p.BlogId)  // Strani ključ je BlogId
                     .OnDelete(DeleteBehavior.Cascade);  // Kada se obriše blog, brišu se i slike
         modelBuilder.HasDefaultSchema("blog");
+
     }
+    public DbSet<Comment> Comment { get; set; }
+
+    
 }

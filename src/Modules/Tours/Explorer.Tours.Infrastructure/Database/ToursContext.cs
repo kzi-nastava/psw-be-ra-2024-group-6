@@ -1,14 +1,15 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
+using Object = Explorer.Tours.Core.Domain.Object;
 using Explorer.Stakeholders.Core.Domain;
-
 
 namespace Explorer.Tours.Infrastructure.Database;
 
 public class ToursContext : DbContext
 {
     public DbSet<Equipment> Equipment { get; set; }
+    public DbSet<Core.Domain.Object> Objects { get; set; }
     public DbSet<Checkpoint> Checkpoints { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Tour> Tours { get; set; }
@@ -40,8 +41,22 @@ public class ToursContext : DbContext
                 .HasForeignKey(t => t.EquipmentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+        modelBuilder.Entity<Object>()
+            .HasOne<Location>(o=> o.Location)
+            .WithOne()
+            .HasForeignKey<Object>(c => c.LocationId);
+        modelBuilder.Entity<Object>()
+            .HasOne<Tour>()
+            .WithMany()
+            .HasForeignKey(c => c.TourId);
+        modelBuilder.Entity<Object>()
+            .HasOne<Tour>()
+            .WithMany()
+            .HasForeignKey(c => c.TourId);
+
         modelBuilder.Entity<Checkpoint>()
-          .HasOne<Location>()
+          .HasOne<Location>(c=>c.Location)
           .WithOne()
           .HasForeignKey<Checkpoint>(c => c.LocationId);
         modelBuilder.Entity<Checkpoint>()

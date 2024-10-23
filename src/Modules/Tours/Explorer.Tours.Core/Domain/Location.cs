@@ -5,12 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Tours.Core.Domain
-{
-    public class Location :Entity
-    {
-        public long latitude { get; init; }
-        public long longitude { get; init; }
+namespace Explorer.Tours.Core.Domain;
 
-    }
+public class Location : Entity
+{
+    public double Latitude { get; init; }
+    public double Longitude { get; init; }
 }
