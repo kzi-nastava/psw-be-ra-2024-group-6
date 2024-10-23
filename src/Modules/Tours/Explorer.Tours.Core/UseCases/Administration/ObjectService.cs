@@ -15,18 +15,20 @@ namespace Explorer.Tours.Core.UseCases.Administration;
 public class ObjectService : CrudService<ObjectDto, Domain.Object> , IObjectService
 {
     private readonly IObjectRepository _objectRepository;
+    private readonly IMapper _mapper;
 
     public ObjectService(ICrudRepository<Domain.Object> crudRepository, IMapper mapper, IObjectRepository objectRepository) : base(crudRepository, mapper)
     {
+        _mapper = mapper;
         _objectRepository = objectRepository;
     }
 
-    Result<List<ObjectDto>> IObjectService.GetByTourId(long tourId)
+    Result<List<ObjectReadDto>> IObjectService.GetByTourId(long tourId)
     {
         try
         {
-            var el = MapToDto(_objectRepository.GetAllByTourId(tourId));
-            return el;
+            List<ObjectReadDto> tourObjects = _objectRepository.GetAllByTourId(tourId).Select(x => _mapper.Map<ObjectReadDto>(x)).ToList();
+            return tourObjects;
         }
         catch (KeyNotFoundException e)
         {

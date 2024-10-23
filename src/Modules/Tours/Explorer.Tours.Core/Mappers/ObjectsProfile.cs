@@ -14,5 +14,7 @@ public class ObjectsProfile : Profile
     public ObjectsProfile()
     {
         CreateMap<ObjectDto, Domain.Object>().ReverseMap();
+        CreateMap<Domain.Object, ObjectReadDto>().ReverseMap();
+        CreateMap<Location, LocationReadDto>().ReverseMap();
     }
 }
