@@ -7,8 +7,10 @@ public class StakeholdersContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Person> People { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
+
     public DbSet<Tourist> Tourists { get; set; }
-	  public DbSet<Problem> Problems { get; set; }
+	public DbSet<Problem> Problems { get; set; }
     public DbSet<Club> Clubs { get; set; }
 
     public DbSet<Author> Author { get; set; }
@@ -45,7 +47,6 @@ public class StakeholdersContext : DbContext
             .HasOne<Tourist>()
             .WithMany()
             .HasForeignKey(p => p.TouristId);
-        
         modelBuilder.Entity<Club>()
             .HasOne<User>() 
             .WithMany() 
