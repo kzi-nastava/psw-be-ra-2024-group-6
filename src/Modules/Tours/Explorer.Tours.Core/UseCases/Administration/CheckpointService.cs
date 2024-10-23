@@ -18,16 +18,23 @@ namespace Explorer.Tours.Core.UseCases.Administration
     {
         private readonly ICheckpointRepository _checkpointRepository;
         private readonly IMapper mapper;
-        public CheckpointService(ICrudRepository<Checkpoint> crudRepository,ICheckpointRepository checkpointRepository, IMapper mapper) : base(crudRepository, mapper){
+        public CheckpointService(ICrudRepository<Checkpoint> crudRepository,ICheckpointRepository checkpointRepository, IMapper mapper) : base(crudRepository, mapper)
+        {
 
             _checkpointRepository = checkpointRepository;
             this.mapper = mapper;
         }
 
+
         Result<List<CheckpointReadDto>> ICheckpointService.GetByTourId(long tourId)
+
         {
-                List<CheckpointReadDto> el = _checkpointRepository.GetByTourId(tourId).Select(mapper.Map<CheckpointReadDto>).ToList();
-                return el;
+            List<CheckpointReadDto> el = _checkpointRepository.GetByTourId(tourId).Select(mapper.Map<CheckpointReadDto>).ToList();
+            return el;
+        }
+        public CheckpointDto Create(CheckpointCreateDto checkpointCreateDto)
+        {
+            return MapToDto(CrudRepository.Create(mapper.Map<Checkpoint>(checkpointCreateDto)));
         }
     }
 }

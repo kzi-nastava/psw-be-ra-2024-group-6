@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Explorer.Tours.API.Dtos;
 
 public class ObjectReadDto
@@ -14,4 +15,5 @@ public class ObjectReadDto
     public string Description { get; set; }
     public string Category { get; set; }
     public LocationReadDto Location { get; set; }
+
 }

@@ -19,6 +19,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public Checkpoint Create(Checkpoint checkpoint)
+        {
+            Checkpoint ch= _dbContext.Checkpoints.Add(checkpoint).Entity;
+            _dbContext.SaveChanges();
+            return ch;
+
+        }
+
         public List<Checkpoint> GetByTourId(long tourId)
         {
                 return _dbContext.Checkpoints
@@ -26,5 +35,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                     .Include(c => c.Location)
                     .ToList();
         }
+
     }
 }
