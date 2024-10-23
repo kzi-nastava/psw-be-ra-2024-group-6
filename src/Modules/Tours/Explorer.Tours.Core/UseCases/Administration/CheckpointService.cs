@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentResults;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using System.Diagnostics;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -23,21 +24,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
             this.mapper = mapper;
         }
 
-        Result<List<CheckpointDto>> ICheckpointService.GetByTourId(int tourId)
+        Result<List<CheckpointReadDto>> ICheckpointService.GetByTourId(int tourId)
         {
-            try
-            {
-                var el = MapToDto(_checkpointRepository.GetByTourId(tourId));
+                List<CheckpointReadDto> el = _checkpointRepository.GetByTourId(tourId).Select(mapper.Map<CheckpointReadDto>).ToList();
                 return el;
-            }
-            catch (KeyNotFoundException e)
-            {
-                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-            catch (ArgumentException e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            }
         }
     }
 }
