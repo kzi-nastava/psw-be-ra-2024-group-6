@@ -1,4 +1,6 @@
-﻿using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +22,8 @@ public class ObjectDatabaseRepository : IObjectRepository
     {
         try
         {
-            var ret = _dbContext.Objects.Where(o => o.TourId == tourId).ToList();
-            return ret;
+            return _dbContext.Objects.Where(o => o.TourId == tourId).Include(o => o.Location).ToList();
+            
         }
         catch (Exception ex)
         {

@@ -1,5 +1,6 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Author;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
@@ -143,11 +144,10 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         //Act
-        var result = (ObjectResult)controller.GetByTourId(-2).Result;
+        var result = ((ObjectResult)controller.GetByTourId(-3).Result)?.Value as List<ObjectReadDto>;
 
         //Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(200);
+        result.Count.ShouldBe(1);
     }
 
     [Fact]

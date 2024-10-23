@@ -9,6 +9,6 @@ namespace Explorer.Tours.Core.Domain;
 
 public class Location : Entity
 {
-    public long Latitude { get; init; }
-    public long Longitude { get; init; }
+    public double Latitude { get; init; }
+    public double Longitude { get; init; }
 }
