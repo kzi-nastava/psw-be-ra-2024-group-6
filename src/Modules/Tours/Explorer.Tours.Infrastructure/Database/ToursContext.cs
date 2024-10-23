@@ -51,6 +51,23 @@ public class ToursContext : DbContext
             .WithMany()
             .HasForeignKey(c => c.TourId);
 
+
+
+        modelBuilder.Entity<Tour>()
+            .HasMany<Checkpoint>()
+            .WithOne()
+            .HasForeignKey(c => c.TourId);
+
+        modelBuilder.Entity<Tour>()
+            .HasMany<Object>()
+            .WithOne()
+            .HasForeignKey(c => c.TourId);
+
+      
+
+
+
+
         modelBuilder.Entity<Checkpoint>()
           .HasOne<Location>()
           .WithOne()
