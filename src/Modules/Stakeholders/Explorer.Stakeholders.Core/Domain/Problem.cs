@@ -18,16 +18,20 @@ namespace Explorer.Stakeholders.Core.Domain
         public long TourId { get; private set; }
         public long TouristId { get; private set; }
 
-        public Problem(string category, string priority, DateTime date,string description, long tourId, long touristId)
+        public Problem(string category, string priority, DateTime date, string description, long tourId, long touristId)
         {
             this.Category = category;
             this.Priority = priority;
-            this.Date = date;
+
+
+            this.Date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+
             this.Description = description;
             this.TourId = tourId;
             this.TouristId = touristId;
             Validate();
         }
+
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Category)) throw new ArgumentException("Invalid Category.");
