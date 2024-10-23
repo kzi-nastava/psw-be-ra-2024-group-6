@@ -17,10 +17,7 @@ public class Checkpoint : Entity
     public string Name { get; init; }
     public string Description { get; init; }
     public string ImageUrl { get; init; }
-
-
-    public virtual Tour Tour { get; init; }
-    public virtual Location? Location { get; init; }
+    public virtual Location? Location { get; set; }
 
     public Checkpoint() { }
     public Checkpoint(string name, string? description, string? imageUrl, long locationId, long tourId)
