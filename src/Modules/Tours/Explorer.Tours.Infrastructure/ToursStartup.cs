@@ -1,12 +1,20 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.UseCases;
+using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Mappers;
+using Explorer.Tours.Core.UseCases;
 using Explorer.Tours.Core.UseCases.Administration;
 using Explorer.Tours.Infrastructure.Database;
+using Explorer.Tours.Infrastructure.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Object = Explorer.Tours.Core.Domain.Object;
 
 namespace Explorer.Tours.Infrastructure;
 
@@ -24,11 +32,30 @@ public static class ToursStartup
     private static void SetupCore(IServiceCollection services)
     {
         services.AddScoped<IEquipmentService, EquipmentService>();
+        services.AddScoped<IObjectService, ObjectService>();
+        services.AddScoped<ICheckpointService, CheckpointService>();
+        services.AddScoped<ITourService,TourService>();
+        services.AddScoped<IRequiredEquipmentService, RequiredEquipmentService>();
+        services.AddScoped<ITouristEquipmentManagerService, TouristEquipmentManagerService>();
+
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<Equipment>), typeof(CrudDatabaseRepository<Equipment, ToursContext>));
+        services.AddScoped(typeof(ICrudRepository<Object>), typeof(CrudDatabaseRepository<Object, ToursContext>));
+        services.AddScoped<IObjectRepository, ObjectDatabaseRepository>();
+        services.AddScoped(typeof(ICrudRepository<Checkpoint>), typeof(CrudDatabaseRepository<Checkpoint, ToursContext>));
+        services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
+        services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
+        services.AddScoped<ICheckpointRepository, CheckpointDatabaseRepository>();
+
+
+        services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour,ToursContext>));
+
+        services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
+        services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
+        services.AddScoped<ITourRepository, TourDatabaseRepository>();
 
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),
