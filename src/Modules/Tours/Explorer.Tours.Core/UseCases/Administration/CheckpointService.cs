@@ -24,7 +24,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             this.mapper = mapper;
         }
 
-        Result<List<CheckpointReadDto>> ICheckpointService.GetByTourId(int tourId)
+        Result<List<CheckpointReadDto>> ICheckpointService.GetByTourId(long tourId)
         {
                 List<CheckpointReadDto> el = _checkpointRepository.GetByTourId(tourId).Select(mapper.Map<CheckpointReadDto>).ToList();
                 return el;
