@@ -10,11 +10,11 @@ namespace Explorer.API.Controllers.Author_Tourist
 {
     [Authorize(Policy = "touristOrAuthorPolicy")]
     [Route("api/touristOrAuthor/comment")]
-    public class BlogController : BaseApiController
+    public class CommentController : BaseApiController
     {
         private readonly ICommentService _commentService;
 
-        public BlogController(ICommentService commentService)
+        public CommentController(ICommentService commentService)
         {
             _commentService = commentService;
         }

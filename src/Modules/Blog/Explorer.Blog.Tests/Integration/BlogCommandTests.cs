@@ -1,5 +1,4 @@
-﻿
-using Explorer.API.Controllers.Administrator.Administration;
+﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Author_Tourist;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
@@ -17,9 +16,9 @@ using System.Threading.Tasks;
 namespace Explorer.Blog.Tests.Integration
 {
     [Collection("Sequential")]
-    public class CommentCommandTests : BaseBlogIntegrationTest
+    public class BlogCommandTests : BaseBlogIntegrationTest
     {
-        public CommentCommandTests(BlogTestFactory factory) : base(factory) { }
+        public BlogCommandTests(BlogTestFactory factory) : base(factory) { }
 
         [Fact]
         public void Creates()
@@ -28,36 +27,32 @@ namespace Explorer.Blog.Tests.Integration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
-            var newEntity = new CommentDto
+            var newEntity = new BlogDto
             {
-                Id = -1,
-                Text = "Buraz",
-                UserId = -1,
-                CreationDate = DateTime.Now.ToUniversalTime(),
-                UpdateDate = DateTime.Now.ToUniversalTime(),
-                BlogId = -1
-
-
+                Title = "Moji utisci o Rimu",
+                Description = "Obožavam Rim. Najbolji grad ikada!!!!",
+                UserId = 1,
+                Status = API.Dtos.Status.Published,
+                CreatedAt = DateTime.Now.ToUniversalTime(), 
+                Pictures = new List<BlogPictureDto>()
             };
 
             // Act
-            var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as CommentDto;
+            var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as BlogDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.Id.ShouldNotBe(0);
-            result.Text.ShouldBe(newEntity.Text);
-            result.CreationDate.ShouldBe(newEntity.CreationDate);
-            result.UpdateDate.ShouldBe(newEntity.UpdateDate);
-            result.UserId.ShouldBe(-1);
-
+            result.Description.ShouldBe(newEntity.Description);
+            result.Title.ShouldBe(newEntity.Title);
+            result.Status.ShouldBe(newEntity.Status);
+            result.UserId.ShouldBe(1);
 
             // Assert - Database
-            var storedEntity = dbContext.Comment.FirstOrDefault(i => i.Text == newEntity.Text);
+            var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Description == newEntity.Description);
             storedEntity.ShouldNotBeNull();
             storedEntity.Id.ShouldBe(result.Id);
         }
-
 
         [Fact]
         public void Create_fails_invalid_data()
@@ -65,9 +60,9 @@ namespace Explorer.Blog.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var updatedEntity = new CommentDto
+            var updatedEntity = new BlogDto
             {
-                Text = ""
+                
             };
 
             // Act
@@ -77,54 +72,55 @@ namespace Explorer.Blog.Tests.Integration
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(400);
         }
-
+        
         [Fact]
-
         public void Updates()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
-            var updatedEntity = new CommentDto
+            var updatedEntity = new BlogDto
             {
-                Id = -2,
-                Text = "Lose",
-                UserId = -1,
-                UpdateDate = DateTime.Now.ToUniversalTime(),
-                BlogId = -1
+                Id = -1,
+                Title = "Moji utisci o Rimu",
+                Description = "Obožavam Rim. Najbolji grad ikada!!!!",
+                UserId = 1,
+                Status = API.Dtos.Status.Closed,
+                Pictures = new List<BlogPictureDto>()
             };
 
             // Act
-            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as CommentDto;
+            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as BlogDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(-2);
-            result.Text.ShouldBe(updatedEntity.Text);
-            result.UpdateDate.ShouldBe(updatedEntity.UpdateDate);
+            result.Id.ShouldBe(-1);
+            result.Title.ShouldBe(updatedEntity.Title);
+            result.Description.ShouldBe(updatedEntity.Description);
 
             // Assert - Database
-            var storedEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -2 && i.Text == "Lose");
+            var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Core.Domain.Status.Closed);
             storedEntity.ShouldNotBeNull();
-            storedEntity.CreationDate.ShouldBe(updatedEntity.CreationDate);
-            var oldEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -2 && i.Text == "nesto");
+            storedEntity.Description.ShouldBe(updatedEntity.Description);
+            var oldEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Core.Domain.Status.Draft);
             oldEntity.ShouldBeNull();
         }
-
+        
         [Fact]
         public void Update_fails_invalid_id()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var updatedEntity = new CommentDto
+            var updatedEntity = new BlogDto
             {
-                Id = -5,
-                Text = "Solidno",
+                Id = -10000,
+                Title = "Moji utisci o Rimu",
+                Description = "Obožavam Rim. Najbolji grad ikada!!!!",
                 UserId = 1,
-                CreationDate = DateTime.Now.ToUniversalTime(),
-                UpdateDate = DateTime.Now.ToUniversalTime(),
+                Status = API.Dtos.Status.Closed,
+                Pictures = new List<BlogPictureDto>()
             };
 
             // Act
@@ -133,15 +129,14 @@ namespace Explorer.Blog.Tests.Integration
             // Assert
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(404);
-        }
+        } 
 
-
-        private static CommentController CreateController(IServiceScope scope)
+        private static BlogController CreateController(IServiceScope scope)
         {
-            return new CommentController(scope.ServiceProvider.GetRequiredService<ICommentService>())
+            return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>())
             {
                 ControllerContext = BuildContext("-1")
             };
-        }
-    }
+        } 
+    } 
 }

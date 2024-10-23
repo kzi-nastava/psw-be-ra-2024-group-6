@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using BlogDomain = Explorer.Blog.Core.Domain;
 using Explorer.Blog.Core.Domain;
-
 namespace Explorer.Blog.Infrastructure;
 
 public static class BlogStartup
@@ -24,12 +23,14 @@ public static class BlogStartup
 
     private static void SetupCore(IServiceCollection services)
     {
+        services.AddScoped<IBlogService, BlogService>();
         services.AddScoped<ICommentService, CommentService>();
 
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
+        services.AddScoped(typeof(ICrudRepository<BlogDomain.Blog>), typeof(CrudDatabaseRepository<BlogDomain.Blog, BlogContext>));
         services.AddScoped(typeof(ICrudRepository<Comment>), typeof(CrudDatabaseRepository<Comment, BlogContext>));
         services.AddDbContext<BlogContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("blog"),
