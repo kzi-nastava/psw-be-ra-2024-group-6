@@ -32,7 +32,7 @@ namespace Explorer.Blog.Tests.Integration
                 Title = "Moji utisci o Rimu",
                 Description = "Obožavam Rim. Najbolji grad ikada!!!!",
                 UserId = 1,
-                Status = API.Dtos.Status.Published,
+                Status = "Published",
                 CreatedAt = DateTime.Now.ToUniversalTime(), 
                 Pictures = new List<BlogPictureDto>()
             };
@@ -86,7 +86,7 @@ namespace Explorer.Blog.Tests.Integration
                 Title = "Moji utisci o Rimu",
                 Description = "Obožavam Rim. Najbolji grad ikada!!!!",
                 UserId = 1,
-                Status = API.Dtos.Status.Closed,
+                Status = "Closed",
                 Pictures = new List<BlogPictureDto>()
             };
 
@@ -119,7 +119,7 @@ namespace Explorer.Blog.Tests.Integration
                 Title = "Moji utisci o Rimu",
                 Description = "Obožavam Rim. Najbolji grad ikada!!!!",
                 UserId = 1,
-                Status = API.Dtos.Status.Closed,
+                Status = "Closed",
                 Pictures = new List<BlogPictureDto>()
             };
 

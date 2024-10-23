@@ -33,10 +33,10 @@ namespace Explorer.Tours.Tests.Integration.Tours;
         {
             Name = "Pariske tura",
             Description = "Tura kroz Pariz.",
-            Difficulty = Difficulty.Medium,
+            Difficulty = "Medium",
             Tags = new List<string> { "priroda", "drustvo" },
             Cost = 0.0,
-            Status = Status.Draft,
+            Status = "Draft",
             AuthorId = -21
         };
 
@@ -85,10 +85,10 @@ namespace Explorer.Tours.Tests.Integration.Tours;
             Id = -2,
             Name = "Promjenjeno ime",
             Description = "Promjenjena deskripcija.",
-            Difficulty = Difficulty.Hard,
+            Difficulty = "Hard",
             Tags = { "promjenjen1", "promjenjen2" },
             Cost = 5.0,
-            Status = Status.Closed,
+            Status = "Closed",
             AuthorId = -1
         };
 
@@ -124,10 +124,10 @@ namespace Explorer.Tours.Tests.Integration.Tours;
             Id = -1000, // non-existent club ID
             Name = "Test",
             Description = "Promjenjena deskripcija.",
-            Difficulty = Difficulty.Hard,
+            Difficulty = "Hard",
             Tags = { "promjenjen1", "promjenjen2" },
             Cost = 5.0,
-            Status = Status.Closed,
+            Status = "Closed",
             AuthorId = -1
         };
 

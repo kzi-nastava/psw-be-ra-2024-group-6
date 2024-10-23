@@ -76,10 +76,10 @@ namespace Explorer.Tours.Tests.Integration.Tours
                  {
                     Description = "Test",
                     Name = "Test",
-                    Difficulty = Difficulty.Easy,
+                    Difficulty ="Easy",
                     Tags = new List<string> { "Test" },
                     Cost = 0,
-                    Status = Status.Draft,
+                    Status = "Draft",
                     AuthorId = -1000
                  } 
             };

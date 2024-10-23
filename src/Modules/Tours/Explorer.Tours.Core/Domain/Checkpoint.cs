@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,8 @@ public class Checkpoint : Entity
     public string Description { get; init; }
     public string ImageUrl { get; init; }
 
-    
 
+    public virtual Tour Tour { get; init; }
     public virtual Location? Location { get; init; }
 
     public Checkpoint() { }
