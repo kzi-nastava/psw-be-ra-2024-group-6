@@ -35,8 +35,6 @@ namespace Explorer.Blog.Tests.Integration
                 Status = API.Dtos.Status.Published,
                 CreatedAt = DateTime.Now.ToUniversalTime(), 
                 Pictures = new List<BlogPictureDto>()
-
-
             };
 
             // Act
@@ -50,13 +48,11 @@ namespace Explorer.Blog.Tests.Integration
             result.Status.ShouldBe(newEntity.Status);
             result.UserId.ShouldBe(1);
 
-
             // Assert - Database
             var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Description == newEntity.Description);
             storedEntity.ShouldNotBeNull();
             storedEntity.Id.ShouldBe(result.Id);
         }
-        
 
         [Fact]
         public void Create_fails_invalid_data()
@@ -78,7 +74,6 @@ namespace Explorer.Blog.Tests.Integration
         }
         
         [Fact]
-        
         public void Updates()
         {
             // Arrange
@@ -135,7 +130,6 @@ namespace Explorer.Blog.Tests.Integration
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(404);
         } 
- 
 
         private static BlogController CreateController(IServiceScope scope)
         {
