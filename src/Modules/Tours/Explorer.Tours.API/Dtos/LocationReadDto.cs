@@ -10,13 +10,17 @@ namespace Explorer.Tours.API.Dtos
     {
         public long Id { get; set; }
 
-        public long Latitude { get; set; }
-        public long Longitude { get; set; }
 
-        public LocationReadDto(long id,long latitude,long longitude) {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+
+        public LocationReadDto(long id, double latitude, double longitude) {
             Id = id;
             Latitude = latitude;
             Longitude = longitude;
         }
+
+
+
     }
 }
