@@ -1,5 +1,6 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Author;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
@@ -79,7 +80,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
         var updatedEntity = new ObjectDto
         {
-            Id = 1,
+            Id = -1,
             Name = "Zar Mance",
             ImageUrl = "/putanja",
             Description = "Predaleko je",
@@ -93,7 +94,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
 
         // Assert - Response
         result.ShouldNotBeNull();
-        result.Id.ShouldBe(1);
+        result.Id.ShouldBe(-1);
         result.Name.ShouldBe(updatedEntity.Name);
         result.ImageUrl.ShouldBe(updatedEntity.ImageUrl);
         result.Description.ShouldBe(updatedEntity.Description);
@@ -143,11 +144,10 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         //Act
-        var result = (ObjectResult)controller.GetByTourId(-2).Result;
+        var result = ((ObjectResult)controller.GetByTourId(-3).Result)?.Value as List<ObjectReadDto>;
 
         //Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(200);
+        result.Count.ShouldBe(1);
     }
 
     [Fact]
@@ -159,7 +159,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (OkResult)controller.Delete(2);
+        var result = (OkResult)controller.Delete(-2);
 
         // Assert - Response
         result.ShouldNotBeNull();

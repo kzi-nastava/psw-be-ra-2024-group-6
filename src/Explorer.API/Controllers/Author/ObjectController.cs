@@ -33,7 +33,7 @@ public class ObjectController : BaseApiController
     }
 
     [HttpPost("{tourId:long}")]
-    public ActionResult<List<ObjectDto>> GetByTourId(long tourId)
+    public ActionResult<List<ObjectReadDto>> GetByTourId(long tourId)
     {
         var result = _objectService.GetByTourId(tourId);
         return CreateResponse(result);

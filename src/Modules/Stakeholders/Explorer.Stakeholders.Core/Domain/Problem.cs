@@ -22,10 +22,7 @@ namespace Explorer.Stakeholders.Core.Domain
         {
             this.Category = category;
             this.Priority = priority;
-
-
             this.Date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
-
             this.Description = description;
             this.TourId = tourId;
             this.TouristId = touristId;

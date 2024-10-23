@@ -8,6 +8,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
     public interface ICheckpointRepository
     {
-        List<Checkpoint> GetByTourId(int tourId);
+        List<Checkpoint> GetByTourId(long tourId);
+        Checkpoint Create(Checkpoint checkpoint);
     }
 }

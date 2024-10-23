@@ -43,22 +43,32 @@ public class ToursContext : DbContext
 
 
         modelBuilder.Entity<Object>()
-            .HasOne<Location>()
+            .HasOne<Location>(o=> o.Location)
             .WithOne()
             .HasForeignKey<Object>(c => c.LocationId);
-        modelBuilder.Entity<Object>()
-            .HasOne<Tour>()
-            .WithMany()
-            .HasForeignKey(c => c.TourId);
+
 
         modelBuilder.Entity<Checkpoint>()
-          .HasOne<Location>()
+            .HasOne<Tour>() // povezuje Checkpoint sa Tour
+            .WithMany(t => t.Checkpoints) // pretpostavljam da Tour ima Checkpoints kolekciju
+            .HasForeignKey(c => c.TourId);
+
+
+        // Object entitet
+        modelBuilder.Entity<Object>()
+            .HasOne<Tour>() // povezuje Object sa Tour
+            .WithMany(t => t.Objects) // pretpostavljam da Tour ima Objects kolekciju
+            .HasForeignKey(o => o.TourId);
+
+
+
+
+
+
+        modelBuilder.Entity<Checkpoint>()
+          .HasOne<Location>(c=>c.Location)
           .WithOne()
           .HasForeignKey<Checkpoint>(c => c.LocationId);
-        modelBuilder.Entity<Checkpoint>()
-            .HasOne<Tour>()
-            .WithMany()
-            .HasForeignKey(c => c.TourId);
 
         ConfigureRequiredEquipment(modelBuilder);
     }

@@ -23,14 +23,17 @@ namespace Explorer.Tours.Core.Domain
 
     public class Tour : Entity
     {
-        public string Name { get; private set; }
-        public string Description { get; private set;}
-        public Difficulty Difficulty { get; private set; }
-        public List<string> Tags { get; private set; } // Lista tagova koji opisuju turu
-        public double Cost { get; private set; } = 0; // Default cena je 0
-        public Status Status { get; private set; } = Status.Draft; // Default status je Draft
+        public string Name { get; set; }
+        public string Description { get; set;}
+        public Difficulty Difficulty { get; set; }
+        public List<string> Tags { get; set; } // Lista tagova koji opisuju turu
+        public double Cost { get; set; } = 0; // Default cena je 0
+        public Status Status { get; set; } = Status.Draft; // Default status je Draft
         
-        public long AuthorId { get; private set; }
+        public long AuthorId { get; set; }
+
+        public virtual List<Checkpoint> Checkpoints { get;  set; }
+        public virtual List<Object> Objects { get;  set; }
 
 
         public Tour(string name, string description, Difficulty difficulty, List<string> tags,long authorId)
@@ -42,6 +45,7 @@ namespace Explorer.Tours.Core.Domain
             AuthorId = authorId;
             Validate();
         }
+        public Tour() { }
 
         private void Validate()
         {

@@ -16,7 +16,9 @@ public class Object : Entity
     public Category Category { get; private set; }
     public long LocationId { get; private set; }
     public long TourId { get; private set; }
+    public virtual Location? Location { get; set; }
 
+    public Object() { }
     public Object(string name, string imageUrl, string description, Category category,long locationId, long tourId)
     {
         Name = name;

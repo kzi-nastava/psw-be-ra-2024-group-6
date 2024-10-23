@@ -13,7 +13,8 @@ public interface IObjectService
 {
     Result<PagedResult<ObjectDto>> GetPaged(int page, int pageSize);
     Result<ObjectDto> Create(ObjectDto equipment);
+    Result<ObjectDto> Create(ObjectCreateDto objectCreateDto);
     Result<ObjectDto> Update(ObjectDto equipment);
     Result Delete(int id);
-    Result<List<ObjectDto>> GetByTourId(long tourId);
+    Result<List<ObjectReadDto>> GetByTourId(long tourId);
 }

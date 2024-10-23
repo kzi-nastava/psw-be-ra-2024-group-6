@@ -37,6 +37,7 @@ public static class ToursStartup
         services.AddScoped<ITourService,TourService>();
         services.AddScoped<IRequiredEquipmentService, RequiredEquipmentService>();
         services.AddScoped<ITouristEquipmentManagerService, TouristEquipmentManagerService>();
+        services.AddScoped<ILocationService, LocationService>();
 
     }
 
@@ -44,6 +45,7 @@ public static class ToursStartup
     {
         services.AddScoped(typeof(ICrudRepository<Equipment>), typeof(CrudDatabaseRepository<Equipment, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<Object>), typeof(CrudDatabaseRepository<Object, ToursContext>));
+        services.AddScoped(typeof(ICrudRepository<Location>), typeof(CrudDatabaseRepository<Location, ToursContext>));
         services.AddScoped<IObjectRepository, ObjectDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<Checkpoint>), typeof(CrudDatabaseRepository<Checkpoint, ToursContext>));
         services.AddScoped(typeof(IRequiredEquipmentRepository), typeof(RequiredEquipmentRepository));
