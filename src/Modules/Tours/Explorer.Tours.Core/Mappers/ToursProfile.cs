@@ -16,19 +16,25 @@ public class ToursProfile : Profile
         CreateMap<RequiredEquipmentDto, RequiredEquipment>().ReverseMap();
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 
-        //CreateMap<TourInfoDto, Tour>().ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>src.Name));
-        CreateMap<TourCreateDto, Tour>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.TourInfo.Name))
-            .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => src.TourInfo.AuthorId))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.TourInfo.Status))
-            .ForMember(dest => dest.Difficulty, opt => opt.MapFrom(src => src.TourInfo.Difficulty))
-            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.TourInfo.Description));
-            //.ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.TourInfo.Tags));
+        CreateMap<TourInfoDto, Tour>().ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>src.Name));
 
-
-
-        CreateMap<CheckpointCreateDto,Checkpoint>().ReverseMap();
+        CreateMap<CheckpointCreateDto,Checkpoint>().ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>src.Name))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+            .ForMember(dest => dest.LocationId, opt => opt.MapFrom(src => src.Location.Id))
+            .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
+            .ForMember(dest=>dest.Location,opt=>opt.Ignore());
         CreateMap<ObjectCreateDto,Object>().ReverseMap();
-        
+        CreateMap<LocationCreateDto,Location>().ReverseMap();
+        CreateMap<LocationDto, Location>().ReverseMap();
+        CreateMap<CheckpointCreateDto, Checkpoint>().ReverseMap();
+        CreateMap<ObjectCreateDto, Object>().ReverseMap();
+        CreateMap<LocationCreateDto, Location>().ReverseMap();
+
+
+
+        CreateMap<ObjectCreateDto, Object>().ReverseMap();
+
+
     }
 }

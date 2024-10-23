@@ -37,20 +37,23 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-                // Mapirajte DTO u entitet ture
-                Tour tour = mapper.Map<Tour>(createTour);
-
-                // Kreirajte novu turu u repozitorijumu
+                Tour tour = mapper.Map<Tour>(createTour.TourInfo);
                 Tour newTour = crudRepository.Create(tour);
+                foreach (CheckpointCreateDto ch in createTour.Checkpoints)
+                {
+                    ch.TourId = newTour.Id;
+                    _checkpointService.Create(mapper.Map<CheckpointCreateDto>(ch));
+                }
+                foreach (ObjectCreateDto o in createTour.Objects)
+                {
+                    o.TourId = newTour.Id;
+                    _objectService.Create(mapper.Map<ObjectCreateDto>(o));
+                }
 
-                
-
-                // Vratite uspešan rezultat sa kreiranim DTO-om
                 return Result.Ok(createTour);
             }
             catch (Exception ex)
             {
-                // Vratite grešku u slučaju neuspeha
                 return Result.Fail(ex.Message);
             }
 
