@@ -17,6 +17,12 @@ namespace Explorer.API.Controllers.Author
             _checkpointService = checkpointService;
         }
 
+        [HttpGet("{toudId:int}")]
+        public ActionResult<PagedResult<CheckpointReadDto>> GetByTourId(int tourId)
+        {
+            var result = _checkpointService.GetByTourId(tourId);
+            return CreateResponse(result);
+        }
         [HttpGet]
         public ActionResult<PagedResult<CheckpointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
