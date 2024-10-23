@@ -17,7 +17,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             _dbContext = dbContext;
         }
-        public List<Checkpoint> GetByTourId(int tourId)
+        public List<Checkpoint> GetByTourId(long tourId)
         {
             try
             {
