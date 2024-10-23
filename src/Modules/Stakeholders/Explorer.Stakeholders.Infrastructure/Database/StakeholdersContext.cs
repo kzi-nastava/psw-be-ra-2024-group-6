@@ -47,10 +47,6 @@ public class StakeholdersContext : DbContext
             .HasOne<Tourist>()
             .WithMany()
             .HasForeignKey(p => p.TouristId);
-        modelBuilder.Entity<Rating>()
-            .HasOne<Rating>()
-            .WithMany()
-            .HasForeignKey(p => p.UserId);
         modelBuilder.Entity<Club>()
             .HasOne<User>() 
             .WithMany() 
