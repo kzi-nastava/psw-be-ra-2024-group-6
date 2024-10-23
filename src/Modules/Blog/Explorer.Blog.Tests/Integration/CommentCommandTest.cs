@@ -30,10 +30,12 @@ namespace Explorer.Blog.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
             var newEntity = new CommentDto
             {
-                Text = "Solidno",
-                UserId = 1,
+                Id = -1,
+                Text = "Buraz",
+                UserId = -1,
                 CreationDate = DateTime.Now.ToUniversalTime(),
                 UpdateDate = DateTime.Now.ToUniversalTime(),
+                BlogId = -1
 
 
             };
@@ -47,7 +49,7 @@ namespace Explorer.Blog.Tests.Integration
             result.Text.ShouldBe(newEntity.Text);
             result.CreationDate.ShouldBe(newEntity.CreationDate);
             result.UpdateDate.ShouldBe(newEntity.UpdateDate);
-            result.UserId.ShouldBe(1);
+            result.UserId.ShouldBe(-1);
 
 
             // Assert - Database
@@ -86,10 +88,11 @@ namespace Explorer.Blog.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
             var updatedEntity = new CommentDto
             {
-                Id = 1,
+                Id = -1,
                 Text = "Lose",
-                UserId = 1,
+                UserId = -1,
                 UpdateDate = DateTime.Now.ToUniversalTime(),
+                BlogId = -1
             };
 
             // Act
@@ -97,15 +100,15 @@ namespace Explorer.Blog.Tests.Integration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(1);
+            result.Id.ShouldBe(-1);
             result.Text.ShouldBe(updatedEntity.Text);
             result.UpdateDate.ShouldBe(updatedEntity.UpdateDate);
 
             // Assert - Database
-            var storedEntity = dbContext.Comment.FirstOrDefault(i => i.Id == 1 && i.Text == "Lose");
+            var storedEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -1 && i.Text == "Lose");
             storedEntity.ShouldNotBeNull();
             storedEntity.CreationDate.ShouldBe(updatedEntity.CreationDate);
-            var oldEntity = dbContext.Comment.FirstOrDefault(i => i.Id == 1 && i.Text == "Solidno");
+            var oldEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -1 && i.Text == "Solidno");
             oldEntity.ShouldBeNull();
         }
 
@@ -117,7 +120,7 @@ namespace Explorer.Blog.Tests.Integration
             var controller = CreateController(scope);
             var updatedEntity = new CommentDto
             {
-                Id = -1,
+                Id = -5,
                 Text = "Solidno",
                 UserId = 1,
                 CreationDate = DateTime.Now.ToUniversalTime(),

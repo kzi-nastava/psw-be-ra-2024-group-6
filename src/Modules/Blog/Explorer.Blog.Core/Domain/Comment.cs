@@ -9,7 +9,6 @@ namespace Explorer.Blog.Core.Domain
 {
     public class Comment : Entity
     {
-        public long Id { get; private set; }
 
         public string Text { get; private set; }
 
@@ -20,10 +19,9 @@ namespace Explorer.Blog.Core.Domain
         public int UserId { get; private set; }
         public int BlogId { get; private set; }
 
-        public Comment( long id, string text, DateTime creationDate, DateTime updateDate, int userId, int blogId)
+        public Comment(string text, DateTime creationDate, DateTime updateDate, int userId, int blogId)
         {
             if (string.IsNullOrWhiteSpace(text)) throw new ArgumentNullException("Must contain text");
-            Id = id;
             Text = text;
             CreationDate = creationDate;
             UpdateDate = updateDate;
