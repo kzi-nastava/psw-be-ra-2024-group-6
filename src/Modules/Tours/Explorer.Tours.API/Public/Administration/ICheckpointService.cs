@@ -14,6 +14,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<CheckpointDto> Create(CheckpointDto equipment);
         Result<CheckpointDto> Update(CheckpointDto equipment);
         Result Delete(int id);
-        Result<List<CheckpointDto>> GetByTourId(long tourId);
+        Result<List<CheckpointReadDto>> GetByTourId(long tourId);
+
     }
 }

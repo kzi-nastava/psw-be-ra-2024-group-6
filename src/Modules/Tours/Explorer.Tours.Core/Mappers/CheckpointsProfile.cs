@@ -14,6 +14,8 @@ namespace Explorer.Tours.Core.Mappers
         public CheckpointsProfile()
         {
             CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
+            CreateMap<Checkpoint, CheckpointReadDto>().ReverseMap();
+            CreateMap<Location, LocationReadDto>().ReverseMap();
         }
     }
 }

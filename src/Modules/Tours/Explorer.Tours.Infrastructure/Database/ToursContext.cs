@@ -73,7 +73,7 @@ public class ToursContext : DbContext
 
 
         modelBuilder.Entity<Checkpoint>()
-          .HasOne<Location>()
+          .HasOne<Location>(c=>c.Location)
           .WithOne()
           .HasForeignKey<Checkpoint>(c => c.LocationId);
         modelBuilder.Entity<Checkpoint>()
