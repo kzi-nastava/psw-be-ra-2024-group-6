@@ -22,7 +22,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         public List<Checkpoint> GetByTourId(long tourId)
         {
                 return _dbContext.Checkpoints
-                    .Where(p => p.TourId == tourId)
+                    .Where(c => c.TourId == tourId)
                     .Include(c => c.Location)
                     .ToList();
         }
