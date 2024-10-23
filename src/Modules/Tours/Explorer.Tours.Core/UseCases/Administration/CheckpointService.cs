@@ -23,7 +23,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             this.mapper = mapper;
         }
 
-        Result<List<CheckpointDto>> ICheckpointService.GetByTourId(int tourId)
+        Result<List<CheckpointDto>> ICheckpointService.GetByTourId(long tourId)
         {
             try
             {
