@@ -1,13 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Explorer.Blog.Core.Domain;
+using Microsoft.EntityFrameworkCore;
+using BlogDomain = Explorer.Blog.Core.Domain;
+
 
 namespace Explorer.Blog.Infrastructure.Database;
 
 public class BlogContext : DbContext
 {
-    public BlogContext(DbContextOptions<BlogContext> options) : base(options) {}
+    public DbSet<Comment> Comment { get; set; }
+    public BlogContext(DbContextOptions<BlogContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.HasDefaultSchema("blog");
     }
 }
