@@ -6,6 +6,7 @@
         public string ImageUrl { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
+        public long? TourId { get; set; }
         public LocationCreateDto Location { get; set; }
     }
 }

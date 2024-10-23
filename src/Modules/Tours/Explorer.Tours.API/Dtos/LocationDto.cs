@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.API.Dtos
 {
-    public class LocationCreateDto
+    public class LocationDto
     {
-        public long? Id { get; set; }
+        public long Id { get; set; }
         public long Latitude { get; set; }
         public long Longitude { get; set; }
     }
