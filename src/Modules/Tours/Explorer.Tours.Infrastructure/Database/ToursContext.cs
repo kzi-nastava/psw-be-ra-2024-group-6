@@ -50,10 +50,6 @@ public class ToursContext : DbContext
             .HasOne<Tour>()
             .WithMany()
             .HasForeignKey(c => c.TourId);
-        modelBuilder.Entity<Object>()
-            .HasOne<Tour>()
-            .WithMany()
-            .HasForeignKey(c => c.TourId);
 
 
 
