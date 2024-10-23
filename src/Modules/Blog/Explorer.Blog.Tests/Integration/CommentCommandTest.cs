@@ -88,7 +88,7 @@ namespace Explorer.Blog.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
             var updatedEntity = new CommentDto
             {
-                Id = -1,
+                Id = -2,
                 Text = "Lose",
                 UserId = -1,
                 UpdateDate = DateTime.Now.ToUniversalTime(),
@@ -100,15 +100,15 @@ namespace Explorer.Blog.Tests.Integration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(-1);
+            result.Id.ShouldBe(-2);
             result.Text.ShouldBe(updatedEntity.Text);
             result.UpdateDate.ShouldBe(updatedEntity.UpdateDate);
 
             // Assert - Database
-            var storedEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -1 && i.Text == "Lose");
+            var storedEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -2 && i.Text == "Lose");
             storedEntity.ShouldNotBeNull();
             storedEntity.CreationDate.ShouldBe(updatedEntity.CreationDate);
-            var oldEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -1 && i.Text == "Solidno");
+            var oldEntity = dbContext.Comment.FirstOrDefault(i => i.Id == -2 && i.Text == "nesto");
             oldEntity.ShouldBeNull();
         }
 

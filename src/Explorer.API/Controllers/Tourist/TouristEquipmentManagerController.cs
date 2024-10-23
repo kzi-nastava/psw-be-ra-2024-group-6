@@ -52,7 +52,7 @@ public class TouristEquipmentManagerController : BaseApiController
         var result = _touristEquipmentManagerService.Delete(touristId, equipmentId);
         if (result.IsSuccess)
         {
-            return Ok(result.Successes.FirstOrDefault()?.Message ?? "Deleted successfully");
+            return Ok(result.Successes.FirstOrDefault()?.Message);
         }
 
         return BadRequest(result.Errors.FirstOrDefault()?.Message);
