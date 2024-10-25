@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.UseCases
 {
-    public class TourService : CrudService<TourDto,Tour>,ITourService
+    public class TourService : CrudService<TourDto, Tour>, ITourService
     {
         private readonly ITourRepository _tourRepository;
         private readonly ICrudRepository<Tour> crudRepository;
@@ -24,7 +24,7 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IObjectService _objectService;
         private readonly IMapper mapper;
 
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService,ICheckpointService checkpointService) : base(repository, mapper)
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper, ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
@@ -78,22 +78,30 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        //public Result<TourDetailsDto> GetTourDetailsByTourId(long tourId)
-        //{
-            /*Tour tour = crudRepository.Get(tourId);
-
-            TourDto tourDto = MapToDto(tour);
-
-            List<CheckpointDto> Checkpoints = _checkpointService.GetByTourId(tourId).Value;
-            List<ObjectDto> Objects = _objectService.GetByTourId(tourId).Value;
-
-            foreach (CheckpointDto checkpointDto in Checkpoints)
+        public Result<TourDetailsDto> GetTourDetailsByTourId(int tourId,int userId)
+        {
+            try
             {
-                new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
-            }
-            */
-            
+                Tour tour = crudRepository.Get(tourId);
+                if (!tour.IsAuthorOwner(userId))
+                    return Result.Fail(FailureCode.Forbidden).WithError("You are not the author of this tour");
 
-        //}
+                TourDto tourDto = MapToDto(tour);
+
+                List<CheckpointReadDto> checkpoints = _checkpointService.GetByTourId(tourId).Value;
+                List<ObjectReadDto> objects = _objectService.GetByTourId(tourId).Value;
+                TourDetailsDto tourDetailsDto = new TourDetailsDto
+                {
+                    TourInfo = tourDto,
+                    Checkpoints = checkpoints,
+                    Objects = objects
+                };
+                return Result.Ok(tourDetailsDto);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

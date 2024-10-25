@@ -54,5 +54,10 @@ namespace Explorer.Tours.Core.Domain
             if (Tags == null || Tags.Count == 0) throw new ArgumentException("At least one tag is required.");
 
         }
+
+        internal bool IsAuthorOwner(int authorId)
+        {
+            return AuthorId == authorId;
+        }
     }
 }

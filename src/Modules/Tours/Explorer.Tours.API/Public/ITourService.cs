@@ -18,6 +18,6 @@ namespace Explorer.Tours.API.Public
         Result Delete(int id);
         Result<TourCreateDto> CreateTour(TourCreateDto tour);
 
-        //Result GetTourDetailsByTourId(int tourId);
+        Result<TourDetailsDto> GetTourDetailsByTourId(int tourId,int userId);
     }
 }
