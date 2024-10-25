@@ -22,6 +22,8 @@ public class Review : Entity
         ValidateRating(rating);
         ValidateComment(comment);
         ValidateTourDate(tourDate);
+        ValidateReviewDate(reviewDate, tourDate);
+
 
         TouristId = touristId;
         Rating = rating;
@@ -56,5 +58,13 @@ public class Review : Entity
             throw new ArgumentException("Tour date cannot be in the future..");
         }
 
+    }
+
+    private void ValidateReviewDate(DateTime reviewDate, DateTime tourDate)
+    {
+        if (reviewDate < tourDate)
+        {
+            throw new ArgumentException("Review date must be greater than or equal to the tour date.");
+        }
     }
 }

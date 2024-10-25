@@ -26,10 +26,10 @@ public class TouristEquipmentManagerQueryTests : BaseToursIntegrationTest
         var controller = CreateController(scope);
 
         // Act
-        //var result = ((ObjectResult)controller.GetAllTouristEquipments(2).Result)?.Value as List<TouristEquipmentManagerDto>;
+        var result = ((ObjectResult)controller.GetTouristEquipments(2).Result)?.Value as List<TouristEquipmentManagerDto>;
         // Assert
-        //result.ShouldNotBeNull();
-        //result.Count.ShouldBe(2);
+        result.ShouldNotBeNull();
+        result.Count.ShouldBe(2);
 
     }
 

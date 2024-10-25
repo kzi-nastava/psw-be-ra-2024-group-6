@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Tourist
 {
     [Authorize(Policy = "touristPolicy")]
-    [Route("api/tourist/addReview")]
+    [Route("api/tourist/reviews")]
     public class ReviewController : BaseApiController
     {
         private readonly IReviewService _reviewService;
@@ -17,11 +17,26 @@ namespace Explorer.API.Controllers.Tourist
             _reviewService = reviewService;
         }
 
-        [HttpPost]
+        [HttpPost("addReview")]
         public ActionResult<ReviewDto> Create([FromBody] ReviewDto reviewDto)
         {
+            reviewDto.TourDate = DateTime.SpecifyKind(reviewDto.TourDate, DateTimeKind.Utc);
+            reviewDto.ReviewDate = DateTime.SpecifyKind(reviewDto.ReviewDate, DateTimeKind.Utc);
+
             var result = _reviewService.Create(reviewDto);
-            return CreateResponse(result);
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet("allReview")]
+        public ActionResult<IEnumerable<ReviewDto>> GetAll()
+        {
+            var reviews = _reviewService.GetAllReviews();
+            return Ok(reviews);
         }
     }
 }
