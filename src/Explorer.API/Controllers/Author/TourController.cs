@@ -39,14 +39,14 @@ namespace Explorer.API.Controllers.Author
 
         }
 
-        /* [HttpGet("{tourId:int}")]
+         [HttpGet("{tourId:int}")]
          public ActionResult<TourDetailsDto> GetTourDetailsByTourId(int tourId)
          {
-
-             var result = _tourService.GetTourDetailsByTourId(tourId);
+             int userId = User.UserId();
+             var result = _tourService.GetTourDetailsByTourId(tourId,userId);
              return CreateResponse(result);
 
-         }*/
+         }
 
         [HttpPost("details")]
         public ActionResult<TourCreateDto> CreateTour([FromBody]TourCreateDto tour)
