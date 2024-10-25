@@ -11,7 +11,7 @@ namespace Explorer.Tours.API.Public.Administration
 {
     public interface IRequiredEquipmentService
     {
-        public Result<List<RequiredEquipmentDto>> GetAllByTour(int tourId);
+        public Result<List<RequiredEquipmentDto>> GetAllByTourId(int tourId);
         public Result<RequiredEquipmentDto> Create(RequiredEquipmentDto requiredEquipment);
         public Result Delete(int id);
     }

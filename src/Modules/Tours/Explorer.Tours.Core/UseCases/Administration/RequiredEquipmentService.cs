@@ -46,11 +46,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        public Result<List<RequiredEquipmentDto>> GetAllByTour(int tourId)
+        public Result<List<RequiredEquipmentDto>> GetAllByTourId(int tourId)
         {
             try
             {
-                var result = _requiredEquipmentRepository.GetAllByTour(tourId).ToList();
+                var result = _requiredEquipmentRepository.GetAllByTourId(tourId).ToList();
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
