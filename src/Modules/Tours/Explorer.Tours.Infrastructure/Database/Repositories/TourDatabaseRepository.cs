@@ -32,5 +32,17 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         }
 
+        public Tour Get(long id)
+        {
+            try
+            {
+                var ret = _context.Tours.FirstOrDefault(t => t.Id == id);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
     }
 }

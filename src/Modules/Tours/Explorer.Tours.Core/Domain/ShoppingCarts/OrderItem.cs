@@ -9,13 +9,13 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
 {
     public class OrderItem : Entity
     {
-        public int ShoppingCartId { get; init; }
-        public int TourId { get; init; }
+        public long ShoppingCartId { get; init; }
+        public long TourId { get; init; }
         public string Name { get; init; }
         public Price Price { get; init; }
 
 
-        public OrderItem(int shoppingCartId, int tourId, string name, Price price)
+        public OrderItem(long shoppingCartId, long tourId, string name, Price price)
         {
             ShoppingCartId = shoppingCartId;
             TourId = tourId;
