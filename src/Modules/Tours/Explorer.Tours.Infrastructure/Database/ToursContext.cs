@@ -117,10 +117,9 @@ public class ToursContext : DbContext
     {
         modelBuilder.Entity<PurchaseToken>(entity =>
         {
-            entity.HasOne<Tour>() 
+            entity.HasOne<Tour>()
                 .WithMany()
-                .HasForeignKey(pt => pt.TourId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(pt => pt.TourId);
         });
 
     }
