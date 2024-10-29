@@ -3,6 +3,8 @@ using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Object = Explorer.Tours.Core.Domain.Object;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
+using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -17,6 +19,13 @@ public class ToursContext : DbContext
     public DbSet<RequiredEquipment> RequiredEquipments { get; set; }
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
 
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+    public DbSet<OrderItem> OrderItems { get; set; }
+
+    public DbSet<PurchaseToken> PurchaseTokens { get; set; }
+
+
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,6 +33,10 @@ public class ToursContext : DbContext
         modelBuilder.HasDefaultSchema("tours");
 
         ConfigureTour(modelBuilder);
+        ConfigureRequiredEquipment(modelBuilder);
+        ConfigureOrderItem(modelBuilder);
+        ConfigureShoppingCart(modelBuilder);
+
     }
     private static void ConfigureTour(ModelBuilder modelBuilder)
     {
@@ -70,7 +83,34 @@ public class ToursContext : DbContext
           .WithOne()
           .HasForeignKey<Checkpoint>(c => c.LocationId);
 
-        ConfigureRequiredEquipment(modelBuilder);
+
+    }
+
+    private static void ConfigureOrderItem(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<OrderItem>(entity =>
+        {
+            entity.Property(item => item.Price).HasColumnType("jsonb");
+            entity.HasOne<ShoppingCart>().WithMany(sc => sc.OrderItems)
+                .HasForeignKey(oi => oi.ShoppingCartId);
+
+            entity.HasOne<Tour>().WithMany().HasForeignKey(oi => oi.TourId);
+        });
+    }
+
+
+    private static void ConfigureShoppingCart(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ShoppingCart>(entity =>
+        {
+            entity.Property(item => item.TotalPrice).HasColumnType("jsonb");
+            entity.HasMany(sc => sc.OrderItems)
+                .WithOne()
+                .HasForeignKey(oi => oi.ShoppingCartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+        });
+
     }
 
     private static void ConfigureRequiredEquipment(ModelBuilder modelBuilder)
