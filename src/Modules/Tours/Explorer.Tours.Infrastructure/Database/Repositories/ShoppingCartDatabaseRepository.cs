@@ -46,6 +46,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext.SaveChanges();
         }
 
+
         public ShoppingCart Get(long id)
         {
             var cart = _dbContext.ShoppingCarts.Where(t => t.Id == id)
