@@ -36,6 +36,7 @@ public class ToursContext : DbContext
         ConfigureRequiredEquipment(modelBuilder);
         ConfigureOrderItem(modelBuilder);
         ConfigureShoppingCart(modelBuilder);
+        ConfigurePurchaseToken(modelBuilder);
 
     }
     private static void ConfigureTour(ModelBuilder modelBuilder)
@@ -112,7 +113,17 @@ public class ToursContext : DbContext
         });
 
     }
+    private static void ConfigurePurchaseToken(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PurchaseToken>(entity =>
+        {
+            entity.HasOne<Tour>() 
+                .WithMany()
+                .HasForeignKey(pt => pt.TourId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 
+    }
     private static void ConfigureRequiredEquipment(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<RequiredEquipment>(entity =>
