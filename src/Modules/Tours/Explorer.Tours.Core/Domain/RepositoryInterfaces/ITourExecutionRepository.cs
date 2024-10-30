@@ -7,6 +7,7 @@ public interface ITourExecutionRepository
     public TourExecution Create(TourExecution tourExecution);
     public void Delete(long id);
     public TourExecution Get(long id);
-    public TourExecution GetByIdAndTouristId(int tourExecutionId, int touristId);
+    public TourExecution? GetByIdAndTouristId(int tourExecutionId, int touristId);
     public TourExecution Update(TourExecution tourExecution);
+
 }

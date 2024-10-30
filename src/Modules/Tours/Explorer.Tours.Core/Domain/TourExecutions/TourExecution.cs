@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.Domain;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Explorer.Tours.Core.Domain.TourExecutions
 {
@@ -31,7 +32,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             TourId = tourId;
             TouristId = touristId;
             Status = TourExecutionStatus.ONGOING;
-            LastActivity = DateTime.Now;
+            LastActivity = DateTime.UtcNow;
             Completion = 0;
         }
 
@@ -42,7 +43,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             if (Enum.TryParse<TourExecutionStatus>(status, true, out var parsedStatus))
             {
                 Status = parsedStatus;
-                LastActivity = DateTime.Now;
+                LastActivity = DateTime.UtcNow;
             }
             else
             {

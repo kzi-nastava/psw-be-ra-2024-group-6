@@ -12,9 +12,9 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
     public class TourExecutionDatabaseRepository : CrudDatabaseRepository<TourExecution, ToursContext>, ITourExecutionRepository
     {
         public TourExecutionDatabaseRepository(ToursContext dbContext) : base(dbContext) {}
-        public TourExecution GetByIdAndTouristId(int tourExecutionId, int touristId)
+        public TourExecution? GetByIdAndTouristId(int tourExecutionId, int touristId)
         {
-            throw new NotImplementedException();
+            return DbContext.TourExecutions.FirstOrDefault(te => te.Id == tourExecutionId && te.TouristId == touristId);
         }
     }
 }

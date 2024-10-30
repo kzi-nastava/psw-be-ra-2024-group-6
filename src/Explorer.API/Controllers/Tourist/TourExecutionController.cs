@@ -28,7 +28,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPut]
         public ActionResult<TourExecutionDto> FinalizeTourExecution([FromQuery] int tourExecutionId, [FromQuery] string status)
         {
-            var result = _tourExecutionService.FinalizeTourExecution(tourExecutionId, status, User.UserId());
+            var result = _tourExecutionService.FinalizeTourExecution(tourExecutionId, status, -1);
             return CreateResponse(result);
         }
     }

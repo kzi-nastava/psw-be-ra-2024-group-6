@@ -34,10 +34,10 @@ public class ToursProfile : Profile
         CreateMap<TourExecutionDto, TourExecution>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.Position,
-                opt => opt.MapFrom(src => new TouristPosition(src.longitude, src.latitude)));
+                opt => opt.MapFrom(src => new TouristPosition(src.Longitude, src.Latitude)));
         CreateMap<TourExecution, TourExecutionDto>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
-            .ForMember(dest => dest.longitude, opt => opt.MapFrom(src => src.Position.Longitude))
-            .ForMember(dest => dest.latitude, opt => opt.MapFrom(src => src.Position.Latitude));
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Position.Longitude))
+            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Position.Latitude));
     }
 }
