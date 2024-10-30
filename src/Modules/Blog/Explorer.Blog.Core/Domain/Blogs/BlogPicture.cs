@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Blog.Core.Domain
+namespace Explorer.Blog.Core.Domain.Blogs
 {
     public class BlogPicture : Entity
     {
-        public string Url {  get; private set; }
+        public string Url { get; private set; }
         public long BlogId { get; private set; }
         public Blog Blog { get; private set; }
 

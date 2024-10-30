@@ -2,6 +2,7 @@
 using Explorer.API.Controllers.Author_Tourist;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
+using Explorer.Blog.Core.Domain.Blogs;
 using Explorer.Blog.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -100,10 +101,10 @@ namespace Explorer.Blog.Tests.Integration
             result.Description.ShouldBe(updatedEntity.Description);
 
             // Assert - Database
-            var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Core.Domain.Status.Closed);
+            var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Status.Closed);
             storedEntity.ShouldNotBeNull();
             storedEntity.Description.ShouldBe(updatedEntity.Description);
-            var oldEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Core.Domain.Status.Draft);
+            var oldEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Status.Draft);
             oldEntity.ShouldBeNull();
         }
         
