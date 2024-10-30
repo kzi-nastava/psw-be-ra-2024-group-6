@@ -3,6 +3,7 @@ using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Object = Explorer.Tours.Core.Domain.Object;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.BuildingBlocks.Core.Domain;
 
@@ -18,6 +19,7 @@ public class ToursContext : DbContext
 
     public DbSet<RequiredEquipment> RequiredEquipments { get; set; }
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
+    public DbSet<TourExecution> TourExecutions { get; set; }
 
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
@@ -33,12 +35,15 @@ public class ToursContext : DbContext
         modelBuilder.HasDefaultSchema("tours");
 
         ConfigureTour(modelBuilder);
+
+        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
+        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
         ConfigureRequiredEquipment(modelBuilder);
         ConfigureOrderItem(modelBuilder);
         ConfigureShoppingCart(modelBuilder);
         ConfigurePurchaseToken(modelBuilder);
-
     }
+    
     private static void ConfigureTour(ModelBuilder modelBuilder)
     {
         
