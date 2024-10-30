@@ -9,5 +9,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     public interface ITourRepository
     {
         List<Tour> GetByUserId(long userId);
+
+        Tour Get(long id);
     }
 }
