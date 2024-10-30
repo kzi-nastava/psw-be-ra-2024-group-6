@@ -30,7 +30,8 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            throw new NotImplementedException();
+            yield return Amount;
         }
+
     }
 }

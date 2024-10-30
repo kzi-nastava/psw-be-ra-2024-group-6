@@ -22,9 +22,10 @@ namespace Explorer.Tours.Core.UseCases.Shopping
         private readonly IMapper mapper;
 
         public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,
-            IShoppingCartRepository shoppingCartRepository, IMapper mapper) : base(crudRepository, mapper)
+            IShoppingCartRepository shoppingCartRepository, ITourRepository tourRepository, IMapper mapper) : base(crudRepository, mapper)
         {
             _shoppingCartRepository = shoppingCartRepository;
+            _tourRepository = tourRepository;
             this.mapper = mapper;
         }
 
@@ -41,7 +42,8 @@ namespace Explorer.Tours.Core.UseCases.Shopping
 
             if (sc == null)
             {
-                sc = new ShoppingCart(userId, 0);
+                sc = new ShoppingCart(userId, new Price(0));
+                _shoppingCartRepository.Create(sc);
             }
 
             var tour = _tourRepository.Get(tourId);
@@ -51,6 +53,7 @@ namespace Explorer.Tours.Core.UseCases.Shopping
             }
 
             sc.AddItem(tourId, tour.Name, tour.Cost);
+            _shoppingCartRepository.Update(sc);
             return MapToDto(mapper.Map<ShoppingCart>(sc));
         }
 
