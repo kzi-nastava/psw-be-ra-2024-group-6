@@ -13,7 +13,7 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
         public Price TotalPrice { get; private set; }
         public List<OrderItem> OrderItems { get; private set; }
 
-        public ShoppingCart(long userId, Price totalPrice, List<OrderItem> orderItems)
+        public ShoppingCart(long userId, Price totalPrice)
         {
             UserId = userId;
             TotalPrice = totalPrice;
