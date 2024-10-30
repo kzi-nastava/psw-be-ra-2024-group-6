@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain.Problems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
