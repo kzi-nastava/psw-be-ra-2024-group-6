@@ -12,6 +12,7 @@ using Explorer.Stakeholders.API.Public.Administration;
 using Explorer.Stakeholders.Core.UseCases.Administration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Explorer.Stakeholders.Core.Domain.Problems;
 
 namespace Explorer.Stakeholders.Infrastructure;
 
