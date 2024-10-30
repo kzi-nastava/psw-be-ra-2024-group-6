@@ -34,5 +34,20 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             LastActivity = DateTime.Now;
             Completion = 0;
         }
+
+        public TourExecution() {}
+
+        public void Finalize(string status)
+        {
+            if (Enum.TryParse<TourExecutionStatus>(status, true, out var parsedStatus))
+            {
+                Status = parsedStatus;
+                LastActivity = DateTime.Now;
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid status value: {status}");
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Object = Explorer.Tours.Core.Domain.Object;
 
 namespace Explorer.Tours.Core.Mappers;
@@ -30,6 +31,13 @@ public class ToursProfile : Profile
 
         CreateMap<ObjectCreateDto, Object>().ReverseMap();
 
-
+        CreateMap<TourExecutionDto, TourExecution>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Position,
+                opt => opt.MapFrom(src => new TouristPosition(src.longitude, src.latitude)));
+        CreateMap<TourExecution, TourExecutionDto>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.longitude, opt => opt.MapFrom(src => src.Position.Longitude))
+            .ForMember(dest => dest.latitude, opt => opt.MapFrom(src => src.Position.Latitude));
     }
 }
