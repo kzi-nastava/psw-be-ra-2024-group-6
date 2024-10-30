@@ -3,6 +3,7 @@ using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Object = Explorer.Tours.Core.Domain.Object;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -16,6 +17,7 @@ public class ToursContext : DbContext
 
     public DbSet<RequiredEquipment> RequiredEquipments { get; set; }
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
+    public DbSet<TourExecution> TourExecutions { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
@@ -24,6 +26,9 @@ public class ToursContext : DbContext
         modelBuilder.HasDefaultSchema("tours");
 
         ConfigureTour(modelBuilder);
+
+        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
+        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
     }
     private static void ConfigureTour(ModelBuilder modelBuilder)
     {
