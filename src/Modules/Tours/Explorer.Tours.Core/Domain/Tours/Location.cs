@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Tours.Core.Domain;
+namespace Explorer.Tours.Core.Domain.Tours;
 
 public class Location : Entity
 {
@@ -13,6 +13,6 @@ public class Location : Entity
     public double Longitude { get; init; }
     public Location() { }
 
-    
+
 
 }
