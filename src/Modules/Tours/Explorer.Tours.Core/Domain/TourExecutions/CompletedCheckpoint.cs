@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.Domain;
 
@@ -12,6 +13,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         public int CheckpointId { get; init; }
         public DateTime CompletionTime { get; init; }
 
+        [JsonConstructor]
         public CompletedCheckpoint(int checkpointId, DateTime completionTime)
         {
             CheckpointId = checkpointId;
