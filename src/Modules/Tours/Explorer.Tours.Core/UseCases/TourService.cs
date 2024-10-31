@@ -1,0 +1,107 @@
+﻿using AutoMapper;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Public;
+using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using FluentResults;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Explorer.Tours.Core.UseCases
+{
+    public class TourService : CrudService<TourDto, Tour>, ITourService
+    {
+        private readonly ITourRepository _tourRepository;
+        private readonly ICrudRepository<Tour> crudRepository;
+        private readonly ICheckpointService _checkpointService;
+        private readonly IObjectService _objectService;
+        private readonly IMapper mapper;
+
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper, ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService) : base(repository, mapper)
+        {
+            _tourRepository = tourRepository;
+            crudRepository = repository;
+            _objectService = objectService;
+            _checkpointService = checkpointService;
+            this.mapper = mapper;
+        }
+
+        public Result<TourCreateDto> CreateTour(TourCreateDto createTour)
+        {
+            try
+            {
+                Tour tour = mapper.Map<Tour>(createTour.TourInfo);
+                Tour newTour = crudRepository.Create(tour);
+                foreach (CheckpointCreateDto ch in createTour.Checkpoints)
+                {
+                    ch.TourId = newTour.Id;
+                    _checkpointService.Create(mapper.Map<CheckpointCreateDto>(ch));
+                }
+                foreach (ObjectCreateDto o in createTour.Objects)
+                {
+                    o.TourId = newTour.Id;
+                    _objectService.Create(mapper.Map<ObjectCreateDto>(o));
+                }
+
+                return Result.Ok(createTour);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+
+
+        }
+
+        public Result<List<TourDto>> GetByUserId(long userId)
+        {
+            try
+            {
+                var el = MapToDto(_tourRepository.GetByUserId(userId));
+                return el;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+
+        }
+
+        public Result<TourDetailsDto> GetTourDetailsByTourId(int tourId,int userId)
+        {
+            try
+            {
+                Tour tour = crudRepository.Get(tourId);
+                if (!tour.IsAuthorOwner(userId))
+                    return Result.Fail(FailureCode.Forbidden).WithError("You are not the author of this tour");
+
+                TourDto tourDto = MapToDto(tour);
+
+                List<CheckpointReadDto> checkpoints = _checkpointService.GetByTourId(tourId).Value;
+                List<ObjectReadDto> objects = _objectService.GetByTourId(tourId).Value;
+                TourDetailsDto tourDetailsDto = new TourDetailsDto
+                {
+                    TourInfo = tourDto,
+                    Checkpoints = checkpoints,
+                    Objects = objects
+                };
+                return Result.Ok(tourDetailsDto);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+    }
+}

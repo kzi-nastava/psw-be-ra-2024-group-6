@@ -1,0 +1,16 @@
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain.Problems;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
+{
+    public interface IProblemRepository : ICrudRepository<Problem>
+    {
+        List<Problem> GetAll();
+
+    }
+}

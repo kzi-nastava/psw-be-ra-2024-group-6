@@ -26,6 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Author-Administrator-Tourist\" />
+    <Folder Include="Controllers\Tourist\" />
     <Folder Include="Controllers\Author\" />
   </ItemGroup>
 

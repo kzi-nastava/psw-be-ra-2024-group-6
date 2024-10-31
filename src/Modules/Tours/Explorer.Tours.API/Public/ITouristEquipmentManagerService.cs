@@ -11,7 +11,7 @@ namespace Explorer.Tours.API.Public;
 
 public interface ITouristEquipmentManagerService
 {
-    Result<List<TouristEquipmentManagerDto>> GetTouristEquipment(int touristId);
+    Result<List<TouristEquipmentManagerDto>> GetAllTouristEquipments(int touristId);
     Result<TouristEquipmentManagerDto> Create(TouristEquipmentManagerDto equipment);
     Result Delete(int touristId, int equipmentId);
 }

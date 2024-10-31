@@ -31,7 +31,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _context.SaveChanges();
         }
 
-        public ICollection<RequiredEquipment> GetAllByTour(int tourId)
+        public ICollection<RequiredEquipment> GetAllByTourId(int tourId)
         {
             return _context.RequiredEquipments
                 .Where(re => re.TourId == tourId)

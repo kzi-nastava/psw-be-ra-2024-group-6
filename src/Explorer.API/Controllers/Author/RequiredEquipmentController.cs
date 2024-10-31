@@ -32,7 +32,7 @@ namespace Explorer.API.Controllers.Author
         [HttpGet]
         public ActionResult<ICollection<RequiredEquipmentDto>> GetAllByTourId([FromQuery] int tourId)
         {
-            var result = _requiredEquipmentService.GetAllByTour(tourId);
+            var result = _requiredEquipmentService.GetAllByTourId(tourId);
             return CreateResponse(result);
         }
 

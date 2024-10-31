@@ -28,9 +28,9 @@ public class TouristEquipmentManagerController : BaseApiController
     }
 
     [HttpGet]
-    public ActionResult<List<TouristEquipmentManagerDto>> GetTouristEquipments([FromQuery] int touristId)
+    public ActionResult<List<TouristEquipmentManagerDto>> GetAllTouristEquipments([FromQuery] int touristId)
     {
-        var result = _touristEquipmentManagerService.GetTouristEquipment(touristId);
+        var result = _touristEquipmentManagerService.GetAllTouristEquipments(touristId);
         return CreateResponse(result);
     }
 
@@ -52,7 +52,7 @@ public class TouristEquipmentManagerController : BaseApiController
         var result = _touristEquipmentManagerService.Delete(touristId, equipmentId);
         if (result.IsSuccess)
         {
-            return Ok(result.Successes.FirstOrDefault()?.Message ?? "Deleted successfully");
+            return Ok(result.Successes.FirstOrDefault()?.Message);
         }
 
         return BadRequest(result.Errors.FirstOrDefault()?.Message);
