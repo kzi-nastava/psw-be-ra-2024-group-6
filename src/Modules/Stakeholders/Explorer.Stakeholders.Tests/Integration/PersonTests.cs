@@ -4,6 +4,7 @@ using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Explorer.API.Controllers.Stakeholders;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
