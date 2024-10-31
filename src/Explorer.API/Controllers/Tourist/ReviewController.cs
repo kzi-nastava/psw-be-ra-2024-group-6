@@ -17,7 +17,7 @@ namespace Explorer.API.Controllers.Tourist
             _reviewService = reviewService;
         }
 
-        [HttpPost("addReview")]
+        [HttpPost]
         public ActionResult<ReviewDto> Create([FromBody] ReviewDto reviewDto)
         {
             reviewDto.TourDate = DateTime.SpecifyKind(reviewDto.TourDate, DateTimeKind.Utc);
@@ -32,7 +32,7 @@ namespace Explorer.API.Controllers.Tourist
             return Ok(result.Value);
         }
 
-        [HttpGet("allReview")]
+        [HttpGet("all-reviews")]
         public ActionResult<IEnumerable<ReviewDto>> GetAll()
         {
             var reviews = _reviewService.GetAllReviews();

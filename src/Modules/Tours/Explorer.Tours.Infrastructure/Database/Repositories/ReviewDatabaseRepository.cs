@@ -9,11 +9,11 @@ using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Infrastructure.Database;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories;
-public class ReviewRepository : ITourReviewRepository
+public class ReviewDatabaseRepository : IReviewRepository
 {
     private readonly ToursContext _dbContext;
 
-    public ReviewRepository(ToursContext dbContext)
+    public ReviewDatabaseRepository(ToursContext dbContext)
     {
         _dbContext = dbContext;
     }

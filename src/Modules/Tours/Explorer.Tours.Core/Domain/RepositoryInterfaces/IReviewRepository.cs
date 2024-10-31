@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
-    public interface ITourReviewRepository
+    public interface IReviewRepository
     {
-        IEnumerable<Review> GetAll();
-        //void Add(Review review);
+        public IEnumerable<Review> GetAll();
     }
 }
