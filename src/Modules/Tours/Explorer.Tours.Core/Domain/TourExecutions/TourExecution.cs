@@ -31,7 +31,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             TourId = tourId;
             TouristId = touristId;
             Status = TourExecutionStatus.ONGOING;
-            LastActivity = DateTime.Now;
+            LastActivity = DateTime.UtcNow;
             Completion = 0;
         }
 
@@ -42,7 +42,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             if (Enum.TryParse<TourExecutionStatus>(status, true, out var parsedStatus))
             {
                 Status = parsedStatus;
-                LastActivity = DateTime.Now;
+                LastActivity = DateTime.UtcNow;
             }
             else
             {
