@@ -55,11 +55,6 @@ public class StakeholdersContext : DbContext
             .HasForeignKey(c => c.OwnerId) 
             ;
 
-        modelBuilder.Entity<ProblemMessage>()
-            .HasOne<Problem>()
-            .WithOne()
-            .HasForeignKey<Problem>(p => p.Id);
-
     }
 
 

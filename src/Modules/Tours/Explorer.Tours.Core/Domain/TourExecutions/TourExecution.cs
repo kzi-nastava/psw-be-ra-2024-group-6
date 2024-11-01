@@ -34,5 +34,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             LastActivity = DateTime.Now;
             Completion = 0;
         }
+
+        public TourExecution() { }
     }
 }
