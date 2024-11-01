@@ -201,7 +201,7 @@ public class Tour : Entity
 
     private bool CanPublish()
     {
-        if (Status==Status.Draft && Checkpoints.Count >= 2 && ValidatePublishInfo() )
+        if (Status!=Status.Published && Checkpoints.Count >= 2 && ValidatePublishInfo() )
             return true;
         return false;
     }
