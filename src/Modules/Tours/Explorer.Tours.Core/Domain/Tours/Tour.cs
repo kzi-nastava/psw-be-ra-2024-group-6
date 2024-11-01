@@ -167,9 +167,20 @@ public class Tour : Entity
         //existingEquipment.Update(equipment);
     }
 
-    public void Archive()
+    private bool CanArchive()
     {
+        if(Status==Status.Published)
+            return true;
+        return false;
+    }
 
+    public bool Archive()
+    {
+        if(!CanArchive())
+            return false;
+        StatusChangeTime = DateTime.UtcNow;
+        Status = Status.Archived;
+        return true;
     }
 
     public bool Publish()

@@ -18,6 +18,7 @@ namespace Explorer.Tours.API.Public
         Result Delete(int id);
         Result<TourCreateDto> CreateTour(TourCreateDto tour);
         Result<TourDetailsDto> PublishTour(long tourId, int userId);
+        Result<TourDetailsDto> Archive(long tourId, int userId);
 
         //Result GetTourDetailsByTourId(int tourId);
     }
