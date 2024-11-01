@@ -23,9 +23,9 @@ public class Distance : ValueObject
     public DistanceUnit Unit { get; }
 
     [JsonConstructor]
-    public Distance(double value, DistanceUnit unit)
+    public Distance(double lenght, DistanceUnit unit)
     {
-        Lenght = value;
+        Lenght = lenght;
         Unit = unit;
     }
 

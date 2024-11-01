@@ -57,6 +57,14 @@ namespace Explorer.API.Controllers.Author
 
         }
 
+        [HttpPost("publish/{tourId:long}")]
+        public ActionResult<TourDetailsDto> PublishTour(long tourId)
+        {
+            int userId = User.UserId();
+            var result = _tourService.PublishTour(tourId, userId);
+            return CreateResponse(result);
+        }
+
 
 
 
