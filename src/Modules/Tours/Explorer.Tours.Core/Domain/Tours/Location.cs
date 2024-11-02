@@ -28,4 +28,10 @@ public class Location : ValueObject
     {
         throw new NotImplementedException();
     }
+
+    public string ToString()
+    {
+        return $"{City}, {Country}";
+    }
+}
 }

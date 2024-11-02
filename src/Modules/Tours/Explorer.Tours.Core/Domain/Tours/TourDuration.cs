@@ -12,7 +12,7 @@ public enum TransportType
 {
     Car,
     Bike,
-    Foot
+    Walking
 }
 
 public class TourDuration : ValueObject
@@ -31,4 +31,10 @@ public class TourDuration : ValueObject
     {
         throw new NotImplementedException();
     }
+
+    public string ToString()
+    {
+        return $"{Duration} by {TransportType}";
+    }
+}
 }

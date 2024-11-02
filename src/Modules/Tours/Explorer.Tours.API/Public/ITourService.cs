@@ -18,6 +18,8 @@ namespace Explorer.Tours.API.Public
         Result Delete(int id);
         Result<TourCreateDto> CreateTour(TourCreateDto tour);
 
+        Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize);
+        Result<TourPreviewDto> GetTourPreview(long tourId);
         //Result GetTourDetailsByTourId(int tourId);
     }
 }
