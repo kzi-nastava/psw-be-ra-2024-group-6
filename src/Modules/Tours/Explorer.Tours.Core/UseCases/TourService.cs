@@ -90,10 +90,13 @@ namespace Explorer.Tours.Core.UseCases
 
             foreach (Tour tour in tours.Results)
             {
-                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
-                    tour.Checkpoints.First().ImageUrl, tour.TotalLenght.Lenght);
+                if (tour.Status == Status.Published)
+                {
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                         tour.TotalLenght.ToString());
 
-                tourCardDtos.Add(tourCardDto);
+                    tourCardDtos.Add(tourCardDto);
+                }
             }
 
             return tourCardDtos;
