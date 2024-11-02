@@ -19,14 +19,19 @@ public enum DistanceUnit
 
 public class Distance : ValueObject
 {
-    public double Lenght { get;}
+    public double Length { get;}
     public DistanceUnit Unit { get; }
 
     [JsonConstructor]
-    public Distance(double lenght, DistanceUnit unit)
+    public Distance(double length, DistanceUnit unit)
     {
-        Lenght = lenght;
+        Length = length;
         Unit = unit;
+        Validate();
+    }
+    public void Validate()
+    {
+        if (Length < 0) throw new ArgumentException("Invalid length.");
     }
 
     public Distance Add(Distance distance)
@@ -36,7 +41,7 @@ public class Distance : ValueObject
             throw new ArgumentException("Cannot add distances with different units.");
         }
 
-        return new Distance(Lenght + distance.Lenght, Unit);
+        return new Distance(Length + distance.Length, Unit);
     }
 
     public Distance Subtract(Distance distance)
@@ -46,7 +51,7 @@ public class Distance : ValueObject
             throw new ArgumentException("Cannot subtract distances with different units.");
         }
 
-        return new Distance(Lenght - distance.Lenght, Unit);
+        return new Distance(Length - distance.Length, Unit);
     }
 
  
