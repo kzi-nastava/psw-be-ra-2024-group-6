@@ -1,7 +1,6 @@
 ﻿using Explorer.API.Controllers.Author;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Database;
-using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 
 namespace Explorer.Tours.Tests.Integration.Administration
 {

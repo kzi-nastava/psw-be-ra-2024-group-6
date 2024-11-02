@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.Tours;
 using Object = Explorer.Tours.Core.Domain.Tours.Object;

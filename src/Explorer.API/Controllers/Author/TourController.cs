@@ -1,11 +1,11 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.API.Controllers.Author
 {
@@ -58,7 +58,7 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpPost("archive/{tourId:long}")]
-        public ActionResult<TourDetailsDto> ArchieveTour(long tourId)
+        public ActionResult<TourReadDto> ArchieveTour(long tourId)
         {
             int userId = User.UserId();
             var result = _tourService.Archive(tourId, userId);
@@ -66,7 +66,7 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpPost("publish/{tourId:long}")]
-        public ActionResult<TourDetailsDto> PublishTour(long tourId)
+        public ActionResult<TourReadDto> PublishTour(long tourId)
         {
             int userId = User.UserId();
             var result = _tourService.PublishTour(tourId, userId);

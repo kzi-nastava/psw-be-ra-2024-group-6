@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Core.Domain;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
@@ -78,7 +80,7 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<TourDetailsDto> PublishTour(long tourId, int userId)
+        public Result<TourReadDto> PublishTour(long tourId, int userId)
         {
             try
             {
@@ -88,7 +90,7 @@ namespace Explorer.Tours.Core.UseCases
                 if (!tour.Publish())
                     return Result.Fail("publish failed");
                 _tourRepository.Update(tour);
-                return mapper.Map<TourDetailsDto>(tour);
+                return mapper.Map<TourReadDto>(tour);
 
             }
             catch (KeyNotFoundException ex)
@@ -99,7 +101,7 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<TourDetailsDto> Archive(long tourId, int userId)
+        public Result<TourReadDto> Archive(long tourId, int userId)
         {
             try
             {
@@ -109,7 +111,7 @@ namespace Explorer.Tours.Core.UseCases
                 if (!tour.Archive())
                     return Result.Fail("publish failed");
                 _tourRepository.Update(tour);
-                return mapper.Map<TourDetailsDto>(tour);
+                return mapper.Map<TourReadDto>(tour);
 
             }
             catch (KeyNotFoundException ex)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 using Explorer.Tours.Core.Domain.Tours;
 using System;
 using System.Collections.Generic;

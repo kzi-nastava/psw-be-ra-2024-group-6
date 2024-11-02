@@ -1,5 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -17,8 +17,8 @@ namespace Explorer.Tours.API.Public
         Result<TourDto> Update(TourDto tour);
         Result Delete(int id);
         Result<TourCreateDto> CreateTour(TourCreateDto tour);
-        Result<TourDetailsDto> PublishTour(long tourId, int userId);
-        Result<TourDetailsDto> Archive(long tourId, int userId);
+        Result<TourReadDto> PublishTour(long tourId, int userId);
+        Result<TourReadDto> Archive(long tourId, int userId);
 
         //Result GetTourDetailsByTourId(int tourId);
     }

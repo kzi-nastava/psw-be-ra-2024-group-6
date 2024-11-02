@@ -1,5 +1,4 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
-using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Explorer.API.Controllers.Author;
 using System.Diagnostics;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 namespace Explorer.Tours.Tests.Integration.Administration
 {
     [Collection("Sequential")]
