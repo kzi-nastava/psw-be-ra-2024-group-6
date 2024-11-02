@@ -37,4 +37,3 @@ public class TourDuration : ValueObject
         return $"{Duration} by {TransportType}";
     }
 }
-}

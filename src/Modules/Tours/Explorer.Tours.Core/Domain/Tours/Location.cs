@@ -34,4 +34,3 @@ public class Location : ValueObject
         return $"{City}, {Country}";
     }
 }
-}
