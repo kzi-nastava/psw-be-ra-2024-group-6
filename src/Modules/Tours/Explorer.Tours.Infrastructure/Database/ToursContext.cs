@@ -14,7 +14,6 @@ public class ToursContext : DbContext
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Object> Objects { get; set; }
     public DbSet<Checkpoint> Checkpoints { get; set; }
-    public DbSet<Location> Locations { get; set; }
     public DbSet<Tour> Tours { get; set; }
 
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }

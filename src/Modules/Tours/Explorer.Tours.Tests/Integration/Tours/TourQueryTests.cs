@@ -91,7 +91,6 @@ namespace Explorer.Tours.Tests.Integration.Tours
             dbContext.Tours.Count().ShouldBe(4);
             dbContext.Tours.FirstOrDefault(x => x.Name == result.TourInfo.Name).ShouldNotBeNull();
             dbContext.Checkpoints.FirstOrDefault(x=>x.Name=="Test").ShouldNotBeNull();
-            dbContext.Locations.FirstOrDefault(x => x.Latitude == 202).ShouldNotBeNull();
             dbContext.Objects.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
         }
 
