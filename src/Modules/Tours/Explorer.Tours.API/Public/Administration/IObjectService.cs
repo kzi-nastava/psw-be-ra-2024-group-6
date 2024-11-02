@@ -12,7 +12,6 @@ namespace Explorer.Tours.API.Public.Administration;
 public interface IObjectService
 {
     Result<PagedResult<ObjectDto>> GetPaged(int page, int pageSize);
-    Result<ObjectDto> Create(ObjectDto equipment);
     Result<ObjectDto> Create(ObjectCreateDto objectCreateDto);
     Result<ObjectDto> Update(ObjectDto equipment);
     Result Delete(int id);

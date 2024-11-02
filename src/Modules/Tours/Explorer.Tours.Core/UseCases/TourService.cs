@@ -35,7 +35,7 @@ namespace Explorer.Tours.Core.UseCases
             this.mapper = mapper;
         }
 
-        public Result<TourCreateDto> CreateTour(TourCreateDto createTour)
+        public Result<TourCreateDto> Create(TourCreateDto createTour)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<TourReadDto> PublishTour(long tourId, int userId)
+        public Result<TourReadDto> Publish(long tourId, int userId)
         {
             try
             {
