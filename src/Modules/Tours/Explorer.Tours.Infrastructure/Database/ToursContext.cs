@@ -14,7 +14,6 @@ public class ToursContext : DbContext
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<Object> Objects { get; set; }
     public DbSet<Checkpoint> Checkpoints { get; set; }
-    public DbSet<Location> Locations { get; set; }
     public DbSet<Tour> Tours { get; set; }
 
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
@@ -55,9 +54,7 @@ public class ToursContext : DbContext
                 .WithMany(t => t.Objects)
                 .HasForeignKey(o => o.TourId);
 
-            entity.HasOne<Location>(o => o.Location)
-                  .WithOne()
-                  .HasForeignKey<Object>(o => o.LocationId);
+            entity.Property(o => o.Location).HasColumnType("jsonb");
         });
     }
 
@@ -69,9 +66,7 @@ public class ToursContext : DbContext
                 .WithMany(t => t.Checkpoints)
                 .HasForeignKey(c => c.TourId);
 
-             entity.HasOne<Location>(c => c.Location)
-                   .WithOne()
-                   .HasForeignKey<Checkpoint>(c => c.LocationId);
+            entity.Property(c => c.Location).HasColumnType("jsonb");
         });
     }
 
@@ -89,7 +84,7 @@ public class ToursContext : DbContext
             entity
         .HasMany(t => t.Equipment)
         .WithMany()
-        .UsingEntity(j => j.ToTable("RequiredEquipments")); ;
+        .UsingEntity(j => j.ToTable("RequiredEquipments"));
 
             entity.Property(tour => tour.Durations).HasColumnType("jsonb");
             entity.Property(tour => tour.Price).HasColumnType("jsonb");
