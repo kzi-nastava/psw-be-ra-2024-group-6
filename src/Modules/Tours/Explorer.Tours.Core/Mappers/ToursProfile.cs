@@ -20,20 +20,6 @@ public class ToursProfile : Profile
 
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 
-        CreateMap<TourInfoDto, Tour>().ReverseMap();
-
-        CreateMap<CheckpointCreateDto,Checkpoint>().ReverseMap();
-        CreateMap<ObjectCreateDto,Object>().ReverseMap();
-        CreateMap<LocationCreateDto,Location>().ReverseMap();
-        CreateMap<LocationDto, Location>().ReverseMap();
-        CreateMap<CheckpointCreateDto, Checkpoint>().ReverseMap();
-        CreateMap<ObjectCreateDto, Object>().ReverseMap();
-        CreateMap<LocationCreateDto, Location>().ReverseMap();
-
-
-
-        CreateMap<ObjectCreateDto, Object>().ReverseMap();
-
-
+        CreateMap<Tour, TourReadDto>().ReverseMap();
     }
 }
