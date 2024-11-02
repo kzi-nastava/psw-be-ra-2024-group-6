@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Explorer.Tours.API.Public.Administration
 {
-    public interface ICheckpointService
+    public interface ICheckpointService 
     {
         Result<PagedResult<CheckpointDto>> GetPaged(int page, int pageSize); 
         Result<CheckpointDto> Update(CheckpointDto equipment);

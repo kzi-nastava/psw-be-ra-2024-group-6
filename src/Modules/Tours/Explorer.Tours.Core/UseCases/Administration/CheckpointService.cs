@@ -27,12 +27,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
 
         Result<List<CheckpointReadDto>> ICheckpointService.GetByTourId(long tourId)
-
         {
             List<CheckpointReadDto> el = _checkpointRepository.GetByTourId(tourId).Select(mapper.Map<CheckpointReadDto>).ToList();
             return el;
         }
-        public CheckpointDto Create(CheckpointCreateDto checkpointCreateDto)
+        public Result<CheckpointDto> Create(CheckpointCreateDto checkpointCreateDto)
         {
             return MapToDto(CrudRepository.Create(mapper.Map<Checkpoint>(checkpointCreateDto)));
         }

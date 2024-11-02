@@ -27,7 +27,7 @@ public class ObjectService : CrudService<ObjectDto, Domain.Tours.Object> , IObje
         return MapToDto(CrudRepository.Create(_mapper.Map<Domain.Tours.Object>(objectCreateDto)));
     }
 
-    Result<List<ObjectReadDto>> IObjectService.GetByTourId(long tourId)
+    public Result<List<ObjectReadDto>> GetByTourId(long tourId)
     {
         try
         {
