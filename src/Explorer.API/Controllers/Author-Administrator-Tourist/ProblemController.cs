@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace Explorer.API.Controllers.Tourist
 {
-    [Authorize(Policy = "touristPolicy")]
+    [Authorize(Policy = "authorOrAdministratorOrTouristPolicy")]
     [Route("api/tourist/problem")]
     public class ProblemController : BaseApiController
     {
@@ -40,6 +40,7 @@ namespace Explorer.API.Controllers.Tourist
             var result = _problemService.Update(problem);
             return CreateResponse(result);
         }
+
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)

@@ -46,7 +46,7 @@ public class StakeholdersContext : DbContext
             .WithOne()
             .HasForeignKey<Tourist>(t => t.UserId );
 		modelBuilder.Entity<Problem>()
-            .HasOne<Tourist>()
+            .HasOne<User>()
             .WithMany()
             .HasForeignKey(p => p.TouristId);
         modelBuilder.Entity<Club>()
@@ -55,12 +55,6 @@ public class StakeholdersContext : DbContext
             .HasForeignKey(c => c.OwnerId) 
             ;
 
-        modelBuilder.Entity<ProblemMessage>()
-            .HasOne<Problem>()
-            .WithOne()
-            .HasForeignKey<Problem>(p => p.Id);
-
     }
-
 
 }

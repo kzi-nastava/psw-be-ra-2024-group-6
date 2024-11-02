@@ -8,12 +8,9 @@ namespace Explorer.Stakeholders.API.Dtos
 {
     public class ProblemMessageDto
     {
-        public int Id { get; set; }
-        public long ProblemId { get; set; }
         public string Content { get; set; }
         public long SenderId { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime CreationDate { get; set; }
 
-        public ProblemMessageDto() { }
     }
 }
