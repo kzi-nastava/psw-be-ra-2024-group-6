@@ -186,7 +186,7 @@ public class Tour : Entity
 
     private bool ValidatePublishInfo()
     {
-        return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description) && Difficulty!=null && (Tags!=null && Tags.Count>0) && Durations.Count>0;
+        return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description)  && Tags.Count>0 && Durations.Count>0;
     }
 
     private bool CanPublish()
