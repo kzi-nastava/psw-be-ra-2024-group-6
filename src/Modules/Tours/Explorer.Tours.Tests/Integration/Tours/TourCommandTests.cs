@@ -1,5 +1,4 @@
 ﻿using Explorer.API.Controllers.Tourist;
-using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.Infrastructure.Database;
@@ -14,6 +13,7 @@ using Explorer.API.Controllers.Author;
 using Shouldly;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.Tours.Tests.Integration.Tours;
 

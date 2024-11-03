@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
@@ -27,7 +27,7 @@ public class ObjectService : CrudService<ObjectDto, Domain.Tours.Object> , IObje
         return MapToDto(CrudRepository.Create(_mapper.Map<Domain.Tours.Object>(objectCreateDto)));
     }
 
-    Result<List<ObjectReadDto>> IObjectService.GetByTourId(long tourId)
+    public Result<List<ObjectReadDto>> GetByTourId(long tourId)
     {
         try
         {

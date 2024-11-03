@@ -32,7 +32,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
                 return _dbContext.Checkpoints
                     .Where(c => c.TourId == tourId)
-                    .Include(c => c.Location)
                     .ToList();
         }
 

@@ -55,13 +55,13 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public void Delete(long id)
         {
-            var entity = Get(id);
+            var entity = GetAggregate(id);
             _context.Tours.Remove(entity);
             _context.SaveChanges();
         }
 
 
-        public Tour Get(long id)
+        public Tour GetAggregate(long id)
         {
             var tour = _context.Tours.Where(t => t.Id == id)
                 .Include(t => t.Checkpoints!).Include(t=>t.Objects).Include(t=>t.Equipment).FirstOrDefault();

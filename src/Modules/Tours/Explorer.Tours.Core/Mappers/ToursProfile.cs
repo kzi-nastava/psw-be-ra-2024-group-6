@@ -1,6 +1,14 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
+using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
+using Explorer.Tours.API.Dtos.TourDtos.PriceDtos;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using Object = Explorer.Tours.Core.Domain.Tours.Object;
 
@@ -16,20 +24,9 @@ public class ToursProfile : Profile
 
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 
-        CreateMap<TourInfoDto, Tour>().ReverseMap();
-
-        CreateMap<CheckpointCreateDto,Checkpoint>().ReverseMap();
-        CreateMap<ObjectCreateDto,Object>().ReverseMap();
-        CreateMap<LocationCreateDto,Location>().ReverseMap();
-        CreateMap<LocationDto, Location>().ReverseMap();
-        CreateMap<CheckpointCreateDto, Checkpoint>().ReverseMap();
-        CreateMap<ObjectCreateDto, Object>().ReverseMap();
-        CreateMap<LocationCreateDto, Location>().ReverseMap();
-
-
-
-        CreateMap<ObjectCreateDto, Object>().ReverseMap();
-
-
+        CreateMap<Tour, TourReadDto>().ReverseMap();
+        CreateMap<Price,PriceDto>().ReverseMap();
+        CreateMap<TourDuration, TourDurationDto>().ReverseMap();
+        CreateMap<Distance,DistanceDto>().ReverseMap();
     }
 }

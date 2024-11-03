@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Core.Domain;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
@@ -33,7 +35,7 @@ namespace Explorer.Tours.Core.UseCases
             this.mapper = mapper;
         }
 
-        public Result<TourCreateDto> CreateTour(TourCreateDto createTour)
+        public Result<TourCreateDto> Create(TourCreateDto createTour)
         {
             try
             {
@@ -78,19 +80,18 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<TourDetailsDto> GetTourDetailsByTourId(int tourId,int userId)
+        public Result<TourReadDto> GetTourDetailsByTourId(int tourId,int userId)
         {
             try
             {
                 Tour tour = crudRepository.Get(tourId);
-                if (!tour.IsAuthorOwner(userId))
+                if (!tour.IsUserAuthor(userId))
                     return Result.Fail(FailureCode.Forbidden).WithError("You are not the author of this tour");
-
                 TourDto tourDto = MapToDto(tour);
 
                 List<CheckpointReadDto> checkpoints = _checkpointService.GetByTourId(tourId).Value;
                 List<ObjectReadDto> objects = _objectService.GetByTourId(tourId).Value;
-                TourDetailsDto tourDetailsDto = new TourDetailsDto
+                TourReadDto tourDetailsDto = new TourReadDto
                 {
                     TourInfo = tourDto,
                     Checkpoints = checkpoints,
@@ -103,5 +104,61 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+
+        public Result<TourReadDto> Publish(long tourId, int userId)
+        {
+            try
+            {
+                Tour tour = _tourRepository.GetAggregate(tourId);
+                if (!tour.IsUserAuthor(userId))
+                    return Result.Fail("user is not author of tour");
+                if (!tour.Publish())
+                    return Result.Fail("publish failed");
+                _tourRepository.Update(tour);
+                return mapper.Map<TourReadDto>(tour);
+
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Result.Fail("tour not found");
+            }
+
+
+        }
+
+        public Result<TourReadDto> Archive(long tourId, int userId)
+        {
+            try
+            {
+                Tour tour = _tourRepository.GetAggregate(tourId);
+                if (!tour.IsUserAuthor(userId))
+                    return Result.Fail("user is not author of tour");
+                if (!tour.Archive())
+                    return Result.Fail("publish failed");
+                _tourRepository.Update(tour);
+                return mapper.Map<TourReadDto>(tour);
+
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Result.Fail("tour not found");
+            }
+        }
+
+        //public Result<TourDetailsDto> GetTourDetailsByTourId(long tourId)
+        //{
+        /*Tour tour = crudRepository.Get(tourId);
+
+        TourDto tourDto = MapToDto(tour);
+
+        List<CheckpointDto> Checkpoints = _checkpointService.GetByTourId(tourId).Value;
+        List<ObjectDto> Objects = _objectService.GetByTourId(tourId).Value;
+
+        foreach (CheckpointDto checkpointDto in Checkpoints)
+        {
+            new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
+        }
+        */
     }
 }
