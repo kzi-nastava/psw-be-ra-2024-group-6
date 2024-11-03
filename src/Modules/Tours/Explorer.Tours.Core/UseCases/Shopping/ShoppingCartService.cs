@@ -38,8 +38,7 @@ namespace Explorer.Tours.Core.UseCases.Shopping
 
         public Result<ShoppingCartDto> AddItem(long shoppingCartId, long tourId, long userId)
         {
-            var sc = _shoppingCartRepository.Get(shoppingCartId);
-
+            var sc = _shoppingCartRepository.GetByUserId(userId);
             if (sc == null)
             {
                 sc = new ShoppingCart(userId, new Price(0));
@@ -47,9 +46,9 @@ namespace Explorer.Tours.Core.UseCases.Shopping
             }
 
             var tour = _tourRepository.Get(tourId);
-            if (tour == null)
+            if (tour == null || tour.CheckIfNotPublished())
             {
-                return null;
+                return MapToDto(mapper.Map<ShoppingCart>(sc));
             }
 
             sc.AddItem(tourId, tour.Name, tour.Cost);

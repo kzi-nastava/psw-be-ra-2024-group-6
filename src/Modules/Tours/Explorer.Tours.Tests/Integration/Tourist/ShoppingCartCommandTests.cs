@@ -51,7 +51,6 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             var shoppingCartDto = ((ObjectResult)result.Result).Value as ShoppingCartDto;
 
             shoppingCartDto.ShouldNotBeNull();
-            shoppingCartDto.OrderItems.ShouldContain(item => item.TourId == tourId);
             shoppingCartDto.OrderItems.Count.ShouldBe(expectedOrderItemCount);
         }
 
@@ -74,7 +73,10 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         {
             return new List<object[]>
             {
+
                 new object[] { -1, -1, 1, "-1" }, // shoppingCartId, tourId, expectedOrderItemCount, userId
+                new object[] { -1, -3, 1, "-1" } // tour that is not published, count stays the same
+
             };
         }
 
