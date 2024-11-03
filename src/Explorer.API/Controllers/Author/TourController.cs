@@ -48,11 +48,11 @@ namespace Explorer.API.Controllers.Author
 
          }*/
 
-        [HttpPost("details")]
-        public ActionResult<TourCreateDto> CreateTour([FromBody]TourCreateDto tour)
+        [HttpPost]
+        public ActionResult<TourCreateDto> Create([FromBody]TourCreateDto tour)
         {
             tour.TourInfo.AuthorId = User.UserId();
-            var result = _tourService.CreateTour(tour);
+            var result = _tourService.Create(tour);
             return CreateResponse(result);
 
         }
@@ -69,18 +69,7 @@ namespace Explorer.API.Controllers.Author
         public ActionResult<TourReadDto> PublishTour(long tourId)
         {
             int userId = User.UserId();
-            var result = _tourService.PublishTour(tourId, userId);
-            return CreateResponse(result);
-        }
-
-
-
-
-        [HttpPost]
-        public ActionResult<TourDto> Create([FromBody] TourDto tour)
-        {
-            tour.AuthorId = User.UserId();
-            var result = _tourService.Create(tour);
+            var result = _tourService.Publish(tourId, userId);
             return CreateResponse(result);
         }
 

@@ -84,7 +84,7 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-                Tour tour = _tourRepository.Get(tourId);
+                Tour tour = _tourRepository.GetAggregate(tourId);
                 if (!tour.IsUserAuthor(userId))
                     return Result.Fail("user is not author of tour");
                 if (!tour.Publish())
@@ -105,7 +105,7 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-                Tour tour = _tourRepository.Get(tourId);
+                Tour tour = _tourRepository.GetAggregate(tourId);
                 if (!tour.IsUserAuthor(userId))
                     return Result.Fail("user is not author of tour");
                 if (!tour.Archive())
@@ -122,20 +122,20 @@ namespace Explorer.Tours.Core.UseCases
 
         //public Result<TourDetailsDto> GetTourDetailsByTourId(long tourId)
         //{
-            /*Tour tour = crudRepository.Get(tourId);
+        /*Tour tour = crudRepository.Get(tourId);
 
-            TourDto tourDto = MapToDto(tour);
+        TourDto tourDto = MapToDto(tour);
 
-            List<CheckpointDto> Checkpoints = _checkpointService.GetByTourId(tourId).Value;
-            List<ObjectDto> Objects = _objectService.GetByTourId(tourId).Value;
+        List<CheckpointDto> Checkpoints = _checkpointService.GetByTourId(tourId).Value;
+        List<ObjectDto> Objects = _objectService.GetByTourId(tourId).Value;
 
-            foreach (CheckpointDto checkpointDto in Checkpoints)
-            {
-                new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
-            }
-            */
+        foreach (CheckpointDto checkpointDto in Checkpoints)
+        {
+            new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
+        }
+        */
 
 
-            //}
+        //}
     }
 }

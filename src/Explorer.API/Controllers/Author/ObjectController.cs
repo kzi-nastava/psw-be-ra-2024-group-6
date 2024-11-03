@@ -26,7 +26,7 @@ public class ObjectController : BaseApiController
     }
 
     [HttpPost]
-    public ActionResult<ObjectDto> Create([FromBody] ObjectDto obj)
+    public ActionResult<ObjectDto> Create([FromBody] ObjectCreateDto obj)
     {
         var result = _objectService.Create(obj);
         return CreateResponse(result);
