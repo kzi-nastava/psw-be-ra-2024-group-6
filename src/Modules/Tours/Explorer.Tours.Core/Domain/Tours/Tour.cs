@@ -161,9 +161,7 @@ public class Tour : Entity
 
     private bool CanArchive()
     {
-        if(Status==Status.Published)
-            return true;
-        return false;
+        return Status == Status.Published;
     }
 
     public bool Archive()
@@ -193,9 +191,8 @@ public class Tour : Entity
 
     private bool CanPublish()
     {
-        if (Status!=Status.Published && Checkpoints.Count >= 2 && ValidatePublishInfo() )
-            return true;
-        return false;
+        return Status != Status.Published && Checkpoints.Count >= 2 && ValidatePublishInfo();
+
     }
 
     public List<Checkpoint> GetPreviewCheckpoints()
