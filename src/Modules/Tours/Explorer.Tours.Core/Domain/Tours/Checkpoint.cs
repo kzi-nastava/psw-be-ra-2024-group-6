@@ -8,16 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Explorer.Tours.Core.Domain;
+namespace Explorer.Tours.Core.Domain.Tours;
 
 public class Checkpoint : Entity
 {
-    public long TourId { get; init; }
-    public long LocationId { get; init; }
-    public string Name { get; init; }
-    public string Description { get; init; }
-    public string ImageUrl { get; init; }
-    public virtual Location? Location { get; set; }
+    public long TourId { get; private set; }
+    public long LocationId { get; private set; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public string ImageUrl { get; private set; }
+    public  Location? Location { get; private set; }
 
     public Checkpoint() { }
     public Checkpoint(string name, string? description, string? imageUrl, long locationId, long tourId)
@@ -36,5 +36,13 @@ public class Checkpoint : Entity
         if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
     }
 
+    public void Update(Checkpoint checkpoint)
+    {
+        this.Name = checkpoint.Name;
+        this.Description = checkpoint.Description;
+        this.ImageUrl = checkpoint.ImageUrl;
+        this.LocationId = checkpoint.LocationId;
+        Validate();
+    }
 }
 
