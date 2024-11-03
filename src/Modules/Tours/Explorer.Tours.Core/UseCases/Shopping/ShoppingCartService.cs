@@ -68,6 +68,7 @@ namespace Explorer.Tours.Core.UseCases.Shopping
             }
 
             sc.RemoveItem(itemId);
+            _shoppingCartRepository.Update(sc);
             return MapToDto(mapper.Map<ShoppingCart>(sc));
         }
     }
