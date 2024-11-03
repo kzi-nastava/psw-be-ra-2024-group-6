@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.Domain;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Explorer.Tours.Core.Domain.TourExecutions
 {
