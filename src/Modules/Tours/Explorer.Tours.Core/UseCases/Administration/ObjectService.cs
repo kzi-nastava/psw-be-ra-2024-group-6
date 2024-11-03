@@ -2,7 +2,6 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 using System.Collections.Generic;
@@ -12,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.UseCases.Administration;
 
-public class ObjectService : CrudService<ObjectDto, Domain.Object> , IObjectService
+public class ObjectService : CrudService<ObjectDto, Domain.Tours.Object> , IObjectService
 {
     private readonly IObjectRepository _objectRepository;
     private readonly IMapper _mapper;
 
-    public ObjectService(ICrudRepository<Domain.Object> crudRepository, IMapper mapper, IObjectRepository objectRepository) : base(crudRepository, mapper)
+    public ObjectService(ICrudRepository<Domain.Tours.Object> crudRepository, IMapper mapper, IObjectRepository objectRepository) : base(crudRepository, mapper)
     {
         _mapper = mapper;
         _objectRepository = objectRepository;
@@ -25,7 +24,7 @@ public class ObjectService : CrudService<ObjectDto, Domain.Object> , IObjectServ
 
     public Result<ObjectDto> Create(ObjectCreateDto objectCreateDto)
     {
-        return MapToDto(CrudRepository.Create(_mapper.Map<Domain.Object>(objectCreateDto)));
+        return MapToDto(CrudRepository.Create(_mapper.Map<Domain.Tours.Object>(objectCreateDto)));
     }
 
     Result<List<ObjectReadDto>> IObjectService.GetByTourId(long tourId)
