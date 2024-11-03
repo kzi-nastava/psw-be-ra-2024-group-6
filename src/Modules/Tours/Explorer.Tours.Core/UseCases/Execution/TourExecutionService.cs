@@ -25,6 +25,11 @@ namespace Explorer.Tours.Core.UseCases.Execution
         {
             try
             {
+                var existingTourExecution = _tourExecutionRepository.GetByTourIdAndTouristId(tourExecution.TourId, tourExecution.TouristId);
+                if (existingTourExecution != null)
+                {
+                    return Result.Fail(FailureCode.Forbidden).WithError("Tourist already started this tour.");
+                }
                 var result = _tourExecutionRepository.Create(MapToDomain(tourExecution));
                 return MapToDto(result);
             }
@@ -50,6 +55,19 @@ namespace Explorer.Tours.Core.UseCases.Execution
             catch (ArgumentException e)
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<ICollection<TourExecutionDto>> GetByTouristId(int touristId)
+        {
+            try
+            {
+                var tourExecutions = _tourExecutionRepository.GetByTouristId(touristId);
+                return tourExecutions.Select(tourExecution => MapToDto(tourExecution)).ToList();
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
     }

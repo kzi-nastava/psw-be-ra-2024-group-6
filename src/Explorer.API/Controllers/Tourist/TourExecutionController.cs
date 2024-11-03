@@ -36,7 +36,8 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPut]
         public ActionResult<TourExecutionDto> FinalizeTourExecution([FromQuery] int tourExecutionId, [FromQuery] string status)
         {
-            var result = _tourExecutionService.FinalizeTourExecution(tourExecutionId, status, -1);
+            var touristId = User.UserId();
+            var result = _tourExecutionService.FinalizeTourExecution(tourExecutionId, status, touristId);
             return CreateResponse(result);
         }
 
@@ -51,6 +52,14 @@ namespace Explorer.API.Controllers.Tourist
         public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _tourService.GetPaged(page, pageSize);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("get-by-tourist")]
+        public ActionResult<PagedResult<TourExecutionDto>> GetAll()
+        {
+            var touristId = User.UserId();
+            var result = _tourExecutionService.GetByTouristId(touristId);
             return CreateResponse(result);
         }
     }
