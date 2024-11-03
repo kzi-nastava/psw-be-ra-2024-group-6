@@ -60,4 +60,9 @@ public class Distance : ValueObject
     {
         throw new NotImplementedException();
     }
+
+    public string ToString()
+    {
+        return $"{Length} {Unit}";
+    }
 }

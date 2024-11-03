@@ -20,7 +20,7 @@ namespace Explorer.API.Controllers.Author
             _tourService = tourService;
         }
 
-        
+
 
         [HttpGet]
         public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
@@ -48,13 +48,12 @@ namespace Explorer.API.Controllers.Author
 
          }
 
-        [HttpPost]
-        public ActionResult<TourCreateDto> Create([FromBody]TourCreateDto tour)
-        {
-            tour.TourInfo.AuthorId = User.UserId();
-            var result = _tourService.Create(tour);
-            return CreateResponse(result);
-
+         [HttpPost]
+         public ActionResult<TourCreateDto> Create([FromBody] TourCreateDto tour)
+         {
+             tour.TourInfo.AuthorId = User.UserId();
+             var result = _tourService.Create(tour);
+             return CreateResponse(result);
         }
 
         [HttpPost("archive/{tourId:long}")]

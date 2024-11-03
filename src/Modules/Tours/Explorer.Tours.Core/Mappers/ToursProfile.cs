@@ -28,5 +28,6 @@ public class ToursProfile : Profile
         CreateMap<Price,PriceDto>().ReverseMap();
         CreateMap<TourDuration, TourDurationDto>().ReverseMap();
         CreateMap<Distance,DistanceDto>().ReverseMap();
+        CreateMap<TourCardDto, Tour>().ReverseMap();
     }
 }
