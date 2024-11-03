@@ -10,8 +10,8 @@ namespace Explorer.Tours.API.Dtos
     {
         public TourInfoDto TourInfo { get; set; }
 
-        public List<CheckpointCreateDto> Checkpoints { get; set; }
+        public List<CheckpointCreateDto>? Checkpoints { get; set; }
 
-        public List<ObjectCreateDto> Objects { get;set; }
+        public List<ObjectCreateDto>? Objects { get;set; }
     }
 }
