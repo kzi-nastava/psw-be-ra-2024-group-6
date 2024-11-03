@@ -46,8 +46,9 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
             if (itemToRemove != null)
             {
                 OrderItems.Remove(itemToRemove);
+                CalculateTotalPrice(itemToRemove.Price.Amount, false);
             }
-            CalculateTotalPrice(itemToRemove.Price.Amount, false);
+
         }
 
         private void CalculateTotalPrice(double newPrice, bool add)

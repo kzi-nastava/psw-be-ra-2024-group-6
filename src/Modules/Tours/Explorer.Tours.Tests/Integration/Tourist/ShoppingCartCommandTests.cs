@@ -41,8 +41,10 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         }
 
         [Theory]
-        [MemberData(nameof(AddItemTestData))]
-        public  void AddItem_ShouldAddItemToCart(int shoppingCartId, int tourId, int expectedOrderItemCount, string userId)
+        [InlineData(-1, -1, 1, "-1")]
+        [InlineData(-1, -1, 1, "-1")]
+        [InlineData(-1, -3, 0, "-1")]
+        public  void AddsItem(int shoppingCartId, int tourId, int expectedOrderItemCount, string userId)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope, userId);
@@ -55,8 +57,8 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         }
 
         [Theory]
-        [MemberData(nameof(RemoveItemTestData))]
-        public  void RemoveItem_ShouldRemoveItemFromCart(int shoppingCartId, int itemId, int expectedOrderItemCount, string userId)
+        [InlineData(-1, -1, 0, "-1")]
+        public  void RemovesItem(int shoppingCartId, int itemId, int expectedOrderItemCount, string userId)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope, userId);
