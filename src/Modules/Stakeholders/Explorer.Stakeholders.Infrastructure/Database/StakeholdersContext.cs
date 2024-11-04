@@ -1,4 +1,5 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Stakeholders.Infrastructure.Database;
@@ -15,6 +16,12 @@ public class StakeholdersContext : DbContext
 
     public DbSet<Author> Author { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
+    
+    
+
+
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,6 +31,17 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
 
         ConfigureStakeholder(modelBuilder);
+
+        ConfigurePerson(modelBuilder);
+
+        ConfigureNotification(modelBuilder); 
+    }
+
+    private void ConfigurePerson(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Person>().Property(item => item.Followers).HasColumnType("jsonb");
+        modelBuilder.Entity<Person>().Property(item => item.Followings).HasColumnType("jsonb");
+
     }
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
@@ -53,6 +71,20 @@ public class StakeholdersContext : DbContext
             .HasForeignKey(c => c.OwnerId) 
             ;
 
+    }
+    
+    
+
+    private static void ConfigureNotification(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Notification>()
+            .HasKey(n => n.Id);
+
+        modelBuilder.Entity<Notification>()
+            .HasOne<Person>()
+            .WithMany()
+            .HasForeignKey(n => n.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 

@@ -59,5 +59,22 @@ namespace Explorer.Stakeholders.Core.UseCases
 
             return result.Value;
         }
+        /*public Result<List<FollowerReadDto>> GetFollowersByUserId(long userId)
+        {
+            try
+            {
+                Result<List<FollowerReadDto>> followers = MapToDto(_userRepository.GetFollowers(userId));
+                return followers;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }*/
+
     }
 }

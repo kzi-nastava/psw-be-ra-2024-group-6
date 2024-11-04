@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
 
 namespace Explorer.API.Controllers.Stakeholders
 {
-    
+
     [Route("api/person")]
     public class PersonController : BaseApiController
     {

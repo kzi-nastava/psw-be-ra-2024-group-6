@@ -1,6 +1,7 @@
 using AutoMapper;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
 
 namespace Explorer.Stakeholders.Core.Mappers;
 
@@ -12,5 +13,10 @@ public class StakeholderProfile : Profile
         CreateMap<PersonDto, Person>().ReverseMap();
         CreateMap<ClubDto, Club>().ReverseMap();
         CreateMap<UserDto, User>().ReverseMap();
+        CreateMap<FollowerCreateDto, Follower>().ReverseMap();
+        CreateMap<FollowerReadDto, Follower>().ReverseMap();
+        CreateMap<NotificationCreateDto, Notification>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+        CreateMap<NotificationDto, Notification>().ReverseMap();
     }
 }
