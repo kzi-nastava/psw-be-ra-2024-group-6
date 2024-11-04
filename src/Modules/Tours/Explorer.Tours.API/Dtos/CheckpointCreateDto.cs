@@ -13,5 +13,6 @@ namespace Explorer.Tours.API.Dtos
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public long? TourId { get; set; }
+        public string Secret {  get; set; }
     }
 }

@@ -32,7 +32,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 Description = "Patike sa tvrdim đonom i kramponima koje daju stabilnost na neravnom i rastresitom terenu.",
                 LocationId = -1000,
                 TourId = -3,
-                ImageUrl = "neka/putanja"
+                ImageUrl = "neka/putanja",
+                Secret = "Veoma velika tajna"
 
             };
 
@@ -84,7 +85,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 Description = "Predaleko je",
                 LocationId = -2,
                 TourId = -2,
-                ImageUrl = "neka/putanja/doslike"
+                ImageUrl = "neka/putanja/doslike",
+                Secret = "Neka tajna.."
 
             };
 
@@ -118,7 +120,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 Description = "Test",
                 LocationId = 0,
                 TourId = 0,
-                ImageUrl = "neka/putanja/doslike"
+                ImageUrl = "neka/putanja/doslike",
+                Secret = "Neka tajna.."
             };
 
             // Act
