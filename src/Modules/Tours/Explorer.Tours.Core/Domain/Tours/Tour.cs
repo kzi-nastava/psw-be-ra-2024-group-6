@@ -32,7 +32,7 @@ public class Tour : Entity
     public Status Status { get; private set; } = Status.Draft;
     public long AuthorId { get; private set; }
     public Distance TotalLenght { get; private set; }
-    public DateTime? ArchieveTime { get; private set; }
+    public DateTime StatusChangeTime { get; private set; }
     public List<TourDuration> Durations { get; private set; }
 
     public List<Checkpoint> Checkpoints { get; private set; }
@@ -167,19 +167,43 @@ public class Tour : Entity
         //existingEquipment.Update(equipment);
     }
 
-    public void Archive()
+    private bool CanArchive()
     {
+        if(Status==Status.Published)
+            return true;
+        return false;
+    }
+
+    public bool Archive()
+    {
+        if(!CanArchive())
+            return false;
+        StatusChangeTime = DateTime.UtcNow;
+        Status = Status.Archived;
+        return true;
+    }
+
+    public bool Publish()
+    {
+        if (!CanPublish())
+            return false;
+
+        StatusChangeTime=DateTime.UtcNow;
+        Status = Status.Published;
+        return true;
 
     }
 
-    public void Publish()
+    private bool ValidatePublishInfo()
     {
-
+        return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description) && Difficulty!=null && (Tags!=null && Tags.Count>0) && Durations.Count>0;
     }
 
     private bool CanPublish()
     {
-        throw new NotImplementedException();
+        if (Status==Status.Draft && Checkpoints.Count >= 2 && ValidatePublishInfo() )
+            return true;
+        return false;
     }
 
     public List<Checkpoint> GetPreviewCheckpoints()
@@ -190,9 +214,8 @@ public class Tour : Entity
     {
         throw new NotImplementedException();
     }
-
-    public bool IsAuthorOwner(int userId)
+    internal bool IsUserAuthor(int userId)
     {
-        return userId == AuthorId;
+        return AuthorId==userId;
     }
 }
