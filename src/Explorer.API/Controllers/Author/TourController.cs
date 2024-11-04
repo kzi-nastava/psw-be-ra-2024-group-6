@@ -59,7 +59,6 @@ namespace Explorer.API.Controllers.Author
 
 
 
-
         [HttpPost]
         public ActionResult<TourDto> Create([FromBody] TourDto tour)
         {
@@ -81,7 +80,6 @@ namespace Explorer.API.Controllers.Author
             var result = _tourService.Delete(id);
             return CreateResponse(result);
         }
-
 
     }
 }
