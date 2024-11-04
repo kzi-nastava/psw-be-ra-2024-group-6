@@ -20,16 +20,10 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<ReviewDto> Create([FromBody] ReviewDto reviewDto)
         {
-            reviewDto.TourDate = DateTime.SpecifyKind(reviewDto.TourDate, DateTimeKind.Utc);
-            reviewDto.ReviewDate = DateTime.SpecifyKind(reviewDto.ReviewDate, DateTimeKind.Utc);
 
-            var result = _reviewService.Create(reviewDto);
-            if (result.IsFailed)
-            {
-                return BadRequest(result.Errors);
-            }
+            var result = _reviewService.CreateWithDateParser(reviewDto);
+            return CreateResponse(result);
 
-            return Ok(result.Value);
         }
 
         [HttpGet("all-reviews")]

@@ -10,8 +10,7 @@ namespace Explorer.Tours.API.Public
 {
     public interface IReviewService
     {
-        public Result<ReviewDto> Create(ReviewDto reviewDto);
-        public IEnumerable<ReviewDto> GetAllReviews(); 
-
+        public Result<ReviewDto> CreateWithDateParser(ReviewDto reviewDto);
+        public IEnumerable<ReviewDto> GetAllReviews();
     }
 }
