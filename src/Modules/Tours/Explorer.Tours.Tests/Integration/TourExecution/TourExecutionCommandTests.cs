@@ -13,6 +13,7 @@ using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Explorer.Tours.API.Public;
 
 namespace Explorer.Tours.Tests.Integration.TourExecution
 {
@@ -100,7 +101,7 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
 
         private static TourExecutionController CreateController(IServiceScope scope)
         {
-            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>())
+            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(), scope.ServiceProvider.GetRequiredService<ICheckpointService>(), scope.ServiceProvider.GetRequiredService<ITourService>())
             {
                 ControllerContext = BuildContext("-1")
             };

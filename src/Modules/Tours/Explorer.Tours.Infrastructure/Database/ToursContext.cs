@@ -21,6 +21,7 @@ public class ToursContext : DbContext
     public DbSet<TourExecution> TourExecutions { get; set; }
 
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 
     public DbSet<OrderItem> OrderItems { get; set; }
 

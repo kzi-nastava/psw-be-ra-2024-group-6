@@ -1,16 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Explorer.API.Controllers.Stakeholders;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
-using Microsoft.OpenApi.Validations;
+using Explorer.API.Controllers.Stakeholders;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
