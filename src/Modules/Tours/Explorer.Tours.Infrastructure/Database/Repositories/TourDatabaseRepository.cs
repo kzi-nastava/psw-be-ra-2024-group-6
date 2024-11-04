@@ -60,18 +60,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _context.SaveChanges();
         }
 
-
-        public Tour Get(long id)
-        {
-            var tour = _context.Tours.Where(t => t.Id == id)
-                .Include(t => t.Checkpoints!).Include(t=>t.Objects).Include(t=>t.Equipment).FirstOrDefault();
-            if (tour == null)
-            {
-                throw new KeyNotFoundException($"ShoppingCart not found: {id}");
-            }
-            return tour;
-        }
-
         public Tour Get(long id)
         {
             try

@@ -54,7 +54,7 @@ namespace Explorer.Tours.Core.UseCases.Shopping
                 return null;
             }
 
-            sc.AddItem(tourId, tour.Name, tour.Cost);
+            sc.AddItem(tourId, tour.Name, tour.Price.Amount);
             _shoppingCartRepository.Update(sc);
             return MapToDto(mapper.Map<ShoppingCart>(sc));
         }
