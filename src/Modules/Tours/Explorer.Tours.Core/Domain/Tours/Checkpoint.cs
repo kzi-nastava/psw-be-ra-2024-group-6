@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Explorer.Tours.Core.Domain;
+namespace Explorer.Tours.Core.Domain.Tours;
 
 public class Checkpoint : Entity
 {
@@ -39,5 +39,13 @@ public class Checkpoint : Entity
         if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
     }
 
+    public void Update(Checkpoint checkpoint)
+    {
+        this.Name = checkpoint.Name;
+        this.Description = checkpoint.Description;
+        this.ImageUrl = checkpoint.ImageUrl;
+        this.LocationId = checkpoint.LocationId;
+        Validate();
+    }
 }
 
