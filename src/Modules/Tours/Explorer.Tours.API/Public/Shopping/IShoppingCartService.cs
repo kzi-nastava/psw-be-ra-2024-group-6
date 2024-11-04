@@ -17,7 +17,9 @@ namespace Explorer.Tours.API.Public.Shopping
 
         public Result<ShoppingCartDto> GetByUserId(long userId);
 
-        public Result<ShoppingCartDto> AddItem(long shoppingCartId, long tourId,long userId);
-        public Result<ShoppingCartDto> RemoveItem(int shoppingCartId, int itemId);
+        public Result<ShoppingCartDto> AddItem(long userId, long tourId);
+        public Result<ShoppingCartDto> RemoveItem(int userId, int itemId);
+
+        public Result<List<PurchaseTokenDto>> Checkout(long userId);
     }
 }

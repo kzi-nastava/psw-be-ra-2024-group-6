@@ -13,10 +13,10 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
         public Price TotalPrice { get; private set; }
         public List<OrderItem> OrderItems { get; private set; }
 
-        public ShoppingCart(long userId, double totalPrice)
+        public ShoppingCart(long userId, Price totalPrice)
         {
             UserId = userId;
-            TotalPrice = new Price(totalPrice);
+            TotalPrice = totalPrice;
             OrderItems = new List<OrderItem>();
         }
 
@@ -60,6 +60,23 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
             {
                 TotalPrice = new Price(TotalPrice.Amount - newPrice);
             }
+        }
+
+        public List<PurchaseToken> Checkout()
+        {
+            var tokens = new List<PurchaseToken>();
+
+            foreach (var item in OrderItems)
+            {
+                var token = new PurchaseToken(this.UserId, item.TourId, DateTime.UtcNow);
+
+                tokens.Add(token);
+            }
+
+            OrderItems.Clear();
+            TotalPrice = new Price(0);
+
+            return tokens;
         }
     }
 }
