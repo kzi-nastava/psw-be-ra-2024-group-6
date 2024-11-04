@@ -37,7 +37,7 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
             Validate();
         }
 
-        public Problem() { }
+        public Problem() {}
 
 
         private void Validate()
