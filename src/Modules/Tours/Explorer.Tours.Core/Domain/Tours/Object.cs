@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Explorer.Tours.Core.Domain;
+namespace Explorer.Tours.Core.Domain.Tours;
 
 public class Object : Entity
 {
@@ -16,10 +16,10 @@ public class Object : Entity
     public Category Category { get; private set; }
     public long LocationId { get; private set; }
     public long TourId { get; private set; }
-    public virtual Location? Location { get; set; }
+    public Location? Location { get; set; }
 
     public Object() { }
-    public Object(string name, string imageUrl, string description, Category category,long locationId, long tourId)
+    public Object(string name, string imageUrl, string description, Category category, long locationId, long tourId)
     {
         Name = name;
         ImageUrl = imageUrl;
@@ -35,6 +35,16 @@ public class Object : Entity
         if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
         if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         if ((int)Category < 0 || (int)Category > 3) throw new ArgumentException("Invalid category");
+    }
+
+    public void Update(Object obj)
+    {
+        this.Name = obj.Name;
+        this.ImageUrl = obj.ImageUrl;
+        this.Description = obj.Description;
+        this.Category = obj.Category;
+        this.LocationId = obj.LocationId;
+        Validate();
     }
 }
 public enum Category

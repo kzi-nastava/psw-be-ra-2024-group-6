@@ -20,7 +20,7 @@ namespace Explorer.API.Controllers.Author
             _tourService = tourService;
         }
 
-        
+
 
         [HttpGet]
         public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
@@ -49,7 +49,7 @@ namespace Explorer.API.Controllers.Author
          }
 
         [HttpPost("details")]
-        public ActionResult<TourCreateDto> CreateTour([FromBody]TourCreateDto tour)
+        public ActionResult<TourCreateDto> CreateTour([FromBody] TourCreateDto tour)
         {
             tour.TourInfo.AuthorId = User.UserId();
             var result = _tourService.CreateTour(tour);
