@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.API.Controllers.Tourist;
+using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Mvc;
@@ -100,7 +101,9 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
 
         private static TourExecutionController CreateController(IServiceScope scope)
         {
-            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>())
+            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(),
+                scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+                scope.ServiceProvider.GetRequiredService<ITourService>())
             {
                 ControllerContext = BuildContext("-1")
             };

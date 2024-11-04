@@ -62,5 +62,13 @@ namespace Explorer.API.Controllers.Tourist
             var result = _tourExecutionService.GetByTouristId(touristId);
             return CreateResponse(result);
         }
+
+        [HttpPut("update-tourist-location")]
+        public ActionResult<TourExecutionDto> Update([FromBody] TourExecutionDto tourExecution)
+        {
+            tourExecution.TouristId = User.UserId();
+            var result = _tourExecutionService.Update(tourExecution);
+            return CreateResponse(result);
+        }
     }
 }
