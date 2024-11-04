@@ -39,7 +39,7 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpPost("checkout")]
-        public IActionResult CheckoutCart()
+        public ActionResult<CheckoutResultDto> CheckoutCart()
         {
             var userId = User.UserId();
 
