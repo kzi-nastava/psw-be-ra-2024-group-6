@@ -52,15 +52,6 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<Club>()
             .HasOne<User>() 
             .WithMany() 
-            .HasForeignKey(c => c.OwnerId) 
-            ;
-
-        modelBuilder.Entity<ProblemMessage>()
-            .HasOne<Problem>()
-            .WithOne()
-            .HasForeignKey<Problem>(p => p.Id);
-
+            .HasForeignKey(c => c.OwnerId);
     }
-
-
 }
