@@ -20,6 +20,6 @@ namespace Explorer.Tours.API.Public.Shopping
         public Result<ShoppingCartDto> AddItem(long userId, long tourId);
         public Result<ShoppingCartDto> RemoveItem(int userId, int itemId);
 
-        public Result<List<PurchaseTokenDto>> Checkout(long userId);
+        public Result<CheckoutResultDto> Checkout(long userId);
     }
 }

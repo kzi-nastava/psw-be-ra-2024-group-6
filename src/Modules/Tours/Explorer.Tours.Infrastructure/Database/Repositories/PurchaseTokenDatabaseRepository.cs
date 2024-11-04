@@ -23,5 +23,12 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext.SaveChanges();
             return pt;
         }
+
+        public List<PurchaseToken> GetByUserId(long id)
+        {
+            return _dbContext.PurchaseTokens
+                .Where(t => t.UserId == id)
+                .ToList();
+        }
     }
 }

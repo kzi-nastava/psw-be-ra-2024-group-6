@@ -2,6 +2,7 @@
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Shopping;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -43,6 +44,13 @@ namespace Explorer.API.Controllers.Tourist
             var userId = User.UserId();
 
             var result = _shoppingCartService.Checkout(userId);
+
+            if (result.IsSuccess)
+            {
+                var checkout = result.Value;
+                var tokensResult = Result.Ok(checkout.PurchaseTokens);
+                return CreateResponse(tokensResult);
+            }
 
             return CreateResponse(result);
         }

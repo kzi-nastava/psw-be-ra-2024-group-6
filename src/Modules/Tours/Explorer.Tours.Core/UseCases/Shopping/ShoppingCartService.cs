@@ -75,18 +75,18 @@ namespace Explorer.Tours.Core.UseCases.Shopping
             return MapToDto(mapper.Map<ShoppingCart>(sc));
         }
 
-        public Result<List<PurchaseTokenDto>> Checkout(long userId)
+        public Result<CheckoutResultDto> Checkout(long userId)
         {
             var sc = _shoppingCartRepository.GetByUserId(userId);
             if (sc == null)
             {
-                return Result.Fail<List<PurchaseTokenDto>>("Shopping cart not found.");
+                return Result.Fail<CheckoutResultDto>("Shopping cart not found.");
             }
 
             var tokens = sc.Checkout();
             if(tokens.Count == 0)
             {
-                return Result.Fail<List<PurchaseTokenDto>>("No items in the cart to checkout.");
+                return Result.Fail<CheckoutResultDto>("No items in the cart to checkout.");
             }
 
             foreach (var token in tokens)
@@ -96,7 +96,22 @@ namespace Explorer.Tours.Core.UseCases.Shopping
 
             _shoppingCartRepository.Update(sc);
 
-            return Result.Ok();
+            var cartDto = MapToDto(sc);
+            var tokensDto = tokens.Select(token => new PurchaseTokenDto
+            {
+                Id = (int)token.Id,
+                UserId = (int)token.UserId,
+                TourId = (int)token.TourId,
+                PurchaseDate = token.PurchaseDate
+            }).ToList();
+
+            var resultDto = new CheckoutResultDto
+            {
+                ShoppingCart = cartDto,
+                PurchaseTokens = tokensDto
+            };
+
+            return Result.Ok(resultDto);
         }
 
     }
