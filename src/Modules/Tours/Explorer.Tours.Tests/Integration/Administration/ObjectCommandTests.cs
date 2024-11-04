@@ -34,7 +34,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
             ImageUrl = "image/url",
             Description = "You can relax here ladies",
             Category = "WC",
-            LocationId = 3,
+            LocationId = -7,
             TourId = -2
         };
 
@@ -85,7 +85,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
             ImageUrl = "/putanja",
             Description = "Predaleko je",
             Category = "Restaurant",
-            LocationId = 1,
+            LocationId = -4,
             TourId = -2
         };
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.Stakeholders.API.Dtos;
-using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Problems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +14,7 @@ namespace Explorer.Stakeholders.Core.Mappers
         public ProblemsProfile() { 
 
             CreateMap<ProblemDto, Problem>().ReverseMap();
+            CreateMap<ProblemMessageDto, ProblemMessage>().ReverseMap();
         }
     }
 }

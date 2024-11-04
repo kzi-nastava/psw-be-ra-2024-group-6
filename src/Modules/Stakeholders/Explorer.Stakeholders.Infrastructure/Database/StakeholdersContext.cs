@@ -1,4 +1,5 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Problems;
 using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Stakeholders.Infrastructure.Database;
@@ -22,6 +23,7 @@ public class StakeholdersContext : DbContext
         modelBuilder.HasDefaultSchema("stakeholders");
 
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+        modelBuilder.Entity<Problem>().Property(item => item.Messages).HasColumnType("jsonb");
 
         ConfigureStakeholder(modelBuilder);
     }
@@ -52,6 +54,11 @@ public class StakeholdersContext : DbContext
             .WithMany() 
             .HasForeignKey(c => c.OwnerId) 
             ;
+
+        modelBuilder.Entity<ProblemMessage>()
+            .HasOne<Problem>()
+            .WithOne()
+            .HasForeignKey<Problem>(p => p.Id);
 
     }
 

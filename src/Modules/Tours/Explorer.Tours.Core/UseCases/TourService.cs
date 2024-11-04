@@ -4,8 +4,8 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -13,23 +13,27 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.API.Dtos;
 
 namespace Explorer.Tours.Core.UseCases
 {
-    public class TourService : CrudService<TourDto,Tour>,ITourService
+    public class TourService : CrudService<TourDto, Tour>, ITourService
     {
         private readonly ITourRepository _tourRepository;
         private readonly ICrudRepository<Tour> crudRepository;
         private readonly ICheckpointService _checkpointService;
         private readonly IObjectService _objectService;
+        private readonly IPersonService _personService;
         private readonly IMapper mapper;
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService,ICheckpointService checkpointService, IPersonService personService) : base(repository, mapper)
 
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService,ICheckpointService checkpointService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
             _objectService = objectService;
             _checkpointService = checkpointService;
+            _personService = personService;
             this.mapper = mapper;
         }
 
@@ -78,22 +82,79 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
+
+        public Result<TourDetailsDto> GetTourDetailsByTourId(int tourId, int userId)
+        {
+            try
+            {
+                Tour tour = crudRepository.Get(tourId);
+                if (!tour.IsAuthorOwner(userId))
+                    return Result.Fail(FailureCode.Forbidden).WithError("You are not the author of this tour");
+                TourDto tourDto = MapToDto(tour);
+
+                List<CheckpointReadDto> checkpoints = _checkpointService.GetByTourId(tourId).Value;
+                List<ObjectReadDto> objects = _objectService.GetByTourId(tourId).Value;
+                TourDetailsDto tourDetailsDto = new TourDetailsDto
+                {
+                    TourInfo = tourDto,
+                    Checkpoints = checkpoints,
+                    Objects = objects
+                };
+                return Result.Ok(tourDetailsDto);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize)
+        {
+            PagedResult<Tour> tours = crudRepository.GetPaged(page, pageSize);
+
+            List<TourCardDto> tourCardDtos = new List<TourCardDto>();
+
+            foreach (Tour tour in tours.Results)
+            {
+                if (tour.Status == Status.Published)
+                {
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                         tour.TotalLenght.ToString());
+
+                    tourCardDtos.Add(tourCardDto);
+                }
+            }
+
+            return tourCardDtos;
+        }
+
+        public Result<TourPreviewDto> GetTourPreview(long tourId)
+        {
+            Tour tour = crudRepository.Get(tourId);
+            PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
+            CheckpointReadDto firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
+            List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
+            TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
+                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount, author.Name + " " + author.Surname,
+                tour.TotalLenght.ToString(), durations, firstCp);
+
+            return tourPreviewDto;
+        }
+
         //public Result<TourDetailsDto> GetTourDetailsByTourId(long tourId)
         //{
-            /*Tour tour = crudRepository.Get(tourId);
+        /*Tour tour = crudRepository.Get(tourId);
 
-            TourDto tourDto = MapToDto(tour);
+        TourDto tourDto = MapToDto(tour);
 
-            List<CheckpointDto> Checkpoints = _checkpointService.GetByTourId(tourId).Value;
-            List<ObjectDto> Objects = _objectService.GetByTourId(tourId).Value;
+        List<CheckpointDto> Checkpoints = _checkpointService.GetByTourId(tourId).Value;
+        List<ObjectDto> Objects = _objectService.GetByTourId(tourId).Value;
 
-            foreach (CheckpointDto checkpointDto in Checkpoints)
-            {
-                new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
-            }
-            */
-            
+        foreach (CheckpointDto checkpointDto in Checkpoints)
+        {
+            new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
+        }
+        */
 
-        //}
     }
 }
