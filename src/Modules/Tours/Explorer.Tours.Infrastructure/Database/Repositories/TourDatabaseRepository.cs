@@ -72,5 +72,26 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException(ex.Message);
             }
         }
+
+        public Tour GetTourWithReviews(long tourId)
+        {
+            try
+            {
+                var tourWithReviews = _context.Tours
+                    .Include(t => t.Reviews)  
+                    .FirstOrDefault(t => t.Id == tourId);
+
+                if (tourWithReviews == null)
+                {
+                    throw new KeyNotFoundException($"Tour with ID {tourId} not found.");
+                }
+
+                return tourWithReviews;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
     }
 }

@@ -31,7 +31,6 @@ public class ToursProfile : Profile
         CreateMap<LocationCreateDto, Location>().ReverseMap();
 
 
-
         CreateMap<ObjectCreateDto, Object>().ReverseMap();
 
         CreateMap<TourExecutionDto, TourExecution>()
