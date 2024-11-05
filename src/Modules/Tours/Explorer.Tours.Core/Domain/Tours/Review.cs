@@ -11,7 +11,6 @@ namespace Explorer.Tours.Core.Domain;
 
 public class Review : Entity
 {
-    public long Id { get; private set; }
     public long TouristId { get; private set; }
     public long TourId { get; private set; }
     public int Rating { get; private set; }
