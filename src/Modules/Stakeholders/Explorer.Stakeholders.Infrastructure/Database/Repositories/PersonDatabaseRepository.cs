@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.API.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore;
 using FluentResults;
 using Explorer.BuildingBlocks.Core.UseCases;
 using FluentResults;
+using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {

@@ -44,11 +44,13 @@ public static class ToursStartup
         services.AddScoped<ITouristEquipmentManagerService, TouristEquipmentManagerService>();
         services.AddScoped<ITourExecutionService, TourExecutionService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<IReviewService, ReviewService>();
 
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
+        services.AddScoped(typeof(ICrudRepository<Review>), typeof(CrudDatabaseRepository<Review, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<Equipment>), typeof(CrudDatabaseRepository<Equipment, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<Object>), typeof(CrudDatabaseRepository<Object, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, ToursContext>));
@@ -61,6 +63,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour,ToursContext>));
 
         services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
+        services.AddScoped<IReviewRepository, ReviewDatabaseRepository>();
         services.AddScoped<ITourRepository, TourDatabaseRepository>();
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
