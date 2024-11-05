@@ -13,6 +13,8 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public ShoppingCart Create(ShoppingCart cart);
         public ShoppingCart Update(ShoppingCart cart);
         public void Delete(long id);
-        public ShoppingCart Get(long id);
+        public ShoppingCart? Get(long id);
+
+        public ShoppingCart? GetByUserId(long id);
     }
 }

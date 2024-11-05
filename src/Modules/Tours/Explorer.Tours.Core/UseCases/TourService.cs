@@ -27,8 +27,6 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IPersonService _personService;
         private readonly IMapper mapper;
 
-
-
         public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService,ICheckpointService checkpointService, IPersonService personService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
