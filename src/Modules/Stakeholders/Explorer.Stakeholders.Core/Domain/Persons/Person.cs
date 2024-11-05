@@ -66,7 +66,6 @@ public class Person : Entity
         {
             Followers = new List<Follower>();
         }
-        
             Followers.Add(new Follower(followerId));
         
 
@@ -78,7 +77,6 @@ public class Person : Entity
         {
             Followings = new List<Follower>();
         }
-        
             Followings.Add(new Follower(followingId));
         
     }

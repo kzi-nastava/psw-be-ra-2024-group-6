@@ -33,17 +33,21 @@ namespace Explorer.Stakeholders.Core.UseCases
             Person follower = _personRepository.GetByUserId(UserId);
             try
             {
+                List<Notification> notifications = new List<Notification>();
+
                 foreach (var foll in follower.Followers)
                 {
                     var notification = new Notification(
                         notificationDto.Content,
                         Enum.TryParse(notificationDto.Type, out NotificationType type) ? type : NotificationType.None,
                         notificationDto.LinkId,
-                        follower.UserId
+                        foll.PersonId
                     );
 
-                    _notificationRepository.Add(notification);
+                    notifications.Add(notification);
                 }
+
+                _notificationRepository.AddRange(notifications);
 
                 return Result.Ok();
             }

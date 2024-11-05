@@ -15,8 +15,7 @@ public class StakeholderProfile : Profile
         CreateMap<UserDto, User>().ReverseMap();
         CreateMap<FollowerCreateDto, Follower>().ReverseMap();
         CreateMap<FollowerReadDto, Follower>().ReverseMap();
-        CreateMap<NotificationCreateDto, Notification>()
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+        CreateMap<NotificationCreateDto, Notification>();
         CreateMap<NotificationDto, Notification>().ReverseMap();
     }
 }

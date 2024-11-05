@@ -9,9 +9,6 @@ namespace Explorer.Stakeholders.API.Dtos
     public class FollowerCreateDto
     {
         public long FollowerId { get; set; } // ID korisnika koji želi da prati
-        public string Name { get; set; } // Ime pratioca
-        public string Surname { get; set; } // Prezime pratioca
-
         public FollowerCreateDto() { }
     }
 }

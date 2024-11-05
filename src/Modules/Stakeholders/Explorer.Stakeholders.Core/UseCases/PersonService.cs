@@ -44,7 +44,6 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             try
             {
-                // Dohvati korisnika na osnovu userId
                 var person = _personRepository.GetByUserId(userId);
                 if (person == null)
                 {
