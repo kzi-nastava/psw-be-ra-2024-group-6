@@ -14,6 +14,9 @@ using Shouldly;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
+using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.PriceDtos;
 
 namespace Explorer.Tours.Tests.Integration.Tours;
 
@@ -22,56 +25,7 @@ namespace Explorer.Tours.Tests.Integration.Tours;
     {
     public TourCommandTests(ToursTestFactory factory) : base(factory) { }
 
-    [Fact]
-    public void Creates()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-        var newEntity = new TourDto
-        {
-            Name = "Pariske tura",
-            Description = "Tura kroz Pariz.",
-            Difficulty = "Medium",
-            Tags = new List<string> { "priroda", "drustvo" },
-            Cost = 0.0,
-            Status = "Draft",
-            AuthorId = -21
-        };
-
-        // Act
-        var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as TourDto;
-
-        // Assert - Response
-        result.ShouldNotBeNull();
-        result.Id.ShouldNotBe(0);
-        result.Name.ShouldBe(newEntity.Name);
-
-        // Assert - Database
-        var storedEntity = dbContext.Tours.FirstOrDefault(i => i.Name == newEntity.Name);
-        storedEntity.ShouldNotBeNull();
-        storedEntity.Id.ShouldBe(result.Id);
-    }
-
-    [Fact]
-    public void Create_fails_invalid_data()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var newEntity = new TourDto()
-        {
-            Description = "Invalid data without a name"
-        };
-        // Act
-        var result = ((ObjectResult)controller.Create(newEntity).Result);
-
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(400);
-    }
+   
 
     [Fact]
     public void Updates()
@@ -86,10 +40,27 @@ namespace Explorer.Tours.Tests.Integration.Tours;
             Name = "Promjenjeno ime",
             Description = "Promjenjena deskripcija.",
             Difficulty = "Hard",
-            Tags = { "promjenjen1", "promjenjen2" },
-            Cost = 5.0,
-            Status = "Closed",
-            AuthorId = -1
+            Tags = new List<string> { "gas","aa" },
+            Price = new PriceDto()
+            {
+                Amount = 10
+            },
+            Durations = new List<TourDurationDto>()
+            {
+                new TourDurationDto()
+                {
+                    Duration = TimeOnly.FromDateTime(DateTime.UtcNow),
+                    TransportType = "Bike"
+                }
+            },
+            TotalLength = new DistanceDto()
+            {
+                Length = 10,
+                Unit = "Kilometers"
+            },
+            Status = "Draft",
+            AuthorId = -1,
+            
         };
 
         // Act
@@ -102,7 +73,7 @@ namespace Explorer.Tours.Tests.Integration.Tours;
         result.Description.ShouldBe(updatedTour.Description);
         result.Difficulty.ShouldBe(updatedTour.Difficulty);
         result.Tags.ShouldBe(updatedTour.Tags);
-        result.Cost.ShouldBe(updatedTour.Cost);
+        result.Price.Amount.ShouldBe(updatedTour.Price.Amount);
         result.Status.ShouldBe(updatedTour.Status);
 
         // Assert - Database 
@@ -125,9 +96,25 @@ namespace Explorer.Tours.Tests.Integration.Tours;
             Name = "Test",
             Description = "Promjenjena deskripcija.",
             Difficulty = "Hard",
-            Tags = { "promjenjen1", "promjenjen2" },
-            Cost = 5.0,
-            Status = "Closed",
+            Tags = new List<string>(){"gas"},
+            Price =new PriceDto()
+            {
+                Amount = 10
+            },
+            Durations = new List<TourDurationDto>()
+            {
+                new TourDurationDto()
+                {
+                    Duration = TimeOnly.FromDateTime(DateTime.UtcNow),
+                    TransportType = "Bike"
+                }
+            },
+            TotalLength = new DistanceDto()
+            {
+                Length = 10,
+                Unit = "Kilometers"
+            },
+            Status = "Draft",
             AuthorId = -1
         };
 

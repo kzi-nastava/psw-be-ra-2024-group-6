@@ -33,7 +33,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
         }
         public Result<CheckpointDto> Create(CheckpointCreateDto checkpointCreateDto)
         {
-            return MapToDto(CrudRepository.Create(mapper.Map<Checkpoint>(checkpointCreateDto)));
+            try
+            {
+                return MapToDto(CrudRepository.Create(mapper.Map<Checkpoint>(checkpointCreateDto)));
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
         }
     }
 }

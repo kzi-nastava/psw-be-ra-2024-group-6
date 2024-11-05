@@ -12,6 +12,8 @@ using Shouldly;
 using Explorer.API.Controllers.Author;
 using System.Diagnostics;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+
 namespace Explorer.Tours.Tests.Integration.Administration
 {
     [Collection("Sequential")]
@@ -26,11 +28,17 @@ namespace Explorer.Tours.Tests.Integration.Administration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-            var newEntity = new CheckpointDto
+            var newEntity = new CheckpointCreateDto
             {
                 Name = "Obuća za grub teren",
                 Description = "Patike sa tvrdim đonom i kramponima koje daju stabilnost na neravnom i rastresitom terenu.",
-                LocationId = -1000,
+                Location = new LocationCreateDto()
+                {
+                    City = "SD",
+                    Country = "Serbia",
+                    Latitude = 45.2671,
+                    Longitude = 19.8335,
+                },
                 TourId = -3,
                 ImageUrl = "neka/putanja"
 
@@ -56,7 +64,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var updatedEntity = new CheckpointDto
+            var updatedEntity = new CheckpointCreateDto
             {
                 Description = "Test",
 
@@ -77,14 +85,20 @@ namespace Explorer.Tours.Tests.Integration.Administration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-            var updatedEntity = new CheckpointDto
+            var updatedEntity = new CheckpointDto()
             {
                 Id = -2,
                 Name = "Big",
                 Description = "Predaleko je",
-                LocationId = -2,
-                TourId = -2,
-                ImageUrl = "neka/putanja/doslike"
+                Location = new LocationReadDto()
+                {
+                    City = "Gas",
+                    Country = "Serbia",
+                    Latitude = 45.2671,
+                    Longitude = 19.8335,
+                },
+                ImageUrl = "neka/putanja/doslike",
+                TourId = -2
 
             };
 
@@ -116,7 +130,13 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 Id = -1000,
                 Name = "Test",
                 Description = "Test",
-                LocationId = 0,
+                Location = new LocationReadDto()
+                {
+                    City = "SD",
+                    Country = "Serbia",
+                    Latitude = 45.2671,
+                    Longitude = 19.8335,
+                },
                 TourId = 0,
                 ImageUrl = "neka/putanja/doslike"
             };

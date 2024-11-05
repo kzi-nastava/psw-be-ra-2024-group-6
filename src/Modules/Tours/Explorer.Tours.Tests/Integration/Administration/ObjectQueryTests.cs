@@ -31,8 +31,8 @@ public class ObjectQueryTests : BaseToursIntegrationTest
 
         // Assert
         result.ShouldNotBeNull();
-        result.Results.Count.ShouldBe(2);
-        result.TotalCount.ShouldBe(2);
+        result.Results.Count.ShouldBe(3);
+        result.TotalCount.ShouldBe(3);
     }
 
     private static ObjectController CreateController(IServiceScope scope)

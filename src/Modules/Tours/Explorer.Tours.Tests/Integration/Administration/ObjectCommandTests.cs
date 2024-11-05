@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 
 namespace Explorer.Tours.Tests.Integration.Administration;
 
@@ -27,14 +28,19 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-        var newEntity = new ObjectDto
+        var newEntity = new ObjectCreateDto
         {
-            Id = 50,
             Name = "Women only WC",
             ImageUrl = "image/url",
             Description = "You can relax here ladies",
             Category = "WC",
-            LocationId = -7,
+            Location = new LocationCreateDto()
+            {
+                City = "Sd",
+                Country = "Serbia",
+                Latitude = 45.2671,
+                Longitude = 19.8335
+            },
             TourId = -2
         };
 
@@ -58,7 +64,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         // Arrange
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
-        var updatedEntity = new ObjectDto
+        var updatedEntity = new ObjectCreateDto
         {
             Description = "Test"
         };
@@ -80,13 +86,20 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
         var updatedEntity = new ObjectDto
         {
-            Id = -1,
+            Id = -3,
             Name = "Zar Mance",
             ImageUrl = "/putanja",
             Description = "Predaleko je",
             Category = "Restaurant",
-            LocationId = -4,
+            Location = new LocationReadDto()
+            {
+                City = "Sd",
+                Country = "Serbia",
+                Latitude = 45.2671,
+                Longitude = 19.833
+            },
             TourId = -2
+            
         };
 
         // Act
@@ -94,12 +107,11 @@ public class ObjectCommandTests : BaseToursIntegrationTest
 
         // Assert - Response
         result.ShouldNotBeNull();
-        result.Id.ShouldBe(-1);
+        result.Id.ShouldBe(-3);
         result.Name.ShouldBe(updatedEntity.Name);
         result.ImageUrl.ShouldBe(updatedEntity.ImageUrl);
         result.Description.ShouldBe(updatedEntity.Description);
         result.Category.ShouldBe(updatedEntity.Category);
-        result.LocationId.ShouldBe(updatedEntity.LocationId);
         result.TourId.ShouldBe(updatedEntity.TourId);
 
         // Assert - Database
@@ -123,7 +135,13 @@ public class ObjectCommandTests : BaseToursIntegrationTest
             ImageUrl = "/test",
             Description = "test",
             Category = "WC",
-            LocationId = 4,
+            Location = new LocationReadDto()
+            {
+                City = "Sd",
+                Country = "Serbia",
+                Latitude = 45.2671,
+                Longitude = 19.8335
+            },
             TourId = 5
         };
 
@@ -166,7 +184,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         result.StatusCode.ShouldBe(200);
 
         // Assert - Database
-        var storedCourse = dbContext.Objects.FirstOrDefault(i => i.Id == 2);
+        var storedCourse = dbContext.Objects.FirstOrDefault(i => i.Id == -2);
         storedCourse.ShouldBeNull();
     }
     [Fact]
