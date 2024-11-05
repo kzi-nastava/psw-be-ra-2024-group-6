@@ -56,7 +56,7 @@ namespace Explorer.API.Controllers.Author
              return CreateResponse(result);
         }
 
-        [HttpPost("archive/{tourId:long}")]
+        [HttpPatch("archive/{tourId:long}")]
         public ActionResult<TourReadDto> ArchieveTour(long tourId)
         {
             int userId = User.UserId();
@@ -64,7 +64,7 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
-        [HttpPost("publish/{tourId:long}")]
+        [HttpPatch("publish/{tourId:long}")]
         public ActionResult<TourReadDto> PublishTour(long tourId)
         {
             int userId = User.UserId();
