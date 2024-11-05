@@ -2,7 +2,7 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 using System;
@@ -23,6 +23,45 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             _personRepository = personRepository;
             this.mapper = mapper;
+        }
+
+        public Result<PersonDto> AddFollower(int followerId, int userId)
+        {
+            Person follower  = _personRepository.GetByUserId(userId);
+            follower.AddFollower(followerId);
+            _personRepository.Update(follower);
+
+            Person following = _personRepository.GetByUserId(followerId);
+            following.AddFollowing(userId);
+            _personRepository.Update(following);
+
+            return MapToDto(follower);
+
+
+        }
+
+        public Result<List<PersonDto>> GetFollowers(int userId)
+        {
+            try
+            {
+                var person = _personRepository.GetByUserId(userId);
+                if (person == null)
+                {
+                    return Result.Fail(FailureCode.NotFound).WithError("User not found");
+                }
+
+                // Pronađi sve korisnike koji prate trenutnog korisnika
+                var followers = person.Followers.Select(f => _personRepository.GetByUserId(f.PersonId)).ToList();
+
+                // Mapiraj pronađene korisnike u DTO objekte
+                var followerDtos = followers.Select(MapToDto).ToList();
+
+                return Result.Ok(followerDtos);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
 
         Result<PersonDto> IPersonService.GetByUserId(int id)
@@ -61,5 +100,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
 
         }
+
+
     }
 }

@@ -13,5 +13,6 @@ namespace Explorer.Stakeholders.API.Public
     {
         public PagedResult<UserDto> GetPaged();
         public Result<UserDto> Update(UserDto user);
+
     }
 }
