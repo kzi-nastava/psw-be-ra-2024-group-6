@@ -34,14 +34,16 @@ public class ToursContext : DbContext
         modelBuilder.HasDefaultSchema("tours");
 
         ConfigureTour(modelBuilder);
-        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
-        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
         ConfigureCheckpoint(modelBuilder);
         ConfigureObject(modelBuilder);
+        ConfigureReview(modelBuilder);
         ConfigureEquipment(modelBuilder);
         ConfigureOrderItem(modelBuilder);
         ConfigureShoppingCart(modelBuilder);
         ConfigurePurchaseToken(modelBuilder);
+        ConfigureTouristEquipmentManager(modelBuilder);
+        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
+        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
     }
     
 
@@ -79,38 +81,37 @@ public class ToursContext : DbContext
         modelBuilder.Entity<Tour>(entity =>
         {
             entity.HasMany<Checkpoint>(t=>t.Checkpoints)
-                .WithOne()
-                .HasForeignKey(c => c.TourId);
+                  .WithOne()
+                  .HasForeignKey(c => c.TourId);
 
             entity.HasMany<Object>(t =>t.Objects)
                   .WithOne()
                   .HasForeignKey(o => o.TourId);
-            entity
-        .HasMany(t => t.Equipment)
-        .WithMany()
-        .UsingEntity(j => j.ToTable("RequiredEquipments"));
+            entity.HasMany(t => t.Equipment)
+                  .WithMany()
+                  .UsingEntity(j => j.ToTable("RequiredEquipments"));
 
             entity.Property(tour => tour.Durations).HasColumnType("jsonb");
             entity.Property(tour => tour.Price).HasColumnType("jsonb");
-            entity.Property(tour => tour.TotalLenght).HasColumnType("jsonb");
+            entity.Property(tour => tour.TotalLength).HasColumnType("jsonb");
         });
-
-
-
-        modelBuilder.Entity<TouristEquipmentManager>()
-        .HasKey(te => te.Id);
-
-        modelBuilder.Entity<TouristEquipmentManager>()
-        .HasIndex(te => new { te.TouristId, te.EquipmentId })
-        .IsUnique();
-
-        modelBuilder.Entity<TouristEquipmentManager>()
-                .HasOne<Equipment>()
-                .WithMany()
-                .HasForeignKey(t => t.EquipmentId)
-                .OnDelete(DeleteBehavior.Cascade);
     }
 
+    private static void ConfigureTouristEquipmentManager(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TouristEquipmentManager>()
+            .HasKey(te => te.Id);
+
+        modelBuilder.Entity<TouristEquipmentManager>()
+            .HasIndex(te => new { te.TouristId, te.EquipmentId })
+            .IsUnique();
+
+        modelBuilder.Entity<TouristEquipmentManager>()
+            .HasOne<Equipment>()
+            .WithMany()
+            .HasForeignKey(t => t.EquipmentId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
     private static void ConfigureOrderItem(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderItem>(entity =>

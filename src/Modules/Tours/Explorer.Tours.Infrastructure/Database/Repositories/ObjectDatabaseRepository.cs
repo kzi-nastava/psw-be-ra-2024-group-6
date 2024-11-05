@@ -22,7 +22,7 @@ public class ObjectDatabaseRepository : IObjectRepository
     {
         try
         {
-            return _dbContext.Objects.Where(o => o.TourId == tourId).Include(o => o.Location).ToList();
+            return _dbContext.Objects.Where(o => o.TourId == tourId).ToList();
             
         }
         catch (Exception ex)

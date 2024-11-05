@@ -13,19 +13,18 @@ namespace Explorer.Tours.Core.Domain.Tours;
 public class Checkpoint : Entity
 {
     public long TourId { get; private set; }
-    public long LocationId { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public string ImageUrl { get; private set; }
-    public  Location? Location { get; private set; }
+    public  Location Location { get; private set; }
 
     public Checkpoint() { }
-    public Checkpoint(string name, string? description, string? imageUrl, long locationId, long tourId)
+    public Checkpoint(string? name, string? description, string? imageUrl, long tourId,Location location)
     {
         Name = name;
         Description = description;
         ImageUrl = imageUrl;
-        LocationId = locationId;
+        Location = location;
         TourId = tourId;
         Validate();
     }
@@ -34,6 +33,7 @@ public class Checkpoint : Entity
         if (string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Invalid Name.");
         if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
+
     }
 
     public void Update(Checkpoint checkpoint)
@@ -41,8 +41,7 @@ public class Checkpoint : Entity
         this.Name = checkpoint.Name;
         this.Description = checkpoint.Description;
         this.ImageUrl = checkpoint.ImageUrl;
-        this.LocationId = checkpoint.LocationId;
-        Validate();
+        this.Location = checkpoint.Location;
     }
 }
 
