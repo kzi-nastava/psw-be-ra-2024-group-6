@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
 namespace Explorer.Tours.Core.Domain.Tours;
 
 public enum Difficulty
@@ -38,7 +39,7 @@ public class Tour : Entity
     public List<Checkpoint> Checkpoints { get; private set; }
     public List<Object> Objects { get; private set; }
     public List<Equipment> Equipment { get; private set; }
-    //public List<Review> Reviews { get; private set; }
+    public List<Review> Reviews { get; private set; }
 
     public Tour(string name, string description, Difficulty difficulty, List<string> tags, long authorId, Distance totalLenght, List<TourDuration> durations)
     {
