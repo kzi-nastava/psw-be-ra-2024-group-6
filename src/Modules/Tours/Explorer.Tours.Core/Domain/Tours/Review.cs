@@ -5,19 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.Domain;
 
 public class Review : Entity
 {
+    public long Id { get; private set; }
     public long TouristId { get; private set; }
+    public long TourId { get; private set; }
     public int Rating { get; private set; }
     public string Comment { get; private set; }
     public DateTime TourDate { get; private set; }
     public DateTime ReviewDate { get; private set; }
     public List<string> Images { get; private set; }
 
-    public Review(long touristId, int rating, string comment, DateTime tourDate, DateTime reviewDate, List<string> images)
+    public Tour Tour { get; private set; }
+
+
+    public Review(long touristId, long tourId, int rating, string comment, DateTime tourDate, DateTime reviewDate, List<string> images)
     {
         ValidateRating(rating);
         ValidateComment(comment);
@@ -26,6 +32,7 @@ public class Review : Entity
 
 
         TouristId = touristId;
+        TourId = tourId;
         Rating = rating;
         Comment = comment;
         TourDate = tourDate;
