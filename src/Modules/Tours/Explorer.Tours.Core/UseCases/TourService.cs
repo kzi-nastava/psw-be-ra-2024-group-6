@@ -118,8 +118,9 @@ namespace Explorer.Tours.Core.UseCases
             {
                 if (tour.Status == Status.Published)
                 {
+                    double avarage = tour.GetAverageRating();
                     TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
-                         tour.TotalLenght.ToString());
+                         tour.TotalLenght.ToString(),avarage);
 
                     tourCardDtos.Add(tourCardDto);
                 }
