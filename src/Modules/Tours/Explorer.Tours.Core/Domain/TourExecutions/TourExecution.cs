@@ -50,5 +50,22 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
                 throw new ArgumentException($"Invalid status value: {status}");
             }
         }
+
+        public void CompleteCheckpoint(int checkpointId,int checkpointNum)
+        {
+            foreach(CompletedCheckpoint check in CompletedCheckpoints)
+            {
+                if (check.CheckpointId == checkpointId)
+                    return;
+            }
+            CompletedCheckpoint checkpoint = new CompletedCheckpoint(checkpointId, DateTime.UtcNow);
+            CompletedCheckpoints.Add(checkpoint);
+            this.CalculateCompletion(checkpointNum);
+        }
+
+        public void CalculateCompletion(int checkpointNum)
+        {
+             this.Completion = Math.Round((((double)CompletedCheckpoints.LongCount() / checkpointNum) * 100), 2);
+        }
     }
 }

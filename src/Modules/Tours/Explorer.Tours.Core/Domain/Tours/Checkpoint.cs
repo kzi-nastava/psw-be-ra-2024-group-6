@@ -13,10 +13,10 @@ namespace Explorer.Tours.Core.Domain.Tours;
 public class Checkpoint : Entity
 {
     public long TourId { get; init; }
-    public long LocationId { get; init; }
-    public string Name { get; init; }
-    public string Description { get; init; }
-    public string ImageUrl { get; init; }
+    public long LocationId { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string ImageUrl { get; set; }
     public virtual Location? Location { get; set; }
     public string Secret { get; init; }
 

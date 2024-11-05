@@ -39,7 +39,6 @@ public static class ToursStartup
         services.AddScoped<ICheckpointService, CheckpointService>();
         services.AddScoped<ITourService,TourService>();
         services.AddScoped<ITouristEquipmentManagerService, TouristEquipmentManagerService>();
-        services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<ITourExecutionService, TourExecutionService>();
 
     }

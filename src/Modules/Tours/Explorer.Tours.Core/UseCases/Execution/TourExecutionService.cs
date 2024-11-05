@@ -70,5 +70,25 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        public Result<TourExecutionDto> CompleteCheckpoint(int touristId,int tourId,int checkpointId,int checkpointNum)
+        {
+            try
+            {
+                var tourExecution = _tourExecutionRepository.GetByIdAndTouristId(tourId, touristId);
+                tourExecution.CompleteCheckpoint(checkpointId, checkpointNum);
+                var result = _tourExecutionRepository.Update(tourExecution);
+                return MapToDto(result);
+
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 }
