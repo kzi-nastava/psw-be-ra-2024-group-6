@@ -2,7 +2,6 @@
 using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Object = Explorer.Tours.Core.Domain.Tours.Object;
-using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.BuildingBlocks.Core.Domain;
@@ -149,8 +148,16 @@ public class ToursContext : DbContext
 
     }
 
+    private static void ConfigureReview(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Review>(entity =>
+        {
+            entity.HasOne<Tour>() 
+                  .WithMany(t => t.Reviews)
+                  .HasForeignKey(r => r.TourId);
+        });
+    }
 
-    
 
 
 }

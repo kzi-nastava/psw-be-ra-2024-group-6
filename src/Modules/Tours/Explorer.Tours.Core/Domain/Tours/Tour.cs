@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
 namespace Explorer.Tours.Core.Domain.Tours;
 
 public enum Difficulty
