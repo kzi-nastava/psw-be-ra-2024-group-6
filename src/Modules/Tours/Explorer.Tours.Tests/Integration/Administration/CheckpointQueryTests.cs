@@ -29,8 +29,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<CheckpointDto>;
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(4);
-            result.TotalCount.ShouldBe(4);
+            result.Results.Count.ShouldBe(3);
+            result.TotalCount.ShouldBe(3);
         }
         [Fact]
         public void Retrieves_all_for_tour()

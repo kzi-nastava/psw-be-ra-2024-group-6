@@ -34,15 +34,16 @@ public class ToursContext : DbContext
         modelBuilder.HasDefaultSchema("tours");
 
         ConfigureTour(modelBuilder);
-        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
-        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
         ConfigureCheckpoint(modelBuilder);
         ConfigureObject(modelBuilder);
+        ConfigureReview(modelBuilder);
         ConfigureEquipment(modelBuilder);
         ConfigureOrderItem(modelBuilder);
         ConfigureShoppingCart(modelBuilder);
         ConfigurePurchaseToken(modelBuilder);
         ConfigureTouristEquipmentManager(modelBuilder);
+        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
+        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
     }
     
 

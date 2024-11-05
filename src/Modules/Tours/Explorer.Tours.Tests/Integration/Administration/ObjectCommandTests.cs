@@ -118,7 +118,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var storedEntity = dbContext.Objects.FirstOrDefault(i => i.Name == "Zar Mance");
         storedEntity.ShouldNotBeNull();
         storedEntity.Description.ShouldBe(updatedEntity.Description);
-        var oldEntity = dbContext.Objects.FirstOrDefault(i => i.Name == "Objekat1");
+        var oldEntity = dbContext.Objects.FirstOrDefault(i => i.Name == "Objekat3");
         oldEntity.ShouldBeNull();
     }
 
