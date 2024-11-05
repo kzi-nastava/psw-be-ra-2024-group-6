@@ -9,6 +9,7 @@ using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.API.Dtos.TourDtos.PriceDtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
 using Object = Explorer.Tours.Core.Domain.Tours.Object;
 
@@ -18,6 +19,7 @@ public class ToursProfile : Profile
 {
     public ToursProfile()
     {
+        CreateMap<ReviewDto, Review>().ReverseMap();
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
 
         CreateMap<TourDto, Tour>().ReverseMap();
@@ -29,5 +31,15 @@ public class ToursProfile : Profile
         CreateMap<TourDuration, TourDurationDto>().ReverseMap();
         CreateMap<Distance,DistanceDto>().ReverseMap();
         CreateMap<TourCardDto, Tour>().ReverseMap();
+        
+
+        CreateMap<TourExecutionDto, TourExecution>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Position,
+                opt => opt.MapFrom(src => new TouristPosition(src.Longitude, src.Latitude)));
+        CreateMap<TourExecution, TourExecutionDto>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Position.Longitude))
+            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Position.Latitude));
     }
 }

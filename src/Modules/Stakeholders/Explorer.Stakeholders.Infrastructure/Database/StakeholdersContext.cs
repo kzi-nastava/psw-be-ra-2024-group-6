@@ -1,4 +1,5 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
 using Explorer.Stakeholders.Core.Domain.Problems;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,12 @@ public class StakeholdersContext : DbContext
 
     public DbSet<Author> Author { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
+    
+    
+
+
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,6 +33,17 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<Problem>().Property(item => item.Messages).HasColumnType("jsonb");
 
         ConfigureStakeholder(modelBuilder);
+
+        ConfigurePerson(modelBuilder);
+
+        ConfigureNotification(modelBuilder); 
+    }
+
+    private void ConfigurePerson(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Person>().Property(item => item.Followers).HasColumnType("jsonb");
+        modelBuilder.Entity<Person>().Property(item => item.Followings).HasColumnType("jsonb");
+
     }
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
@@ -52,15 +70,24 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<Club>()
             .HasOne<User>() 
             .WithMany() 
-            .HasForeignKey(c => c.OwnerId) 
-            ;
-
-        modelBuilder.Entity<ProblemMessage>()
-            .HasOne<Problem>()
-            .WithOne()
-            .HasForeignKey<Problem>(p => p.Id);
-
+            .HasForeignKey(c => c.OwnerId);
     }
+
+    
+    
+
+    private static void ConfigureNotification(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Notification>()
+            .HasKey(n => n.Id);
+
+        modelBuilder.Entity<Notification>()
+            .HasOne<Person>()
+            .WithMany()
+            .HasForeignKey(n => n.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+
 
 
 }

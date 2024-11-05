@@ -33,6 +33,8 @@ namespace Explorer.Blog.Core.Domain.Blogs
             Status = status;
             UserId = userId;
             Pictures = pictures ?? new List<BlogPicture>();
+            Ratings = new List<Rating>();
+            Comments = new List<Comment>();
         }
     }
 

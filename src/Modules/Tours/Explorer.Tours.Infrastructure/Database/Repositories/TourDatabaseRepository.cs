@@ -63,14 +63,32 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public Tour GetAggregate(long id)
         {
-            var tour = _context.Tours.Where(t => t.Id == id)
-                .Include(t => t.Checkpoints!).Include(t=>t.Objects).Include(t=>t.Equipment).FirstOrDefault();
-            if (tour == null)
+            try
             {
-                throw new KeyNotFoundException($"ShoppingCart not found: {id}");
+                var ret = _context.Tours
+                    .Include(t => t.Checkpoints)
+                    .Include(t => t.Objects)
+                    .Include(t => t.Equipment)
+                    .Include(t => t.Reviews)
+                    .FirstOrDefault(t => t.Id == id);
+                return ret;
             }
-            return tour;
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
         }
-
+        public Tour Get(long id)
+        {
+            try
+            {
+                var ret = _context.Tours.FirstOrDefault(t => t.Id == id);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
     }
 }

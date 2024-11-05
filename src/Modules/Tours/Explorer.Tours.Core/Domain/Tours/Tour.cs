@@ -38,7 +38,7 @@ public class Tour : Entity
     public List<Checkpoint> Checkpoints { get; private set; }
     public List<Object> Objects { get; private set; }
     public List<Equipment> Equipment { get; private set; }
-    //public List<Review> Reviews { get; private set; }
+    public List<Review> Reviews { get; private set; }
 
     public Tour(string? name, string? description, Difficulty difficulty, List<string> tags, long authorId, Distance totalLength, List<TourDuration> durations,Price price)
     {
