@@ -24,6 +24,11 @@ public class BlogContext : DbContext
                     .WithOne(p => p.Blog)      // Slika pripada jednom blogu
                     .HasForeignKey(p => p.BlogId)  // Strani ključ je BlogId
                     .OnDelete(DeleteBehavior.Cascade);  // Kada se obriše blog, brišu se i slike
+        modelBuilder.Entity<Comment>()
+                    .HasOne(c => c.Blog)         // Komentar pripada jednom blogu
+                    .WithMany(b => b.Comments)    // Blog može imati više komentara
+                    .HasForeignKey(c => c.BlogId) // Strani ključ u Comment tabeli je BlogId
+                    .OnDelete(DeleteBehavior.Cascade); // Kada se obriše blog, brišu se i komentari
         modelBuilder.HasDefaultSchema("blog");
 
     }

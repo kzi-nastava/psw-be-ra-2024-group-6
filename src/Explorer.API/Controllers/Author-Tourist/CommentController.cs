@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Blog.Core.Domain;
 using Explorer.Tours.API.Dtos;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 
 namespace Explorer.API.Controllers.Author_Tourist
 {
@@ -22,6 +23,7 @@ namespace Explorer.API.Controllers.Author_Tourist
         [HttpPost]
         public ActionResult<CommentDto> Create([FromBody] CommentDto comment)
         {
+            comment.UserId = User.UserId();
             var result = _commentService.Create(comment);
 
             return CreateResponse(result);
