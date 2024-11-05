@@ -1,5 +1,6 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Problems;
 using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Stakeholders.Infrastructure.Database;
@@ -29,6 +30,7 @@ public class StakeholdersContext : DbContext
         modelBuilder.HasDefaultSchema("stakeholders");
 
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+        modelBuilder.Entity<Problem>().Property(item => item.Messages).HasColumnType("jsonb");
 
         ConfigureStakeholder(modelBuilder);
 
@@ -68,10 +70,9 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<Club>()
             .HasOne<User>() 
             .WithMany() 
-            .HasForeignKey(c => c.OwnerId) 
-            ;
-
+            .HasForeignKey(c => c.OwnerId);
     }
+
     
     
 
@@ -86,6 +87,7 @@ public class StakeholdersContext : DbContext
             .HasForeignKey(n => n.ReceiverId)
             .OnDelete(DeleteBehavior.Restrict);
     }
+
 
 
 }

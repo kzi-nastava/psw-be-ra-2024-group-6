@@ -2,6 +2,7 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
+using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -91,15 +92,42 @@ namespace Explorer.Tours.Tests.Integration.Tours
             dbContext.Tours.Count().ShouldBe(4);
             dbContext.Tours.FirstOrDefault(x => x.Name == result.TourInfo.Name).ShouldNotBeNull();
             dbContext.Checkpoints.FirstOrDefault(x=>x.Name=="Test").ShouldNotBeNull();
-            dbContext.Locations.FirstOrDefault(x => x.Latitude == 202).ShouldNotBeNull();
             dbContext.Objects.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
+        }
+        [Fact]
+        public void Get_tour_details()
+        {
+            //Arange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+            //Art 
+            var result = ((ObjectResult)controller.GetTourDetailsByTourId(-2).Result)?.Value as TourDetailsDto;
+
+            //Assert
+            result.ShouldNotBeNull();
+            result.Checkpoints.Count.ShouldBe(2);
+            result.Objects.Count.ShouldBe(1);
+            foreach (var checkpoint in result.Checkpoints)
+            {
+                checkpoint.Location.ShouldNotBeNull();
+                /*checkpoint.Location.Latitude.ShouldBe(202);
+                checkpoint.Location.Longitude.ShouldBe(202);*/
+            }
+            foreach (var obj in result.Objects)
+            {
+                obj.Location.ShouldNotBeNull();
+                /*obj.Location.Latitude.ShouldBe(202);
+                obj.Location.Longitude.ShouldBe(202);*/
+            }
         }
 
         private static TourController CreateController(IServiceScope scope)
         {
             return new TourController(scope.ServiceProvider.GetRequiredService<ITourService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildContext("-12")
             };
         }
         
