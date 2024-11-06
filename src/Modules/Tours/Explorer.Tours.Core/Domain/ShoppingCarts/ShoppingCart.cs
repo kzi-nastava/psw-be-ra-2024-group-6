@@ -62,5 +62,22 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
                 TotalPrice = new Price(TotalPrice.Amount - newPrice);
             }
         }
+
+        public List<PurchaseToken> Checkout()
+        {
+            var tokens = new List<PurchaseToken>();
+
+            foreach (var item in OrderItems)
+            {
+                var token = new PurchaseToken(this.UserId, item.TourId, DateTime.UtcNow);
+
+                tokens.Add(token);
+            }
+
+            OrderItems.Clear();
+            TotalPrice = new Price(0);
+
+            return tokens;
+        }
     }
 }

@@ -18,13 +18,16 @@ namespace Explorer.Tours.Core.UseCases.Shopping
     public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, IShoppingCartService
     {
         private readonly IShoppingCartRepository _shoppingCartRepository;
+        private readonly IPurchaseTokenRepository _purchaseTokenRepository;
         private readonly ITourRepository _tourRepository;
         private readonly IMapper mapper;
 
         public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,
-            IShoppingCartRepository shoppingCartRepository, ITourRepository tourRepository, IMapper mapper) : base(crudRepository, mapper)
+
+            IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, ITourRepository tourRepository, IMapper mapper) : base(crudRepository, mapper)
         {
             _shoppingCartRepository = shoppingCartRepository;
+            _purchaseTokenRepository = purchaseTokenRepository;
             _tourRepository = tourRepository;
             this.mapper = mapper;
         }
@@ -36,9 +39,10 @@ namespace Explorer.Tours.Core.UseCases.Shopping
             return MapToDto(_shoppingCartRepository.GetByUserId(userId));
         }
 
-        public Result<ShoppingCartDto> AddItem(long shoppingCartId, long tourId, long userId)
+        public Result<ShoppingCartDto> AddItem(long userId, long tourId)
         {
             var sc = _shoppingCartRepository.GetByUserId(userId);
+
             if (sc == null)
             {
                 sc = new ShoppingCart(userId, new Price(0));
@@ -51,16 +55,19 @@ namespace Explorer.Tours.Core.UseCases.Shopping
                 return MapToDto(mapper.Map<ShoppingCart>(sc));
             }
 
-            sc.AddItem(tourId, tour.Name, tour.Cost);
+
+            sc.AddItem(tourId, tour.Name, tour.Price.Amount);
+
             _shoppingCartRepository.Update(sc);
             return MapToDto(mapper.Map<ShoppingCart>(sc));
         }
 
 
 
-        public Result<ShoppingCartDto> RemoveItem(int shoppingCartId, int itemId)
+        public Result<ShoppingCartDto> RemoveItem(int userId, int itemId)
         {
-            var sc = _shoppingCartRepository.Get(shoppingCartId);
+
+            var sc = _shoppingCartRepository.GetByUserId(userId);
             if (sc == null)
             {
                 return Result.Fail<ShoppingCartDto>("Shopping cart not found.");
@@ -70,5 +77,45 @@ namespace Explorer.Tours.Core.UseCases.Shopping
             _shoppingCartRepository.Update(sc);
             return MapToDto(mapper.Map<ShoppingCart>(sc));
         }
+
+        public Result<CheckoutResultDto> Checkout(long userId)
+        {
+            var sc = _shoppingCartRepository.GetByUserId(userId);
+            if (sc == null)
+            {
+                return Result.Fail<CheckoutResultDto>("Shopping cart not found.");
+            }
+
+            var tokens = sc.Checkout();
+            if(tokens.Count == 0)
+            {
+                return Result.Fail<CheckoutResultDto>("No items in the cart to checkout.");
+            }
+
+            foreach (var token in tokens)
+            {
+                _purchaseTokenRepository.Create(token);
+            }
+
+            _shoppingCartRepository.Update(sc);
+
+            var cartDto = MapToDto(sc);
+            var tokensDto = tokens.Select(token => new PurchaseTokenDto
+            {
+                Id = (int)token.Id,
+                UserId = (int)token.UserId,
+                TourId = (int)token.TourId,
+                PurchaseDate = token.PurchaseDate
+            }).ToList();
+
+            var resultDto = new CheckoutResultDto
+            {
+                ShoppingCart = cartDto,
+                PurchaseTokens = tokensDto
+            };
+
+            return Result.Ok(resultDto);
+        }
+
     }
 }

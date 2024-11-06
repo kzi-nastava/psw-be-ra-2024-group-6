@@ -59,5 +59,6 @@ namespace Explorer.Stakeholders.Core.UseCases
 
             return result.Value;
         }
+        
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +31,7 @@ namespace Explorer.API.Controllers.Author
         }
 
         [HttpPost]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpointDto)
+        public ActionResult<CheckpointDto> Create([FromBody] CheckpointCreateDto checkpointDto)
         {
             var result = _checkpointService.Create(checkpointDto);
             return CreateResponse(result);

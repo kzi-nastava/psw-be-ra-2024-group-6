@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
-using Explorer.Blog.Core.Domain;
+using Explorer.Blog.Core.Domain.Blogs;
 
 namespace Explorer.Blog.Core.UseCases
 {

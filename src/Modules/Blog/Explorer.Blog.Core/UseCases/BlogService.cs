@@ -12,9 +12,9 @@ using BlogDomain = Explorer.Blog.Core.Domain;
 
 namespace Explorer.Blog.Core.UseCases
 {
-    public class BlogService : CrudService<BlogDto, BlogDomain.Blog> ,IBlogService
+    public class BlogService : CrudService<BlogDto, BlogDomain.Blogs.Blog> ,IBlogService
     {
-        public BlogService(ICrudRepository<BlogDomain.Blog> repository, IMapper mapper) : base(repository, mapper) { }
+        public BlogService(ICrudRepository<BlogDomain.Blogs.Blog> repository, IMapper mapper) : base(repository, mapper) { }
 
     }
 }

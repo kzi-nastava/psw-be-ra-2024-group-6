@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Public.Administration;
 using System;
 using System.Collections.Generic;
@@ -11,6 +9,8 @@ using System.Threading.Tasks;
 using FluentResults;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using System.Diagnostics;
+using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -27,14 +27,20 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
 
         Result<List<CheckpointReadDto>> ICheckpointService.GetByTourId(long tourId)
-
         {
             List<CheckpointReadDto> el = _checkpointRepository.GetByTourId(tourId).Select(mapper.Map<CheckpointReadDto>).ToList();
             return el;
         }
-        public CheckpointDto Create(CheckpointCreateDto checkpointCreateDto)
+        public Result<CheckpointDto> Create(CheckpointCreateDto checkpointCreateDto)
         {
-            return MapToDto(CrudRepository.Create(mapper.Map<Checkpoint>(checkpointCreateDto)));
+            try
+            {
+                return MapToDto(CrudRepository.Create(mapper.Map<Checkpoint>(checkpointCreateDto)));
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
         }
     }
 }

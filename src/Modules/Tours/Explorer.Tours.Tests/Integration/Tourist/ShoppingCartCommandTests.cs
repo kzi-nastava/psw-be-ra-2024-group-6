@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Explorer.API.Controllers.Tourist;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Shopping;
+using FluentResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,15 +42,16 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         }
 
         [Theory]
-        [InlineData(-1, -1, 1, "-1")]
-        [InlineData(-1, -1, 1, "-1")]
-        [InlineData(-1, -3, 0, "-1")]
-        public  void AddsItem(int shoppingCartId, int tourId, int expectedOrderItemCount, string userId)
+        [InlineData(-1, 1, "-1")]
+        [InlineData( -1, 1, "-1")]
+        [InlineData( -100, 1, "-1")]
+        public  void AddsItem(int tourId, int expectedOrderItemCount, string userId)
         {
+            // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope, userId);
 
-            var result = controller.AddItem(shoppingCartId, tourId);
+            var result = controller.AddItem(tourId);
             var shoppingCartDto = ((ObjectResult)result.Result).Value as ShoppingCartDto;
 
             shoppingCartDto.ShouldNotBeNull();
@@ -58,12 +60,13 @@ namespace Explorer.Tours.Tests.Integration.Tourist
 
         [Theory]
         [InlineData(-1, -1, 0, "-1")]
-        public  void RemovesItem(int shoppingCartId, int itemId, int expectedOrderItemCount, string userId)
+        public  void RemovesItem(int shoppingCartIdint, int itemId, int expectedOrderItemCount, string userId)
         {
+            // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope, userId);
 
-            var result = controller.RemoveItem(shoppingCartId, itemId);
+            var result = controller.RemoveItem(itemId);
             var shoppingCartDto = ((ObjectResult)result.Result).Value as ShoppingCartDto;
 
             shoppingCartDto.ShouldNotBeNull();
@@ -71,23 +74,37 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             shoppingCartDto.OrderItems.Count.ShouldBe(expectedOrderItemCount);
         }
 
-        public static IEnumerable<object[]> AddItemTestData()
+        [Fact]
+        public void ChecksOutCart()
         {
-            return new List<object[]>
-            {
+            // Arrange
+            string userId = "-1";
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, userId);
 
-                new object[] { -1, -1, 1, "-1" }, // shoppingCartId, tourId, expectedOrderItemCount, userId
-                new object[] { -1, -3, 1, "-1" } // tour that is not published, count stays the same
+            // Act
+            var result = controller.CheckoutCart().Result as ObjectResult;
 
-            };
+            // Assert
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(200);
+            var tokens = result.Value as List<PurchaseTokenDto>;
+            tokens.ShouldNotBeNull();
+            tokens.Count.ShouldBe(1);
         }
-
-        public static IEnumerable<object[]> RemoveItemTestData()
+        [Fact]
+        public void ChecksOutCart_fail()
         {
-            return new List<object[]>
-            {
-                new object[] { -1, -1, 0, "-1" }, // shoppingCartId, itemId, expectedOrderItemCount, userId
-            };
+            // Arrange
+            string userId = "-2";
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, userId);
+
+            // Act
+            var result = controller.CheckoutCart().Result as ObjectResult;
+
+            // Assert
+            result.StatusCode.ShouldBe(500);
         }
     }
 }

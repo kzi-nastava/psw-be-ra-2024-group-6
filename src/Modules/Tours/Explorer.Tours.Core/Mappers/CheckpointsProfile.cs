@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.Core.Domain;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.Core.Domain.Tours;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Explorer.Tours.Core.Mappers
         {
             CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
             CreateMap<Checkpoint, CheckpointReadDto>().ReverseMap();
-            CreateMap<Location, LocationReadDto>().ReverseMap();
+            CreateMap<Checkpoint, CheckpointCreateDto>().ReverseMap();
         }
     }
 }
