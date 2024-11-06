@@ -114,9 +114,9 @@ namespace Explorer.Tours.Core.UseCases
             {
                 Tour tour = _tourRepository.GetAggregate(tourId);
                 if (!tour.IsUserAuthor(userId))
-                    return Result.Fail("user is not author of tour");
+                    return Result.Fail(FailureCode.Forbidden).WithError("User is not author of tour");
                 if (!tour.Publish())
-                    return Result.Fail("publish failed");
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Data not valid");
                 _tourRepository.Update(tour);
                 return mapper.Map<TourReadDto>(tour);
 
@@ -135,9 +135,9 @@ namespace Explorer.Tours.Core.UseCases
             {
                 Tour tour = _tourRepository.GetAggregate(tourId);
                 if (!tour.IsUserAuthor(userId))
-                    return Result.Fail("user is not author of tour");
+                    return Result.Fail(FailureCode.Forbidden).WithError("User is not author of tour");
                 if (!tour.Archive())
-                    return Result.Fail("publish failed");
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Archive failed invalid data");
                 _tourRepository.Update(tour);
                 return mapper.Map<TourReadDto>(tour);
 

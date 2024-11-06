@@ -41,8 +41,8 @@ namespace Explorer.Tours.Tests.Integration.Tours
 
             //Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(4);
-            result.TotalCount.ShouldBe(4);
+            result.Results.Count.ShouldBe(6);
+            result.TotalCount.ShouldBe(6);
         }
         [Fact]
         public void Create_tour()
@@ -117,7 +117,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
 
             //Assert
             result.ShouldNotBeNull();
-            dbContext.Tours.Count().ShouldBe(4);
+            dbContext.Tours.Count().ShouldBe(6);
             dbContext.Tours.FirstOrDefault(x => x.Name == result.TourInfo.Name).ShouldNotBeNull();
             dbContext.Checkpoints.FirstOrDefault(x=>x.Name=="Test").ShouldNotBeNull();
             dbContext.Objects.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
@@ -149,6 +149,65 @@ namespace Explorer.Tours.Tests.Integration.Tours
                 /*obj.Location.Latitude.ShouldBe(202);
                 obj.Location.Longitude.ShouldBe(202);*/
             }
+        }
+        [Fact]
+        public void Publish_tour()
+        {
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+            //Art 
+            var result = ((ObjectResult)controller.PublishTour(-2).Result)?.Value as TourReadDto;
+            result.ShouldNotBeNull();
+            var tour = dbContext.Tours.FirstOrDefault(x => x.Id == -2);
+            tour.ShouldNotBeNull();
+            tour.Status.ShouldBe(Status.Published);
+
+        }
+        [Fact]
+        public void Publish_tour_fails_no_checkpoints()
+        {
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+            //Art 
+            var result = ((ObjectResult)controller.PublishTour(-4).Result);
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(400);
+
+        }
+        [Fact]
+        public void Archive_tour()
+        {
+            //Arange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+            //Art 
+            var result = ((ObjectResult)controller.ArchieveTour(-5).Result)?.Value as TourReadDto;
+            result.ShouldNotBeNull();
+            var tour = dbContext.Tours.FirstOrDefault(x => x.Id == -5);
+            tour.ShouldNotBeNull();
+            tour.Status.ShouldBe(Status.Archived);
+
+        }
+        [Fact]
+        public void Archive_tour_fails_not_published()
+        {
+            //Arange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+            //Art 
+            var result = ((ObjectResult)controller.ArchieveTour(-2).Result);
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(400);
+
+
         }
 
         private static TourController CreateController(IServiceScope scope)
