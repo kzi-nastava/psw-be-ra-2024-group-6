@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.Core.Domain.Tours;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,6 @@ public class ObjectsProfile : Profile
     {
         CreateMap<ObjectDto, Domain.Tours.Object>().ReverseMap();
         CreateMap<Domain.Tours.Object, ObjectReadDto>().ReverseMap();
-        CreateMap<Location, LocationReadDto>().ReverseMap();
+        CreateMap<Domain.Tours.Object, ObjectCreateDto>().ReverseMap();
     }
 }
