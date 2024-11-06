@@ -91,8 +91,6 @@ namespace Explorer.Tours.Core.UseCases.Execution
         {
             try
             {
-                //if (_tourExecutionRepository.GetByIdAndTouristId(tourExecution.Id, tourExecution.TouristId) == null)
-                //    return Result.Fail(FailureCode.NotFound).WithError("Not found");
                 var result = _tourExecutionRepository.Update(MapToDomain(tourExecution));
                 return MapToDto(result);
 
