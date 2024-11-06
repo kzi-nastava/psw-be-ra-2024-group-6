@@ -90,7 +90,7 @@ public class ToursContext : DbContext
             entity.HasMany(t => t.Equipment)
                   .WithMany()
                   .UsingEntity(j => j.ToTable("RequiredEquipments"));
-
+            entity.HasMany(t =>t.Reviews).WithOne().HasForeignKey(o => o.TourId);
             entity.Property(tour => tour.Durations).HasColumnType("jsonb");
             entity.Property(tour => tour.Price).HasColumnType("jsonb");
             entity.Property(tour => tour.TotalLength).HasColumnType("jsonb");
