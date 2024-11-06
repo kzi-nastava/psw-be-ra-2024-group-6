@@ -45,11 +45,12 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
         [HttpPut("sendMessage/{id:int}")]
-        public ActionResult<ProblemDto> SendMessage([FromBody] ProblemDto problem,ProblemMessageDto message)
+        public ActionResult<ProblemDto> SendMessage()
         {
-            var userId = User.UserId();
+           /* var userId = User.UserId();
             var result = _problemService.SendMessage(userId, problem,message);
-            return CreateResponse(result);
+            return CreateResponse(result);*/
+           return Ok();
         }
 
 
