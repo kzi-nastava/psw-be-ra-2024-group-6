@@ -54,7 +54,7 @@ namespace Explorer.API.Controllers.Tourist
 
             return CreateResponse(result);
         }
-        /*
+        
         [HttpGet("user/{userId}")]
         public ActionResult<ShoppingCartDto> GetShoppingCartByUserId(int userId)
         {
@@ -67,7 +67,7 @@ namespace Explorer.API.Controllers.Tourist
 
             return CreateResponse(result);
         }
-        */
+        
 
 
 

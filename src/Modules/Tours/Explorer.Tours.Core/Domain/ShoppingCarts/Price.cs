@@ -32,5 +32,6 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
         {
             yield return Amount;
         }
+
     }
 }

@@ -74,6 +74,30 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
         }
 
         [Fact]
+        public void Create_fails_tour_not_bought()
+        {
+            {
+                // Arrange
+                using var scope = Factory.Services.CreateScope();
+                var controller = CreateController(scope);
+                var updatedEntity = new TourExecutionDto
+                {
+                    TourId = -3,
+                    TouristId = -1,
+                    Longitude = -20,
+                    Latitude = 50
+                };
+
+                // Act
+                var result = (ObjectResult)controller.CreateTourExecution(updatedEntity).Result;
+
+                // Assert
+                result.ShouldNotBeNull();
+                result.StatusCode.ShouldBe(403);
+            }
+        }
+
+        [Fact]
         public void Finalizes_tour_execution()
         {
             // Arrange

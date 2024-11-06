@@ -14,19 +14,18 @@ public class Object : Entity
     public string ImageUrl { get; private set; }
     public string Description { get; private set; }
     public Category Category { get; private set; }
-    public long LocationId { get; private set; }
     public long TourId { get; private set; }
-    public Location? Location { get; set; }
+    public Location Location { get; set; }
 
     public Object() { }
-    public Object(string name, string imageUrl, string description, Category category, long locationId, long tourId)
+    public Object(string? name, string? imageUrl, string? description, Category category, long locationId, long tourId,Location location)
     {
         Name = name;
         ImageUrl = imageUrl;
         Description = description;
         Category = category;
-        LocationId = locationId;
         TourId = tourId;
+        Location = location;
         Validate();
     }
     private void Validate()
@@ -34,7 +33,6 @@ public class Object : Entity
         if (string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Invalid Name.");
         if (string.IsNullOrWhiteSpace(ImageUrl)) throw new ArgumentException("Invalid ImageUrl");
         if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
-        if ((int)Category < 0 || (int)Category > 3) throw new ArgumentException("Invalid category");
     }
 
     public void Update(Object obj)
@@ -43,8 +41,7 @@ public class Object : Entity
         this.ImageUrl = obj.ImageUrl;
         this.Description = obj.Description;
         this.Category = obj.Category;
-        this.LocationId = obj.LocationId;
-        Validate();
+        this.Location = obj.Location;
     }
 }
 public enum Category

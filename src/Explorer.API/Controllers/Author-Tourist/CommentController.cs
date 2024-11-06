@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Blog.Core.Domain;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.API.Controllers.Author_Tourist
 {

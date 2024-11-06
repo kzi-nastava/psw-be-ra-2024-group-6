@@ -73,9 +73,6 @@ public class StakeholdersContext : DbContext
             .HasForeignKey(c => c.OwnerId);
     }
 
-    
-    
-
     private static void ConfigureNotification(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Notification>()

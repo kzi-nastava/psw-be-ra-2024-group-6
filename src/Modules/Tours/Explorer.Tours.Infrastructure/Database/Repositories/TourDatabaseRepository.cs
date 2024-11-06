@@ -54,11 +54,29 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public void Delete(long id)
         {
-            var entity = Get(id);
+            var entity = GetAggregate(id);
             _context.Tours.Remove(entity);
             _context.SaveChanges();
         }
 
+
+        public Tour GetAggregate(long id)
+        {
+            try
+            {
+                var ret = _context.Tours
+                    .Include(t => t.Checkpoints)
+                    .Include(t => t.Objects)
+                    .Include(t => t.Equipment)
+                    .Include(t => t.Reviews)
+                    .FirstOrDefault(t => t.Id == id);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
         public Tour Get(long id)
         {
             try
