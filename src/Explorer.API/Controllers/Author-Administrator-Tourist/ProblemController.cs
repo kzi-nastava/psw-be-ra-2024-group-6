@@ -44,12 +44,12 @@ namespace Explorer.API.Controllers.Tourist
             var result = _problemService.Update(problem, userId);
             return CreateResponse(result);
         }
-        [HttpPut("sendMessage/{id:int}")]
-        public ActionResult<ProblemDto> SendMessage()
+        [HttpPut("sendMessage")]
+        public ActionResult<ProblemDto> SendMessage([FromBody] ProblemWithMessageDto problemWithMessageDto)
         {
-           /* var userId = User.UserId();
-            var result = _problemService.SendMessage(userId, problem,message);
-            return CreateResponse(result);*/
+            var userId = User.UserId();
+            var result = _problemService.SendMessage(userId, problemWithMessageDto.Problem, problemWithMessageDto.Message);
+            return CreateResponse(result);
            return Ok();
         }
 
