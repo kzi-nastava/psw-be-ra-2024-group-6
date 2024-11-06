@@ -12,5 +12,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public PurchaseToken Create(PurchaseToken token);
 
         public List<PurchaseToken> GetByUserId(long id);
+
+        public PurchaseToken? GetByUserAndTour(long userId, long tourId);
     }
 }

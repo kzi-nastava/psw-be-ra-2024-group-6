@@ -30,5 +30,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .Where(t => t.UserId == id)
                 .ToList();
         }
+
+        public PurchaseToken? GetByUserAndTour(long userId, long tourId)
+        {
+            return _dbContext.PurchaseTokens
+                .FirstOrDefault(t => t.UserId == userId && t.TourId == tourId);
+        }
     }
 }

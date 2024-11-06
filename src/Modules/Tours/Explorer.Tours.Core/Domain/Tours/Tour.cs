@@ -233,6 +233,11 @@ public class Tour : Entity
 
 
 
+    public bool CheckIfNotPublished()
+    {
+        return Status != Status.Published;
+    }
+
     internal bool IsUserAuthor(int userId)
     {
         return AuthorId==userId;
