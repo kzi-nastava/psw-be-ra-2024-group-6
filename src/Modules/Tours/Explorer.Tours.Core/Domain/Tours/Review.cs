@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Dtos.TourDtos;
 using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.Domain;
@@ -24,12 +25,6 @@ public class Review : Entity
 
     public Review(long touristId, long tourId, int rating, string comment, DateTime tourDate, DateTime reviewDate, List<string> images)
     {
-        ValidateRating(rating);
-        ValidateComment(comment);
-        ValidateTourDate(tourDate);
-        ValidateReviewDate(reviewDate, tourDate);
-
-
         TouristId = touristId;
         TourId = tourId;
         Rating = rating;
@@ -37,40 +32,20 @@ public class Review : Entity
         TourDate = tourDate;
         ReviewDate = reviewDate;
         Images = images ?? new List<string>();
+        Validate();
     }
 
-    private void ValidateRating(int rating)
+    public void Validate()
     {
-        if (rating < 1 || rating > 5)
-        {
-            throw new ArgumentException("Rating must be between 1 and 5.");
-        }
-
-    }
-
-    private void ValidateComment(string comment)
-    {
-        if (string.IsNullOrWhiteSpace(comment))
-        {
+        if (string.IsNullOrWhiteSpace(Comment))
             throw new ArgumentException("Comment cannot be blank.");
-        }
-
-    }
-
-    private void ValidateTourDate(DateTime tourDate)
-    {
-        if (tourDate > DateTime.Now)
-        {
+        if (Rating < 1 || Rating > 5)
+            throw new ArgumentException("Rating must be between 1 and 5.");
+        if (TourDate > DateTime.Now)
             throw new ArgumentException("Tour date cannot be in the future..");
-        }
-
-    }
-
-    private void ValidateReviewDate(DateTime reviewDate, DateTime tourDate)
-    {
-        if (reviewDate < tourDate)
-        {
+        if (ReviewDate < TourDate)
             throw new ArgumentException("Review date must be greater than or equal to the tour date.");
-        }
     }
+
+
 }
