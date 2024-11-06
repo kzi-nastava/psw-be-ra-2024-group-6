@@ -1,4 +1,6 @@
-﻿namespace Explorer.Tours.API.Dtos
+﻿using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+
+namespace Explorer.Tours.API.Dtos.TourDtos.ObjectDtos
 {
     public class ObjectCreateDto
     {

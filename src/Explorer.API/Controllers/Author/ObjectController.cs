@@ -1,5 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +26,7 @@ public class ObjectController : BaseApiController
     }
 
     [HttpPost]
-    public ActionResult<ObjectDto> Create([FromBody] ObjectDto obj)
+    public ActionResult<ObjectDto> Create([FromBody] ObjectCreateDto obj)
     {
         var result = _objectService.Create(obj);
         return CreateResponse(result);
