@@ -205,6 +205,11 @@ public class Tour : Entity
         throw new NotImplementedException();
     }
 
+    public bool CheckIfNotPublished()
+    {
+        return Status != Status.Published;
+    }
+
     internal bool IsUserAuthor(int userId)
     {
         return AuthorId==userId;
