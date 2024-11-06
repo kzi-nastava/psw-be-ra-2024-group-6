@@ -17,7 +17,7 @@ namespace Explorer.Stakeholders.API.Dtos
         public long TouristId { get; set; }
         public bool IsClosed { get; set; }
         public bool IsResolved { get; set; }
-        public DateTime DueDate { get; set; }
-        public List<ProblemMessageDto> Messages { get; set; }
+        public DateTime? DueDate { get; set; }
+        public List<ProblemMessageDto>? Messages { get; set; }
     }
 }

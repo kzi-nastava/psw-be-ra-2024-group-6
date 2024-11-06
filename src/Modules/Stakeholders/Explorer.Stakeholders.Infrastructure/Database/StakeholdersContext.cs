@@ -1,5 +1,5 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
-using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Core.Domain.Problems;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,7 +64,7 @@ public class StakeholdersContext : DbContext
             .WithOne()
             .HasForeignKey<Tourist>(t => t.UserId );
 		modelBuilder.Entity<Problem>()
-            .HasOne<Tourist>()
+            .HasOne<User>()
             .WithMany()
             .HasForeignKey(p => p.TouristId);
         modelBuilder.Entity<Club>()
@@ -87,7 +87,5 @@ public class StakeholdersContext : DbContext
             .HasForeignKey(n => n.ReceiverId)
             .OnDelete(DeleteBehavior.Restrict);
     }
-
-
 
 }

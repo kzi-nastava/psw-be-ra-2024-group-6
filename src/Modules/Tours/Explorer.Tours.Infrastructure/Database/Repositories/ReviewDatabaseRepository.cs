@@ -36,5 +36,6 @@ public class ReviewDatabaseRepository : IReviewRepository
     {
         return _dbContext.Reviews.Where(review => review.TourId == tourId).ToList();
     }
+
 }
 

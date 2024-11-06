@@ -11,7 +11,6 @@ using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using FluentResults;
-using Explorer.Stakeholders.Core.Domain;
 
 namespace Explorer.Tours.Core.UseCases.Shopping
 {
