@@ -1,5 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -8,16 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Explorer.Tours.API.Public.Administration
 {
-    public interface ICheckpointService
+    public interface ICheckpointService 
     {
-        Result<PagedResult<CheckpointDto>> GetPaged(int page, int pageSize);
-        Result<CheckpointDto> Create(CheckpointDto equipment);
+        Result<PagedResult<CheckpointDto>> GetPaged(int page, int pageSize); 
         Result<CheckpointDto> Update(CheckpointDto equipment);
         Result Delete(int id);
         Result<List<CheckpointReadDto>> GetByTourId(long tourId);
-
-   
-        CheckpointDto Create(CheckpointCreateDto checkpointCreateDto);
+        Result<CheckpointDto> Create(CheckpointCreateDto checkpointCreateDto);
 
     }
 }
