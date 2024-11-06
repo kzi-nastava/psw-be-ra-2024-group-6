@@ -6,6 +6,7 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.API.Controllers.Author
 {
@@ -83,13 +84,6 @@ namespace Explorer.API.Controllers.Author
         public ActionResult Delete(int id)
         {
             var result = _tourService.Delete(id);
-            return CreateResponse(result);
-        }
-
-        [HttpGet("search")]
-        public ActionResult<List<TourDto>> SearchToursNearby([FromBody] SearchLocationDto searchLocation)
-        {
-            var result = _tourService.FindToursNearby(searchLocation);
             return CreateResponse(result);
         }
 

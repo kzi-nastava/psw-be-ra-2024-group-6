@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos;
 using FluentResults;
 using System;
@@ -23,7 +24,7 @@ namespace Explorer.Tours.API.Public
         Result<TourReadDto> GetTourDetailsByTourId(int tourId,int userId);
         Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize);
         Result<TourPreviewDto> GetTourPreview(long tourId);
-        Result<List<TourDto>> FindToursNearby(SearchLocationDto searchLocation);
+        Result<List<TourCardDto>> FindToursNearby(double latitude, double longitude, double radius);
 
         //Result GetTourDetailsByTourId(int tourId);
     }

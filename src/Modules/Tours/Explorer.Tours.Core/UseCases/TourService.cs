@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -195,23 +196,25 @@ namespace Explorer.Tours.Core.UseCases
         }
         */
 
-        public Result<List<TourDto>> FindToursNearby(SearchLocationDto searchLocation)
+        public Result<List<TourCardDto>> FindToursNearby(double latitude, double longitude, double maxDistance)
+
         {
             try
             {
                 List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
 
-                List<Tour> nearbyTours = new List<Tour>();
+                List<TourCardDto> nearbyToursDtos = new List<TourCardDto>();
 
                 foreach (var tour in tours)
                 {
-                    if (tour.IsTourNearby(searchLocation.Latitude, searchLocation.Longitude, searchLocation.MaxDistance))
+                    if (tour.IsTourNearby(latitude, longitude, maxDistance))
                     {
-                        nearbyTours.Add(tour);
+                        nearbyToursDtos.Add(new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString()));
                     }
+                
                 }
 
-                return MapToDto(nearbyTours);
+                return mapper.Map<List<TourCardDto>>(nearbyToursDtos);
             }
             catch (Exception ex)
             {

@@ -6,22 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Tourist
 {
     [Authorize(Policy = "touristPolicy")]
-    [Route("api/tourPreview")]
-    public class TourPreviewController : BaseApiController
+    [Route("api/tourSearch")]
+    public class TourSearchController : BaseApiController
     {
         private readonly ITourService _tourService;
 
-        public TourPreviewController(ITourService tourService)
+        public TourSearchController(ITourService tourService)
         {
             _tourService = tourService;
         }
 
-        [HttpGet("preview/{tourId:long}")]
-        public ActionResult<TourPreviewDto> GetTourPreview(long tourId)
+        [HttpGet]
+        public ActionResult<List<TourCardDto>> SearchToursNearby([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
         {
-            var result = _tourService.GetTourPreview(tourId);
+            var result = _tourService.FindToursNearby(latitude, longitude, radius);
             return CreateResponse(result);
         }
-
     }
 }
