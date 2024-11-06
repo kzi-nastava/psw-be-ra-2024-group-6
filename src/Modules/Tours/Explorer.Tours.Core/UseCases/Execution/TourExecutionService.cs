@@ -16,9 +16,12 @@ namespace Explorer.Tours.Core.UseCases.Execution
     public class TourExecutionService : BaseService<TourExecutionDto, TourExecution>, ITourExecutionService
     {
         private readonly ITourExecutionRepository _tourExecutionRepository;
-        public TourExecutionService(ITourExecutionRepository tourExecutionRepository, IMapper mapper) : base(mapper)
+        private readonly IPurchaseTokenRepository _purchaseTokenRepository;
+        public TourExecutionService(ITourExecutionRepository tourExecutionRepository, IPurchaseTokenRepository _tokenRepository, IMapper mapper) : base(mapper)
         {
             _tourExecutionRepository = tourExecutionRepository;
+            _purchaseTokenRepository = _tokenRepository;
+
         }
 
         public Result<TourExecutionDto> Create(TourExecutionDto tourExecution)
@@ -30,6 +33,13 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 {
                     return Result.Fail(FailureCode.Forbidden).WithError("Tourist already started this tour.");
                 }
+
+
+                if (!checkIfTouristBoughtTour(tourExecution))
+                {
+                    return Result.Fail(FailureCode.Forbidden).WithError("Tourist did not buy this tour.");
+                }
+
                 var result = _tourExecutionRepository.Create(MapToDomain(tourExecution));
                 return MapToDto(result);
             }
@@ -37,6 +47,12 @@ namespace Explorer.Tours.Core.UseCases.Execution
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
+        }
+
+
+        private bool checkIfTouristBoughtTour(TourExecutionDto tourExecution)
+        {
+            return _purchaseTokenRepository.GetByUserAndTour(tourExecution.TouristId, tourExecution.TourId) != null;
         }
 
         public Result<TourExecutionDto> FinalizeTourExecution(int tourExecutionId, string status, int touristId)
