@@ -20,6 +20,8 @@ namespace Explorer.Tours.API.Public
         Result<TourDetailsDto> GetTourDetailsByTourId(int tourId,int userId);
         Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize);
         Result<TourPreviewDto> GetTourPreview(long tourId);
+        Result<List<TourDto>> FindToursNearby(SearchLocationDto searchLocation);
+
         //Result GetTourDetailsByTourId(int tourId);
     }
 }

@@ -44,5 +44,11 @@ public class Checkpoint : Entity
         this.LocationId = checkpoint.LocationId;
         Validate();
     }
+
+    public double GetCheckpointDistance(double longitude, double latitude)
+    {
+        return Location.CalculateDistance(longitude, latitude);
+
+    }
 }
 

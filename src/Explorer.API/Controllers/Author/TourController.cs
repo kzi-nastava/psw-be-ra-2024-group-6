@@ -82,6 +82,12 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [HttpGet("search")]
+        public ActionResult<List<TourDto>> SearchToursNearby([FromBody] SearchLocationDto searchLocation)
+        {
+            var result = _tourService.FindToursNearby(searchLocation);
+            return CreateResponse(result);
+        }
 
     }
 }

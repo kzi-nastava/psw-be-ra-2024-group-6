@@ -1,4 +1,5 @@
 using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using System;
 using System.Collections.Generic;
@@ -196,4 +197,19 @@ public class Tour : Entity
     {
         return userId == AuthorId;
     }
+
+    public bool IsTourNearby(double latitude, double longitude, double maxDistance)
+    {
+        foreach (var checkpoint in Checkpoints) 
+        {
+            double distance = checkpoint.GetCheckpointDistance(latitude, longitude);
+
+            if (distance <= maxDistance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -156,5 +156,29 @@ namespace Explorer.Tours.Core.UseCases
         }
         */
 
+        public Result<List<TourDto>> FindToursNearby(SearchLocationDto searchLocation)
+        {
+            try
+            {
+                List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
+
+                List<Tour> nearbyTours = new List<Tour>();
+
+                foreach (var tour in tours)
+                {
+                    if (tour.IsTourNearby(searchLocation.Latitude, searchLocation.Longitude, searchLocation.MaxDistance))
+                    {
+                        nearbyTours.Add(tour);
+                    }
+                }
+
+                return MapToDto(nearbyTours);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
+
     }
 }
