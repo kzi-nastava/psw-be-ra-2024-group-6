@@ -37,6 +37,7 @@ public static class ToursStartup
     
     private static void SetupCore(IServiceCollection services)
     {
+        services.AddScoped<IPurchaseTokenService, PurchaseTokenService>();
         services.AddScoped<IEquipmentService, EquipmentService>();
         services.AddScoped<IObjectService, ObjectService>();
         services.AddScoped<ICheckpointService, CheckpointService>();
@@ -58,7 +59,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<Checkpoint>), typeof(CrudDatabaseRepository<Checkpoint, ToursContext>));
         services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
         services.AddScoped<ICheckpointRepository, CheckpointDatabaseRepository>();
-
+        services.AddScoped(typeof(ICrudRepository<PurchaseToken>), typeof(CrudDatabaseRepository<PurchaseToken, ToursContext>));
 
         services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour,ToursContext>));
 
@@ -68,6 +69,7 @@ public static class ToursStartup
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
         services.AddScoped<IPurchaseTokenRepository, PurchaseTokenDatabaseRepository>();
+
 
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),

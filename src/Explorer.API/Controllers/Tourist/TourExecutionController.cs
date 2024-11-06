@@ -6,9 +6,12 @@ using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Execution;
+using Explorer.Tours.API.Public.Shopping;
 using Explorer.Tours.Core.UseCases.Administration;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -19,12 +22,14 @@ namespace Explorer.API.Controllers.Tourist
         private readonly ITourExecutionService _tourExecutionService;
         private readonly ICheckpointService _checkpointService;
         private readonly ITourService _tourService;
+        private readonly IPurchaseTokenService _purchaseTokenService;
 
-        public TourExecutionController(ITourExecutionService tourExecutionService,ICheckpointService checkpointService,ITourService tourService)
+        public TourExecutionController(ITourExecutionService tourExecutionService,ICheckpointService checkpointService,ITourService tourService,IPurchaseTokenService purchaseTokenService)
         {
             _tourExecutionService = tourExecutionService;
             _checkpointService = checkpointService;
             _tourService = tourService;
+            _purchaseTokenService = purchaseTokenService;
         }
 
         [HttpPost]
@@ -67,10 +72,28 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet("options")]
-        public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] int userId)
         {
-            var result = _tourService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            var toursResult = _tourService.GetPaged(page, pageSize); //returns all tours
+            var purchaseTokensResult = _purchaseTokenService.GetByUserId(userId);   //returns all userId purchases
+
+            var allTours = toursResult.Value;
+
+            var purchasedTourIds = purchaseTokensResult.Value.Select(pt => pt.TourId).ToList();
+
+            var filteredTours = new List<TourDto>();
+
+            foreach (var tour in allTours.Results)
+            {
+                if (purchasedTourIds.Contains((int)tour.Id))
+                {
+                    filteredTours.Add(tour);
+                }
+            }
+            var a = new PagedResult<TourDto>(filteredTours, filteredTours.Count);
+
+
+            return CreateResponse(Result.Ok(a));
         }
 
         [HttpGet("get-by-tourist")]
