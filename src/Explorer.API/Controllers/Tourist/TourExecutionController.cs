@@ -79,7 +79,7 @@ namespace Explorer.API.Controllers.Tourist
 
             var allTours = toursResult.Value;
 
-            var purchasedTourIds = purchaseTokensResult.Value.Select(pt => pt.TourId).ToList();
+            var purchasedTourIds = purchaseTokensResult.Value.Where(pt => !pt.isExpired).Select(pt => pt.TourId).ToList();
 
             var filteredTours = new List<TourDto>();
 
