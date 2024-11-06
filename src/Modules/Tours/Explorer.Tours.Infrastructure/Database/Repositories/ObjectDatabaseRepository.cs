@@ -18,11 +18,11 @@ public class ObjectDatabaseRepository : IObjectRepository
         _dbContext = dbContext;
     }
 
-    public List<Core.Domain.Object> GetAllByTourId(long tourId)
+    public List<Core.Domain.Tours.Object> GetAllByTourId(long tourId)
     {
         try
         {
-            return _dbContext.Objects.Where(o => o.TourId == tourId).Include(o => o.Location).ToList();
+            return _dbContext.Objects.Where(o => o.TourId == tourId).ToList();
             
         }
         catch (Exception ex)

@@ -1,11 +1,11 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.API.Controllers.Author
 {
@@ -20,7 +20,7 @@ namespace Explorer.API.Controllers.Author
             _tourService = tourService;
         }
 
-        
+
 
         [HttpGet]
         public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
@@ -40,7 +40,7 @@ namespace Explorer.API.Controllers.Author
         }
 
          [HttpGet("{tourId:int}")]
-         public ActionResult<TourDetailsDto> GetTourDetailsByTourId(int tourId)
+         public ActionResult<TourReadDto> GetTourDetailsByTourId(int tourId)
          {
              int userId = User.UserId();
              var result = _tourService.GetTourDetailsByTourId(tourId,userId);
@@ -48,23 +48,27 @@ namespace Explorer.API.Controllers.Author
 
          }
 
-        [HttpPost("details")]
-        public ActionResult<TourCreateDto> CreateTour([FromBody]TourCreateDto tour)
-        {
-            tour.TourInfo.AuthorId = User.UserId();
-            var result = _tourService.CreateTour(tour);
-            return CreateResponse(result);
-
+         [HttpPost]
+         public ActionResult<TourCreateDto> Create([FromBody] TourCreateDto tour)
+         {
+             tour.TourInfo.AuthorId = User.UserId();
+             var result = _tourService.Create(tour);
+             return CreateResponse(result);
         }
 
-
-
-
-        [HttpPost]
-        public ActionResult<TourDto> Create([FromBody] TourDto tour)
+        [HttpPatch("archive/{tourId:long}")]
+        public ActionResult<TourReadDto> ArchieveTour(long tourId)
         {
-            tour.AuthorId = User.UserId();
-            var result = _tourService.Create(tour);
+            int userId = User.UserId();
+            var result = _tourService.Archive(tourId, userId);
+            return CreateResponse(result);
+        }
+
+        [HttpPatch("publish/{tourId:long}")]
+        public ActionResult<TourReadDto> PublishTour(long tourId)
+        {
+            int userId = User.UserId();
+            var result = _tourService.Publish(tourId, userId);
             return CreateResponse(result);
         }
 

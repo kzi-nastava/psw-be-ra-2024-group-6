@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
+
     public class ShoppingCartDatabaseRepository : IShoppingCartRepository
     {
         private readonly ToursContext _dbContext;
@@ -47,16 +48,23 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         }
 
 
-        public ShoppingCart Get(long id)
+        public ShoppingCart? Get(long id)
         {
-            var cart = _dbContext.ShoppingCarts.Where(t => t.Id == id)
-                .Include(t => t.OrderItems!).FirstOrDefault();
-            if (cart == null)
-            {
-                throw new KeyNotFoundException($"ShoppingCart not found: {id}");
-            }
+            var cart = _dbContext.ShoppingCarts
+                .Where(t => t.Id == id)
+                .Include(t => t.OrderItems)
+                .FirstOrDefault();
+
             return cart;
         }
 
+        public ShoppingCart? GetByUserId(long id)
+        {
+            var cart = _dbContext.ShoppingCarts.Where(t => t.UserId == id)
+                .Include(t => t.OrderItems)
+                .FirstOrDefault();
+
+            return cart;
+        }
     }
 }

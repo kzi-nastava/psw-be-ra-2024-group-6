@@ -1,7 +1,7 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Author;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +31,8 @@ public class ObjectQueryTests : BaseToursIntegrationTest
 
         // Assert
         result.ShouldNotBeNull();
-        result.Results.Count.ShouldBe(2);
-        result.TotalCount.ShouldBe(2);
+        result.Results.Count.ShouldBe(3);
+        result.TotalCount.ShouldBe(3);
     }
 
     private static ObjectController CreateController(IServiceScope scope)

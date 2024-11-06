@@ -14,6 +14,7 @@ using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Explorer.Tours.API.Public;
 
 namespace Explorer.Tours.Tests.Integration.TourExecution
 {
@@ -74,6 +75,30 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
         }
 
         [Fact]
+        public void Create_fails_tour_not_bought()
+        {
+            {
+                // Arrange
+                using var scope = Factory.Services.CreateScope();
+                var controller = CreateController(scope);
+                var updatedEntity = new TourExecutionDto
+                {
+                    TourId = -3,
+                    TouristId = -1,
+                    Longitude = -20,
+                    Latitude = 50
+                };
+
+                // Act
+                var result = (ObjectResult)controller.CreateTourExecution(updatedEntity).Result;
+
+                // Assert
+                result.ShouldNotBeNull();
+                result.StatusCode.ShouldBe(403);
+            }
+        }
+
+        [Fact]
         public void Finalizes_tour_execution()
         {
             // Arrange
@@ -101,11 +126,9 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
 
         private static TourExecutionController CreateController(IServiceScope scope)
         {
-            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(),
-                scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
-                scope.ServiceProvider.GetRequiredService<ITourService>())
+            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(), scope.ServiceProvider.GetRequiredService<ICheckpointService>(), scope.ServiceProvider.GetRequiredService<ITourService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildContext("-2")
             };
         }
     }
