@@ -41,6 +41,39 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             };
         }
 
+        [Theory]
+        [InlineData(-1, 1, "-1")]
+        [InlineData( -1, 1, "-1")]
+        [InlineData( -100, 1, "-1")]
+        public  void AddsItem(int tourId, int expectedOrderItemCount, string userId)
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, userId);
+
+            var result = controller.AddItem(tourId);
+            var shoppingCartDto = ((ObjectResult)result.Result).Value as ShoppingCartDto;
+
+            shoppingCartDto.ShouldNotBeNull();
+            shoppingCartDto.OrderItems.Count.ShouldBe(expectedOrderItemCount);
+        }
+
+        [Theory]
+        [InlineData(-1, -1, 0, "-1")]
+        public  void RemovesItem(int shoppingCartIdint, int itemId, int expectedOrderItemCount, string userId)
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, userId);
+
+            var result = controller.RemoveItem(itemId);
+            var shoppingCartDto = ((ObjectResult)result.Result).Value as ShoppingCartDto;
+
+            shoppingCartDto.ShouldNotBeNull();
+            shoppingCartDto.OrderItems.ShouldNotContain(item => item.Id == itemId);
+            shoppingCartDto.OrderItems.Count.ShouldBe(expectedOrderItemCount);
+        }
+
         [Fact]
         public void ChecksOutCart()
         {
@@ -72,25 +105,6 @@ namespace Explorer.Tours.Tests.Integration.Tourist
 
             // Assert
             result.StatusCode.ShouldBe(500);
-        }
-
-        public static IEnumerable<object[]> AddItemTestData()
-        {
-            return new List<object[]>
-            {
-
-                new object[] { -1, -1, 1, "-1" }, // shoppingCartId, tourId, expectedOrderItemCount, userId
-                new object[] { -1, -3, 1, "-1" } // tour that is not published, count stays the same
-
-            };
-        }
-
-        public static IEnumerable<object[]> RemoveItemTestData()
-        {
-            return new List<object[]>
-            {
-                new object[] { -1, -1, 0, "-1" }, // shoppingCartId, itemId, expectedOrderItemCount, userId
-            };
         }
     }
 }
