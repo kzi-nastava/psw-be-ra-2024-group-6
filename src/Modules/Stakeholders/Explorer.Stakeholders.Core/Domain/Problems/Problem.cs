@@ -39,7 +39,6 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
 
         public Problem() {}
 
-
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Category)) throw new ArgumentException("Invalid Category.");
