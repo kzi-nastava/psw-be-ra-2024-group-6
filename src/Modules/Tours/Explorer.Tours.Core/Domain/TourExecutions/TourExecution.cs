@@ -58,6 +58,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
                 if (check.CheckpointId == checkpointId)
                     return;
             }
+            LastActivity = DateTime.UtcNow;
             CompletedCheckpoint checkpoint = new CompletedCheckpoint(checkpointId, DateTime.UtcNow);
             CompletedCheckpoints.Add(checkpoint);
             this.CalculateCompletion(checkpointNum);

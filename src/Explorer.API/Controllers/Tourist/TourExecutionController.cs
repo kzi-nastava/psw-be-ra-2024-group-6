@@ -62,5 +62,13 @@ namespace Explorer.API.Controllers.Tourist
             var result = _tourExecutionService.GetByTouristId(touristId);
             return CreateResponse(result);
         }
+
+        [HttpPut("checkpoint")]
+        public ActionResult<TourExecutionDto> CompleteCheckpoint([FromQuery] int tourExecutionId, [FromQuery] int checkpointId, [FromQuery] int checkpointNum)
+        {
+            //var touristId = User.UserId();
+            var result = _tourExecutionService.CompleteCheckpoint(tourExecutionId, checkpointId, checkpointNum);
+            return CreateResponse(result);
+        }
     }
 }

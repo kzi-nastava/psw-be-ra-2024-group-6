@@ -71,11 +71,11 @@ namespace Explorer.Tours.Core.UseCases.Execution
             }
         }
 
-        public Result<TourExecutionDto> CompleteCheckpoint(int touristId,int tourId,int checkpointId,int checkpointNum)
+        public Result<TourExecutionDto> CompleteCheckpoint(int tourExecutionId,int checkpointId,int checkpointNum)
         {
             try
             {
-                var tourExecution = _tourExecutionRepository.GetByIdAndTouristId(tourId, touristId);
+                var tourExecution = _tourExecutionRepository.Get(tourExecutionId);
                 tourExecution.CompleteCheckpoint(checkpointId, checkpointNum);
                 var result = _tourExecutionRepository.Update(tourExecution);
                 return MapToDto(result);
