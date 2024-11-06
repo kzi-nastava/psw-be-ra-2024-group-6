@@ -35,11 +35,27 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpPut]
+        [HttpPut("complete/checkpoint")]
+        public ActionResult<TourExecutionDto> CompleteCheckpoint([FromQuery] int tourExecutionId, [FromQuery] int checkpointId, [FromQuery] int checkpointNum)
+        {
+            //var touristId = User.UserId();
+            var result = _tourExecutionService.CompleteCheckpoint(tourExecutionId, checkpointId, checkpointNum);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("finalize")]
         public ActionResult<TourExecutionDto> FinalizeTourExecution([FromQuery] int tourExecutionId, [FromQuery] string status)
         {
             var touristId = User.UserId();
             var result = _tourExecutionService.FinalizeTourExecution(tourExecutionId, status, touristId);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("update")]
+        public ActionResult<TourExecutionDto> UpdateTourist([FromBody] TourExecutionDto tourExecution)
+        {
+            // var touristId = User.UserId();
+            var result = _tourExecutionService.UpdateTourist(tourExecution);
             return CreateResponse(result);
         }
 
@@ -65,12 +81,14 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpPut("checkpoint")]
-        public ActionResult<TourExecutionDto> CompleteCheckpoint([FromQuery] int tourExecutionId, [FromQuery] int checkpointId, [FromQuery] int checkpointNum)
+        [HttpGet("secret/{checkpointId:long}")]
+        public ActionResult<CheckpointDto> GetSecret(int checkpointId)
         {
-            //var touristId = User.UserId();
-            var result = _tourExecutionService.CompleteCheckpoint(tourExecutionId, checkpointId, checkpointNum);
-            return CreateResponse(result);
+            var res = _checkpointService.Get(checkpointId);
+            return CreateResponse(res);
         }
+
+
+
     }
 }

@@ -26,10 +26,10 @@ namespace Explorer.Tours.Core.UseCases.Execution
             try
             {
                 var existingTourExecution = _tourExecutionRepository.GetByTourIdAndTouristId(tourExecution.TourId, tourExecution.TouristId);
-                if (existingTourExecution != null)
+                /*if (existingTourExecution != null)
                 {
                     return Result.Fail(FailureCode.Forbidden).WithError("Tourist already started this tour.");
-                }
+                }*/
                 var result = _tourExecutionRepository.Create(MapToDomain(tourExecution));
                 return MapToDto(result);
             }
@@ -90,5 +90,28 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
+
+        public Result<TourExecutionDto> UpdateTourist(TourExecutionDto tourExecution)
+        {
+            try
+            {
+                var tourExecutionNew = _tourExecutionRepository.Get(tourExecution.Id);
+                tourExecutionNew.SetLastActivity(tourExecution.Longitude,tourExecution.Latitude);
+                var result = _tourExecutionRepository.Update(tourExecutionNew);
+                return MapToDto(result);
+
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+
+
     }
 }

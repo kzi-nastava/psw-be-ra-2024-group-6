@@ -67,6 +67,14 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         public void CalculateCompletion(int checkpointNum)
         {
              this.Completion = Math.Round((((double)CompletedCheckpoints.LongCount() / checkpointNum) * 100), 2);
+              if(this.Completion == 100)
+                this.Status = TourExecutionStatus.COMPLETED;
+        }
+
+        public void SetLastActivity(double longitude,double latitude) 
+        {
+            this.LastActivity = DateTime.UtcNow;
+            this.Position = new TouristPosition(longitude, latitude);
         }
     }
 }

@@ -11,5 +11,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     {
         List<Checkpoint> GetByTourId(long tourId);
         Checkpoint Create(Checkpoint checkpoint);
+
+        Checkpoint Get(long id);
     }
 }

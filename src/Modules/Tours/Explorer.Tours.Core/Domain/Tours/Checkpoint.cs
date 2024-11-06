@@ -30,7 +30,7 @@ public class Checkpoint : Entity
         TourId = tourId;
         Secret = secret;
         Validate();
-        Secret = secret;
+       
     }
     private void Validate()
     {

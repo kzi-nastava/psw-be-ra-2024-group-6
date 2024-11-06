@@ -11,4 +11,6 @@ public interface ITourExecutionService
     public Result<ICollection<TourExecutionDto>> GetByTouristId(int touristId);
 
     public Result<TourExecutionDto> CompleteCheckpoint(int tourExecutionId,int checkpointId,int checkpointNum);
+    public Result<TourExecutionDto> UpdateTourist(TourExecutionDto tourExecution);
+
 }
