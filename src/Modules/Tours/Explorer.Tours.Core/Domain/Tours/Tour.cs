@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
 namespace Explorer.Tours.Core.Domain.Tours;
 
 public enum Difficulty
@@ -31,36 +32,28 @@ public class Tour : Entity
     public Price Price { get; private set; }
     public Status Status { get; private set; } = Status.Draft;
     public long AuthorId { get; private set; }
-    public Distance TotalLenght { get; private set; }
-    public DateTime? ArchieveTime { get; private set; }
+    public Distance TotalLength { get; private set; }
+    public DateTime StatusChangeTime { get; private set; }
     public List<TourDuration> Durations { get; private set; }
 
     public List<Checkpoint> Checkpoints { get; private set; }
     public List<Object> Objects { get; private set; }
     public List<Equipment> Equipment { get; private set; }
-    //public List<Review> Reviews { get; private set; }
+    public List<Review> Reviews { get; private set; }
 
-    public Tour(string name, string description, Difficulty difficulty, List<string> tags, long authorId, Distance totalLenght, List<TourDuration> durations)
+    public Tour(string? name, string? description, Difficulty difficulty, List<string> tags, long authorId, Distance totalLength, List<TourDuration> durations,Price price)
     {
         Name = name;
         Description = description;
         Difficulty = difficulty;
         Tags = new List<string>(tags);
         AuthorId = authorId;
-        TotalLenght = totalLenght;
+        TotalLength = totalLength;
+        Price = price;
         Durations = new List<TourDuration>(durations);
         Validate();
     }
 
-    public Tour(string name, string description, Difficulty difficulty, List<string> tags, long authorId)
-    {
-        Name = name;
-        Description = description;
-        Difficulty = difficulty;
-        Tags = new List<string>(tags);
-        AuthorId = authorId;
-        Validate();
-    }
     public Tour() { }
 
     private void Validate()
@@ -167,19 +160,40 @@ public class Tour : Entity
         //existingEquipment.Update(equipment);
     }
 
-    public void Archive()
+    private bool CanArchive()
     {
+        return Status == Status.Published;
+    }
+
+    public bool Archive()
+    {
+        if(!CanArchive())
+            return false;
+        StatusChangeTime = DateTime.UtcNow;
+        Status = Status.Archived;
+        return true;
+    }
+
+    public bool Publish()
+    {
+        if (!CanPublish())
+            return false;
+
+        StatusChangeTime=DateTime.UtcNow;
+        Status = Status.Published;
+        return true;
 
     }
 
-    public void Publish()
+    private bool ValidatePublishInfo()
     {
-
+        return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description)  && Tags.Count>0 && Durations.Count>0;
     }
 
     private bool CanPublish()
     {
-        throw new NotImplementedException();
+        return Status != Status.Published && Checkpoints.Count >= 2 && ValidatePublishInfo();
+
     }
 
     public List<Checkpoint> GetPreviewCheckpoints()
@@ -191,8 +205,8 @@ public class Tour : Entity
         throw new NotImplementedException();
     }
 
-    public bool IsAuthorOwner(int userId)
+    internal bool IsUserAuthor(int userId)
     {
-        return userId == AuthorId;
+        return AuthorId==userId;
     }
 }

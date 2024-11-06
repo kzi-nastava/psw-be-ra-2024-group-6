@@ -48,5 +48,12 @@ namespace Explorer.Tours.Core.UseCases
             return reviews.Select(MapToDto);
         }
 
+        public IEnumerable<ReviewDto> GetReviewsFromTourId(long tourId)
+        {
+            var reviews = _reviewRepository.GetReviewsForTour(tourId);
+            return reviews.Select(MapToDto);
+
+        }
     }
+
 }
