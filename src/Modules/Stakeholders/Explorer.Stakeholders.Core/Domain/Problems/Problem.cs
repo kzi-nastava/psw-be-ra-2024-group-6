@@ -37,6 +37,8 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
             Validate();
         }
 
+        public Problem() {}
+
 
         private void Validate()
         {
@@ -45,9 +47,9 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
             if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         }
 
-        public void AddMessage(ProblemMessage message)
+        public void SendMessage(ProblemMessage message)
         {
-
+            Messages.Add(message);
         }
 
         public void MarkAsResolved()

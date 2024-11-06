@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain;
-using Object = Explorer.Tours.Core.Domain.Object;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
+using Object = Explorer.Tours.Core.Domain.Tours.Object;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -9,14 +11,16 @@ public class ToursProfile : Profile
 {
     public ToursProfile()
     {
+        CreateMap<ReviewDto, Review>().ReverseMap();
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
 
         CreateMap<TourDto, Tour>().ReverseMap();
 
-        CreateMap<RequiredEquipmentDto, RequiredEquipment>().ReverseMap();
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 
         CreateMap<TourInfoDto, Tour>().ReverseMap();
+
+        CreateMap<TourCardDto, Tour>().ReverseMap();
 
         CreateMap<CheckpointCreateDto,Checkpoint>().ReverseMap();
         CreateMap<ObjectCreateDto,Object>().ReverseMap();
@@ -30,6 +34,13 @@ public class ToursProfile : Profile
 
         CreateMap<ObjectCreateDto, Object>().ReverseMap();
 
-
+        CreateMap<TourExecutionDto, TourExecution>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Position,
+                opt => opt.MapFrom(src => new TouristPosition(src.Longitude, src.Latitude)));
+        CreateMap<TourExecution, TourExecutionDto>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Position.Longitude))
+            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Position.Latitude));
     }
 }

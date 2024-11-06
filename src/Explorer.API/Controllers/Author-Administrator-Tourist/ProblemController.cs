@@ -6,6 +6,8 @@ using Explorer.Stakeholders.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Explorer.API.Controllers.Author;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -22,7 +24,8 @@ namespace Explorer.API.Controllers.Tourist
         [HttpGet]
         public ActionResult<PagedResult<ProblemDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _problemService.GetPaged(page, pageSize);
+            var userId = User.UserId();
+            var result = _problemService.GetAll(userId);
             return CreateResponse(result);
         }
 
@@ -37,7 +40,15 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPut("{id:int}")]
         public ActionResult<ProblemDto> Update([FromBody] ProblemDto problem)
         {
-            var result = _problemService.Update(problem);
+            var userId = User.UserId();
+            var result = _problemService.Update(problem, userId);
+            return CreateResponse(result);
+        }
+        [HttpPut("sendMessage/{id:int}")]
+        public ActionResult<ProblemDto> SendMessage([FromBody] ProblemDto problem,ProblemMessageDto message)
+        {
+            var userId = User.UserId();
+            var result = _problemService.SendMessage(userId, problem,message);
             return CreateResponse(result);
         }
 

@@ -33,7 +33,7 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "ide gas crni bmw",
                 Date = new DateTime(),
                 TourId = 0,
-                TouristId = -3
+                TouristId = -21
             };
 
             // Act
