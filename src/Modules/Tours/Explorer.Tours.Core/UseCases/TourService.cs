@@ -214,7 +214,7 @@ namespace Explorer.Tours.Core.UseCases
                 
                 }
 
-                return mapper.Map<List<TourCardDto>>(nearbyToursDtos);
+                return nearbyToursDtos;
             }
             catch (Exception ex)
             {
