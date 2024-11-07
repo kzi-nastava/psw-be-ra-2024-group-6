@@ -94,6 +94,12 @@ namespace Explorer.Tours.Core.UseCases.Shopping
 
             foreach (var token in tokens)
             {
+                var existingToken = _purchaseTokenRepository.GetByUserAndTour(token.UserId, token.TourId);
+                if (existingToken != null)
+                {
+                    return Result.Fail<CheckoutResultDto>($"You already bought one of the tours in your cart");
+                }
+
                 _purchaseTokenRepository.Create(token);
             }
 
