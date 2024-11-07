@@ -32,6 +32,12 @@ namespace Explorer.API.Controllers.Tourist
             var reviews = _reviewService.GetAllReviews();
             return Ok(reviews);
         }
+        [HttpGet("all-reviews/{userId:long}")]
+        public ActionResult<IEnumerable<ReviewDto>> GetAllByUser(long userId)
+        {
+            var result = _reviewService.GetAllByUser(userId);
+            return Ok(result);
+        }
 
         [HttpGet("tour/{tourId}/reviews")]
         public ActionResult<IEnumerable<ReviewDto>> GetReviewsByTourId(long tourId)

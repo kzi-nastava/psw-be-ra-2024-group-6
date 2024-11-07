@@ -31,6 +31,10 @@ public class ReviewDatabaseRepository : IReviewRepository
     {
         return _dbContext.Reviews.ToList(); 
     }
+    public IEnumerable<Review> GetAllByUser(long userId)
+    {
+        return _dbContext.Reviews.Where(t => t.TouristId == userId).ToList();
+    }
 
     public IEnumerable<Review> GetReviewsForTour(long tourId)
     {

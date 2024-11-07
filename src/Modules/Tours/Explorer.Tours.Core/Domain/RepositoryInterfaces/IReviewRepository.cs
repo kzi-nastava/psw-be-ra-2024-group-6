@@ -11,6 +11,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     public interface IReviewRepository
     {
         public IEnumerable<Review> GetAll();
+        public IEnumerable<Review> GetAllByUser(long userId);
 
         public Result<Review> Create(Review review);
 

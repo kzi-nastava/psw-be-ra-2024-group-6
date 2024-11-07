@@ -86,6 +86,18 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+        public Result<TourExecutionDto> GetById(int id)
+        {
+            try
+            {
+                var tourExecution = _tourExecutionRepository.Get(id);
+                return Result.Ok(MapToDto(tourExecution));
+            }
+            catch(Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
 
         public Result<TourExecutionDto> CompleteCheckpoint(int tourExecutionId,int checkpointId,int checkpointNum)
         {
@@ -126,11 +138,5 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
-        public long? GetTourIdByTourExecutionId(int tourExecutionId)
-        {
-            return _tourExecutionRepository.GetTourIdByTourExecutionId(tourExecutionId);
-        }
-
-
     }
 }

@@ -129,7 +129,8 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(),
            scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
            scope.ServiceProvider.GetRequiredService<ITourService>(),
-           scope.ServiceProvider.GetRequiredService<IPurchaseTokenService>())
+           scope.ServiceProvider.GetRequiredService<IPurchaseTokenService>(),
+           scope.ServiceProvider.GetRequiredService<IObjectService>())
             {
                 ControllerContext = BuildContext("-1")
             };

@@ -35,7 +35,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         public PurchaseToken? GetByUserAndTour(long userId, long tourId)
         {
             return _dbContext.PurchaseTokens
-                .FirstOrDefault(t => t.UserId == userId && t.TourId == tourId);
+                .FirstOrDefault(t => t.UserId == userId && t.TourId == tourId && t.isExpired == false);
         }
 
         public PurchaseToken Update(PurchaseToken token)

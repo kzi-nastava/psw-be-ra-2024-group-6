@@ -19,7 +19,6 @@ public class Review : Entity
     public DateTime ReviewDate { get; private set; }
     public List<string> Images { get; private set; }
 
-    public Tour Tour { get; private set; }
 
 
     public Review(long touristId, long tourId, int rating, string comment, DateTime tourDate, DateTime reviewDate, List<string> images)
@@ -28,7 +27,6 @@ public class Review : Entity
         ValidateComment(comment);
         ValidateTourDate(tourDate);
         ValidateReviewDate(reviewDate, tourDate);
-
 
         TouristId = touristId;
         TourId = tourId;

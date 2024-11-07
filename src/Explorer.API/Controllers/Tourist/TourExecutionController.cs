@@ -1,13 +1,17 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.API.Public.Shopping;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.UseCases.Administration;
+using Explorer.Tours.Core.UseCases.Execution;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +25,17 @@ namespace Explorer.API.Controllers.Tourist
     {
         private readonly ITourExecutionService _tourExecutionService;
         private readonly ICheckpointService _checkpointService;
+        private readonly IObjectService _objectService;
         private readonly ITourService _tourService;
         private readonly IPurchaseTokenService _purchaseTokenService;
 
-        public TourExecutionController(ITourExecutionService tourExecutionService,ICheckpointService checkpointService,ITourService tourService,IPurchaseTokenService purchaseTokenService)
+        public TourExecutionController(ITourExecutionService tourExecutionService,ICheckpointService checkpointService,ITourService tourService,IPurchaseTokenService purchaseTokenService,IObjectService objectService)
         {
             _tourExecutionService = tourExecutionService;
             _checkpointService = checkpointService;
             _tourService = tourService;
             _purchaseTokenService = purchaseTokenService;
+            _objectService = objectService;
         }
 
         [HttpPost]
@@ -37,6 +43,24 @@ namespace Explorer.API.Controllers.Tourist
         {
             tourExecution.TouristId = User.UserId();
             var result = _tourExecutionService.Create(tourExecution);
+
+            if (result.IsSuccess)
+            {
+                PurchaseTokenDto purchaseToken = _purchaseTokenService.GetByUserAndTour(tourExecution.TouristId, tourExecution.TourId).Value;
+
+                if (purchaseToken != null)
+                {
+                    purchaseToken.isExpired = true;
+                    _purchaseTokenService.Update(purchaseToken);
+                }
+            }
+
+            return CreateResponse(result);
+        }
+        [HttpGet]
+        public ActionResult<TourExecutionDto> GetById([FromQuery] int tourExecutionId)
+        {
+            var result = _tourExecutionService.GetById(tourExecutionId);
             return CreateResponse(result);
         }
 
@@ -54,19 +78,6 @@ namespace Explorer.API.Controllers.Tourist
             var touristId = User.UserId();
             var result = _tourExecutionService.FinalizeTourExecution(tourExecutionId, status, touristId);
            
-            var tourId = _tourExecutionService.GetTourIdByTourExecutionId(tourExecutionId);
-
-            if(tourId != null)
-            {
-                PurchaseTokenDto purchaseToken = _purchaseTokenService.GetByUserAndTour(touristId,(long)tourId).Value;
-                
-                if(purchaseToken != null)
-                {
-                    purchaseToken.isExpired = true;
-                    _purchaseTokenService.Update(purchaseToken);
-                }
-
-            }
             return CreateResponse(result);
         }
 
@@ -79,9 +90,16 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet("checkpoints/{tourId:long}")]
-        public ActionResult<List<CheckpointReadDto>> GetByTourId(long tourId)
+        public ActionResult<List<CheckpointReadDto>> GetCheckpointsByTourId(long tourId)
         {
             var result = _checkpointService.GetByTourId(tourId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("objects/{tourId:long}")]
+        public ActionResult<List<ObjectReadDto>> GetObjectsByTourId(long tourId)
+        {
+            var result = _objectService.GetByTourId(tourId);
             return CreateResponse(result);
         }
 
