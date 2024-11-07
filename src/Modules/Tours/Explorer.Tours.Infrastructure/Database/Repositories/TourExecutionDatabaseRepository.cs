@@ -27,5 +27,9 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             return DbContext.TourExecutions.Where(te => te.TouristId == touristId).ToList();
         }
+        public long? GetTourIdByTourExecutionId(int tourExecutionId)
+        {
+            return DbContext.TourExecutions.FirstOrDefault(te => te.Id == tourExecutionId)?.TourId;
+        }
     }
 }

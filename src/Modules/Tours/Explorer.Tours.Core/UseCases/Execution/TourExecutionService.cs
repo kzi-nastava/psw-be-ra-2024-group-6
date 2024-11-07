@@ -29,13 +29,12 @@ namespace Explorer.Tours.Core.UseCases.Execution
             try
             {
                 var existingTourExecution = _tourExecutionRepository.GetByTourIdAndTouristId(tourExecution.TourId, tourExecution.TouristId);
+                
                 if (existingTourExecution != null)
                 {
                     return Result.Fail(FailureCode.Forbidden).WithError("Tourist already started this tour.");
                 }
                 
-
-
                 if (!checkIfTouristBoughtTour(tourExecution))
                 {
                     return Result.Fail(FailureCode.Forbidden).WithError("Tourist did not buy this tour.");
@@ -127,7 +126,10 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
-
+        public long? GetTourIdByTourExecutionId(int tourExecutionId)
+        {
+            return _tourExecutionRepository.GetTourIdByTourExecutionId(tourExecutionId);
+        }
 
 
     }

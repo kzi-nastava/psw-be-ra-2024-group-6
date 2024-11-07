@@ -53,6 +53,20 @@ namespace Explorer.API.Controllers.Tourist
         {
             var touristId = User.UserId();
             var result = _tourExecutionService.FinalizeTourExecution(tourExecutionId, status, touristId);
+           
+            var tourId = _tourExecutionService.GetTourIdByTourExecutionId(tourExecutionId);
+
+            if(tourId != null)
+            {
+                PurchaseTokenDto purchaseToken = _purchaseTokenService.GetByUserAndTour(touristId,(long)tourId).Value;
+                
+                if(purchaseToken != null)
+                {
+                    purchaseToken.isExpired = true;
+                    _purchaseTokenService.Update(purchaseToken);
+                }
+
+            }
             return CreateResponse(result);
         }
 
