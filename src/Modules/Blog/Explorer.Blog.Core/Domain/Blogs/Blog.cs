@@ -42,7 +42,9 @@ namespace Explorer.Blog.Core.Domain.Blogs
     {
         Draft,
         Closed,
-        Published
+        Published,
+        Active,
+        Popular
     }
 
 }
