@@ -20,7 +20,7 @@ namespace Explorer.Tours.API.Public
         Result<TourReadDto> Archive(long tourId, int userId);
         Result<TourDto> Update(TourDto tour);
 
-        Result<TourReadDto> GetTourDetailsByTourId(int tourId,int userId);
+        Result<TourReadDto> GetTourDetailsByTourId(long tourId,long userId);
         Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize);
         Result<TourPreviewDto> GetTourPreview(long tourId);
         //Result GetTourDetailsByTourId(int tourId);
