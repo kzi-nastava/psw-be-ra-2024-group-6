@@ -1,6 +1,8 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Execution;
@@ -60,6 +62,14 @@ namespace Explorer.API.Controllers.Tourist
         {
             var touristId = User.UserId();
             var result = _tourExecutionService.GetByTouristId(touristId);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("update-tourist-location")]
+        public ActionResult<TourExecutionDto> Update([FromBody] TourExecutionDto tourExecution)
+        {
+            tourExecution.TouristId = User.UserId();
+            var result = _tourExecutionService.Update(tourExecution);
             return CreateResponse(result);
         }
     }
