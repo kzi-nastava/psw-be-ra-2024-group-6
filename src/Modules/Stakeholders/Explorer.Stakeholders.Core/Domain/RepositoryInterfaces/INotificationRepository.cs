@@ -11,5 +11,9 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     {
         void Add(Notification notification);
         void AddRange(IEnumerable<Notification> notifications);
+
+        public List<Notification> GetNotificationsByUserId(int userId);
+
+        void MarkAsRead(int notificationId);
     }
 }

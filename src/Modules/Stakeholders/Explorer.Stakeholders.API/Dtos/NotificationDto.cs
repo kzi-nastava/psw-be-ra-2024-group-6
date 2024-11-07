@@ -13,7 +13,7 @@ namespace Explorer.Stakeholders.API.Dtos
         public long ReceiverId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Type { get; set; }
-        public long LinkId { get; set; }
+        public long? LinkId { get; set; }
         public bool IsRead { get; set; }
     }
 }

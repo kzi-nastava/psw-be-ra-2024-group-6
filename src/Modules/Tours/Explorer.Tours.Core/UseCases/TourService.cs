@@ -108,6 +108,48 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+        public Result<TourReadDto> Publish(long tourId, int userId)
+        {
+            try
+            {
+                Tour tour = _tourRepository.GetAggregate(tourId);
+                if (!tour.IsUserAuthor(userId))
+                    return Result.Fail("user is not author of tour");
+                if (!tour.Publish())
+                    return Result.Fail("publish failed");
+                _tourRepository.Update(tour);
+                return mapper.Map<TourReadDto>(tour);
+
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Result.Fail("tour not found");
+            }
+
+
+        }
+
+        public Result<TourReadDto> Archive(long tourId, int userId)
+        {
+            try
+            {
+                Tour tour = _tourRepository.GetAggregate(tourId);
+                if (!tour.IsUserAuthor(userId))
+                    return Result.Fail("user is not author of tour");
+                if (!tour.Archive())
+                    return Result.Fail("publish failed");
+                _tourRepository.Update(tour);
+                return mapper.Map<TourReadDto>(tour);
+
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Result.Fail("tour not found");
+            }
+        }
+
+
+
         public Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize)
         {
             PagedResult<Tour> tours = crudRepository.GetPaged(page, pageSize);
@@ -127,6 +169,27 @@ namespace Explorer.Tours.Core.UseCases
 
             return tourCardDtos;
         }
+
+        /*public Result<List<TourCardDto>> GetAllTourCards()
+        {
+            List<Tour> tours = _tourRepository.GetToursWithReviews();
+
+            List<TourCardDto> tourCardDtos = new List<TourCardDto>();
+
+            foreach (Tour tour in tours)
+            {
+                if (tour.Status == Status.Published)
+                {
+                    double avg = tour.GetAverageRating();
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg);
+                    tourCardDtos.Add(tourCardDto);
+                }
+            }
+
+            return tourCardDtos;
+        }*/
+
+
 
         public Result<TourPreviewDto> GetTourPreview(long tourId)
         {

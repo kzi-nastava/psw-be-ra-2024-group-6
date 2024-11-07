@@ -56,5 +56,44 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
             }
         }
+
+        public Result<List<NotificationDto>> GetNotificationsByUserId(int userId)
+        {
+            try
+            {
+                List<Notification> notifications = _notificationRepository.GetNotificationsByUserId(userId);
+
+                // Ako nema notifikacija, vraća se prazna lista
+                return notifications.Any()
+                    ? notifications.Select(notification => new NotificationDto
+                    {
+                        Id = notification.Id,
+                        Content = notification.Content,
+                        Type = notification.Type.ToString(),
+                        ReceiverId = notification.ReceiverId,
+                        LinkId = notification.LinkId,
+                        CreatedAt = notification.CreatedAt,
+                        IsRead = notification.IsRead
+                    }).ToList()
+                    : new List<NotificationDto>();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to retrieve notifications for user with ID {userId}. Error: {ex.Message}");
+            }
+        }
+
+        public Result MarkAsRead(int notificationId)
+        {
+            try
+            {
+                _notificationRepository.MarkAsRead(notificationId);
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail($"Greška prilikom označavanja notifikacije kao pročitane. Detalji: {ex.Message}");
+            }
+        }
     }
 }
