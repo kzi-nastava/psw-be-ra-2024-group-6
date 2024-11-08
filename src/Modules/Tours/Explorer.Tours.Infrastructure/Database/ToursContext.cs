@@ -1,5 +1,4 @@
-﻿using Explorer.Stakeholders.Core.Domain;
-using Explorer.Tours.Core.Domain;
+﻿using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using Object = Explorer.Tours.Core.Domain.Tours.Object;
 using Explorer.Tours.Core.Domain.TourExecutions;
@@ -158,6 +157,7 @@ public class ToursContext : DbContext
                   .HasForeignKey(r => r.TourId);
         });
     }
+
 
 
 

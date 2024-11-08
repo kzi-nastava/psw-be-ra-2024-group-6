@@ -13,6 +13,5 @@ namespace Explorer.Tours.API.Public
         public Result<ReviewDto> CreateWithDateParser(ReviewDto reviewDto);
         public IEnumerable<ReviewDto> GetAllReviews();
         public IEnumerable<ReviewDto> GetReviewsFromTourId(long tourId);
-
     }
 }

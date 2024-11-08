@@ -40,5 +40,6 @@ namespace Explorer.API.Controllers.Tourist
             return Ok(reviews);
         }
 
+
     }
 }

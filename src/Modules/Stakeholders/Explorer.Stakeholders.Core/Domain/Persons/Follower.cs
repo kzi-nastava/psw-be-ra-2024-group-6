@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Explorer.Stakeholders.Core.Domain.ProfileNotifications
+namespace Explorer.Stakeholders.Core.Domain.Persons
 {
     public class Follower : ValueObject
     {

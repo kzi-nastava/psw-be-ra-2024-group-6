@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Stakeholders.API.Dtos;
-using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Persons;
 
 namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {

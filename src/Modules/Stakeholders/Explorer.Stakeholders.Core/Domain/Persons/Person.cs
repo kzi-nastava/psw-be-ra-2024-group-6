@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.Mail;
 
-namespace Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+namespace Explorer.Stakeholders.Core.Domain.Persons;
 
 public class Person : Entity
 {
@@ -62,22 +62,22 @@ public class Person : Entity
 
     public void AddFollower(int followerId)
     {
-        if (Followers == null)
+        if(Followers == null)
         {
             Followers = new List<Follower>();
         }
-            Followers.Add(new Follower(followerId));
+        Followers.Add(new Follower(followerId));
         
 
     }
 
     public void AddFollowing(int followingId)
     {
-        if (Followings == null)
+        if(Followings == null)
         {
             Followings = new List<Follower>();
         }
-            Followings.Add(new Follower(followingId));
+        Followings.Add(new Follower(followingId));
         
     }
 }
