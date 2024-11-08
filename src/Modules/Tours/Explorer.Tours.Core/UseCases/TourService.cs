@@ -114,7 +114,9 @@ namespace Explorer.Tours.Core.UseCases
 
         private bool checkIfUserBoughtTour(long tourId, long userId)
         {
-            return (_tokenService.GetByUserAndTour(userId, tourId) != null);
+
+            var result = _tokenService.GetByUserAndTour(userId, tourId);
+            return (result.Value != null);
         }
 
         public Result<TourReadDto> Publish(long tourId, int userId)
