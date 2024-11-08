@@ -6,10 +6,12 @@ using Explorer.Stakeholders.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Explorer.API.Controllers.Author;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 
 namespace Explorer.API.Controllers.Tourist
 {
-    [Authorize(Policy = "touristPolicy")]
+    [Authorize(Policy = "authorOrAdministratorOrTouristPolicy")]
     [Route("api/tourist/problem")]
     public class ProblemController : BaseApiController
     {
@@ -22,7 +24,8 @@ namespace Explorer.API.Controllers.Tourist
         [HttpGet]
         public ActionResult<PagedResult<ProblemDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _problemService.GetPaged(page, pageSize);
+            var userId = User.UserId();
+            var result = _problemService.GetAll(userId);
             return CreateResponse(result);
         }
 
@@ -37,9 +40,19 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPut("{id:int}")]
         public ActionResult<ProblemDto> Update([FromBody] ProblemDto problem)
         {
-            var result = _problemService.Update(problem);
+            var userId = User.UserId();
+            var result = _problemService.Update(problem, userId);
             return CreateResponse(result);
         }
+        [HttpPut("sendMessage")]
+        public ActionResult<ProblemDto> SendMessage([FromBody] ProblemWithMessageDto problemWithMessageDto)
+        {
+            var userId = User.UserId();
+            var result = _problemService.SendMessage(userId, problemWithMessageDto.Problem, problemWithMessageDto.Message);
+            return CreateResponse(result);
+           return Ok();
+        }
+
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)

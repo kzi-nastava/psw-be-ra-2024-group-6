@@ -13,7 +13,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public IEnumerable<Review> GetAll();
 
         public Result<Review> Create(Review review);
-
         public IEnumerable<Review> GetReviewsForTour(long tourId);
     }
 }

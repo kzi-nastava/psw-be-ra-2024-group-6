@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.API.Dtos
 {
-    public class ProblemMessageDto
+    public class ProblemWithMessageDto
     {
-        public string Content { get; set; }
-        public long SenderId { get; set; }
-        public DateTime CreationDate { get; set; }
-
+        public ProblemDto Problem;
+        public ProblemMessageDto Message;
     }
 }

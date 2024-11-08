@@ -10,7 +10,7 @@ using Microsoft.AspNetCore;
 using FluentResults;
 using Explorer.BuildingBlocks.Core.UseCases;
 using FluentResults;
-using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Persons;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {

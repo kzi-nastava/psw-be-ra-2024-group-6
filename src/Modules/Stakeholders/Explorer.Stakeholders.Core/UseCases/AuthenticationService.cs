@@ -2,7 +2,7 @@
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
-using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 
