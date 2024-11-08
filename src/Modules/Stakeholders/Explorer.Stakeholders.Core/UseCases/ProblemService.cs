@@ -47,12 +47,6 @@ namespace Explorer.Stakeholders.Core.UseCases
         }
 
 
-        public Result<ProblemDto> Update(ProblemDto equipment, int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public Result<PagedResult<ProblemDto>> GetAll(long userId)
         {
             var result = GetPaged(1, 10);
@@ -119,8 +113,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
-
-        public Result<ProblemDto> Update(ProblemDto problem, long userId)
+        public Result<ProblemDto> Update(ProblemDto problem, int userId)
         {
             try
             {
@@ -140,6 +133,8 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+
 
         public Result<ProblemDto> SendMessage(int userId, ProblemDto problem, ProblemMessageDto message)
         {
