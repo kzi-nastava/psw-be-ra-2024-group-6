@@ -86,6 +86,34 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+        public Result<TourExecutionDto> GetMostCompleted(int touristId, int tourId)
+        {
+            try
+            {
+                var tourExecutionsByUser = _tourExecutionRepository.GetByTouristId(touristId);
+                var specificTourExecutions = tourExecutionsByUser.Where(t => t.TourId == tourId);
+
+                var highestCompletionTourExecution = specificTourExecutions.FirstOrDefault();
+
+                if (highestCompletionTourExecution != null)
+                {
+                    foreach (TourExecution t in specificTourExecutions)
+                    {
+                        if (t.Completion > highestCompletionTourExecution.Completion)
+                        {
+                            highestCompletionTourExecution = t;
+                        }
+                    }
+                    return MapToDto(highestCompletionTourExecution);
+                }
+                return Result.Fail(FailureCode.NotFound).WithError("This user has no tour executions");
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+
+        }
         public Result<TourExecutionDto> GetById(int id)
         {
             try

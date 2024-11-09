@@ -43,7 +43,8 @@ namespace Explorer.API.Controllers.Tourist
         {
             tourExecution.TouristId = User.UserId();
             var result = _tourExecutionService.Create(tourExecution);
-
+            // Uncomment if it's made that you can purchase the same tour multiple times
+            /*
             if (result.IsSuccess)
             {
                 PurchaseTokenDto purchaseToken = _purchaseTokenService.GetByUserAndTour(tourExecution.TouristId, tourExecution.TourId).Value;
@@ -53,7 +54,7 @@ namespace Explorer.API.Controllers.Tourist
                     purchaseToken.isExpired = true;
                     _purchaseTokenService.Update(purchaseToken);
                 }
-            }
+            }*/
 
             return CreateResponse(result);
         }
@@ -63,6 +64,14 @@ namespace Explorer.API.Controllers.Tourist
             var result = _tourExecutionService.GetById(tourExecutionId);
             return CreateResponse(result);
         }
+        [HttpGet("mostCompleted")]
+        public ActionResult<TourExecutionDto> GetMostCompletedByTourId([FromQuery] int tourId)
+        {
+            var touristId = User.UserId();
+            var result = _tourExecutionService.GetMostCompleted(touristId, tourId);
+            return CreateResponse(result);
+        }
+
 
         [HttpPut("complete/checkpoint")]
         public ActionResult<TourExecutionDto> CompleteCheckpoint([FromQuery] int tourExecutionId, [FromQuery] int checkpointId, [FromQuery] int checkpointNum)

@@ -1,4 +1,6 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -44,6 +46,16 @@ namespace Explorer.API.Controllers.Tourist
         {
             var reviews = _reviewService.GetReviewsFromTourId(tourId);
             return Ok(reviews);
+        }
+        [HttpPut]
+        public ActionResult<User> Update([FromBody] ReviewDto review)
+        {
+            if (string.IsNullOrWhiteSpace(review.Comment) || review.Completion < 35 || review.Completion > 100 || review.Rating < 1 || review.Rating > 5)
+            {
+                return BadRequest("Bad fields.");
+            }
+            var result = _reviewService.Update(review);
+            return CreateResponse(result);
         }
 
     }

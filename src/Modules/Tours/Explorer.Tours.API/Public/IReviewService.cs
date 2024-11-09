@@ -14,5 +14,6 @@ namespace Explorer.Tours.API.Public
         public IEnumerable<ReviewDto> GetAllReviews();
         public IEnumerable<ReviewDto> GetReviewsFromTourId(long tourId);
         public IEnumerable<ReviewDto> GetAllByUser(long userId);
+        public Result<ReviewDto> Update(ReviewDto review);
     }
 }
