@@ -1,6 +1,6 @@
 ﻿INSERT INTO stakeholders."Problems"(
 	"Id", "Category", "Priority", "Date", "Description", "TourId", "TouristId", "IsResolved","IsClosed","DueDate", "Messages")
-	VALUES (-1, 'kate', 'prvi', '16-10-2024 10:10:10', 'blabla', -1, -21, False, False, '16-10-2024 10:10:10','[
+	VALUES (-1, 'kate', 'prvi', '16-10-2024 10:10:10', 'blabla', -1, -22, False, False, '16-10-2024 10:10:10','[
     {{
         
         "Content": "This is the first message content",

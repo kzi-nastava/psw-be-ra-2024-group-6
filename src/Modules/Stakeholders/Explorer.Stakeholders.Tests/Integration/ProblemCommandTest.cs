@@ -34,7 +34,18 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "ide gas crni bmw",
                 Date = new DateTime(),
                 TourId = 0,
-                TouristId = -21
+                TouristId = -22,
+                IsResolved = false,
+                IsClosed = false,
+                DueDate = new DateTime(),
+                Messages = new List<ProblemMessageDto>(){
+                    new ProblemMessageDto
+                    {
+                        Content = "Poruka porukica",
+                        SenderId = 2,
+                        CreationDate = new DateTime()
+                    }
+                }
             };
 
             // Act
@@ -88,7 +99,18 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "kvakvakva",
                 Date = new DateTime(),
                 TourId = 0,
-                TouristId = -2
+                TouristId = -2,
+                IsResolved = true,
+                IsClosed = false,
+                DueDate = new DateTime(),
+                Messages = new List<ProblemMessageDto>(){
+                    new ProblemMessageDto
+                    {
+                        Content = "Banana hleb",
+                        SenderId = 2,
+                        CreationDate = new DateTime()
+                    }
+                }
             };
 
             // Act
