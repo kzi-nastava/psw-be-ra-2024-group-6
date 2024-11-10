@@ -16,10 +16,12 @@ namespace Explorer.API.Controllers.Tourist
     public class ProblemController : BaseApiController
     {
         private readonly IProblemService _problemService;
+        private readonly IUserService _userService;
 
-        public ProblemController(IProblemService problemService)
+        public ProblemController(IProblemService problemService,IUserService userService)
         {
             _problemService = problemService;
+            _userService = userService;
         }
         [HttpGet]
         public ActionResult<PagedResult<ProblemDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
@@ -48,6 +50,8 @@ namespace Explorer.API.Controllers.Tourist
         public ActionResult<ProblemDto> SendMessage([FromBody] ProblemWithMessageDto problemWithMessageDto)
         {
             var userId = User.UserId();
+            Debug.WriteLine(userId);
+            Debug.WriteLine(problemWithMessageDto.Problem);
             var result = _problemService.SendMessage(userId, problemWithMessageDto.Problem, problemWithMessageDto.Message);
             return CreateResponse(result);
            return Ok();
@@ -60,6 +64,13 @@ namespace Explorer.API.Controllers.Tourist
             Debug.WriteLine(id);
             var result = _problemService.Delete(id);
             return CreateResponse(result);
+        }
+
+        [HttpGet("username/{userId:long}")]
+        public ActionResult<string> GetUsernameByUserId(long userId)
+        {
+            var user = _userService.Get(userId);
+            return Ok(user.Value.Username);
         }
     }
 }
