@@ -8,7 +8,8 @@ namespace Explorer.Stakeholders.API.Dtos
 {
     public class ProblemWithMessageDto
     {
-        public ProblemDto Problem;
-        public ProblemMessageDto Message;
+        public ProblemDto Problem { get; set; }
+        public ProblemMessageDto Message { get; set; }
+
     }
 }

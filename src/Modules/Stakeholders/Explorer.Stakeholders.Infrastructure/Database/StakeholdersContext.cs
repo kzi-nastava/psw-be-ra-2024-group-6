@@ -59,10 +59,10 @@ public class StakeholdersContext : DbContext
             .WithOne()
             .HasForeignKey<Author>(a => a.UserId);
 
-        modelBuilder.Entity<Tourist>()
+        /*modelBuilder.Entity<Tourist>()
             .HasOne<User>()
             .WithOne()
-            .HasForeignKey<Tourist>(t => t.UserId );
+            .HasForeignKey<Tourist>(t => t.UserId );*/
 		modelBuilder.Entity<Problem>()
             .HasOne<User>()
             .WithMany()
