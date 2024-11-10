@@ -9,12 +9,27 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.Domain.Blogs;
+using Explorer.Blog.Core.Domain.RepositoryInterfaces;
+using FluentResults;
 
 namespace Explorer.Blog.Core.UseCases
 {
     public class CommentService : CrudService<CommentDto, Comment>, ICommentService
     {
-        public CommentService(ICrudRepository<Comment> repository, IMapper mapper) : base(repository, mapper) { }
+        private readonly ICommentRepository _commentRepository;
+        private readonly IMapper _mapper;
+        public CommentService(ICommentRepository commentRepository, ICrudRepository<Comment> repository, IMapper mapper) : base(repository, mapper)
+        {
+            _commentRepository = commentRepository;
+            _mapper = mapper;
+        }
+
+        public Result<IEnumerable<CommentDto>> GetByBlogId(long id)
+        {
+            var comments = _commentRepository.GetByBlogId(id);
+            var commentsDto = _mapper.Map<IEnumerable<CommentDto>>(comments);
+            return Result.Ok(commentsDto); 
+        }
 
     }
 }
