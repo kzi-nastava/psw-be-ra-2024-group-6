@@ -47,7 +47,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
         {
             try
             {
-                return _dbContext.Notifications.Where(n => n.ReceiverId == userId).ToList();
+                return _dbContext.Notifications.Where(n => n.ReceiverPersonId == userId).ToList();
             }
             catch (Exception ex)
             {

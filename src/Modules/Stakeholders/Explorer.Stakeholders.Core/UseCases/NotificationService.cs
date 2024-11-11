@@ -30,18 +30,18 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result SendNotification(NotificationCreateDto notificationDto, int UserId)
         {
-            Person follower = _personRepository.GetByUserId(UserId);
+            Person sender = _personRepository.GetByUserId(UserId);
             try
             {
                 List<Notification> notifications = new List<Notification>();
 
-                foreach (var foll in follower.Followers)
+                foreach (var foll in sender.Followers)
                 {
                     var notification = new Notification(
                         notificationDto.Content,
                         Enum.TryParse(notificationDto.Type, out NotificationType type) ? type : NotificationType.None,
                         notificationDto.LinkId,
-                        foll.PersonId
+                        foll.PersonId,sender.Id
                     );
 
                     notifications.Add(notification);
@@ -70,7 +70,8 @@ namespace Explorer.Stakeholders.Core.UseCases
                         Id = notification.Id,
                         Content = notification.Content,
                         Type = notification.Type.ToString(),
-                        ReceiverId = notification.ReceiverId,
+                        ReceiverPersonId = notification.ReceiverPersonId,
+                        SenderPersonId = notification.SenderPersonId,
                         LinkId = notification.LinkId,
                         CreatedAt = notification.CreatedAt,
                         IsRead = notification.IsRead
