@@ -15,12 +15,12 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
         public DateTime PurchaseDate { get; init; }
         public bool isExpired { get; init; }
 
-        public PurchaseToken(long userId, long tourId, DateTime purchaseDate)
+        public PurchaseToken(long userId, long tourId, DateTime purchaseDate,bool isExpired)
         {
             UserId = userId;
             TourId = tourId;
             PurchaseDate = purchaseDate;
-            isExpired = false;
+            this.isExpired = isExpired;
         }
     }
 }
