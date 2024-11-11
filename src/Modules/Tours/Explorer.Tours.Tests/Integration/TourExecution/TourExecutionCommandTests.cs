@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.API.Controllers.Tourist;
+using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +33,11 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             var newEntity = new TourExecutionDto
             {
                 TourId = -1,
-                TouristId = -1,
+                TouristId = -21,
                 Longitude = -20,
-                Latitude = 50
+                Latitude = 50,
+                Status = "ONGOING",
+                Completion = 0
             };
 
             // Act
@@ -124,6 +127,43 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             oldEntity.ShouldBeNull();
         }
 
+        [Fact]
+        public void Updates_tourist_location_on_tour_execution()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+            var updateEntity = new TourExecutionDto()
+            {
+                Id = -2,
+                TourId = -1,
+                TouristId = -1,
+                Status = "ONGOING",
+                Longitude = 50,
+                Latitude = 42,
+                Completion = 0
+            };
+
+            var oldStatus = TourExecutionStatus.ONGOING;
+
+            // Act
+            var result = ((ObjectResult)controller.Update(updateEntity).Result)?.Value as TourExecutionDto;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.Longitude.ShouldBe(50);
+            result.Latitude.ShouldBe(42);
+
+            // Assert - Database
+            var storedEntity = dbContext.TourExecutions.FirstOrDefault(i => i.Id == updateEntity.Id);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Position.Longitude.ShouldBe(50);
+            storedEntity.Position.Latitude.ShouldBe(42);
+            var oldEntity = dbContext.TourExecutions.FirstOrDefault(i => i.Position == new TouristPosition(5, 2));
+            oldEntity.ShouldBeNull();
+        }
+
         private static TourExecutionController CreateController(IServiceScope scope)
         {
             return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(),
@@ -132,7 +172,7 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
            scope.ServiceProvider.GetRequiredService<IPurchaseTokenService>(),
            scope.ServiceProvider.GetRequiredService<IObjectService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildContext("-21")
             };
         }
     }

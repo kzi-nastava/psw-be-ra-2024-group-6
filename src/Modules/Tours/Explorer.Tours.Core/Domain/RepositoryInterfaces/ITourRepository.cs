@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 
@@ -16,5 +17,9 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public void Delete(long id);
         public Tour GetAggregate(long id);
         public Tour Get(long id);
+        public Tour GetTourWithReviews(long tourId);
+        public PagedResult<Tour> GetToursWithReviews(int page, int size);
+
+        public List<Tour> GetPublishedToursWithCheckpoints();
     }
 }

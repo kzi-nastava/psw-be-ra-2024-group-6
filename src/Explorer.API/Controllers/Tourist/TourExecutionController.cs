@@ -145,6 +145,14 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
+        [HttpPut("update-tourist-location")]
+        public ActionResult<TourExecutionDto> Update([FromBody] TourExecutionDto tourExecution)
+        {
+            tourExecution.TouristId = User.UserId();
+            var result = _tourExecutionService.Update(tourExecution);
+            return CreateResponse(result);
+        }
+
         [HttpGet("secret/{checkpointId:long}")]
         public ActionResult<CheckpointDto> GetSecret(int checkpointId)
         {

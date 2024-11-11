@@ -1,5 +1,4 @@
-﻿using Explorer.Stakeholders.Core.Domain;
-using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+﻿using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 using System;

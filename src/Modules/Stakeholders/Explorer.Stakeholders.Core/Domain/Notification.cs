@@ -19,27 +19,30 @@ namespace Explorer.Stakeholders.Core.Domain
         public string Content { get; private set; }
         public NotificationType Type { get; private set; }
         public long? LinkId { get; private set; }
-        public long ReceiverId { get; private set; }
+        public long ReceiverPersonId { get; private set; }
+
+        public long SenderPersonId { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public bool IsRead { get; private set; }
 
         public Notification() { }
 
-        public Notification(string content, NotificationType type, long? linkId, long receiverId)
+        public Notification(string content, NotificationType type, long? linkId, long receiverPersonId,long senderPersonId)
         {
             Content = content;
             Type = type;
             LinkId = linkId;
-            ReceiverId = receiverId;
+            ReceiverPersonId = receiverPersonId;
             CreatedAt = DateTime.UtcNow;
             IsRead = false;
+            SenderPersonId = senderPersonId;
             Validate();
         }
 
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Content)) throw new ArgumentException("Content cannot be empty");
-            if (ReceiverId == 0) throw new ArgumentException("ReceiverId is required");
+            if (ReceiverPersonId == 0) throw new ArgumentException("ReceiverId is required");
             if (Content.Length > 280) throw new ArgumentException("Message exceeds the maximum length of 280 char");
         }
 

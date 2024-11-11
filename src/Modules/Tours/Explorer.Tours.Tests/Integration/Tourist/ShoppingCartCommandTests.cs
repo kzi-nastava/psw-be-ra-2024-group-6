@@ -106,5 +106,19 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             // Assert
             result.StatusCode.ShouldBe(500);
         }
+        [Fact]
+        public void ChecksOutCart_already_has_purchaseToken()
+        {
+            // Arrange
+            string userId = "-21";
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, userId);
+
+            // Act
+            var result = controller.CheckoutCart().Result as ObjectResult;
+
+            // Assert
+            result.StatusCode.ShouldBe(500);
+        }
     }
 }

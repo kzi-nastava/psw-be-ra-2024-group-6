@@ -1,4 +1,4 @@
-﻿using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+﻿using Explorer.Stakeholders.Core.Domain.Persons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +11,9 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     {
         void Add(Notification notification);
         void AddRange(IEnumerable<Notification> notifications);
+
+        public List<Notification> GetNotificationsByUserId(int userId);
+
+        void MarkAsRead(int notificationId);
     }
 }

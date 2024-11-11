@@ -14,7 +14,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public IEnumerable<Review> GetAllByUser(long userId);
 
         public Result<Review> Create(Review review);
-
         public IEnumerable<Review> GetReviewsForTour(long tourId);
 
         public Review Update(Review review);

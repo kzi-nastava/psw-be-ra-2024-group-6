@@ -1,5 +1,5 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
-using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Core.Domain.Problems;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,12 +59,12 @@ public class StakeholdersContext : DbContext
             .WithOne()
             .HasForeignKey<Author>(a => a.UserId);
 
-        modelBuilder.Entity<Tourist>()
+        /*modelBuilder.Entity<Tourist>()
             .HasOne<User>()
             .WithOne()
-            .HasForeignKey<Tourist>(t => t.UserId );
+            .HasForeignKey<Tourist>(t => t.UserId );*/
 		modelBuilder.Entity<Problem>()
-            .HasOne<Tourist>()
+            .HasOne<User>()
             .WithMany()
             .HasForeignKey(p => p.TouristId);
         modelBuilder.Entity<Club>()
@@ -81,10 +81,13 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<Notification>()
             .HasOne<Person>()
             .WithMany()
-            .HasForeignKey(n => n.ReceiverId)
+            .HasForeignKey(n => n.ReceiverPersonId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Notification>()
+            .HasOne<Person>()
+            .WithMany()
+            .HasForeignKey(n => n.SenderPersonId)
             .OnDelete(DeleteBehavior.Restrict);
     }
-
-
 
 }

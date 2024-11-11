@@ -13,5 +13,11 @@ public class BlogProfile : Profile
         .ReverseMap()
         .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
         CreateMap<BlogPictureDto, BlogPicture>().ReverseMap();
+
+
+        CreateMap<RatingDto, Rating>()
+            .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => Enum.Parse<VoteType>(src.VoteType, true)))
+            .ReverseMap()
+            .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => src.VoteType.ToString()));
     }
 }
