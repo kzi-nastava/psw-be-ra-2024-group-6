@@ -20,5 +20,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public Tour GetTourWithReviews(long tourId);
         public PagedResult<Tour> GetToursWithReviews(int page, int size);
 
+        public List<Tour> GetPublishedToursWithCheckpoints();
     }
 }

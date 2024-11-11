@@ -43,5 +43,11 @@ public class Checkpoint : Entity
         this.ImageUrl = checkpoint.ImageUrl;
         this.Location = checkpoint.Location;
     }
+
+    public double GetCheckpointDistance(double longitude, double latitude)
+    {
+        return Location.CalculateDistance(longitude, latitude);
+
+    }
 }
 

@@ -124,5 +124,20 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         }
 
 
+
+        public List<Tour> GetPublishedToursWithCheckpoints()
+        {
+            try
+            {
+                return _context.Tours
+                    .Where(t => t.Status == Status.Published)
+                    .Include(t => t.Checkpoints)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error finding nearby tours", ex);
+            }
+        }
     }
 }
