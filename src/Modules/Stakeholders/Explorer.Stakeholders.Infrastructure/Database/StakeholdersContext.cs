@@ -81,7 +81,12 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<Notification>()
             .HasOne<Person>()
             .WithMany()
-            .HasForeignKey(n => n.ReceiverId)
+            .HasForeignKey(n => n.ReceiverPersonId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Notification>()
+            .HasOne<Person>()
+            .WithMany()
+            .HasForeignKey(n => n.SenderPersonId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 

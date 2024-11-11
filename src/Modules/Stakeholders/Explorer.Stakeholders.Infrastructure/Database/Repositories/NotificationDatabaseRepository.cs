@@ -43,5 +43,26 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
                 throw new InvalidOperationException($"Failed to add multiple notifications. Error: {ex.Message}");
             }
         }
+        public List<Notification> GetNotificationsByUserId(int userId)
+        {
+            try
+            {
+                return _dbContext.Notifications.Where(n => n.ReceiverPersonId == userId).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to retrieve notifications for user with ID {userId}. Error: {ex.Message}");
+            }
+        }
+
+        public void MarkAsRead(int notificationId)
+        {
+            var notification = _dbContext.Notifications.FirstOrDefault(n => n.Id == notificationId);
+            if (notification != null)
+            {
+                _dbContext.Entry(notification).Property("IsRead").CurrentValue = true;
+                _dbContext.SaveChanges();
+            }
+        }
     }
 }

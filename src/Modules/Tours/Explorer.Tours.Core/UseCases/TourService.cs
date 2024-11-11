@@ -152,6 +152,7 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+
         public Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize)
         {
             PagedResult<Tour> tours = _tourRepository.GetToursWithReviews(page, pageSize);
@@ -212,6 +213,7 @@ namespace Explorer.Tours.Core.UseCases
 
             return reviewDtos;
         }
+
 
 
 
