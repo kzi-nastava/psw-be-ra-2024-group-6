@@ -26,7 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <Folder Include="Controllers\Author-Administrator-Tourist\" />
+=======
+    <Folder Include="Controllers\Tourist\" />
+>>>>>>> development
     <Folder Include="Controllers\Author\" />
   </ItemGroup>
 

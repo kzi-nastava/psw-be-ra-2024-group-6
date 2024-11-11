@@ -31,6 +31,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             var entity = Get(id);
             _dbContext.Problems.Remove(entity);
             _dbContext.SaveChanges();
+            
         }
 
         public Problem Get(long id)
@@ -44,15 +45,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             return p;
         }
 
-        public List<Problem> GetAll()
-        {
-            throw new NotImplementedException();
-        }
 
-        public PagedResult<Problem> GetPaged(int page, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
 
         public Problem Update(Problem entity)
         {

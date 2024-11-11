@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {
-    public interface IProblemRepository : ICrudRepository<Problem>
+    public interface IProblemRepository
     {
-        List<Problem> GetAll();
+        public Problem Create(Problem problem);
+        public Problem Update(Problem problem);
+        public void Delete(long id);
+        public Problem Get(long id);
 
     }
 }

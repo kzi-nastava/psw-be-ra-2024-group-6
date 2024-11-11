@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using BlogDomain = Explorer.Blog.Core.Domain;
 using Explorer.Blog.Core.Domain.Blogs;
+using Explorer.Blog.Core.Domain.RepositoryInterfaces;
+using Explorer.Blog.Infrastructure.Database.Repositories;
 
 namespace Explorer.Blog.Infrastructure;
 
@@ -26,6 +28,8 @@ public static class BlogStartup
     {
         services.AddScoped<IBlogService, BlogService>();
         services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<IBlogRepository, BlogDatabaseRepository>();
+        services.AddScoped<ICommentRepository, CommentDatabaseRepository>();
 
     }
 

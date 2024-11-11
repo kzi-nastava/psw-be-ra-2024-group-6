@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos.TourDtos;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Dtos.TourDtos.ObjectDtos;

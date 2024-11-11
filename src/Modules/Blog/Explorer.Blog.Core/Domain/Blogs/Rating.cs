@@ -10,8 +10,8 @@ namespace Explorer.Blog.Core.Domain.Blogs
 {
     public class Rating : ValueObject
     {
-        public int UserId;
-        public VoteType VoteType;
+        public int UserId { get; }
+        public VoteType VoteType { get; }
 
         [JsonConstructor]
         public Rating(int userId, VoteType voteType)
@@ -19,6 +19,11 @@ namespace Explorer.Blog.Core.Domain.Blogs
             //Validate(userId, voteType);
             UserId = userId;
             VoteType = voteType;
+        }
+
+        public Rating()
+        {
+
         }
 
         private void Validate(int userId, VoteType voteType)

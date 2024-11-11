@@ -86,5 +86,23 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        public Result<TourExecutionDto> Update(TourExecutionDto tourExecution)
+        {
+            try
+            {
+                var result = _tourExecutionRepository.Update(MapToDomain(tourExecution));
+                return MapToDto(result);
+
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message); 
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
+            }
+        }
     }
 }

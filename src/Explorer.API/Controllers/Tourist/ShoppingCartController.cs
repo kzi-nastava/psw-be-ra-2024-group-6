@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Explorer.API.Controllers.Tourist
 {
     [Authorize(Policy = "touristPolicy")]
-    [Microsoft.AspNetCore.Components.Route("api/tourist/shop")]
+    [Route("api/tourist/shop")]
     public class ShoppingCartController : BaseApiController
     {
         private readonly IShoppingCartService _shoppingCartService;
@@ -55,9 +55,10 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
         
-        [HttpGet("user/{userId}")]
-        public ActionResult<ShoppingCartDto> GetShoppingCartByUserId(int userId)
+        [HttpGet("user")]
+        public ActionResult<ShoppingCartDto> GetShoppingCartForUser()
         {
+            var userId = User.UserId();
             var result = _shoppingCartService.GetByUserId(userId);
 
             if (result == null)
@@ -67,11 +68,5 @@ namespace Explorer.API.Controllers.Tourist
 
             return CreateResponse(result);
         }
-        
-
-
-
-
-
     }
 }

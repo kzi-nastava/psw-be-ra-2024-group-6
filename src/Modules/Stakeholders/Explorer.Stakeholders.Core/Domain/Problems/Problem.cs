@@ -19,10 +19,10 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
         public long TouristId { get; private set; }
         public bool IsResolved { get; private set; }
         public bool IsClosed { get; private set; }
-        public DateTime DueDate { get; private set; }
-        public List<ProblemMessage> Messages { get; private set; }
+        public DateTime? DueDate { get; private set; }
+        public List<ProblemMessage>? Messages { get; private set; }
 
-        public Problem(string category, string priority, DateTime date, string description, long tourId, long touristId, DateTime? dueDate = null)
+        public Problem(string category, string priority, DateTime date, string description, long tourId, long touristId, DateTime? dueDate, List<ProblemMessage>? messages)
         {
             Category = category;
             Priority = priority;
@@ -32,13 +32,12 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
             TouristId = touristId;
             IsClosed = false;
             IsResolved = false;
-            Messages = new List<ProblemMessage>();
-            DueDate = dueDate ?? DateTime.UtcNow.AddDays(5);
+            Messages = messages ?? new List<ProblemMessage>();
+            DueDate = dueDate ?? Date.AddDays(5);
             Validate();
         }
 
         public Problem() {}
-
 
         private void Validate()
         {
@@ -47,9 +46,9 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
             if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         }
 
-        public void AddMessage(ProblemMessage message)
+        public void SendMessage(ProblemMessage message)
         {
-
+            Messages.Add(message);
         }
 
         public void MarkAsResolved()

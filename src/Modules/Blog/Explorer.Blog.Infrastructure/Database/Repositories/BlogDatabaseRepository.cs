@@ -47,7 +47,7 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories
                 .Include(t => t.Pictures).FirstOrDefault();
             if (blog == null)
             {
-                throw new KeyNotFoundException($"ShoppingCart not found: {id}");
+                throw new KeyNotFoundException($"Blog not found: {id}");
             }
             return blog;
         }

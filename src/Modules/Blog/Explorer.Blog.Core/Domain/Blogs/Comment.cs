@@ -17,9 +17,10 @@ namespace Explorer.Blog.Core.Domain.Blogs
         public DateTime UpdateDate { get; private set; }
 
         public int UserId { get; private set; }
-        public int BlogId { get; private set; }
+        public long BlogId { get; private set; }
+        public Blog Blog { get; private set; }
 
-        public Comment(string text, DateTime creationDate, DateTime updateDate, int userId, int blogId)
+        public Comment(string text, DateTime creationDate, DateTime updateDate, int userId, long blogId)
         {
             if (string.IsNullOrWhiteSpace(text)) throw new ArgumentNullException("Must contain text");
             Text = text;

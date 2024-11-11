@@ -2,7 +2,7 @@
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 
 namespace Explorer.API.Controllers.Stakeholders
