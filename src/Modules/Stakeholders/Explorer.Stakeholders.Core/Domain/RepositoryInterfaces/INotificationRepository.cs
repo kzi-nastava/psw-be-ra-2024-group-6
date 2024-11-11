@@ -1,4 +1,4 @@
-﻿using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+﻿using Explorer.Stakeholders.Core.Domain.Persons;
 using System;
 using System.Collections.Generic;
 using System.Linq;

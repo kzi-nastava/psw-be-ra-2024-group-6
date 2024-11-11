@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Tours.Core.Domain.Tours;
 
-namespace Explorer.Tours.Core.Domain;
+namespace Explorer.Tours.Core.Domain{
 
 public class Review : Entity
 {
@@ -18,9 +18,6 @@ public class Review : Entity
     public DateTime TourDate { get; private set; }
     public DateTime ReviewDate { get; private set; }
     public List<string> Images { get; private set; }
-
-    public Tour Tour { get; private set; }
-
 
     public Review(long touristId, long tourId, int rating, string comment, DateTime tourDate, DateTime reviewDate, List<string> images)
     {
@@ -73,4 +70,5 @@ public class Review : Entity
             throw new ArgumentException("Review date must be greater than or equal to the tour date.");
         }
     }
+}
 }
