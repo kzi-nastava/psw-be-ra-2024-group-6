@@ -256,4 +256,8 @@ public class Tour : Entity
         }
         return false;
     }
+    public void setReviews(List<Review> reviews)
+    {
+        Reviews = reviews;
+    }
 }
