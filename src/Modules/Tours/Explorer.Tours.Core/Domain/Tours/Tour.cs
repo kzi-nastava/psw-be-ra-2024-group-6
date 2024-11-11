@@ -202,8 +202,36 @@ public class Tour : Entity
     }
     public double GetAverageRating()
     {
-        throw new NotImplementedException();
+        if (HasNoReviews())
+        {
+            return 0;
+        }
+
+        double totalRating = CalculateTotalRating();
+        return CalculateAverageRating(totalRating);
     }
+    private bool HasNoReviews()
+    {
+        return Reviews == null || Reviews.Count == 0;
+    }
+    private double CalculateTotalRating()
+    {
+        double totalRating = 0;
+
+        for (int i = 0; i < Reviews.Count; i++)
+        {
+            totalRating += Reviews[i].Rating;
+        }
+
+        return totalRating;
+    }
+
+    private double CalculateAverageRating(double totalRating)
+    {
+        return totalRating / Reviews.Count;
+    }
+
+
 
     public bool CheckIfNotPublished()
     {

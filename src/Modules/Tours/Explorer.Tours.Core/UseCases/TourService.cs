@@ -16,6 +16,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Tours.Core.Domain;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -147,21 +149,9 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
-        public Result<TourPreviewDto> GetTourPreview(long tourId)
-        {
-            Tour tour = crudRepository.Get(tourId);
-            PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
-            CheckpointReadDto firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
-            List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
-            TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
-                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount, author.Name + " " + author.Surname,
-                tour.TotalLength.ToString(), durations, firstCp);
-
-            return tourPreviewDto;
-        }
         public Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize)
         {
-            PagedResult<Tour> tours = crudRepository.GetPaged(page, pageSize);
+            PagedResult<Tour> tours = _tourRepository.GetToursWithReviews(page, pageSize);
 
             List<TourCardDto> tourCardDtos = new List<TourCardDto>();
 
@@ -169,8 +159,9 @@ namespace Explorer.Tours.Core.UseCases
             {
                 if (tour.Status == Status.Published)
                 {
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
-                        tour.TotalLength.ToString());
+                    double avg = tour.GetAverageRating();
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,tour.TotalLength.ToString(),avg);
+
 
                     tourCardDtos.Add(tourCardDto);
                 }
@@ -178,6 +169,48 @@ namespace Explorer.Tours.Core.UseCases
 
             return tourCardDtos;
         }
+        
+
+
+        public Result<TourPreviewDto> GetTourPreview(long tourId)
+        {
+            Tour tour = _tourRepository.GetTourWithReviews(tourId);
+            PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
+            CheckpointReadDto firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
+            List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
+            List<TourReviewDto> reviewDtos = GetTourReviewsDtos(tour.Reviews);
+            TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
+                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount, author.Name + " " + author.Surname,
+                tour.TotalLength.ToString(), durations, firstCp, reviewDtos);
+
+            return tourPreviewDto;
+        }
+
+        private List<TourReviewDto> GetTourReviewsDtos(List<Review> reviews)
+        {
+            var reviewDtos = new List<TourReviewDto>();
+
+            foreach (var review in reviews)
+            {
+                PersonDto reviewer = _personService.GetByUserId((int)review.TouristId).Value;
+
+                var reviewDto = new TourReviewDto
+                {
+                    UserId = reviewer.UserId,
+                    Name = reviewer.Name,
+                    Surname = reviewer.Surname,
+                    Comment = review.Comment,
+                    Rating = review.Rating, 
+                    ReviewDate = review.ReviewDate 
+                };
+
+                reviewDtos.Add(reviewDto);
+            }
+
+            return reviewDtos;
+        }
+
+
 
         //public Result<TourDetailsDto> GetTourDetailsByTourId(long tourId)
         //{
