@@ -1,4 +1,6 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Persons;
+using Explorer.Stakeholders.Core.Domain.Problems;
 using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Stakeholders.Infrastructure.Database;
@@ -15,6 +17,12 @@ public class StakeholdersContext : DbContext
 
     public DbSet<Author> Author { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
+    
+    
+
+
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,8 +30,20 @@ public class StakeholdersContext : DbContext
         modelBuilder.HasDefaultSchema("stakeholders");
 
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+        modelBuilder.Entity<Problem>().Property(item => item.Messages).HasColumnType("jsonb");
 
         ConfigureStakeholder(modelBuilder);
+
+        ConfigurePerson(modelBuilder);
+
+        ConfigureNotification(modelBuilder); 
+    }
+
+    private void ConfigurePerson(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Person>().Property(item => item.Followers).HasColumnType("jsonb");
+        modelBuilder.Entity<Person>().Property(item => item.Followings).HasColumnType("jsonb");
+
     }
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
@@ -39,21 +59,30 @@ public class StakeholdersContext : DbContext
             .WithOne()
             .HasForeignKey<Author>(a => a.UserId);
 
-        modelBuilder.Entity<Tourist>()
+        /*modelBuilder.Entity<Tourist>()
             .HasOne<User>()
             .WithOne()
-            .HasForeignKey<Tourist>(t => t.UserId );
+            .HasForeignKey<Tourist>(t => t.UserId );*/
 		modelBuilder.Entity<Problem>()
-            .HasOne<Tourist>()
+            .HasOne<User>()
             .WithMany()
             .HasForeignKey(p => p.TouristId);
         modelBuilder.Entity<Club>()
             .HasOne<User>() 
             .WithMany() 
-            .HasForeignKey(c => c.OwnerId) 
-            ;
-
+            .HasForeignKey(c => c.OwnerId);
     }
 
+    private static void ConfigureNotification(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Notification>()
+            .HasKey(n => n.Id);
+
+        modelBuilder.Entity<Notification>()
+            .HasOne<Person>()
+            .WithMany()
+            .HasForeignKey(n => n.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
 
 }

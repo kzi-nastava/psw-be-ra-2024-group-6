@@ -9,9 +9,12 @@ using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Stakeholders.Infrastructure.Database.Repositories;
 using Explorer.Stakeholders.API.Public.Administration;
-using Explorer.Stakeholders.Core.UseCases.Administration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Explorer.Stakeholders.Core.Domain.Persons;
+using Explorer.Stakeholders.Core.Domain.Problems;
+using Explorer.Tours.API.Internal;
+
 
 namespace Explorer.Stakeholders.Infrastructure;
 
@@ -35,6 +38,7 @@ public static class StakeholdersStartup
         services.AddScoped<IPersonService, PersonService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IClubService, ClubService>();
+        services.AddScoped<INotificationService, NotificationService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -47,7 +51,10 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<User>), typeof(CrudDatabaseRepository<User,StakeholdersContext>));
- 
+        services.AddScoped<INotificationRepository, NotificationDatabaseRepository>(); 
+        services.AddScoped<IProblemRepository, ProblemRepository>();
+
+
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));

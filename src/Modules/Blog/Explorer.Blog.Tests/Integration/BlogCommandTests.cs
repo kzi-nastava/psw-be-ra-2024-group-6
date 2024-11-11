@@ -2,6 +2,7 @@
 using Explorer.API.Controllers.Author_Tourist;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
+using Explorer.Blog.Core.Domain.Blogs;
 using Explorer.Blog.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -100,13 +101,32 @@ namespace Explorer.Blog.Tests.Integration
             result.Description.ShouldBe(updatedEntity.Description);
 
             // Assert - Database
-            var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Core.Domain.Status.Closed);
+            var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Status.Closed);
             storedEntity.ShouldNotBeNull();
             storedEntity.Description.ShouldBe(updatedEntity.Description);
-            var oldEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Core.Domain.Status.Draft);
+            var oldEntity = dbContext.Blogs.FirstOrDefault(i => i.Id == -1 && i.Status == Status.Draft);
             oldEntity.ShouldBeNull();
         }
         
+        [Fact]
+        public void GetOne()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
+
+            // Act
+            var result = ((ObjectResult)controller.GetBlogDetails(-1).Result)?.Value as BlogDto;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(-1);
+            result.Comments.ShouldNotBeEmpty();
+
+        } 
+
+
         [Fact]
         public void Update_fails_invalid_id()
         {
@@ -133,7 +153,7 @@ namespace Explorer.Blog.Tests.Integration
 
         private static BlogController CreateController(IServiceScope scope)
         {
-            return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>())
+            return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>(), scope.ServiceProvider.GetRequiredService<ICommentService>())
             {
                 ControllerContext = BuildContext("-1")
             };

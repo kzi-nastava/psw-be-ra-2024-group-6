@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
+using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 using Explorer.BuildingBlocks.Core.UseCases;
+using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,20 @@ using BlogDomain = Explorer.Blog.Core.Domain;
 
 namespace Explorer.Blog.Core.UseCases
 {
-    public class BlogService : CrudService<BlogDto, BlogDomain.Blog> ,IBlogService
+    public class BlogService : CrudService<BlogDto, BlogDomain.Blogs.Blog> ,IBlogService
     {
-        public BlogService(ICrudRepository<BlogDomain.Blog> repository, IMapper mapper) : base(repository, mapper) { }
+        private readonly IBlogRepository _blogRepository;
+        private readonly IMapper _mapper;
+        public BlogService(IBlogRepository blogRepository,ICrudRepository<BlogDomain.Blogs.Blog> repository, IMapper mapper) : base(repository, mapper) {
+            _blogRepository = blogRepository;
+            _mapper = mapper;
+        }
+
+        public Result<BlogDto> GetBlogDetails(long id)
+        {
+            var blog = _blogRepository.Get(id);
+            return _mapper.Map<BlogDto>(blog);
+        }
 
     }
 }
