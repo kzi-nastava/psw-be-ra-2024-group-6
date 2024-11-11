@@ -135,6 +135,47 @@ namespace Explorer.Blog.Tests.Integration
             result.StatusCode.ShouldBe(404);
         }
 
+        [Fact]
+        public void Delete()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
+
+            var existingCommentId = -3; 
+            var existingComment = dbContext.Comment.FirstOrDefault(c => c.Id == existingCommentId);
+            existingComment.ShouldNotBeNull(); 
+
+            // Act
+            var result = (StatusCodeResult)controller.Delete(existingCommentId).Result;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(200); 
+
+            // Assert - Database
+            var deletedEntity = dbContext.Comment.FirstOrDefault(i => i.Id == existingCommentId);
+            deletedEntity.ShouldBeNull(); 
+        }
+
+        [Fact]
+        public void Delete_fails_invalid_id()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var invalidCommentId = -99; 
+
+            // Act
+            var result = (ObjectResult)controller.Delete(invalidCommentId).Result;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(404); 
+        }
+
+
 
         private static CommentController CreateController(IServiceScope scope)
         {

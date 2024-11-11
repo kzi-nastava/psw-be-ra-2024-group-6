@@ -17,6 +17,7 @@ public class TourPreviewDto
     public double Price { get; set; }
     public string AuthorName { get; set; }
     public string TotalLength { get; set; }
+
     public List<string> Durations { get; set; }
     public CheckpointReadDto FirstCheckpoint { get; set; }
 

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Explorer.Stakeholders.Core.Domain.ProfileNotifications;
+using Explorer.Stakeholders.Core.Domain.Persons;
 using System.Reflection;
 using Explorer.BuildingBlocks.Core.UseCases;
 
