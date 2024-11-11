@@ -214,4 +214,18 @@ public class Tour : Entity
     {
         return AuthorId==userId;
     }
+
+    public bool IsTourNearby(double latitude, double longitude, double maxDistance)
+    {
+        foreach (var checkpoint in Checkpoints)
+        {
+            double distance = checkpoint.GetCheckpointDistance(latitude, longitude);
+
+            if (distance <= maxDistance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

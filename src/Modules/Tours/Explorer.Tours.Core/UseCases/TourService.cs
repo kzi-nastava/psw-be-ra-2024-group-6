@@ -193,5 +193,32 @@ namespace Explorer.Tours.Core.UseCases
             new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
         }
         */
+
+
+        public Result<List<TourCardDto>> FindToursNearby(double latitude, double longitude, double maxDistance)
+
+        {
+            try
+            {
+                List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
+
+                List<TourCardDto> nearbyToursDtos = new List<TourCardDto>();
+
+                foreach (var tour in tours)
+                {
+                    if (tour.IsTourNearby(latitude, longitude, maxDistance))
+                    {
+                        nearbyToursDtos.Add(new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString()));
+                    }
+
+                }
+
+                return nearbyToursDtos;
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
     }
 }

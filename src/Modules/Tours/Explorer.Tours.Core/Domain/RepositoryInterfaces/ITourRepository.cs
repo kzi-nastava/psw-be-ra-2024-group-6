@@ -16,5 +16,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public void Delete(long id);
         public Tour GetAggregate(long id);
         public Tour Get(long id);
+        public List<Tour> GetPublishedToursWithCheckpoints();
     }
 }
