@@ -1,0 +1,20 @@
+﻿INSERT INTO tours."Locations"("Id", "Latitude", "Longitude")
+	VALUES (-1, 1000, 2000);
+INSERT INTO tours."Locations"("Id", "Latitude", "Longitude")
+	VALUES (-2, 6, 6);
+INSERT INTO tours."Locations"("Id", "Latitude", "Longitude")
+	VALUES (-3, 1, 1);
+INSERT INTO tours."Locations"("Id", "Latitude", "Longitude")
+	VALUES (-1000, 5, 5);
+INSERT INTO tours."Locations"(
+    "Id", "Latitude", "Longitude")
+VALUES (-4, 2222, 3333);
+INSERT INTO tours."Locations"(
+    "Id", "Latitude", "Longitude")
+VALUES (-5, 3333, 4444);
+INSERT INTO tours."Locations"(
+    "Id", "Latitude", "Longitude")
+VALUES (-6, 4444, 5555);
+INSERT INTO tours."Locations"(
+    "Id", "Latitude", "Longitude")
+VALUES (-7, 4444, 5555);
