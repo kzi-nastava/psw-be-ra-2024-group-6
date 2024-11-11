@@ -41,10 +41,20 @@ namespace Explorer.Tours.Core.UseCases
             catch (Exception ex) { return  Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message); }
         }
 
+        public new Result<ReviewDto> Update(ReviewDto review)
+        {
+            var result = MapToDto(_reviewRepository.Update(MapToDomain(review)));
+            return result;
+        }
 
         public IEnumerable<ReviewDto> GetAllReviews()
         {
             var reviews = _reviewRepository.GetAll();
+            return reviews.Select(MapToDto);
+        }
+        public IEnumerable<ReviewDto> GetAllByUser(long userId)
+        {
+            var reviews = _reviewRepository.GetAllByUser(userId);
             return reviews.Select(MapToDto);
         }
 
@@ -52,7 +62,6 @@ namespace Explorer.Tours.Core.UseCases
         {
             var reviews = _reviewRepository.GetReviewsForTour(tourId);
             return reviews.Select(MapToDto);
-
         }
     }
 
