@@ -38,6 +38,28 @@ namespace Explorer.Blog.Core.Domain.Blogs
             Ratings = ratings ?? new List<Rating>();
             Comments = new List<Comment>();
         }
+
+        public void AddOrUpdateVote(int userId, VoteType voteType)
+        {
+            var existingRating = Ratings.FirstOrDefault(r => r.UserId == userId);
+            if (existingRating != null)
+            {
+                existingRating.UpdateVote(voteType);
+            }
+            else
+            {
+                Ratings.Add(new Rating(userId, voteType));
+            }
+        }
+
+        public void RemoveVote(int userId)
+        {
+            var existingRating = Ratings.FirstOrDefault(r => r.UserId == userId);
+            if (existingRating != null)
+            {
+                Ratings.Remove(existingRating);
+            }
+        }
     }
 
     public enum Status

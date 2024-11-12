@@ -11,20 +11,17 @@ namespace Explorer.Blog.Core.Domain.Blogs
     public class Rating : ValueObject
     {
         public int UserId { get; }
-        public VoteType VoteType { get; }
+        public VoteType VoteType { get; private set; }
 
         [JsonConstructor]
         public Rating(int userId, VoteType voteType)
         {
-            //Validate(userId, voteType);
             UserId = userId;
             VoteType = voteType;
+            Validate(userId, voteType);
         }
 
-        public Rating()
-        {
-
-        }
+        public Rating() { }
 
         private void Validate(int userId, VoteType voteType)
         {
@@ -38,12 +35,19 @@ namespace Explorer.Blog.Core.Domain.Blogs
             }
         }
 
+        public void UpdateVote(VoteType newVoteType)
+        {
+            if (VoteType == newVoteType)
+            {
+                return;
+            }
+            VoteType = newVoteType;
+        }
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             return new object[] { VoteType, UserId };
         }
-
-
     }
 
     public enum VoteType
