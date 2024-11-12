@@ -16,6 +16,7 @@ namespace Explorer.Stakeholders.API.Public
 
 
         public Result<UserDto> Get(long id);
+        public Result<string> GetUserRole(long id);
 
     }
 }
