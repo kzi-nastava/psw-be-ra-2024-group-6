@@ -59,13 +59,9 @@ namespace Explorer.Tours.Core.UseCases.Execution
         {
             try
             {
-                var tour = _tourExecutionRepository.GetByIdAndTouristId(tourExecutionId, touristId);
-                if (tour == null)
-                {
-                    return Result.Fail(FailureCode.NotFound).WithError("TourExecution does not exists.");
-                }
-                tour.Finalize(status);
-                var updatedTourExecution = _tourExecutionRepository.Update(tour);
+                var tourExecution = _tourExecutionRepository.GetByIdAndTouristId(tourExecutionId, touristId);
+                tourExecution.Finalize(status);
+                var updatedTourExecution = _tourExecutionRepository.Update(tourExecution);
                 return MapToDto(updatedTourExecution);
             }
             catch (KeyNotFoundException e)
