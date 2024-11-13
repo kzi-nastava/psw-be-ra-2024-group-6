@@ -18,6 +18,7 @@ using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Public.Shopping;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -28,16 +29,19 @@ namespace Explorer.Tours.Core.UseCases
         private readonly ICheckpointService _checkpointService;
         private readonly IObjectService _objectService;
         private readonly IPersonService _personService;
+        private readonly IPurchaseTokenService _tokenService;
         private readonly IReviewService _reviewService;
 
         private readonly IMapper mapper;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IPersonService personService, IReviewService reviewService) : base(repository, mapper)
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IPersonService personService, IPurchaseTokenService token, IReviewService reviewService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
             _objectService = objectService;
             _checkpointService = checkpointService;
             _personService = personService;
+            _tokenService = token;
+
             this.mapper = mapper;
             _reviewService = reviewService;
         }
@@ -87,13 +91,13 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<TourReadDto> GetTourDetailsByTourId(int tourId, int userId)
+        public Result<TourReadDto> GetTourDetailsByTourId(long tourId, long userId)
         {
             try
             {
                 Tour tour = crudRepository.Get(tourId);
-                if (!tour.IsUserAuthor(userId))
-                    return Result.Fail(FailureCode.Forbidden).WithError("You are not the author of this tour");
+                if (!tour.IsUserAuthor(userId) && !checkIfUserBoughtTour(tourId, userId))
+                    return Result.Fail(FailureCode.Forbidden).WithError("You are not authorized to view this tour.");
                 TourDto tourDto = MapToDto(tour);
 
                 List<CheckpointReadDto> checkpoints = _checkpointService.GetByTourId(tourId).Value;
@@ -110,6 +114,13 @@ namespace Explorer.Tours.Core.UseCases
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
+        }
+
+        private bool checkIfUserBoughtTour(long tourId, long userId)
+        {
+
+            var result = _tokenService.GetByUserAndTour(userId, tourId);
+            return (result.Value != null);
         }
 
         public Result<TourReadDto> Publish(long tourId, int userId)

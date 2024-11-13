@@ -26,7 +26,10 @@ namespace Explorer.Tours.Core.Mappers
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => new Price(src.Price))) 
                 .ReverseMap()
                 .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems)) 
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.TotalPrice.Amount)); 
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.TotalPrice.Amount));
+
+
+            CreateMap<PurchaseTokenDto, PurchaseToken>().ReverseMap();
         }
     }
 }
