@@ -1,5 +1,6 @@
 ﻿using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,27 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             var result = _dbContext.PurchaseTokens
                 .FirstOrDefault(t => t.UserId == userId && t.TourId == tourId);
-            return result;
+            //removed && t.isExpired == false 
+        }
+
+        public PurchaseToken Update(PurchaseToken token)
+        {
+            try
+            {
+                var existingToken = _dbContext.PurchaseTokens.Find(token.Id);
+                if (existingToken != null)
+                {
+                    _dbContext.Entry(existingToken).State = EntityState.Detached;
+                }
+
+                _dbContext.Entry(token).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return token;
         }
     }
 }

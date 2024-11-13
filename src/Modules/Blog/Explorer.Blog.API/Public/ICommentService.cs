@@ -16,6 +16,7 @@ namespace Explorer.Blog.API.Public
         Result Delete(int id);
         Result<CommentDto> Get(int id);
         Result<PagedResult<CommentDto>> GetPaged(int page, int pageSize);
+        Result<IEnumerable<CommentDto>> GetByBlogId(long id);
 
     }
 }

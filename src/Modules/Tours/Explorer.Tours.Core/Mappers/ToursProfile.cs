@@ -30,8 +30,10 @@ public class ToursProfile : Profile
         CreateMap<Price,PriceDto>().ReverseMap();
         CreateMap<TourDuration, TourDurationDto>().ReverseMap();
         CreateMap<Distance,DistanceDto>().ReverseMap();
-        CreateMap<TourCardDto, Tour>().ReverseMap();
-        
+        //CreateMap<TourCardDto, Tour>().ReverseMap();
+        CreateMap<TourReviewDto,Review>().ReverseMap();
+        CreateMap<TourCardDto, Tour>()
+            .ReverseMap().ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.TotalLength.Length + src.TotalLength.Unit.ToString()));
 
         CreateMap<TourExecutionDto, TourExecution>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))

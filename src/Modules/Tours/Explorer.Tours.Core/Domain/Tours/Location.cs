@@ -43,4 +43,24 @@ public class Location : ValueObject
     {
         return $"{City}, {Country}";
     }
+
+    public double CalculateDistance(double latitude, double longitude)
+    {
+        const double R = 6371; // Poluprečnik Zemlje u kilometrima
+        double dLat = DegreesToRadians(Latitude - latitude);
+        double dLon = DegreesToRadians(Longitude - longitude);
+
+        // Haversine formula
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Cos(DegreesToRadians(latitude)) * Math.Cos(DegreesToRadians(Latitude)) *
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        return R * c; // Rezultat u kilometrima
+    }
+
+    public static double DegreesToRadians(double degrees)
+    {
+        return degrees * Math.PI / 180;
+    }
 }

@@ -10,12 +10,8 @@ public class StakeholdersContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Person> People { get; set; }
     public DbSet<Rating> Ratings { get; set; }
-
-    public DbSet<Tourist> Tourists { get; set; }
-	public DbSet<Problem> Problems { get; set; }
+    public DbSet<Problem> Problems { get; set; }
     public DbSet<Club> Clubs { get; set; }
-
-    public DbSet<Author> Author { get; set; }
 
     public DbSet<Notification> Notifications { get; set; }
 
@@ -53,16 +49,6 @@ public class StakeholdersContext : DbContext
             .WithOne()
             .HasForeignKey<Person>(s => s.UserId);
 
-
-        modelBuilder.Entity<Author>()
-            .HasOne<User>()
-            .WithOne()
-            .HasForeignKey<Author>(a => a.UserId);
-
-        modelBuilder.Entity<Tourist>()
-            .HasOne<User>()
-            .WithOne()
-            .HasForeignKey<Tourist>(t => t.UserId );
 		modelBuilder.Entity<Problem>()
             .HasOne<User>()
             .WithMany()
@@ -81,8 +67,13 @@ public class StakeholdersContext : DbContext
         modelBuilder.Entity<Notification>()
             .HasOne<Person>()
             .WithMany()
-            .HasForeignKey(n => n.ReceiverId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(n => n.ReceiverPersonId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Notification>()
+            .HasOne<Person>()
+            .WithMany()
+            .HasForeignKey(n => n.SenderPersonId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
 }

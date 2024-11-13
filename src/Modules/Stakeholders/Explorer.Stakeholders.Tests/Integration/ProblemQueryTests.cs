@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Stakeholders.API.Public;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
@@ -38,7 +39,7 @@ namespace Explorer.Stakeholders.Tests.Integration
 
         private static ProblemController CreateController(IServiceScope scope)
         {
-            return new ProblemController(scope.ServiceProvider.GetRequiredService<IProblemService>())
+            return new ProblemController(scope.ServiceProvider.GetRequiredService<IProblemService>(), scope.ServiceProvider.GetRequiredService<IUserService>())
             {
                 ControllerContext = BuildContext("-1")
             };

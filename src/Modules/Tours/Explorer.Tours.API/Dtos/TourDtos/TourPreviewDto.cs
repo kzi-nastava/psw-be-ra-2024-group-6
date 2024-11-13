@@ -21,7 +21,9 @@ public class TourPreviewDto
     public List<string> Durations { get; set; }
     public CheckpointReadDto FirstCheckpoint { get; set; }
 
-    public TourPreviewDto(long id, string name, string description, string difficulty, List<string> tags, double price, string authorName, string totalLength, List<string> durations, CheckpointReadDto firstCheckpoint)
+    public List<TourReviewDto> Reviews { get; set; }
+
+    public TourPreviewDto(long id, string name, string description, string difficulty, List<string> tags, double price, string authorName, string totalLength, List<string> durations, CheckpointReadDto firstCheckpoint, List<TourReviewDto> reviews)
     {
         Id = id;
         Name = name;
@@ -33,6 +35,7 @@ public class TourPreviewDto
         TotalLength = totalLength;
         Durations = durations;
         FirstCheckpoint = firstCheckpoint;
+        Reviews = reviews;
     }
 
 }

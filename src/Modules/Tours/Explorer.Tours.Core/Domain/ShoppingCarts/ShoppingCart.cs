@@ -69,7 +69,7 @@ namespace Explorer.Tours.Core.Domain.ShoppingCarts
 
             foreach (var item in OrderItems)
             {
-                var token = new PurchaseToken(this.UserId, item.TourId, DateTime.UtcNow);
+                var token = new PurchaseToken(this.UserId, item.TourId, DateTime.UtcNow,false);
 
                 tokens.Add(token);
             }

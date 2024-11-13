@@ -4,6 +4,7 @@ using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Stakeholders.Core.Domain;
 
 namespace Explorer.API.Controllers.Stakeholders
 {
@@ -13,11 +14,13 @@ namespace Explorer.API.Controllers.Stakeholders
     {
 
         private readonly IPersonService _personService;
+        private readonly IUserService _userService;
 
 
-        public PersonController(IPersonService personService)
+        public PersonController(IPersonService personService,IUserService userService)
         {
             _personService = personService;
+            _userService = userService;
         }
 
         [HttpGet("{userId:int}")]
@@ -28,6 +31,14 @@ namespace Explorer.API.Controllers.Stakeholders
             return CreateResponse(result);
 
         }
+
+        [HttpGet("user/{userId:int}")]
+        public ActionResult<User> GetUser(int userId) 
+        {
+            var result = _userService.Get(userId);
+            return CreateResponse(result);
+        }
+
 
         [HttpPut]
         public ActionResult<PersonDto> Update([FromBody] PersonDto person)

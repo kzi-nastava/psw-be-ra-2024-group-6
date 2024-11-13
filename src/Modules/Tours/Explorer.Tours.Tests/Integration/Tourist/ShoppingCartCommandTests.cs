@@ -107,7 +107,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             result.StatusCode.ShouldBe(500);
         }
         [Fact]
-        public void ChecksOutCart_already_has_purchaseToken()
+       public void ChecksOutCart_already_has_purchaseToken()
         {
             // Arrange
             string userId = "-21";
