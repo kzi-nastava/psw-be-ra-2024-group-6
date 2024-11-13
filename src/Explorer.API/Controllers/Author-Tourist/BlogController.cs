@@ -2,6 +2,7 @@
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.UseCases;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
@@ -14,17 +15,16 @@ namespace Explorer.API.Controllers.Author_Tourist
     public class BlogController : BaseApiController
     {
         private readonly IBlogService _blogService;
-        private readonly ICommentService _commentService;
 
-        public BlogController(IBlogService blogService, ICommentService commentService)
+        public BlogController(IBlogService blogService)
         {
             _blogService = blogService;
-            _commentService = commentService;
         }
 
         [HttpPost]
         public ActionResult<BlogDto> Create([FromBody] BlogDto blog)
         {
+            blog.UserId = User.UserId();
             var result = _blogService.Create(blog);
             return CreateResponse(result);
         }
@@ -57,29 +57,19 @@ namespace Explorer.API.Controllers.Author_Tourist
 		{
 			return CreateResponse(_blogService.Delete(id));
 		}
-        
+
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<BlogDto>> GetAllBlogs()
+        {
+            var blogs = _blogService.GetAllBlogs();
+            return CreateResponse(blogs);
+        }
+
         [HttpGet("blogDetails/{id:long}")]
-        public ActionResult<BlogDto> GetBlogDetails([FromRoute] long id)
+        public ActionResult<BlogDetailsDto> GetBlogDetails([FromRoute] long id)
         {
             var blogResult = _blogService.GetBlogDetails(id);
-            if (blogResult.IsSuccess)
-            {
-                var blog = blogResult.Value; 
-                var commentsResult = _commentService.GetByBlogId(id);
-
-                if (commentsResult.IsSuccess)
-                {
-                    blog.Comments = commentsResult.Value.ToList(); 
-                }
-                else
-                {
-                    return BadRequest(commentsResult.Errors);
-                }
-
-                return CreateResponse(Result.Ok(blog));
-            }
-
-            return BadRequest(blogResult.Errors);
+            return CreateResponse(blogResult);
         } 
 	}
 }

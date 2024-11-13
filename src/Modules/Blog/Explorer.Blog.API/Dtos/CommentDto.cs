@@ -19,6 +19,8 @@ namespace Explorer.Blog.API.Dtos
         public int UserId { get; set; }
 
         public long BlogId { get; set; }
+        
+        public string? AuthorUsername {  get; set; }
 
     }
 
