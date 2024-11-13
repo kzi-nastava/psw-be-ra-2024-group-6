@@ -44,7 +44,9 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories
         public BlogDomain.Blogs.Blog Get(long id)
         {
             var blog = _dbContext.Blogs.Where(t => t.Id == id)
-                .Include(t => t.Pictures).FirstOrDefault();
+                .Include(t => t.Pictures)
+                .Include(t => t.Comments)
+                .FirstOrDefault();
             if (blog == null)
             {
                 throw new KeyNotFoundException($"Blog not found: {id}");

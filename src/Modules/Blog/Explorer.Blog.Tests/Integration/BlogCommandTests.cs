@@ -117,7 +117,7 @@ namespace Explorer.Blog.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
 
             // Act
-            var result = ((ObjectResult)controller.GetBlogDetails(-1).Result)?.Value as BlogDto;
+            var result = ((ObjectResult)controller.GetBlogDetails(-1).Result)?.Value as BlogDetailsDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -153,7 +153,7 @@ namespace Explorer.Blog.Tests.Integration
 
         private static BlogController CreateController(IServiceScope scope)
         {
-            return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>(), scope.ServiceProvider.GetRequiredService<ICommentService>())
+            return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>())
             {
                 ControllerContext = BuildContext("-1")
             };

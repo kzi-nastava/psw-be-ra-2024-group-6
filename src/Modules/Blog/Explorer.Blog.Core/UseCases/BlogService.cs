@@ -27,28 +27,27 @@ namespace Explorer.Blog.Core.UseCases
             _internalInstructorService = internalInstructorService;
         }
 
-        public Result<BlogDto> GetBlogDetails(long id)
+        public Result<BlogDetailsDto> GetBlogDetails(long id)
         {
             var blog = _blogRepository.Get(id);
-            var blogDto = _mapper.Map<BlogDto>(blog);
-            var result = _internalInstructorService.Get(blogDto.UserId ?? -1);
-            if (result.IsSuccess)
+            UserDto blogAutor = _internalInstructorService.Get(blog.UserId).Value;
+            var blogDto = _mapper.Map<BlogDetailsDto>(blog);
+            blogDto.AuthorUsername = blogAutor.Username;
+
+            foreach(CommentDto comment in blogDto.Comments)
             {
-                UserDto user = result.Value;
-                blogDto.Username = user.Username;
-            }
-            else
-            {
-                throw new Exception("User retrieval failed: " + string.Join(", ", result.Errors));
+                UserDto commentAuthor = _internalInstructorService.Get(blog.UserId).Value;
+                comment.AuthorUsername = commentAuthor.Username;
+
             }
             return blogDto;
         }
 
-        public IEnumerable<BlogDto> GetAllBlogs()
+        public Result<List<BlogDto>> GetAllBlogs()
         {
             
-                var blogs = _blogRepository.GetAllBlogsWithPictures();
-                return _mapper.Map<IEnumerable<BlogDto>>(blogs);
+                var blogs = _blogRepository.GetAllBlogsWithPictures().ToList();
+                return _mapper.Map<List<BlogDto>>(blogs);
             
         }
 

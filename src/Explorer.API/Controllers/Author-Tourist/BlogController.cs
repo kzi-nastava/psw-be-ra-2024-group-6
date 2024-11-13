@@ -15,12 +15,10 @@ namespace Explorer.API.Controllers.Author_Tourist
     public class BlogController : BaseApiController
     {
         private readonly IBlogService _blogService;
-        private readonly ICommentService _commentService;
 
-        public BlogController(IBlogService blogService, ICommentService commentService)
+        public BlogController(IBlogService blogService)
         {
             _blogService = blogService;
-            _commentService = commentService;
         }
 
         [HttpPost]
@@ -63,45 +61,15 @@ namespace Explorer.API.Controllers.Author_Tourist
         [HttpGet("all")]
         public ActionResult<IEnumerable<BlogDto>> GetAllBlogs()
         {
-            try
-            {
-                var blogs = _blogService.GetAllBlogs();
-
-                if (blogs == null || !blogs.Any())
-                {
-                    return NotFound("No blogs found."); 
-                }
-
-                return Ok(blogs); 
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var blogs = _blogService.GetAllBlogs();
+            return CreateResponse(blogs);
         }
 
         [HttpGet("blogDetails/{id:long}")]
-        public ActionResult<BlogDto> GetBlogDetails([FromRoute] long id)
+        public ActionResult<BlogDetailsDto> GetBlogDetails([FromRoute] long id)
         {
             var blogResult = _blogService.GetBlogDetails(id);
-            if (blogResult.IsSuccess)
-            {
-                var blog = blogResult.Value; 
-                var commentsResult = _commentService.GetByBlogId(id);
-
-                if (commentsResult.IsSuccess)
-                {
-                    blog.Comments = commentsResult.Value.ToList(); 
-                }
-                else
-                {
-                    return BadRequest(commentsResult.Errors);
-                }
-
-                return CreateResponse(Result.Ok(blog));
-            }
-
-            return BadRequest(blogResult.Errors);
+            return CreateResponse(blogResult);
         } 
 	}
 }
