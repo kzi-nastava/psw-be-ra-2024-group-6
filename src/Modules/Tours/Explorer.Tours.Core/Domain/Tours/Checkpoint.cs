@@ -18,15 +18,19 @@ public class Checkpoint : Entity
     public string ImageUrl { get; private set; }
     public  Location Location { get; private set; }
 
+    public string Secret {  get; private set; }
+
     public Checkpoint() { }
-    public Checkpoint(string? name, string? description, string? imageUrl, long tourId,Location location)
+    public Checkpoint(string? name, string? description, string? imageUrl, long tourId,Location location, string secret)
     {
         Name = name;
         Description = description;
         ImageUrl = imageUrl;
         Location = location;
         TourId = tourId;
+        Secret = secret;
         Validate();
+       
     }
     private void Validate()
     {

@@ -67,7 +67,8 @@ namespace Explorer.Tours.Tests.Integration.Tours
                         Longitude = 20,
                         City = "Test",
                         Country = "Test"
-                    }
+                    },
+                    Secret = "Test",
                 },
             },
                 Objects = new List<ObjectCreateDto>() {

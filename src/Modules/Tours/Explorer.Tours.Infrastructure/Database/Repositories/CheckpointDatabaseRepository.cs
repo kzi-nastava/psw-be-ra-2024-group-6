@@ -34,5 +34,12 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                     .ToList();
         }
 
+        public Checkpoint Get(long Id)
+        {
+            return _dbContext.Checkpoints.First(c => c.Id == Id);
+
+                
+        }
+
     }
 }

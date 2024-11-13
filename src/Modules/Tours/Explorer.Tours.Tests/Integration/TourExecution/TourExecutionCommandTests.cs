@@ -15,6 +15,7 @@ using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Explorer.Tours.API.Public;
+using Explorer.Tours.API.Public.Shopping;
 
 namespace Explorer.Tours.Tests.Integration.TourExecution
 {
@@ -165,7 +166,11 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
 
         private static TourExecutionController CreateController(IServiceScope scope)
         {
-            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(), scope.ServiceProvider.GetRequiredService<ICheckpointService>(), scope.ServiceProvider.GetRequiredService<ITourService>())
+            return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(),
+           scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+           scope.ServiceProvider.GetRequiredService<ITourService>(),
+           scope.ServiceProvider.GetRequiredService<IPurchaseTokenService>(),
+           scope.ServiceProvider.GetRequiredService<IObjectService>())
             {
                 ControllerContext = BuildContext("-21")
             };

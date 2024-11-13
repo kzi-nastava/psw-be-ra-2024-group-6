@@ -42,5 +42,20 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
+
+        public Result<CheckpointDto> Get(long id) 
+        {
+            try
+            {
+                return MapToDto(_checkpointRepository.Get(id));
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+
+            }
+        }
+
+
     }
 }
