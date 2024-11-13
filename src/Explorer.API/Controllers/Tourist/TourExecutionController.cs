@@ -160,6 +160,12 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(res);
         }
 
+        [HttpGet("getTour/{tourId:int}")]
+        public ActionResult<TourDto> GetTourById(int tourId)
+        {
+            var result = _tourService.GetById(tourId);
+            return CreateResponse(result);
+        }
 
 
     }

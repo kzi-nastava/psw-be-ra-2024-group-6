@@ -34,6 +34,18 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
 
         }
+        public Tour GetById(long tourId)
+        {
+            try
+            {
+                var ret = _context.Tours.Find(tourId);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
         public Tour Create(Tour tour)
         {
             var tr = _context.Tours.Add(tour).Entity;
