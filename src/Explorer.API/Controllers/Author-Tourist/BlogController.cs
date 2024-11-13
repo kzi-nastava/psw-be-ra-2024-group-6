@@ -2,6 +2,7 @@
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.UseCases;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,7 @@ namespace Explorer.API.Controllers.Author_Tourist
         [HttpPost]
         public ActionResult<BlogDto> Create([FromBody] BlogDto blog)
         {
+            blog.UserId = User.UserId();
             var result = _blogService.Create(blog);
             return CreateResponse(result);
         }
@@ -51,7 +53,27 @@ namespace Explorer.API.Controllers.Author_Tourist
 		{
 			return CreateResponse(_blogService.Delete(id));
 		}
-        
+
+        [HttpGet("all")]
+        public ActionResult<IEnumerable<BlogDto>> GetAllBlogs()
+        {
+            try
+            {
+                var blogs = _blogService.GetAllBlogs();
+
+                if (blogs == null || !blogs.Any())
+                {
+                    return NotFound("No blogs found."); 
+                }
+
+                return Ok(blogs); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpGet("blogDetails/{id:long}")]
         public ActionResult<BlogDto> GetBlogDetails([FromRoute] long id)
         {

@@ -29,5 +29,13 @@ namespace Explorer.Blog.Core.UseCases
             return _mapper.Map<BlogDto>(blog);
         }
 
+        public IEnumerable<BlogDto> GetAllBlogs()
+        {
+            
+                var blogs = _blogRepository.GetAllBlogsWithPictures();
+                return _mapper.Map<IEnumerable<BlogDto>>(blogs);
+            
+        }
+
     }
 }

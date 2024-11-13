@@ -17,5 +17,8 @@ namespace Explorer.Blog.API.Public
         Result<BlogDto> Get(int id);
 		Result Delete(int id);
         Result<BlogDto> GetBlogDetails(long id);
-	}
+
+        public IEnumerable<BlogDto> GetAllBlogs();
+
+    }
 }

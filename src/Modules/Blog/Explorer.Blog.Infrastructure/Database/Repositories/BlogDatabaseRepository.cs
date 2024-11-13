@@ -51,5 +51,12 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories
             }
             return blog;
         }
+
+        public IEnumerable<BlogDomain.Blogs.Blog> GetAllBlogsWithPictures()
+        {
+            return _dbContext.Blogs
+                .Include(t => t.Pictures)  
+                .ToList();  
+        }
     }
 }
