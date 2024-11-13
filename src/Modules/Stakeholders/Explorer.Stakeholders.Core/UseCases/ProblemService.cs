@@ -177,15 +177,15 @@ namespace Explorer.Stakeholders.Core.UseCases
                     // send notification
                     var authorId = problemTourAuthorService.GetTour(problem.TourId).Value.AuthorId;
 
-                    if (userService.GetUserRole(userId).Value.Equals(UserRole.Author.ToString().ToLower()))
+                    if (userService.GetUserRole(message.SenderId).Value.Equals(UserRole.Author.ToString().ToLower()))
                     {
-                        SendNotification(problem, userId, problem.TouristId, "A new message has been sent on problem ");
+                        SendNotification(problem, message.SenderId, problem.TouristId, "A new message has been sent on problem ");
                     }
-                    else if (userService.GetUserRole(userId).Value.Equals(UserRole.Tourist.ToString().ToLower()))
+                    else if (userService.GetUserRole(message.SenderId).Value.Equals(UserRole.Tourist.ToString().ToLower()))
                     {
                         if (authorId.HasValue)
                         {
-                            SendNotification(problem, userId, authorId.Value, "A new message has been sent on problem ");
+                            SendNotification(problem, message.SenderId, authorId.Value, "A new message has been sent on problem ");
                         }
                         else
                         {
@@ -193,11 +193,11 @@ namespace Explorer.Stakeholders.Core.UseCases
                         }
                     } else
                     {
-                        SendNotification(problem, userId, problem.TouristId, "A new message has been sent on problem ");
+                        SendNotification(problem, message.SenderId, problem.TouristId, "A new message has been sent on problem ");
 
                         if (authorId.HasValue)
                         {
-                            SendNotification(problem, userId, authorId.Value, "A new message has been sent on problem ");
+                            SendNotification(problem, message.SenderId, authorId.Value, "A new message has been sent on problem ");
                         }
                         else
                         {
@@ -225,7 +225,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
         }
 
-        private void SendNotification(ProblemDto problem, int senderId, long receiverId, string content)
+        private void SendNotification(ProblemDto problem, long senderId, long receiverId, string content)
         {
             var notification = new NotificationDto
             {
