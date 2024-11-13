@@ -26,7 +26,7 @@ namespace Explorer.Tours.Tests.Integration.Reviews
 
             var reviewDto = new ReviewDto
             {
-                Id = -1,
+                Id = -100,
                 TouristId = 1,
                 TourId = -1,
                 Rating = 4,
@@ -48,10 +48,10 @@ namespace Explorer.Tours.Tests.Integration.Reviews
         }
 
         [Theory]
-        [InlineData(-2, 1, -1, 6, "Great experience!", -10, 0, 400)] // Invalid rating
-        [InlineData(-3, 1, -1, 4, "", -10, 0, 400)] // Empty comment
-        [InlineData(-4, 1, -1, 4, "Great experience!", 10, 0, 400)] // Future tour date
-        [InlineData(-5, 1, -1, 4, "Great experience!", -10, -20, 400)] // Review date before tour date
+        [InlineData(-200, 1, -1, 6, "Great experience!", -10, 0, 400)] // Invalid rating
+        [InlineData(-300, 1, -1, 4, "", -10, 0, 400)] // Empty comment
+        [InlineData(-400, 1, -1, 4, "Great experience!", 10, 0, 400)] // Future tour date
+        [InlineData(-500, 1, -1, 4, "Great experience!", -10, -20, 400)] // Review date before tour date
 
         public void Create_review_with_invalid_data(
             int id, int touristId, int tourId, int rating, string comment,
