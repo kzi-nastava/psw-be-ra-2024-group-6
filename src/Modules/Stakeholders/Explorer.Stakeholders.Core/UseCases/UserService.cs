@@ -59,5 +59,20 @@ namespace Explorer.Stakeholders.Core.UseCases
 
             return result.Value;
         }
+
+        
+        public Result<UserDto> Get(long id)
+        {
+            var user = _crudRepository.Get(id);
+            var result = MapToDto(user);
+            return result;
+        }
+
+        public Result<string> GetUserRole(long id)
+        {
+            var user = _crudRepository.Get(id);
+            return user.GetPrimaryRoleName();
+        }
+        
     }
 }

@@ -1,16 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Explorer.API.Controllers.Stakeholders;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
-using Microsoft.OpenApi.Validations;
+using Explorer.API.Controllers.Stakeholders;
+using System.Collections.Generic;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
@@ -87,6 +82,33 @@ namespace Explorer.Stakeholders.Tests.Integration
         }
 
         [Fact]
+        public void add_follower()
+        {
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateFollowerController(scope,-11);
+            var userId = -12;
+
+            var result = (ObjectResult)controller.AddFollower(userId);
+
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(200);
+        }
+        [Fact]
+        public void get_followers()
+        {
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateFollowerController(scope,-23);
+            var userId = -12;
+
+            var result = ((ObjectResult)controller.GetFollowers(-23).Result)?.Value as List<PersonDto>;
+            //var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<TourDto>;
+
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(2);
+        }
+
+
+        [Fact]
         public void gets_bad_user_id()
         {
             using var scope = Factory.Services.CreateScope();
@@ -99,11 +121,21 @@ namespace Explorer.Stakeholders.Tests.Integration
             result.StatusCode.ShouldBe(200);
         }
 
+        
+
         private static PersonController CreateController(IServiceScope scope)
         {
-            return new PersonController(scope.ServiceProvider.GetRequiredService<IPersonService>())
+            return new PersonController(scope.ServiceProvider.GetRequiredService<IPersonService>(),scope.ServiceProvider.GetRequiredService<IUserService>())
             {
                 ControllerContext = BuildContext("-1")
+            };
+        }
+
+        private static PersonController CreateFollowerController(IServiceScope scope,int id)
+        {
+            return new PersonController(scope.ServiceProvider.GetRequiredService<IPersonService>(), scope.ServiceProvider.GetRequiredService<IUserService>())
+            {
+                ControllerContext = BuildContext(id.ToString())
             };
         }
     }

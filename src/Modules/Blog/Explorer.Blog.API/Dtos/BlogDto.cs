@@ -15,6 +15,9 @@ namespace Explorer.Blog.API.Dtos
         public string Status { get; set; }
         public int? UserId { get; set; }
         public List<BlogPictureDto> Pictures { get; set; }
+        public List<CommentDto> Comments { get; set; }
+        public string? Username {  get; set; }
+        //public List<RatingDto> Ratings { get; set; }
     }
 
 }
