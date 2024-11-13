@@ -14,5 +14,6 @@ namespace Explorer.Blog.Core.Domain.RepositoryInterfaces
         public BlogDomain.Blogs.Blog Update(BlogDomain.Blogs.Blog blog);
         public void Delete(long id);
         public BlogDomain.Blogs.Blog Get(long id);
+        public List<Blogs.Blog> GetAggregatePaged(int page, int pageSize);
     }
 }
