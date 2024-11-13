@@ -48,7 +48,7 @@ namespace Explorer.API.Controllers.Author
 
          }
 
-         [HttpPost]
+        [HttpPost]
          public ActionResult<TourCreateDto> Create([FromBody] TourCreateDto tour)
          {
              tour.TourInfo.AuthorId = User.UserId();

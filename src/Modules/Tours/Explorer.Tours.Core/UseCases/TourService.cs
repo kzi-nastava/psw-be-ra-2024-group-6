@@ -90,6 +90,22 @@ namespace Explorer.Tours.Core.UseCases
             }
 
         }
+        public Result<TourDto> GetById(long tourId)
+        {
+            try
+            {
+                var el = MapToDto(_tourRepository.GetById(tourId));
+                return el;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
 
         public Result<TourReadDto> GetTourDetailsByTourId(long tourId, long userId)
         {
