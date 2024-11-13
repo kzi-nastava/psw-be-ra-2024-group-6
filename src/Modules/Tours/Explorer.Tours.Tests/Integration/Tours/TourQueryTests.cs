@@ -41,8 +41,8 @@ namespace Explorer.Tours.Tests.Integration.Tours
 
             //Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(4);
-            result.TotalCount.ShouldBe(4);
+            result.Results.Count.ShouldBe(5);
+            result.TotalCount.ShouldBe(5);
         }
         [Fact]
         public void Create_tour()
@@ -118,7 +118,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
 
             //Assert
             result.ShouldNotBeNull();
-            dbContext.Tours.Count().ShouldBe(4);
+            dbContext.Tours.Count().ShouldBe(5);
             dbContext.Tours.FirstOrDefault(x => x.Name == result.TourInfo.Name).ShouldNotBeNull();
             dbContext.Checkpoints.FirstOrDefault(x=>x.Name=="Test").ShouldNotBeNull();
             dbContext.Objects.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();

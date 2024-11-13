@@ -45,7 +45,7 @@ namespace Explorer.Tours.Core.UseCases.Execution
             }
             catch (ArgumentException e)
             {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Invalid argument exception");
             }
         }
 
@@ -60,9 +60,13 @@ namespace Explorer.Tours.Core.UseCases.Execution
             try
             {
                 var tour = _tourExecutionRepository.GetByIdAndTouristId(tourExecutionId, touristId);
+                if (tour == null)
+                {
+                    return Result.Fail(FailureCode.NotFound).WithError("TourExecution does not exists.");
+                }
                 tour.Finalize(status);
-                _tourExecutionRepository.Update(tour);
-                return MapToDto(tour);
+                var updatedTourExecution = _tourExecutionRepository.Update(tour);
+                return MapToDto(updatedTourExecution);
             }
             catch (KeyNotFoundException e)
             {
