@@ -64,7 +64,6 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             var updatedEntity = new TourExecutionDto
             {
                 TourId = -5,
-                TouristId = -21,
                 Longitude = -200,
                 Latitude = -200
             };
@@ -86,8 +85,8 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
                 var controller = CreateController(scope);
                 var updatedEntity = new TourExecutionDto
                 {
-                    TourId = -3,
-                    TouristId = -1,
+                    TourId = -4,
+                    TouristId = -21,
                     Longitude = -20,
                     Latitude = 50
                 };

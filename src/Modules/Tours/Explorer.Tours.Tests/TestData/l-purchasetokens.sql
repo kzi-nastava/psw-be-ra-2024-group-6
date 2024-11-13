@@ -13,3 +13,6 @@ INSERT INTO tours."PurchaseTokens"(
 INSERT INTO tours."PurchaseTokens"(
     "Id", "UserId", "TourId", "PurchaseDate","isExpired")
     VALUES (-5, -21,  -2, TO_TIMESTAMP('16-10-2024 10:10:10', 'DD-MM-YYYY HH24:MI:SS'),false);
+INSERT INTO tours."PurchaseTokens"(
+    "Id", "UserId", "TourId", "PurchaseDate","isExpired")
+    VALUES (-6, -21,  -5, TO_TIMESTAMP('16-10-2024 10:10:10', 'DD-MM-YYYY HH24:MI:SS'),false);
