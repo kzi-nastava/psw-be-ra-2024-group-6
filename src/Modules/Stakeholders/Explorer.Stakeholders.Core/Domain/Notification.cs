@@ -42,7 +42,6 @@ namespace Explorer.Stakeholders.Core.Domain
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Content)) throw new ArgumentException("Content cannot be empty");
-            if (ReceiverPersonId == 0) throw new ArgumentException("ReceiverId is required");
             if (Content.Length > 280) throw new ArgumentException("Message exceeds the maximum length of 280 char");
         }
 
