@@ -126,22 +126,35 @@ namespace Explorer.Stakeholders.Core.UseCases
                         return Result.Fail("you are not the creator of this problem");
                 }
 
-                var oldProblem = repository.Get(problem.Id);
-                if(oldProblem.DueDate != problem.DueDate)
+                repository.Update(mapper.Map<Problem>(problem));
+                return mapper.Map<ProblemDto>(problem);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<ProblemDto> UpdateDueDate(ProblemDto problem, int userId)
+        {
+            try
+            {
+                if (userService.Get(userId).Value.Role.Equals(UserRole.Administrator.ToString()))
                 {
                     var authorId = problemTourAuthorService.GetTour(problem.TourId).Value.AuthorId;
                     if (authorId.HasValue)
                     {
-                        SendNotification(problem, userId, authorId.Value);
+                        SendNotification(problem, userId, authorId.Value, "A new due date has been set on problem ");
                     }
                     else
                     {
                         return Result.Fail(FailureCode.NotFound).WithError("Author not found");
                     }
-                }
 
-                repository.Update(mapper.Map<Problem>(problem));
-                return mapper.Map<ProblemDto>(problem);
+                    repository.Update(mapper.Map<Problem>(problem));
+                    return mapper.Map<ProblemDto>(problem);
+                }else
+                    return Result.Fail("user does not have permission");
             }
             catch (KeyNotFoundException e)
             {
@@ -166,13 +179,13 @@ namespace Explorer.Stakeholders.Core.UseCases
 
                     if (userService.GetUserRole(userId).Value.Equals(UserRole.Author.ToString().ToLower()))
                     {
-                        SendNotification(problem, userId, problem.TouristId);
+                        SendNotification(problem, userId, problem.TouristId, "A new message has been sent on problem ");
                     }
                     else if (userService.GetUserRole(userId).Value.Equals(UserRole.Tourist.ToString().ToLower()))
                     {
                         if (authorId.HasValue)
                         {
-                            SendNotification(problem, userId, authorId.Value);
+                            SendNotification(problem, userId, authorId.Value, "A new message has been sent on problem ");
                         }
                         else
                         {
@@ -180,11 +193,11 @@ namespace Explorer.Stakeholders.Core.UseCases
                         }
                     } else
                     {
-                        SendNotification(problem, userId, problem.TouristId);
+                        SendNotification(problem, userId, problem.TouristId, "A new message has been sent on problem ");
 
                         if (authorId.HasValue)
                         {
-                            SendNotification(problem, userId, authorId.Value);
+                            SendNotification(problem, userId, authorId.Value, "A new message has been sent on problem ");
                         }
                         else
                         {
@@ -212,11 +225,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
         }
 
-        private void SendNotification(ProblemDto problem, int senderId, long receiverId)
+        private void SendNotification(ProblemDto problem, int senderId, long receiverId, string content)
         {
-            var notificationAuthor = new NotificationDto
+            var notification = new NotificationDto
             {
-                Content = "A new message has been sent on problem " + problem.Id,
+                Content = content + problem.Id,
                 Type = NotificationType.TourIssue.ToString(),
                 SenderPersonId = senderId,
                 ReceiverPersonId = receiverId,
@@ -224,7 +237,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                 IsRead = false,
                 LinkId = problem.Id
             };
-            notificationService.SendNotification(notificationAuthor);
+            notificationService.SendNotification(notification);
         }
     }
 }
