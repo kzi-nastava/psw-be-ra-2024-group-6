@@ -49,9 +49,17 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
         public Problem Update(Problem entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            _dbContext.SaveChanges();
-            return entity;
+            try
+            {
+                _dbContext.Entry(entity).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+                return entity;
+            }
+            catch(DbUpdateException ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+
+            }
         }
 
 
