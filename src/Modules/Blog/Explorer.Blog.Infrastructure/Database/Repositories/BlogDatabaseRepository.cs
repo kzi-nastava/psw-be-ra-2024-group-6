@@ -51,5 +51,16 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories
             }
             return blog;
         }
+
+        public List<Core.Domain.Blogs.Blog>  GetAggregatePaged(int page, int pageSize)
+        {
+            return _dbContext.Blogs
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Include(b=>b.Pictures)
+                .ToList();
+        }
+
     }
+    
 }
