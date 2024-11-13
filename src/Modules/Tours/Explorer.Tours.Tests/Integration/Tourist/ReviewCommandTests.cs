@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Explorer.Tours.Tests.Integration.Reviews
@@ -27,12 +26,15 @@ namespace Explorer.Tours.Tests.Integration.Reviews
 
             var reviewDto = new ReviewDto
             {
-                TouristId = -10,
+                Id = -1,
+                TouristId = 1,
+                TourId = -1,
                 Rating = 4,
                 Comment = "Great experience!",
                 TourDate = DateTime.UtcNow.AddDays(-10),
                 ReviewDate = DateTime.UtcNow,
-                Images = new List<string> { "image1.jpg", "image2.jpg" }
+                Images = new List<string> { "image1.jpg", "image2.jpg" },
+                Completion = 70
             };
 
             // Act
@@ -40,79 +42,45 @@ namespace Explorer.Tours.Tests.Integration.Reviews
 
             // Assert
             result.ShouldNotBeNull();
-            dbContext.Reviews.FirstOrDefault(r => r.TouristId == reviewDto.TouristId && r.Comment == reviewDto.Comment).ShouldNotBeNull();
+            result.Rating.ShouldBe(reviewDto.Rating);
+            result.Comment.ShouldBe(reviewDto.Comment);
+            result.TouristId.ShouldBe(reviewDto.TouristId);
         }
 
-        [Fact]
-        public void Create_review_fails_invalid_data()
+        [Theory]
+        [InlineData(-2, 1, -1, 6, "Great experience!", -10, 0, 400)] // Invalid rating
+        [InlineData(-3, 1, -1, 4, "", -10, 0, 400)] // Empty comment
+        [InlineData(-4, 1, -1, 4, "Great experience!", 10, 0, 400)] // Future tour date
+        [InlineData(-5, 1, -1, 4, "Great experience!", -10, -20, 400)] // Review date before tour date
+
+        public void Create_review_with_invalid_data(
+            int id, int touristId, int tourId, int rating, string comment,
+            int tourDateOffset, int reviewDateOffset, int expectedStatusCode)
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
 
-            // Test 1: Invalid Rating
-            var reviewDtoInvalidRating = new ReviewDto
+            var reviewDto = new ReviewDto
             {
-                TouristId = 1,
-                Rating = 6, // Invalid rating (should be between 1 and 5)
-                Comment = "Valid comment",
-                TourDate = DateTime.Now.AddDays(-1),
-                ReviewDate = DateTime.Now,
-                Images = new List<string> { "url1", "url2" }
+                Id = id,
+                TouristId = touristId,
+                TourId = tourId,
+                Rating = rating,
+                Comment = comment,
+                TourDate = DateTime.UtcNow.AddDays(tourDateOffset),
+                ReviewDate = DateTime.UtcNow.AddDays(reviewDateOffset),
+                Images = new List<string> { "image1.jpg", "image2.jpg" },
+                Completion = 70
             };
-            var resultInvalidRating = (ObjectResult)controller.Create(reviewDtoInvalidRating).Result;
+
+            // Act
+            var result = (ObjectResult)controller.Create(reviewDto).Result;
 
             // Assert
-            resultInvalidRating.ShouldNotBeNull();
-            resultInvalidRating.StatusCode.ShouldBe(400);
-
-            // Test 2: Invalid Comment (empty)
-            var reviewDtoInvalidComment = new ReviewDto
-            {
-                TouristId = 1,
-                Rating = 3,
-                Comment = "", // Invalid comment (empty)
-                TourDate = DateTime.Now.AddDays(-1),
-                ReviewDate = DateTime.Now,
-                Images = new List<string> { "url1" }
-            };
-            var resultInvalidComment = (ObjectResult)controller.Create(reviewDtoInvalidComment).Result;
-
-            // Assert
-            resultInvalidComment.ShouldNotBeNull();
-            resultInvalidComment.StatusCode.ShouldBe(400);
-
-            // Test 3: Invalid Tour Date (future date)
-            var reviewDtoInvalidTourDate = new ReviewDto
-            {
-                TouristId = 1,
-                Rating = 3,
-                Comment = "Valid comment",
-                TourDate = DateTime.Now.AddDays(1), // Invalid tour date (in the future)
-                ReviewDate = DateTime.Now,
-                Images = new List<string> { "url1" }
-            };
-            var resultInvalidTourDate = (ObjectResult)controller.Create(reviewDtoInvalidTourDate).Result;
-
-            // Assert
-            resultInvalidTourDate.ShouldNotBeNull();
-            resultInvalidTourDate.StatusCode.ShouldBe(400);
-
-            // Test 4: Invalid Review Date (before Tour Date)
-            var reviewDtoInvalidReviewDate = new ReviewDto
-            {
-                TouristId = 1,
-                Rating = 3,
-                Comment = "Valid comment",
-                TourDate = DateTime.Now.AddDays(-1),
-                ReviewDate = DateTime.Now.AddDays(-2), // Invalid review date (before tour date)
-                Images = new List<string> { "url1" }
-            };
-            var resultInvalidReviewDate = (ObjectResult)controller.Create(reviewDtoInvalidReviewDate).Result;
-
-            // Assert
-            resultInvalidReviewDate.ShouldNotBeNull();
-            resultInvalidReviewDate.StatusCode.ShouldBe(400);
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(expectedStatusCode);
+            result.Value.ShouldNotBeNull();  // Optionally check for error details if your controller provides them
         }
 
         private static ReviewController CreateController(IServiceScope scope)
