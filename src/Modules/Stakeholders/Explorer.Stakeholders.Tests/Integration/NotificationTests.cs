@@ -25,16 +25,12 @@ namespace Explorer.Stakeholders.Tests.Integration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
-            // Simulacija korisnika koji šalje notifikaciju
-            long senderUserId = -11; // Postavite odgovarajući UserId za test
-            controller.ControllerContext = BuildContext(senderUserId.ToString());
 
             // Priprema NotificationCreateDto objekta
             var notificationDto = new NotificationCreateDto
             {
                 Content = "Test Notification",
-                Type = "Tour", // Pretpostavljamo da je "Tour" validna vrednost za tip
-                LinkId = 1 // Postavite odgovarajući ID za testiranje
+                Type = "None" // Pretpostavljamo da je "Tour" validna vrednost za tip
             };
 
             // Act
@@ -48,9 +44,9 @@ namespace Explorer.Stakeholders.Tests.Integration
             // Provera u bazi da li je notifikacija dodata
             var addedNotifications = dbContext.Notifications.Where(n => n.Content == "Test Notification").ToList();
             addedNotifications.ShouldNotBeEmpty();
-            addedNotifications.Count.ShouldBeGreaterThan(0);
-            addedNotifications.All(n => n.SenderPersonId == senderUserId).ShouldBeTrue();
-            addedNotifications.All(n => n.Type == NotificationType.Tour).ShouldBeTrue(); // Provera tipa
+            addedNotifications.Count.ShouldBe(2);
+            addedNotifications.All(n => n.SenderPersonId == -23).ShouldBeTrue();
+            addedNotifications.All(n => n.Type == NotificationType.None).ShouldBeTrue(); // Provera tipa
         }
         [Fact]
         public void GetNotifications_ReturnsNotificationsForUser()
@@ -104,7 +100,7 @@ namespace Explorer.Stakeholders.Tests.Integration
             return new NotificationController(scope.ServiceProvider.GetRequiredService<IPersonService>(),
                 scope.ServiceProvider.GetRequiredService<INotificationService>())
             {
-                ControllerContext = BuildContext("-11") 
+                ControllerContext = BuildContext("-23") 
             };
         }
     }

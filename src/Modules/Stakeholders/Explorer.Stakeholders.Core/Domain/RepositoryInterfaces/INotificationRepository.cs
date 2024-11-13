@@ -10,7 +10,7 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     public interface INotificationRepository
     {
         void Add(Notification notification);
-        void AddRange(IEnumerable<Notification> notifications);
+        void AddRange(List<Notification> notifications);
 
         public List<Notification> GetNotificationsByUserId(int userId);
 
