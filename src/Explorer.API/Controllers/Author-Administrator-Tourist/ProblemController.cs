@@ -46,6 +46,15 @@ namespace Explorer.API.Controllers.Tourist
             var result = _problemService.Update(problem, userId);
             return CreateResponse(result);
         }
+
+        [HttpPut("dueDate/{id:int}")]
+        public ActionResult<ProblemDto> UpdateDueDate([FromBody] ProblemDto problem)
+        {
+            var userId = User.UserId();
+            var result = _problemService.UpdateDueDate(problem, userId);
+            return CreateResponse(result);
+        }
+
         [HttpPut("sendMessage")]
         public ActionResult<ProblemDto> SendMessage([FromBody] ProblemWithMessageDto problemWithMessageDto)
         {
