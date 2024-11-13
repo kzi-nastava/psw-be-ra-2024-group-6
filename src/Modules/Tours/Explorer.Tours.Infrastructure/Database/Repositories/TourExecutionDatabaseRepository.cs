@@ -20,7 +20,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public TourExecution? GetByTourIdAndTouristId(int tourId, int touristId)
         {
-            return DbContext.TourExecutions.FirstOrDefault(te => te.TourId == tourId && te.TouristId == touristId);
+            return DbContext.TourExecutions.FirstOrDefault(te => te.TourId == tourId && te.TouristId == touristId && te.Status == TourExecutionStatus.ONGOING); //changed it so that it only finds ongoing tours
         }
 
         public ICollection<TourExecution> GetByTouristId(int touristId)

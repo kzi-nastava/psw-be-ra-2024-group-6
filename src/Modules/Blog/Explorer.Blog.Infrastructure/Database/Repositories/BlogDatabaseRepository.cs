@@ -47,9 +47,20 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories
                 .Include(t => t.Pictures).FirstOrDefault();
             if (blog == null)
             {
-                throw new KeyNotFoundException($"ShoppingCart not found: {id}");
+                throw new KeyNotFoundException($"Blog not found: {id}");
             }
             return blog;
         }
+
+        public List<Core.Domain.Blogs.Blog>  GetAggregatePaged(int page, int pageSize)
+        {
+            return _dbContext.Blogs
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Include(b=>b.Pictures)
+                .ToList();
+        }
+
     }
+    
 }

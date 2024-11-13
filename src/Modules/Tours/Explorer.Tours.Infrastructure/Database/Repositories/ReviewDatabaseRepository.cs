@@ -8,6 +8,7 @@ using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Infrastructure.Database;
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories;
 public class ReviewDatabaseRepository : IReviewRepository
@@ -31,10 +32,34 @@ public class ReviewDatabaseRepository : IReviewRepository
     {
         return _dbContext.Reviews.ToList(); 
     }
+    public IEnumerable<Review> GetAllByUser(long userId)
+    {
+        return _dbContext.Reviews.Where(t => t.TouristId == userId).ToList();
+    }
 
     public IEnumerable<Review> GetReviewsForTour(long tourId)
     {
         return _dbContext.Reviews.Where(review => review.TourId == tourId).ToList();
+    }
+
+    public Review Update(Review review)
+    {
+        try
+        {
+            var existingReview = _dbContext.PurchaseTokens.Find(review.Id);
+            if (existingReview != null)
+            {
+                _dbContext.Entry(existingReview).State = EntityState.Detached;
+            }
+
+            _dbContext.Entry(review).State = EntityState.Modified;
+            _dbContext.SaveChanges();
+        }
+        catch (DbUpdateException e)
+        {
+            throw new KeyNotFoundException(e.Message);
+        }
+        return review;
     }
 }
 

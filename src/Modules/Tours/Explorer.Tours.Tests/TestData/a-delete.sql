@@ -8,3 +8,4 @@ DELETE FROM tours."OrderItems";
 DELETE FROM tours."ShoppingCarts";
 DELETE FROM tours."Reviews";
 
+

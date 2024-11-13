@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Stakeholders.API.Public;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
@@ -33,7 +34,18 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "ide gas crni bmw",
                 Date = new DateTime(),
                 TourId = 0,
-                TouristId = -3
+                TouristId = -22,
+                IsResolved = false,
+                IsClosed = false,
+                DueDate = new DateTime(),
+                Messages = new List<ProblemMessageDto>(){
+                    new ProblemMessageDto
+                    {
+                        Content = "Poruka porukica",
+                        SenderId = 2,
+                        CreationDate = new DateTime()
+                    }
+                }
             };
 
             // Act
@@ -87,7 +99,18 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "kvakvakva",
                 Date = new DateTime(),
                 TourId = 0,
-                TouristId = -2
+                TouristId = -22,
+                IsResolved = true,
+                IsClosed = false,
+                DueDate = new DateTime(),
+                Messages = new List<ProblemMessageDto>(){
+                    new ProblemMessageDto
+                    {
+                        Content = "Banana hleb",
+                        SenderId = 2,
+                        CreationDate = new DateTime()
+                    }
+                }
             };
 
             // Act
@@ -127,8 +150,19 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "kvakvakva",
                 Date = new DateTime(),
                 TourId = 0,
-                TouristId = 0
-                
+                TouristId = -22,
+                IsResolved = true,
+                IsClosed = false,
+                DueDate = new DateTime(),
+                Messages = new List<ProblemMessageDto>(){
+                    new ProblemMessageDto
+                    {
+                        Content = "Banana hleb",
+                        SenderId = 2,
+                        CreationDate = new DateTime()
+                    }
+                }
+
             };
 
             // Act
@@ -176,7 +210,7 @@ namespace Explorer.Stakeholders.Tests.Integration
 
         private static ProblemController CreateController(IServiceScope scope)
         {
-            return new ProblemController(scope.ServiceProvider.GetRequiredService<IProblemService>())
+            return new ProblemController(scope.ServiceProvider.GetRequiredService<IProblemService>(), scope.ServiceProvider.GetRequiredService<IUserService>())
             {
                 ControllerContext = BuildContext("-1")
             };

@@ -1,4 +1,6 @@
-﻿using Explorer.Tours.Core.Domain.TourExecutions;
+﻿using Explorer.Tours.API.Dtos;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using FluentResults;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces;
 

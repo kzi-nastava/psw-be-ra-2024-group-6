@@ -1,8 +1,6 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
-
-using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.UseCases;
+using Explorer.Tours.API.Internal;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Execution;
@@ -37,6 +35,7 @@ public static class ToursStartup
     
     private static void SetupCore(IServiceCollection services)
     {
+        services.AddScoped<IPurchaseTokenService, PurchaseTokenService>();
         services.AddScoped<IEquipmentService, EquipmentService>();
         services.AddScoped<IObjectService, ObjectService>();
         services.AddScoped<ICheckpointService, CheckpointService>();
@@ -45,6 +44,8 @@ public static class ToursStartup
         services.AddScoped<ITourExecutionService, TourExecutionService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
         services.AddScoped<IReviewService, ReviewService>();
+        services.AddScoped<IInternalProblemTourAuthorService, ProblemTourService>();
+        services.AddScoped<IPurchaseTokenService,PurchaseTokenService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -57,7 +58,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<Checkpoint>), typeof(CrudDatabaseRepository<Checkpoint, ToursContext>));
         services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
         services.AddScoped<ICheckpointRepository, CheckpointDatabaseRepository>();
-
+        services.AddScoped(typeof(ICrudRepository<PurchaseToken>), typeof(CrudDatabaseRepository<PurchaseToken, ToursContext>));
 
         services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour,ToursContext>));
 
@@ -67,6 +68,7 @@ public static class ToursStartup
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
         services.AddScoped<IPurchaseTokenRepository, PurchaseTokenDatabaseRepository>();
+
 
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),

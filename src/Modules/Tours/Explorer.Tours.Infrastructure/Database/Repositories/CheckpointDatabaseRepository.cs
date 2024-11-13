@@ -1,5 +1,4 @@
-﻿using Explorer.Stakeholders.Core.Domain;
-using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+﻿using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,6 +32,13 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 return _dbContext.Checkpoints
                     .Where(c => c.TourId == tourId)
                     .ToList();
+        }
+
+        public Checkpoint Get(long Id)
+        {
+            return _dbContext.Checkpoints.First(c => c.Id == Id);
+
+                
         }
 
     }

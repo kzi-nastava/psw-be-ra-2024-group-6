@@ -40,7 +40,7 @@ namespace Explorer.API.Controllers.Author
         }
 
          [HttpGet("{tourId:int}")]
-         public ActionResult<TourReadDto> GetTourDetailsByTourId(int tourId)
+         public ActionResult<TourReadDto> GetTourDetailsByTourId(long tourId)
          {
              int userId = User.UserId();
              var result = _tourService.GetTourDetailsByTourId(tourId,userId);

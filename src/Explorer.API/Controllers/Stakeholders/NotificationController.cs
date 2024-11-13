@@ -32,6 +32,30 @@ namespace Explorer.API.Controllers.Stakeholders
                 return Ok("Notifications sent successfully");
             }
 
-        }
+            [HttpGet("{userId:int}/notifications")]
+            public ActionResult<List<NotificationDto>> GetNotifications(int userId)
+            {
+                 var result = _notificationService.GetNotificationsByUserId(userId);
+                 return CreateResponse(result);
+            }
+
+            [HttpPut("{notificationId:int}/mark-read")]
+            public ActionResult MarkNotificationAsRead(int notificationId)
+            {
+                var result = _notificationService.MarkAsRead(notificationId);
+                if (result.IsFailed)
+                {
+                    return BadRequest(result.Errors.First().Message);
+                }
+                return Ok("Notifikacija označena kao pročitana");
+            }
+
+
+
+
+
+
+
+    }
 }
 

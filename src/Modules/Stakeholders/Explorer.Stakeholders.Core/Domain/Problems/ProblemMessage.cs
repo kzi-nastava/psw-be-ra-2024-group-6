@@ -10,18 +10,21 @@ namespace Explorer.Stakeholders.Core.Domain.Problems
 {
     public class ProblemMessage : ValueObject
     {
-        public long ProblemId { get; set; }
-        public string Content { get; set; }
-        public long SenderId { get; set; }
-        public DateTime DateTime { get; set; }
+        public string Content { get; private set; }
+        public long SenderId { get; private set; }
+        public DateTime CreationDate { get; private set; }
+
+        public ProblemMessage()
+        {
+
+        }
 
         [JsonConstructor]
-        public ProblemMessage(long problemId, string content, long senderId, DateTime dateTime)
+        public ProblemMessage( string content, long senderId, DateTime creationDate)
         {
-            ProblemId = problemId;
-            Content = content;
-            SenderId = senderId;
-            DateTime = dateTime;
+            this.Content = content;
+            this.SenderId = senderId;
+            this.CreationDate = creationDate;
             Validate();
         }
 

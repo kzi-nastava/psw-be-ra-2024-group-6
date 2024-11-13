@@ -1,5 +1,7 @@
-﻿using Explorer.Stakeholders.Core.Domain;
-using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.BuildingBlocks.Infrastructure.Database;
+﻿using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
@@ -88,6 +90,53 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             catch (Exception ex)
             {
                 throw new KeyNotFoundException(ex.Message);
+            }
+        }
+
+        public Tour GetTourWithReviews(long tourId)
+        {
+            try
+            {
+                var tourWithReviews = _context.Tours
+                    .Include(t => t.Reviews)  
+                    .FirstOrDefault(t => t.Id == tourId);
+
+                if (tourWithReviews == null)
+                {
+                    throw new KeyNotFoundException($"Tour with ID {tourId} not found.");
+                }
+
+                return tourWithReviews;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
+
+        public PagedResult<Tour> GetToursWithReviews(int page,int size)
+        {
+            var result = _context.Tours.Include(t=>t.Reviews).GetPaged(page, size);
+            result.Wait();
+            return result.Result;
+
+
+        }
+
+
+
+        public List<Tour> GetPublishedToursWithCheckpoints()
+        {
+            try
+            {
+                return _context.Tours
+                    .Where(t => t.Status == Status.Published)
+                    .Include(t => t.Checkpoints)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error finding nearby tours", ex);
             }
         }
     }
