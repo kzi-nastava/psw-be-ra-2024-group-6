@@ -25,7 +25,7 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet("tourDetails/{tourId:long}")]
-        public ActionResult<TourDto> GetTour(long tourId)
+        public ActionResult<TourReadDto> GetTour(long tourId)
         {
             long userId = User.UserId();
             var result = _tourService.GetTourDetailsByTourId(tourId, userId);
