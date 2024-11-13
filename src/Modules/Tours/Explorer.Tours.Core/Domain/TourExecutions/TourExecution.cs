@@ -27,6 +27,10 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
 
         public TourExecution(int tourId, int touristId, double longitude, double latitude)
         {
+            if (!Validate(longitude, latitude))
+            {
+                throw new ArgumentException("Invalid longitude or latitude values");
+            }
             Position = new TouristPosition(longitude, latitude);
             CompletedCheckpoints = new List<CompletedCheckpoint>();
             TourId = tourId;
@@ -37,6 +41,11 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         }
 
         public TourExecution() {}
+
+        public bool Validate(double longitude, double latitude)
+        {
+            return longitude is >= -180 and <= 180 && latitude is >= -90 and <= 90;
+        }
 
         public void Finalize(string status)
         {
