@@ -31,5 +31,12 @@ namespace Explorer.API.Controllers.Tourist
             var result = _tourService.GetTourDetailsByTourId(tourId, userId);
             return CreateResponse(result);
         }
+
+        [HttpGet("boughtTours/{userId:long}")]
+        public ActionResult<List<TourCardDto>> GetBoughtTours(long userId)
+        {
+            var result = _tourService.GetBoughtTours(userId);
+            return CreateResponse(result);
+        }
     }
 }

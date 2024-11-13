@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace Explorer.Blog.API.Dtos
 {
-    public class BlogDto
+    public class BlogDetailsDto
     {
         public long Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; }
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public List<BlogPictureDto> Pictures { get; set; }
         public List<CommentDto> Comments { get; set; }
-        public string? Username {  get; set; }
-        //public List<RatingDto> Ratings { get; set; }
+        public string AuthorUsername { get; set; }
     }
-
 }

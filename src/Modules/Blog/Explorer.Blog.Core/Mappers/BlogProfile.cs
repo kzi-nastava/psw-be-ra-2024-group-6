@@ -20,6 +20,9 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
+        CreateMap<BlogDetailsDto, BlogDomain.Blogs.Blog>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
+        .ReverseMap()
+        .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
 
         CreateMap<RatingDto, Rating>()
             .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => Enum.Parse<VoteType>(src.VoteType, true)))

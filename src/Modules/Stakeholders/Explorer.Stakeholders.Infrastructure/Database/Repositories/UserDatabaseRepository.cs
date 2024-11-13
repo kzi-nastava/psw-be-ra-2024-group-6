@@ -1,5 +1,6 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using System.Linq;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories;
 
@@ -40,5 +41,20 @@ public class UserDatabaseRepository : IUserRepository
         var person = _dbContext.People.FirstOrDefault(i => i.UserId == userId);
         if (person == null) return "";
         return person.Email;
+    }
+
+    public User GetById(long id)
+    {
+        var user = _dbContext.Users.FirstOrDefault(i => i.Id == id);
+        if (user == null) throw new KeyNotFoundException("Not found");
+        return user;
+    }
+
+    public List<User> GetByIds(List<int> instructorIds)
+    {
+        var users = _dbContext.Users
+                          .Where(user => instructorIds.Contains((int)user.Id))
+                          .ToList();
+        return users;
     }
 }

@@ -27,5 +27,6 @@ namespace Explorer.Tours.API.Public
         //Result GetTourDetailsByTourId(int tourId);
 
 
+        Result<List<TourCardDto>> GetBoughtTours(long userId);
     }
 }
