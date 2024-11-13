@@ -93,6 +93,8 @@ namespace Explorer.Stakeholders.Tests.Integration
             result.StatusCode.ShouldBe(200);
         }
 
+        
+
         private static PersonController CreateController(IServiceScope scope)
         {
             return new PersonController(scope.ServiceProvider.GetRequiredService<IPersonService>(),scope.ServiceProvider.GetRequiredService<IUserService>())

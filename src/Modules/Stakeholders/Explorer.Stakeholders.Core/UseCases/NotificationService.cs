@@ -53,6 +53,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in service: {ex.Message}");
                 return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
             }
         }
