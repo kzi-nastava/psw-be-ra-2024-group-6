@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos.TourDtos;
+﻿using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Dtos.TourDtos;
 using Explorer.Tours.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,21 @@ namespace Explorer.API.Controllers.Tourist
         public ActionResult<TourPreviewDto> GetTourPreview(long tourId)
         {
             var result = _tourService.GetTourPreview(tourId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("tourDetails/{tourId:long}")]
+        public ActionResult<TourReadDto> GetTour(long tourId)
+        {
+            long userId = User.UserId();
+            var result = _tourService.GetTourDetailsByTourId(tourId, userId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("boughtTours/{userId:long}")]
+        public ActionResult<List<TourCardDto>> GetBoughtTours(long userId)
+        {
+            var result = _tourService.GetBoughtTours(userId);
             return CreateResponse(result);
         }
     }

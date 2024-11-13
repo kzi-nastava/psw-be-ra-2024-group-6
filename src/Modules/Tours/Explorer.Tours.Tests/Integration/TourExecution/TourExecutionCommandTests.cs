@@ -32,7 +32,7 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var newEntity = new TourExecutionDto
             {
-                TourId = -1,
+                TourId = -2,
                 TouristId = -21,
                 Longitude = -20,
                 Latitude = 50,
@@ -46,9 +46,9 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             // Assert - Response
             result.ShouldNotBeNull();
             result.TourId.ShouldNotBe(0);
-            result.TourId.ShouldBe(-1);
+            result.TourId.ShouldBe(-2);
             result.TouristId.ShouldNotBe(0);
-            result.TouristId.ShouldBe(-1);
+            result.TouristId.ShouldBe(-21);
 
             // Assert - Database
             var storedEntity = dbContext.TourExecutions.FirstOrDefault(i => i.TourId == newEntity.TourId && i.TouristId == newEntity.TouristId);
@@ -63,8 +63,7 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             var controller = CreateController(scope);
             var updatedEntity = new TourExecutionDto
             {
-                TourId = -1,
-                TouristId = -1,
+                TourId = -5,
                 Longitude = -200,
                 Latitude = -200
             };
@@ -86,8 +85,8 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
                 var controller = CreateController(scope);
                 var updatedEntity = new TourExecutionDto
                 {
-                    TourId = -3,
-                    TouristId = -1,
+                    TourId = -4,
+                    TouristId = -21,
                     Longitude = -20,
                     Latitude = 50
                 };
@@ -108,7 +107,7 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-            int id = -3;
+            var id = -4;
             string status = "COMPLETED";
             var oldStatus = TourExecutionStatus.ONGOING;
 
@@ -123,7 +122,7 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             var storedEntity = dbContext.TourExecutions.FirstOrDefault(i => i.Id == id);
             storedEntity.ShouldNotBeNull();
             storedEntity.Status.ToString().ShouldBe(status);
-            var oldEntity = dbContext.TourExecutions.FirstOrDefault(i => i.Status == oldStatus);
+            var oldEntity = dbContext.TourExecutions.FirstOrDefault(i => i.Status == oldStatus && i.Id == id);
             oldEntity.ShouldBeNull();
         }
 

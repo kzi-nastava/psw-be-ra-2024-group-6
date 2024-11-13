@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Stakeholders.API.Public;
+using Explorer.API.Controllers.Stakeholders;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
@@ -26,7 +27,7 @@ namespace Explorer.Stakeholders.Tests.Integration
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+            var controller = CreateProblemController(scope);
 
             // Act
             var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<ProblemDto>;
@@ -37,9 +38,67 @@ namespace Explorer.Stakeholders.Tests.Integration
             result.TotalCount.ShouldBe(3);
         }
 
-        private static ProblemController CreateController(IServiceScope scope)
+        [Fact]
+        public void SendMessageNotification()
+        {
+            int userId = -22;
+            int receiverId = -11;
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var problemController = CreateProblemController(scope);
+            var notificationController = CreateNotificationController(scope);
+
+            var problem = new ProblemWithMessageDto
+            {
+                Problem = new ProblemDto
+                {
+                    Id = -1,
+                    Category = "kate",
+                    Priority = "prvi",
+                    Date = new DateTime(),
+                    Description = "description",
+                    TourId = -1,
+                    TouristId = userId,
+                    IsClosed = false,
+                    IsResolved = false,
+                    DueDate = new DateTime(),
+                    Messages = new List<ProblemMessageDto>
+                    {
+                        new ProblemMessageDto
+                        {
+                            Content = "content",
+                            SenderId = userId,
+                            CreationDate = new DateTime()
+                        }
+                    }
+                },
+                Message = new ProblemMessageDto
+                {
+                    Content = "Bad tour",
+                    SenderId = userId,
+                    CreationDate = new DateTime()
+                }
+            };
+
+            // Act
+            var problemResult = ((ObjectResult)problemController.SendMessage(problem).Result)?.Value as ProblemDto;
+            var notificationResult = ((ObjectResult)notificationController.GetNotifications(receiverId).Result)?.Value as List<NotificationDto>;
+
+            // Assert
+            notificationResult.ShouldContain(n => n.LinkId == -1);
+
+        }
+
+        private static ProblemController CreateProblemController(IServiceScope scope)
         {
             return new ProblemController(scope.ServiceProvider.GetRequiredService<IProblemService>(), scope.ServiceProvider.GetRequiredService<IUserService>())
+            {
+                ControllerContext = BuildContext("-1")
+            };
+        }
+        private static NotificationController CreateNotificationController(IServiceScope scope)
+        {
+            return new NotificationController(scope.ServiceProvider.GetRequiredService<IPersonService>(), scope.ServiceProvider.GetRequiredService<INotificationService>())
             {
                 ControllerContext = BuildContext("-1")
             };
