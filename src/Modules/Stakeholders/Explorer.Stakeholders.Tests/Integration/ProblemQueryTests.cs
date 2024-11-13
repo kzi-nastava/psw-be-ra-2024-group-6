@@ -42,6 +42,7 @@ namespace Explorer.Stakeholders.Tests.Integration
         public void SendMessageNotification()
         {
             int userId = -22;
+            int receiverId = -11;
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var problemController = CreateProblemController(scope);
@@ -51,23 +52,23 @@ namespace Explorer.Stakeholders.Tests.Integration
             {
                 Problem = new ProblemDto
                 {
-                    Id = 1,
-                    Category = "category",
-                    Priority = "priority",
-                    Date = DateTime.Now,
+                    Id = -1,
+                    Category = "kate",
+                    Priority = "prvi",
+                    Date = new DateTime(),
                     Description = "description",
                     TourId = -1,
                     TouristId = userId,
                     IsClosed = false,
                     IsResolved = false,
-                    DueDate = DateTime.Today.AddDays(5),
+                    DueDate = new DateTime(),
                     Messages = new List<ProblemMessageDto>
                     {
                         new ProblemMessageDto
                         {
                             Content = "content",
                             SenderId = userId,
-                            CreationDate = DateTime.Now
+                            CreationDate = new DateTime()
                         }
                     }
                 },
@@ -75,16 +76,16 @@ namespace Explorer.Stakeholders.Tests.Integration
                 {
                     Content = "Bad tour",
                     SenderId = userId,
-                    CreationDate = DateTime.Now
+                    CreationDate = new DateTime()
                 }
             };
 
             // Act
             var problemResult = ((ObjectResult)problemController.SendMessage(problem).Result)?.Value as ProblemDto;
-            var notificationResult = ((ObjectResult)notificationController.GetNotifications(userId).Result)?.Value as List<NotificationDto>;
+            var notificationResult = ((ObjectResult)notificationController.GetNotifications(receiverId).Result)?.Value as List<NotificationDto>;
 
             // Assert
-            notificationResult[0].Content.ShouldBe("Bad tour");
+            notificationResult.ShouldContain(n => n.LinkId == -1);
 
         }
 
