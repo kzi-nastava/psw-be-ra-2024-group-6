@@ -123,6 +123,27 @@ namespace Explorer.Tours.Core.UseCases
             return (result.Value != null);
         }
 
+        public Result<List<TourCardDto>> GetBoughtTours(long userId)
+        {
+            try
+            {
+                List<TourCardDto> boughtTours = new List<TourCardDto>();
+
+                foreach (var tour in GetAllTourCards(0,0).Value)
+                {
+                    if(checkIfUserBoughtTour(tour.Id, userId))
+                        boughtTours.Add(tour);
+                }
+
+                return Result.Ok(boughtTours);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+
         public Result<TourReadDto> Publish(long tourId, int userId)
         {
             try
@@ -283,5 +304,6 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(ex.Message);
             }
         }
+
     }
 }
