@@ -11,7 +11,7 @@
         "Content": "This is the second message content",
         "SenderId": 2,
         "CreationDate": "2024-10-16T10:15:10"
-    }{,
+    }},
     {{
         "Content": "This is the third message content",
         "SenderId": 3,
