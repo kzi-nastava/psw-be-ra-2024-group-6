@@ -32,7 +32,7 @@ namespace Explorer.Blog.Tests.Integration
             {
                 Title = "Moji utisci o Rimu",
                 Description = "Obožavam Rim. Najbolji grad ikada!!!!",
-                UserId = 1,
+                UserId = -1,
                 Status = "Published",
                 CreatedAt = DateTime.Now.ToUniversalTime(), 
                 Pictures = new List<BlogPictureDto>()
@@ -47,7 +47,7 @@ namespace Explorer.Blog.Tests.Integration
             result.Description.ShouldBe(newEntity.Description);
             result.Title.ShouldBe(newEntity.Title);
             result.Status.ShouldBe(newEntity.Status);
-            result.UserId.ShouldBe(1);
+            result.UserId.ShouldBe(-1);
 
             // Assert - Database
             var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Description == newEntity.Description);

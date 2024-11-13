@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Core.Domain.Problems;
 using Explorer.Tours.API.Internal;
-
+using Explorer.Stakeholders.API.Internal;
 
 namespace Explorer.Stakeholders.Infrastructure;
 
@@ -39,6 +39,7 @@ public static class StakeholdersStartup
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IClubService, ClubService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IInternalInstructorService, InternalInstructorService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)

@@ -7,5 +7,7 @@ public interface IUserRepository
     User Create(User user);
     long GetPersonId(long userId);
     public string GetUserEmail(long userId);
+    public User GetById(long id);
+    public List<User> GetByIds(List<int> instructorIds);
 
 }
