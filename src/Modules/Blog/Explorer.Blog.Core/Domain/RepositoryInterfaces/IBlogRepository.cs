@@ -15,6 +15,6 @@ namespace Explorer.Blog.Core.Domain.RepositoryInterfaces
         public void Delete(long id);
         public BlogDomain.Blogs.Blog Get(long id);
         IEnumerable<BlogDomain.Blogs.Blog> GetAllBlogsWithPictures(); 
-
+        public List<Blogs.Blog> GetAggregatePaged(int page, int pageSize);
     }
 }

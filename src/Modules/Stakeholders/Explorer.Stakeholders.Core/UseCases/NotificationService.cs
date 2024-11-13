@@ -57,6 +57,20 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
         }
 
+        // sends notification to author or tourist, for tour issues
+        public Result SendNotification(NotificationDto notificationDto)
+        {
+            try
+            {
+                _notificationRepository.Add(_mapper.Map<Notification>(notificationDto));
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
+            }
+        }
+
         public Result<List<NotificationDto>> GetNotificationsByUserId(int userId)
         {
             try

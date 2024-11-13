@@ -9,25 +9,26 @@ using Explorer.Stakeholders.Core.Domain.Problems;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.API.Internal;
 
-
 namespace Explorer.Stakeholders.Core.UseCases
 {
     public class ProblemService : CrudService<ProblemDto, Problem>, IProblemService
     {
         private readonly ICrudRepository<Problem> _crudRepository;
         private readonly IUserService userService;
+        private readonly INotificationService notificationService;
         private readonly IProblemRepository repository;
         private readonly IMapper mapper;
         private readonly IInternalProblemTourAuthorService problemTourAuthorService;
         public ProblemService(ICrudRepository<Problem> crudRepository, IProblemRepository problemRepository,
-            IMapper mapper, IUserService userService, IInternalProblemTourAuthorService problemTourAuthorService ) : base(crudRepository, mapper)
+            IMapper mapper, IUserService userService, IInternalProblemTourAuthorService problemTourAuthorService,
+            INotificationService notificationService) : base(crudRepository, mapper)
         {
             _crudRepository = crudRepository;
             this.userService = userService;
             this.repository = problemRepository;
             this.problemTourAuthorService = problemTourAuthorService;
             this.mapper = mapper;
-
+            this.notificationService = notificationService;
         }
 
         public Result Delete(int id, long userId)
@@ -134,6 +135,33 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
         }
 
+        public Result<ProblemDto> UpdateDueDate(ProblemDto problem, int userId)
+        {
+            try
+            {
+                if (userService.Get(userId).Value.Role.Equals(UserRole.Administrator.ToString()))
+                {
+                    var authorId = problemTourAuthorService.GetTour(problem.TourId).Value.AuthorId;
+                    if (authorId.HasValue)
+                    {
+                        SendNotification(problem, userId, authorId.Value, "A new due date has been set on problem ");
+                    }
+                    else
+                    {
+                        return Result.Fail(FailureCode.NotFound).WithError("Author not found");
+                    }
+
+                    repository.Update(mapper.Map<Problem>(problem));
+                    return mapper.Map<ProblemDto>(problem);
+                }else
+                    return Result.Fail("user does not have permission");
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
 
 
         public Result<ProblemDto> SendMessage(int userId, ProblemDto problem, ProblemMessageDto message)
@@ -145,6 +173,39 @@ namespace Explorer.Stakeholders.Core.UseCases
                     userService.Get(userId).Value.Role.Equals(UserRole.Administrator.ToString()))
                 {
                     mapper.Map<Problem>(problem).SendMessage(mapper.Map<ProblemMessage>(message));
+
+                    // send notification
+                    var authorId = problemTourAuthorService.GetTour(problem.TourId).Value.AuthorId;
+
+                    if (userService.GetUserRole(message.SenderId).Value.Equals(UserRole.Author.ToString().ToLower()))
+                    {
+                        SendNotification(problem, message.SenderId, problem.TouristId, "A new message has been sent on problem ");
+                    }
+                    else if (userService.GetUserRole(message.SenderId).Value.Equals(UserRole.Tourist.ToString().ToLower()))
+                    {
+                        if (authorId.HasValue)
+                        {
+                            SendNotification(problem, message.SenderId, authorId.Value, "A new message has been sent on problem ");
+                        }
+                        else
+                        {
+                            return Result.Fail(FailureCode.NotFound).WithError("Author not found");
+                        }
+                    } else
+                    {
+                        SendNotification(problem, message.SenderId, problem.TouristId, "A new message has been sent on problem ");
+
+                        if (authorId.HasValue)
+                        {
+                            SendNotification(problem, message.SenderId, authorId.Value, "A new message has been sent on problem ");
+                        }
+                        else
+                        {
+                            return Result.Fail(FailureCode.NotFound).WithError("Author not found");
+                        }
+                    }
+
+
                     var updatedProblem = repository.Update(MapToDomain(problem));
 
                     return Result.Ok(mapper.Map<ProblemDto>(updatedProblem));
@@ -164,8 +225,21 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
         }
 
+        private void SendNotification(ProblemDto problem, long senderId, long receiverId, string content)
+        {
+            var notification = new NotificationDto
+            {
+                Content = content + problem.Id,
+                Type = NotificationType.TourIssue.ToString(),
+                SenderPersonId = senderId,
+                ReceiverPersonId = receiverId,
+                CreatedAt = DateTime.UtcNow,
+                IsRead = false,
+                LinkId = problem.Id
+            };
+            notificationService.SendNotification(notification);
+        }
     }
-
 }
 
 

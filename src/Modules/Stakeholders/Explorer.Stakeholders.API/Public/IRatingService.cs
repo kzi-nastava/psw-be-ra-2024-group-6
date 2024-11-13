@@ -16,5 +16,6 @@ namespace Explorer.Stakeholders.API.Public
         Result<RatingDto> Create(RatingDto rating);
         Result<RatingDto> Update(RatingDto rating);
         Result Delete(int id);
+        Result<List<RatingReadDto>> GetBestPaged(int page, int pageSize);
     }
 }

@@ -48,7 +48,13 @@ namespace Explorer.API.Controllers.Author_Tourist
 			var result = _blogService.GetPaged(page, pageSize);
 			return CreateResponse(result);
 		}
-		[HttpDelete("{id:int}")]
+        [HttpGet("home")]
+        public ActionResult<List<BlogHomeDto>> GetAllHome([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _blogService.GetHomePaged(page, pageSize);
+            return CreateResponse(result);
+        }
+        [HttpDelete("{id:int}")]
 		public ActionResult<BlogDto> Delete([FromQuery] int id)
 		{
 			return CreateResponse(_blogService.Delete(id));

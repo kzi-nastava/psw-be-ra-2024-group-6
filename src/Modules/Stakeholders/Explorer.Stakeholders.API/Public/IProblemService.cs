@@ -15,6 +15,7 @@ namespace Explorer.Stakeholders.API.Public.Administration
         Result<PagedResult<ProblemDto>> GetPaged(int page, int pageSize);
         Result<ProblemDto> Create(ProblemDto equipment);
         Result<ProblemDto> Update(ProblemDto equipment, int userId);
+        Result<ProblemDto> UpdateDueDate(ProblemDto equipment, int userId);
         Result Delete(int id);
         Result<ProblemDto> SendMessage(int userId1, ProblemDto prob,ProblemMessageDto message);
     }

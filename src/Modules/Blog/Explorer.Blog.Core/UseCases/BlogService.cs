@@ -52,5 +52,23 @@ namespace Explorer.Blog.Core.UseCases
             
         }
 
+        public Result<List<BlogHomeDto>> GetHomePaged(int page, int pageSize)
+        {
+            List<Domain.Blogs.Blog> blogs = _blogRepository.GetAggregatePaged(page, pageSize);
+            List<BlogHomeDto> blogDtos = new List<BlogHomeDto>();
+            foreach (Domain.Blogs.Blog blog in blogs)
+            {
+                blogDtos.Add(new BlogHomeDto()
+                {
+                    Description = blog.Description,
+                    Id = blog.Id,
+                    ImageUrl = blog.Pictures.First().Url,
+                    Title = blog.Title,
+                    CreatedAt = blog.CreatedAt
+                });
+            }
+
+            return blogDtos;
+        }
     }
 }
