@@ -13,6 +13,7 @@ namespace Explorer.Tours.API.Public
     public interface ITourService
     {
         Result<List<TourDto>> GetByUserId(long userId);
+        Result<TourDto> GetById(long tourId);
         Result<PagedResult<TourDto>> GetPaged(int page, int pageSize);
         Result Delete(int id);
         Result<TourCreateDto> Create(TourCreateDto tour);

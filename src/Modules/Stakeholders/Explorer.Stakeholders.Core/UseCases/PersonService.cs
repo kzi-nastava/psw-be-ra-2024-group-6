@@ -28,11 +28,11 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<PersonDto> AddFollower(int followerId, int userId)
         {
             Person follower  = _personRepository.GetByUserId(userId);
-            follower.AddFollower(followerId);
+            follower.AddFollowing(followerId);
             _personRepository.Update(follower);
 
             Person following = _personRepository.GetByUserId(followerId);
-            following.AddFollowing(userId);
+            following.AddFollower(userId);
             _personRepository.Update(following);
 
             return MapToDto(follower);

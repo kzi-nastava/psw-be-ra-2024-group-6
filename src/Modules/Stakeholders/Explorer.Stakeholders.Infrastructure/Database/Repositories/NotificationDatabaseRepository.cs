@@ -31,7 +31,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             }
         }
 
-        public void AddRange(IEnumerable<Notification> notifications)
+        public void AddRange(List<Notification> notifications)
         {
             try
             {
