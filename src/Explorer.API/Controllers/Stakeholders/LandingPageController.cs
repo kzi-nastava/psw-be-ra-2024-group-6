@@ -20,5 +20,12 @@ namespace Explorer.API.Controllers.Stakeholders
             var result = _tourService.GetAllTourCards(page, pageSize);
             return CreateResponse(result);
         }
+
+        [HttpGet("most-popular-tours")]
+        public ActionResult<List<TourCardDto>> GetMostPopularTours(int count = 4)
+        {
+            var result = _tourService.GetMostPopularTours(count);
+            return CreateResponse(result);
+        }
     }
 }

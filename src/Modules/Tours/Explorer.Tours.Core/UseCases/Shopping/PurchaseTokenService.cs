@@ -44,5 +44,10 @@ namespace Explorer.Tours.Core.UseCases.Shopping
         {
             return MapToDto(_purchaseTokenRepository.GetByUserAndTour(userId, tourId));
         }
+
+        public List<int> GetMostBoughtToursIds(int count)
+        {
+            return _purchaseTokenRepository.GetMostBoughtToursIds(count);
+        }
     }
 }

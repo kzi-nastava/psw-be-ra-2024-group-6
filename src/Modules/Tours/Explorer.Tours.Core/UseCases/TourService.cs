@@ -159,6 +159,22 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+        public Result<List<TourCardDto>> GetMostPopularTours(int count)
+        {
+            try
+            {
+                var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
+                var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
+
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), tour.GetAverageRating())).ToList();
+
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
 
         public Result<TourReadDto> Publish(long tourId, int userId)
         {

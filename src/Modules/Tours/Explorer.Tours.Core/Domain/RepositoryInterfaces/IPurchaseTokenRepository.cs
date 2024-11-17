@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentResults;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
@@ -15,5 +16,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 
         public PurchaseToken? GetByUserAndTour(long userId, long tourId);
         public PurchaseToken Update(PurchaseToken token);
+        public List<int> GetMostBoughtToursIds(int count);
     }
 }

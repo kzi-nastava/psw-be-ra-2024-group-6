@@ -46,6 +46,21 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException(ex.Message);
             }
         }
+
+        public List<Tour> GetAllByIds(List<int> mostBoughtToursIds)
+        {
+            try
+            {
+                return _context.Tours
+                    .Where(t => mostBoughtToursIds.Contains((int)t.Id))
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+        }
+
         public Tour Create(Tour tour)
         {
             var tr = _context.Tours.Add(tour).Entity;
