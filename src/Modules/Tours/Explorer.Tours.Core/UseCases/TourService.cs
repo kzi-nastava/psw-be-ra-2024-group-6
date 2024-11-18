@@ -14,11 +14,12 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Shopping;
+using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.API.Internal;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -28,12 +29,12 @@ namespace Explorer.Tours.Core.UseCases
         private readonly ICrudRepository<Tour> crudRepository;
         private readonly ICheckpointService _checkpointService;
         private readonly IObjectService _objectService;
-        private readonly IPersonService _personService;
+        private readonly IInternalTourPersonService _personService;
         private readonly IPurchaseTokenService _tokenService;
         private readonly IReviewService _reviewService;
 
         private readonly IMapper mapper;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IPersonService personService, IPurchaseTokenService token, IReviewService reviewService) : base(repository, mapper)
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IInternalTourPersonService personService, IPurchaseTokenService token, IReviewService reviewService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;

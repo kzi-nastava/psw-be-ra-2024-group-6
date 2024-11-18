@@ -49,7 +49,7 @@ namespace Explorer.Tours.Core.UseCases.Shopping
             }
 
             var tour = _tourRepository.Get(tourId);
-            if (tour == null || tour.CheckIfNotPublished())
+            if (tour == null || tour.IsNotPublished())
             {
                 return MapToDto(mapper.Map<ShoppingCart>(sc));
             }
