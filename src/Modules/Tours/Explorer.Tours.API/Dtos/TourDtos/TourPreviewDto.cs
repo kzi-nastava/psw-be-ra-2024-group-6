@@ -15,7 +15,9 @@ public class TourPreviewDto
     public string Difficulty { get; set; }
     public List<string> Tags { get; set; }
     public double Price { get; set; }
+    public long AuthorId { get; set; }
     public string AuthorName { get; set; }
+    public string AuthorImageUrl { get; set; }
     public string TotalLength { get; set; }
 
     public List<string> Durations { get; set; }
@@ -23,7 +25,7 @@ public class TourPreviewDto
 
     public List<TourReviewDto> Reviews { get; set; }
 
-    public TourPreviewDto(long id, string name, string description, string difficulty, List<string> tags, double price, string authorName, string totalLength, List<string> durations, CheckpointReadDto firstCheckpoint, List<TourReviewDto> reviews)
+    public TourPreviewDto(long id, string name, string description, string difficulty, List<string> tags, double price,long authorId ,string authorName,string authorImage, string totalLength, List<string> durations, CheckpointReadDto firstCheckpoint, List<TourReviewDto> reviews)
     {
         Id = id;
         Name = name;
@@ -31,6 +33,8 @@ public class TourPreviewDto
         Difficulty = difficulty;
         Tags = tags;
         Price = price;
+        AuthorId = authorId;
+        AuthorImageUrl = authorImage;
         AuthorName = authorName;
         TotalLength = totalLength;
         Durations = durations;

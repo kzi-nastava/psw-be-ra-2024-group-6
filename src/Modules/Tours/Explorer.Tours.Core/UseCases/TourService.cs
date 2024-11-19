@@ -73,12 +73,21 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<List<TourDto>> GetByUserId(long userId)
+        public Result<List<TourAuthorCardDto>> GetByUserId(long userId)
         {
             try
             {
-                var el = MapToDto(_tourRepository.GetByUserId(userId));
-                return el;
+                List<Tour> tours = _tourRepository.GetByUserId(userId);
+                List<TourAuthorCardDto> tourAuthorCardDtos = new List<TourAuthorCardDto>();
+
+                foreach (Tour tour in tours)
+                {
+                    double avg = tour.GetAverageRating();
+                    TourAuthorCardDto tourAuthorCardDto = new TourAuthorCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg, tour.Status.ToString(), tour.StatusChangeTime);
+                    tourAuthorCardDtos.Add(tourAuthorCardDto);
+                }
+
+                return tourAuthorCardDtos;
             }
             catch (KeyNotFoundException e)
             {
@@ -232,7 +241,7 @@ namespace Explorer.Tours.Core.UseCases
             List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
             List<TourReviewDto> reviewDtos = GetTourReviewsDtos(tour.Reviews);
             TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
-                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount, author.Name + " " + author.Surname,
+                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount,author.UserId, author.Name + " " + author.Surname,author.PictureURL,
                 tour.TotalLength.ToString(), durations, firstCp, reviewDtos);
 
             return tourPreviewDto;
@@ -248,12 +257,15 @@ namespace Explorer.Tours.Core.UseCases
 
                 var reviewDto = new TourReviewDto
                 {
+                    Id = review.Id,
                     UserId = reviewer.UserId,
                     Name = reviewer.Name,
                     Surname = reviewer.Surname,
                     Comment = review.Comment,
                     Rating = review.Rating, 
-                    ReviewDate = review.ReviewDate 
+                    ReviewDate = review.ReviewDate,
+                    AuthorImage = reviewer.PictureURL,
+                    Images= review.Images
                 };
 
                 reviewDtos.Add(reviewDto);
