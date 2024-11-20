@@ -47,12 +47,13 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
         }
 
-        public List<Tour> GetAllByIds(List<int> mostBoughtToursIds)
+        public List<Tour> GetAllByIds(List<int> ids)
         {
             try
             {
                 return _context.Tours
-                    .Where(t => mostBoughtToursIds.Contains((int)t.Id))
+                    .Where(t => ids.Contains((int)t.Id))
+                    .Include(t=>t.Reviews)
                     .ToList();
             }
             catch (Exception e)

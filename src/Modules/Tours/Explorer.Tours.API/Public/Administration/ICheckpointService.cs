@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+
 namespace Explorer.Tours.API.Public.Administration
 {
     public interface ICheckpointService 
@@ -18,6 +21,6 @@ namespace Explorer.Tours.API.Public.Administration
 
         public Result<CheckpointDto> Get(long id);
 
-
+        public Result<List<DestinationDto>> GetMostPopularDestinations();
     }
 }

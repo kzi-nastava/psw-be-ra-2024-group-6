@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.Tours;
+using FluentResults;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
@@ -13,5 +15,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         Checkpoint Create(Checkpoint checkpoint);
 
         Checkpoint Get(long id);
+        public List<Checkpoint> GetMostPopularDestinations(int count = 4);
     }
 }
