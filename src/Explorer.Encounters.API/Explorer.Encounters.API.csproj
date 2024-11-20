@@ -6,17 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-
-
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Explorer.BuildingBlocks.Infrastructure\Explorer.BuildingBlocks.Infrastructure.csproj" />
-    <ProjectReference Include="..\Explorer.Blog.Core\Explorer.Blog.Core.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\Explorer.BuildingBlocks.Core\Explorer.BuildingBlocks.Core.csproj" />
   </ItemGroup>
 
-
-
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Internal\" />
+    <Folder Include="Public\" />
   </ItemGroup>
 
 </Project>
