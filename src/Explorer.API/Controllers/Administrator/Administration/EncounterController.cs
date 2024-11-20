@@ -25,12 +25,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpGet("active")]
-        public ActionResult<List<EncounterReadDto>> GetAllActiveEncounters()
-        {
-            var result = _encounterService.GetAllActiveEncounters();
-            return CreateResponse(result);
-        }
+        
         
         [HttpPost]
         public ActionResult<EncounterCreateDto> Create([FromBody] EncounterCreateDto encounterDto)
