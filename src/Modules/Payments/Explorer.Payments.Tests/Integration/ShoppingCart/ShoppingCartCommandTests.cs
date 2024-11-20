@@ -1,22 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Explorer.API.Controllers.Tourist;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Shopping;
-using FluentResults;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Xunit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using Explorer.API.Controllers.Shopping;
+using Explorer.Payments.API.Dtos;
+using IShoppingCartService = Explorer.Payments.API.Public.IShoppingCartService;
 
-namespace Explorer.Tours.Tests.Integration.Tourist
+namespace Explorer.Payments.Tests.Integration.ShoppingCart
 {
     [Collection("Sequential")]
-    public class ShoppingCartCommandTests : BaseToursIntegrationTest
+    public class ShoppingCartCommandTests : BasePaymentsIntegrationTests
     {
-        public ShoppingCartCommandTests(ToursTestFactory factory) : base(factory) { }
+        public ShoppingCartCommandTests(PaymentsTestFactory factory) : base(factory) { }
 
         private static ShoppingCartController CreateController(IServiceScope scope, string userId = "-1")
         {
@@ -42,10 +43,9 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         }
 
         [Theory]
-        [InlineData(-1, 1, "-1")]
-        [InlineData( -1, 1, "-1")]
-        [InlineData( -100, 1, "-1")]
-        public  void AddsItem(int tourId, int expectedOrderItemCount, string userId)
+        [InlineData(-1, 1, "-1000")]
+        [InlineData(-100, 0, "-1001")]
+        public void AddsItem(int tourId, int expectedOrderItemCount, string userId)
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
@@ -59,8 +59,8 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         }
 
         [Theory]
-        [InlineData(-1, -1, 0, "-1")]
-        public  void RemovesItem(int shoppingCartIdint, int itemId, int expectedOrderItemCount, string userId)
+        [InlineData(-5, -5, 0, "-5")]
+        public void RemovesItem(int shoppingCartIdint, int itemId, int expectedOrderItemCount, string userId)
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
@@ -78,7 +78,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         public void ChecksOutCart()
         {
             // Arrange
-            string userId = "-1";
+            string userId = "-30";
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope, userId);
 
@@ -107,7 +107,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             result.StatusCode.ShouldBe(500);
         }
         [Fact]
-       public void ChecksOutCart_already_has_purchaseToken()
+        public void ChecksOutCart_already_has_purchaseToken()
         {
             // Arrange
             string userId = "-21";

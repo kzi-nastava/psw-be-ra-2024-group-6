@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Payments.API.Internal;
 
 namespace Explorer.Payments.Infrastructure;
 
@@ -30,6 +31,7 @@ public static class PaymentsStartup
     private static void SetupCore(IServiceCollection services)
     {
         services.AddScoped<IPurchaseTokenService, PurchaseTokenService>();
+        services.AddScoped<IInternalPurchaseTokenService, InternalPurchaseTokenService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
     }
 

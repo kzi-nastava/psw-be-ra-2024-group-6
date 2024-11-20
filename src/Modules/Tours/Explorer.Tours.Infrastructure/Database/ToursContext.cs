@@ -18,13 +18,7 @@ public class ToursContext : DbContext
     public DbSet<TouristEquipmentManager> TouristEquipmentManagers { get; set; }
     public DbSet<TourExecution> TourExecutions { get; set; }
 
-    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<Review> Reviews { get; set; }
-
-    public DbSet<OrderItem> OrderItems { get; set; }
-
-    public DbSet<PurchaseToken> PurchaseTokens { get; set; }
-
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
@@ -37,9 +31,6 @@ public class ToursContext : DbContext
         ConfigureObject(modelBuilder);
         ConfigureReview(modelBuilder);
         ConfigureEquipment(modelBuilder);
-        ConfigureOrderItem(modelBuilder);
-        ConfigureShoppingCart(modelBuilder);
-        ConfigurePurchaseToken(modelBuilder);
         ConfigureTouristEquipmentManager(modelBuilder);
         modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
         modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
@@ -111,42 +102,7 @@ public class ToursContext : DbContext
             .HasForeignKey(t => t.EquipmentId)
             .OnDelete(DeleteBehavior.Cascade);
     }
-    private static void ConfigureOrderItem(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<OrderItem>(entity =>
-        {
-            entity.Property(item => item.Price).HasColumnType("jsonb");
-            entity.HasOne<ShoppingCart>().WithMany(sc => sc.OrderItems)
-                .HasForeignKey(oi => oi.ShoppingCartId);
 
-            entity.HasOne<Tour>().WithMany().HasForeignKey(oi => oi.TourId);
-        });
-    }
-
-
-    private static void ConfigureShoppingCart(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ShoppingCart>(entity =>
-        {
-            entity.Property(item => item.TotalPrice).HasColumnType("jsonb");
-            entity.HasMany(sc => sc.OrderItems)
-                .WithOne()
-                .HasForeignKey(oi => oi.ShoppingCartId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-        });
-
-    }
-    private static void ConfigurePurchaseToken(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<PurchaseToken>(entity =>
-        {
-            entity.HasOne<Tour>()
-                .WithMany()
-                .HasForeignKey(pt => pt.TourId);
-        });
-
-    }
 
     private static void ConfigureReview(ModelBuilder modelBuilder)
     {

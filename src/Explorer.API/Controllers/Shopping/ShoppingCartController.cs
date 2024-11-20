@@ -1,16 +1,11 @@
-﻿using Explorer.Stakeholders.Infrastructure.Authentication;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Shopping;
-using Explorer.Tours.Core.Domain.ShoppingCarts;
+﻿using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Public;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Explorer.API.Controllers.Tourist
+namespace Explorer.API.Controllers.Shopping
 {
-    [Authorize(Policy = "touristPolicy")]
-    [Route("api/tourist/shop")]
     public class ShoppingCartController : BaseApiController
     {
         private readonly IShoppingCartService _shoppingCartService;
@@ -54,7 +49,7 @@ namespace Explorer.API.Controllers.Tourist
 
             return CreateResponse(result);
         }
-        
+
         [HttpGet("user")]
         public ActionResult<ShoppingCartDto> GetShoppingCartForUser()
         {

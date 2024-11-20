@@ -7,15 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.UseCases;
 
-public class InternalTourPaymentService : IInternalTourPaymentService
+public class InternalTourPaymentService : CrudService<TourDto, Tour>, IInternalTourPaymentService
 {
     private readonly ITourRepository tourRepository;
     private readonly IMapper mapper;
 
-    public InternalTourPaymentService(ITourRepository tourRepository, IMapper mapper)
+    public InternalTourPaymentService(ICrudRepository<Tour> repository, ITourRepository tourRepository, IMapper mapper) : base(repository, mapper)
     {
         this.tourRepository = tourRepository;
         this.mapper = mapper;

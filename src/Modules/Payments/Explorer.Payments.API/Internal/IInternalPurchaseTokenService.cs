@@ -1,17 +1,14 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.Payments.API.Dtos;
 using FluentResults;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Explorer.Tours.API.Dtos;
-using FluentResults;
 
-namespace Explorer.Tours.API.Public.Shopping
+namespace Explorer.Payments.API.Internal
 {
-    public interface IPurchaseTokenService
+    public interface IInternalPurchaseTokenService
     {
         public Result<List<PurchaseTokenDto>> GetByUserId(long id);
         public Result<PurchaseTokenDto> Update(PurchaseTokenDto purchaseToken);

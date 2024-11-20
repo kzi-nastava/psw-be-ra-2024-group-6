@@ -1,13 +1,14 @@
-﻿using Explorer.Tours.Core.Domain.ShoppingCarts;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Payments.Core.Domain;
 using Shouldly;
 using Xunit;
 
-namespace Explorer.Tours.Tests.Integration.Tourist
+namespace Explorer.Payments.Tests.Integration.Tourist
 {
     public class ShoppingCartUnitTests
     {
@@ -16,7 +17,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         public void AddsItem(long userId, long tourId, string tourName, double price)
         {
             // Arrange
-            var shoppingCart = new ShoppingCart(userId, new Price(0));
+            var shoppingCart = new Core.Domain.ShoppingCart(userId, new Price(0));
 
             // Act
             var result = shoppingCart.AddItem(tourId, tourName, price);
@@ -31,7 +32,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
         public void CalculatesTotalPrice()
         {
             // Arrange
-            var shoppingCart = new ShoppingCart(1, new Price(0));
+            var shoppingCart = new Core.Domain.ShoppingCart(1, new Price(0));
             shoppingCart.AddItem(101, "Tour A", 50.0);
             shoppingCart.AddItem(102, "Tour B", 30.0);
 
