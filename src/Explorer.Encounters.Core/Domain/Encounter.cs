@@ -35,6 +35,36 @@ namespace Explorer.Encounters.Core.Domain
         public TypeEncounter TypeEncounter { get; private set;
         
         }
+        public Encounter()
+        {
+
+        }
+             
+
+        public Encounter(string name,string description,Location loc,int xp,Status status,TypeEncounter type)
+        {
+            Name = name;
+            Description = description;
+            Location = loc;
+            Xp = xp;
+            Status = status;
+            TypeEncounter = type;
+
+            Validate();
+        }
+
+        private void Validate()
+        {
+            if(string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Name is required.");
+            if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Description is required.");
+        }
+
+        public bool IsActive()
+        {
+            return Status == Status.Active;
+        }
+
+        
 
     }
 }

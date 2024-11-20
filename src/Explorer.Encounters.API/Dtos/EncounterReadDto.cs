@@ -13,10 +13,13 @@ namespace Explorer.Encounters.API.Dtos
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public LocationCreateDto Location { get; set; }
+        public LocationDto Location { get; set; }
 
         public int Xp { get; set; }
 
         public string Status { get; set; }
+
+        public string TypeEncounter { get; set; }
+
     }
 }

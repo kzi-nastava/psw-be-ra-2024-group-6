@@ -45,7 +45,7 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public void Delete(long id)
         {
-            var entity = _dbContext.Encounters.Include(en => en.Location).FirstOrDefault(t => t.Id == id);
+            var entity = _dbContext.Encounters.FirstOrDefault(t => t.Id == id);
             _dbContext.Encounters.Remove(entity);
             _dbContext.SaveChanges();
         }
@@ -55,11 +55,19 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
             return _dbContext.Encounters.First(e => e.Id == Id);
         }
 
-        public PagedResult<Encounter> GetAllEncounters(int page,int size)
+        public List<Encounter> GetPagedEncounters(int page,int size)
         {
-            var result = _dbContext.Encounters.Include(en => en.Location).GetPaged(page, size);
-            result.Wait();
-            return result.Result;
+            
+            return  _dbContext.Encounters.ToList();
+            
         }
+
+        public List<Encounter> GetAllActiveEncounters()
+        {
+
+            return _dbContext.Encounters.Where(e => e.Status == Status.Active).ToList() ;
+
+        }
+
     }
 }

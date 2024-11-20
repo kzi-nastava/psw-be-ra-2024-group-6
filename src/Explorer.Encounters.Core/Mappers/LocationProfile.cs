@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Explorer.Encounters.Core.Mappers
 {
-    public class EncountersProfile : Profile
+    public class LocationProfile : Profile
     {
-        public EncountersProfile() 
+        public LocationProfile()
         {
-            CreateMap<EncounterCreateDto, Encounter>().ReverseMap();
-            CreateMap<EncounterReadDto,Encounter>().ReverseMap();
+            CreateMap<LocationDto, Location>().ReverseMap();
+            
 
         }
-        
+
     }
 }

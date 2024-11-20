@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
-    [Route("api/encounters")]
+    [Authorize(Policy = "administratorPolicy")]
+    [Route("api/administration/encounters")]
     public class EncounterController : BaseApiController
     {
         
@@ -18,20 +18,27 @@ namespace Explorer.API.Controllers.Administrator.Administration
             _encounterService = encounterService;
         }
         
-        /*[HttpGet]
-        public ActionResult<PagedResult<EncounterReadDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        [HttpGet]
+        public ActionResult<List<EncounterReadDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _encounterService.GetPaged(page, pageSize);
             return CreateResponse(result);
-        }*/
+        }
+
+        [HttpGet("active")]
+        public ActionResult<List<EncounterReadDto>> GetAllActiveEncounters()
+        {
+            var result = _encounterService.GetAllActiveEncounters();
+            return CreateResponse(result);
+        }
         
-        /*[HttpPost]
+        [HttpPost]
         public ActionResult<EncounterCreateDto> Create([FromBody] EncounterCreateDto encounterDto)
         {
             var result = _encounterService.Create(encounterDto);
             return CreateResponse(result);
-        }*/
-        /*
+        }
+        
         [HttpPut("{id:long}")]
         public ActionResult<EncounterCreateDto> Update([FromBody] EncounterCreateDto encounterDto)
         {
@@ -45,6 +52,6 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var result = _encounterService.Delete(id);
             return CreateResponse(result);
         }
-        */
+        
     }
 }

@@ -48,9 +48,19 @@ namespace Explorer.Encounters.Core.UseCases
             return Result.Ok();
         }
 
-        public Result<PagedResult<EncounterReadDto>> GetPaged(int page, int pageSize)
+        public Result<List<EncounterReadDto>> GetPaged(int page, int pageSize)
         {
-            throw new NotImplementedException();
+            
+                return mapper.Map<List<EncounterReadDto>>(_encounterRepository.GetPagedEncounters(page, pageSize));
+            
+            
+        }
+
+        public Result<List<EncounterReadDto>> GetAllActiveEncounters()
+        {
+            
+            return mapper.Map<List<EncounterReadDto>> (_encounterRepository.GetAllActiveEncounters());
+            
         }
 
         public Result<EncounterCreateDto> Update(EncounterCreateDto encounterDto)
