@@ -14,7 +14,7 @@ public class StakeholdersContext : DbContext
     public DbSet<Club> Clubs { get; set; }
 
     public DbSet<Notification> Notifications { get; set; }
-
+    public DbSet<Image> Images { get; set; }
     
     
 
@@ -32,7 +32,9 @@ public class StakeholdersContext : DbContext
 
         ConfigurePerson(modelBuilder);
 
-        ConfigureNotification(modelBuilder); 
+        ConfigureNotification(modelBuilder);
+
+        ConfigureImage(modelBuilder);
     }
 
     private void ConfigurePerson(ModelBuilder modelBuilder)
@@ -74,6 +76,19 @@ public class StakeholdersContext : DbContext
             .WithMany()
             .HasForeignKey(n => n.SenderPersonId)
             .OnDelete(DeleteBehavior.Cascade);
+    }
+    private static void ConfigureImage(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Image>()
+            .HasKey(n => n.Id);
+        modelBuilder.Entity<Image>()
+            .Property(n => n.name)
+            .IsRequired()
+            .HasMaxLength(255);
+        modelBuilder.Entity<Image>()
+            .Property(n => n.data)
+            .IsRequired()
+            .HasColumnType("text");
     }
 
 }
