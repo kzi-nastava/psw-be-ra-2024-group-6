@@ -16,10 +16,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.API.Controllers.Stakeholders;
+using Explorer.Blog.API.Public;
+using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
 using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.PriceDtos;
+using Explorer.Tours.API.Internal;
+using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Tests.Integration.Tours
@@ -178,7 +182,11 @@ namespace Explorer.Tours.Tests.Integration.Tours
 
         private static LandingPageController CreateLandingPageController(IServiceScope scope)
         {
-            return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>())
+            return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>(),
+                scope.ServiceProvider.GetRequiredService<IAuthorService>(),
+                scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+                scope.ServiceProvider.GetRequiredService<IRatingService>(),
+                scope.ServiceProvider.GetRequiredService<IBlogService>())
             {
                 ControllerContext = BuildContext("-2")
             };

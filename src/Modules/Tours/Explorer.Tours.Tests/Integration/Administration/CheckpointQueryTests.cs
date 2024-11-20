@@ -11,6 +11,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.API.Controllers.Stakeholders;
+using Explorer.Blog.API.Public;
+using Explorer.Stakeholders.API.Public;
+using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Public;
 
 namespace Explorer.Tours.Tests.Integration.Administration
 {
@@ -45,9 +50,37 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.ShouldNotBeNull();
             result.Count.ShouldBe(2);
         }
+
+        [Fact]
+        public void Retrieves_most_popular_destinations()
+        {
+            // Arange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateLandingPageController(scope);
+
+            // Act
+            var result = ((ObjectResult)controller.GetMostPopularDestinations().Result)?.Value as List<DestinationDto>;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(2);
+        }
+
         private static CheckpointController CreateController(IServiceScope scope)
         {
             return new CheckpointController(scope.ServiceProvider.GetRequiredService < ICheckpointService>())
+            {
+                ControllerContext = BuildContext("-2")
+            };
+        }
+
+        private static LandingPageController CreateLandingPageController(IServiceScope scope)
+        {
+            return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>(),
+                scope.ServiceProvider.GetRequiredService<IAuthorService>(),
+                scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+                scope.ServiceProvider.GetRequiredService<IRatingService>(),
+                scope.ServiceProvider.GetRequiredService<IBlogService>())
             {
                 ControllerContext = BuildContext("-2")
             };

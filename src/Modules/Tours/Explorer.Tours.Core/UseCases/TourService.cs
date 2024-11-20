@@ -23,7 +23,7 @@ using Explorer.Tours.API.Public.Shopping;
 
 namespace Explorer.Tours.Core.UseCases
 {
-    public class TourService : CrudService<TourDto, Tour>, ITourService, IInternalTourService
+    public class TourService : CrudService<TourDto, Tour>, ITourService
     {
         private readonly ITourRepository _tourRepository;
         private readonly ICrudRepository<Tour> crudRepository;

@@ -16,13 +16,13 @@ namespace Explorer.API.Controllers.Stakeholders
     [Route("api/landingPage")]
     public class LandingPageController : BaseApiController
     {
-        private readonly IInternalTourService _tourService;
+        private readonly ITourService _tourService;
         private readonly IAuthorService _authorService;
         private readonly ICheckpointService _checkpointService;
         private readonly IRatingService _ratingService;
         private readonly IBlogService _blogService;
 
-        public LandingPageController(IInternalTourService tourService, IAuthorService authorService, ICheckpointService checkpointService, IRatingService ratingService, IBlogService blogService)
+        public LandingPageController(ITourService tourService, IAuthorService authorService, ICheckpointService checkpointService, IRatingService ratingService, IBlogService blogService)
         {
             _tourService = tourService;
             _authorService = authorService;
@@ -67,7 +67,7 @@ namespace Explorer.API.Controllers.Stakeholders
         }
 
         [HttpGet("blogs")]
-        public ActionResult<List<BlogHomeDto>> GetAllHome([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<List<BlogHomeDto>> GetBlogs([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _blogService.GetHomePaged(page, pageSize);
             return CreateResponse(result);
