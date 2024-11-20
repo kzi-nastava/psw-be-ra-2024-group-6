@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Explorer.BuildingBlocks.Infrastructure\Explorer.BuildingBlocks.Infrastructure.csproj" />
-    <ProjectReference Include="..\Explorer.Tours.Core\Explorer.Tours.Core.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\Explorer.BuildingBlocks.Infrastructure\Explorer.BuildingBlocks.Infrastructure.csproj" />
+    <ProjectReference Include="..\Explorer.Encounters.Core\Explorer.Encounters.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Database\Repositories\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
-
 
 </Project>
