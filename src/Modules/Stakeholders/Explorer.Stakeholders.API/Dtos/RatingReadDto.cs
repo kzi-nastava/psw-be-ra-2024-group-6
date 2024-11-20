@@ -12,7 +12,9 @@ namespace Explorer.Stakeholders.API.Dtos
         public int PeopleId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string PictureURL { get; set; }
+        public long? ImageId { get; set; }
+        public string? ImageName {  get; set; }
+        public string? ImageData {  get; set; }
         public int StarRating { get; set; }
         public string Comment { get; set; }
         public DateTime PostedAt { get; set; }

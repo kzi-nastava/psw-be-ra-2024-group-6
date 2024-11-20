@@ -2,6 +2,7 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
@@ -17,11 +18,13 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class PersonService : BaseService<PersonDto,Person>, IPersonService
     {
         private readonly IPersonRepository _personRepository;
+        private readonly IImageRepository _imageRepository;
         private readonly IMapper mapper;
 
-        public PersonService(IPersonRepository personRepository,IMapper mapper) : base(mapper)
+        public PersonService(IPersonRepository personRepository,IImageRepository imageRepository,IMapper mapper) : base(mapper)
         {
             _personRepository = personRepository;
+            _imageRepository = imageRepository;
             this.mapper = mapper;
         }
 
@@ -69,6 +72,14 @@ namespace Explorer.Stakeholders.Core.UseCases
             try
             {
                 var el = MapToDto(_personRepository.GetByUserId(id));
+
+                if(el.ImageId != null)  //if the image exists it fills the dto with it
+                {
+                    var img = _imageRepository.Get(el.ImageId.Value);
+                    el.ImageName = img.name;
+                    el.ImageData = img.data;
+                }
+
                 return el;
             }
             catch(KeyNotFoundException e)
@@ -85,7 +96,23 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             try
             {
-                var el = _personRepository.Update(MapToDomain(person));
+                if(person.ImageId != null && person.ImageName != null && person.ImageData != null) //updates the image if it already exists
+                {
+                    var image = mapper.Map<Image>(new ImageDto(person.ImageId.Value, person.ImageName, person.ImageData));
+                    _imageRepository.Update(image);
+                }
+                if(person.ImageId == null && person.ImageName != null && person.ImageData != null) //creates a new image in case it doesnt exist
+                {
+                    var image = mapper.Map<Image>(new ImageDto(null, person.ImageName, person.ImageData));
+                    _imageRepository.Add(image);
+                    person.ImageId = image.Id;
+                }
+                var newPerson = MapToDomain(person);
+                if(newPerson.ImageId == 0)
+                {
+                    newPerson.ImageId = null;
+                }
+                var el = _personRepository.Update(newPerson);
                 return MapToDto(el);
             }
             catch (KeyNotFoundException e)

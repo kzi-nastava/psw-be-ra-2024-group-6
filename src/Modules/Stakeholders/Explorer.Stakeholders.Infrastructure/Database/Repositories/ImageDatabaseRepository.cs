@@ -1,4 +1,5 @@
 ﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Persons;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -44,6 +45,20 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException($"Image not found: {id}");
             }
             return i;
+        }
+        public Image Update(Image image)
+        {
+            try
+            {
+                _dbContext.Images.Update(image);
+                _dbContext.SaveChanges();
+                return image;
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+
+            }
         }
     }
 }

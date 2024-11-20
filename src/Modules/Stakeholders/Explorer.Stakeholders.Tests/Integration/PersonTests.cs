@@ -29,7 +29,7 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "Description updated",
                 Motto = "Motto updated",
                 Email = "updated@gmail.com",
-                PictureURL = "updatedpicture.png"
+                ImageId = -1,
 
             };
 
@@ -43,7 +43,7 @@ namespace Explorer.Stakeholders.Tests.Integration
             result.Surname.ShouldBe(updatedEntity.Surname);
             result.Email.ShouldBe(updatedEntity.Email);
             result.Motto.ShouldBe(updatedEntity.Motto);
-            result.PictureURL.ShouldBe(updatedEntity.PictureURL);
+            result.ImageId.ShouldBe(updatedEntity.ImageId);
 
             var storedEntity = dbContext.People.FirstOrDefault(i => i.Id == result.Id);
             storedEntity.ShouldNotBeNull();
@@ -68,7 +68,7 @@ namespace Explorer.Stakeholders.Tests.Integration
                 Description = "tfw",
                 Surname = "ship it",
                 Motto   = "ok",
-                PictureURL = "pic",
+                ImageId = null,
                 Email = "k@gmail.com"
             };
 

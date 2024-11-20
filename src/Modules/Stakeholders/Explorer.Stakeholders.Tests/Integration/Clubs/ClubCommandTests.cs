@@ -34,7 +34,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Clubs
             {
                 Name = "Planinarski klub Avantura",
                 Description = "Klub za ljubitelje avantura u prirodi.",
-                ImageUrl = "https://example.com/image.jpg",
+                ImageId = null,
                 OwnerId = -21
             };
 
@@ -84,7 +84,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Clubs
                 Id = -10,
                 Name = "Changed Name",
                 Description = "Changed Description",
-                ImageUrl = "Changed url",
+                ImageId = null,
                 OwnerId = -21
             };
 

@@ -41,6 +41,11 @@ public class StakeholdersContext : DbContext
     {
         modelBuilder.Entity<Person>().Property(item => item.Followers).HasColumnType("jsonb");
         modelBuilder.Entity<Person>().Property(item => item.Followings).HasColumnType("jsonb");
+        modelBuilder.Entity<Person>()
+            .HasOne<Image>()
+            .WithMany()
+            .HasForeignKey(p => p.ImageId)
+            .OnDelete(DeleteBehavior.SetNull);
 
     }
 
@@ -59,6 +64,11 @@ public class StakeholdersContext : DbContext
             .HasOne<User>() 
             .WithMany() 
             .HasForeignKey(c => c.OwnerId);
+        modelBuilder.Entity<Club>()
+            .HasOne<Image>()
+            .WithMany()
+            .HasForeignKey(c => c.ImageId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 
     private static void ConfigureNotification(ModelBuilder modelBuilder)

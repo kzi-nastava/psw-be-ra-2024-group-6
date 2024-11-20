@@ -20,7 +20,9 @@ namespace Explorer.Stakeholders.API.Dtos
 
         public string Description { get; set; }
         public string Motto { get; set; }
-        public string PictureURL {  get; set; }
+        public long? ImageId { get; set; }
+        public string? ImageName {  get; set; }
+        public string? ImageData { get; set; }
 
 
 

@@ -12,7 +12,7 @@ public class Person : Entity
     public string Email { get; private set; }
     public string Description { get; private set; }
     public string Motto { get; private set; }
-    public string PictureURL { get; private set; }
+    public long? ImageId { get; set; }
 
     public List<Follower> Followers { get; private set; } //ko tebe prati kao korisnika
 
@@ -30,14 +30,14 @@ public class Person : Entity
         Email = email;
         Description = "";
         Motto = "";
-        PictureURL = "";
+        ImageId = null;
         Followers = new List<Follower>();
         Followings = new List<Follower>();
         Validate();
 
     }
 
-    public Person(long userId, string name, string surname, string email, string description, string motto, string picture)
+    public Person(long userId, string name, string surname, string email, string description, string motto, long imageId)
     {
         UserId = userId;
         Name = name;
@@ -45,7 +45,7 @@ public class Person : Entity
         Email = email;
         Description = description;
         Motto = motto;
-        PictureURL = picture;
+        ImageId = imageId;
         Followers = new List<Follower>();
         Followings = new List<Follower>();
         Validate();

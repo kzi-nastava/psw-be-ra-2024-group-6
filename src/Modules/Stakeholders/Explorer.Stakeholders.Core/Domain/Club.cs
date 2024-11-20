@@ -12,15 +12,15 @@ namespace Explorer.Stakeholders.Core.Domain
     {
         public string Name { get; private set; }
         public string? Description { get; private set; }
-        public string? ImageUrl { get; private set; }
+        public long? ImageId { get; private set; }
         public long OwnerId { get; private set; }
 
 
-        public Club(string name, string? description, string? imageUrl, long ownerId)
+        public Club(string name, string? description, long? imageId, long ownerId)
         {
             Name = name;
             Description = description;
-            ImageUrl = imageUrl;
+            ImageId = imageId;
             OwnerId = ownerId;
             Validate();
         }

@@ -8,8 +8,14 @@ namespace Explorer.Stakeholders.API.Dtos
 {
     public class ImageDto
     {
-        public int Id {  get; set; }
+        public long? Id {  get; set; }
         public string Name { get; set; }
         public string Data {  get; set; }
+        public ImageDto(long? id, string name, string data) 
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Data = data;
+        }
     }
 }

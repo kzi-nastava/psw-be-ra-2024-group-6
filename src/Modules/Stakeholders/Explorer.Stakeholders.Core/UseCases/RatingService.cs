@@ -19,13 +19,15 @@ namespace Explorer.Stakeholders.Core.UseCases
         private IPersonService _personService;
         private IMapper _mapper;
         private IRatingRepository _ratingRepository;
+        private IImageRepository _imageRepository;
 
-        public RatingService(ICrudRepository<Rating> repository, IPersonService personService, IMapper mapper,IRatingRepository ratingRepository) : base(
+        public RatingService(ICrudRepository<Rating> repository, IPersonService personService, IMapper mapper,IRatingRepository ratingRepository, IImageRepository imageRepository) : base(
             repository, mapper)
         {
             this._mapper = mapper;
             this._personService = personService;
             this._ratingRepository = ratingRepository;
+            _imageRepository = imageRepository;
         }
 
         public Result<List<RatingReadDto>> GetBestPaged(int page, int pageSize)
@@ -35,6 +37,12 @@ namespace Explorer.Stakeholders.Core.UseCases
             foreach (var rating in ratings)
             {
                 PersonDto person = _personService.GetByUserId(rating.UserId).Value;
+                var image = _mapper.Map<Image>(new ImageDto(null, "", ""));
+                if (person.ImageId != null)
+                {
+                    image = _imageRepository.Get(person.ImageId.Value);
+                }
+
                 ratingDtos.Add(new RatingReadDto
                 {
                     Id = rating.Id,
@@ -43,7 +51,9 @@ namespace Explorer.Stakeholders.Core.UseCases
                     PostedAt = rating.PostedAt,
                     Name = person.Name,
                     Surname = person.Surname,
-                    PictureURL = person.PictureURL,
+                    ImageId = person.ImageId,
+                    ImageData = image.data,
+                    ImageName = image.name,
                     PeopleId = person.Id
                 });
             }
