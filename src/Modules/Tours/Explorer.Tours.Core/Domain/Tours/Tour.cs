@@ -231,9 +231,7 @@ public class Tour : Entity
         return totalRating / Reviews.Count;
     }
 
-
-
-    public bool CheckIfNotPublished()
+    public bool IsNotPublished()
     {
         return Status != Status.Published;
     }
