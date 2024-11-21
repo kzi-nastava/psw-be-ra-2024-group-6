@@ -31,9 +31,10 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IPersonService _personService;
         private readonly IPurchaseTokenService _tokenService;
         private readonly IReviewService _reviewService;
+        private readonly ITourEquipmentRepository _tourEquipmentRepository;
 
         private readonly IMapper mapper;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IPersonService personService, IPurchaseTokenService token, IReviewService reviewService) : base(repository, mapper)
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IPersonService personService, IPurchaseTokenService token, IReviewService reviewService, ITourEquipmentRepository tourEquipmentRepository) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
@@ -41,6 +42,7 @@ namespace Explorer.Tours.Core.UseCases
             _checkpointService = checkpointService;
             _personService = personService;
             _tokenService = token;
+            _tourEquipmentRepository = tourEquipmentRepository;
 
             this.mapper = mapper;
             _reviewService = reviewService;
@@ -61,6 +63,11 @@ namespace Explorer.Tours.Core.UseCases
                 {
                     o.TourId = newTour.Id;
                     _objectService.Create(mapper.Map<ObjectCreateDto>(o));
+                }
+                foreach(EquipmentDto t in createTour.TourInfo.Equipment)
+                {
+                    TourEquipment tourEquipment = new TourEquipment(newTour.Id, t.Id);
+                    _tourEquipmentRepository.Create(tourEquipment);
                 }
 
                 return Result.Ok(createTour);

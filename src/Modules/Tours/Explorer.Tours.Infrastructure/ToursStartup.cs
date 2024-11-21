@@ -68,6 +68,7 @@ public static class ToursStartup
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
         services.AddScoped<IPurchaseTokenRepository, PurchaseTokenDatabaseRepository>();
+        services.AddScoped<ITourEquipmentRepository, TourEquipmentRepository>();
 
 
         services.AddDbContext<ToursContext>(opt =>

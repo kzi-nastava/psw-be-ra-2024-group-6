@@ -24,7 +24,7 @@ public class ToursContext : DbContext
     public DbSet<OrderItem> OrderItems { get; set; }
 
     public DbSet<PurchaseToken> PurchaseTokens { get; set; }
-
+    public DbSet<TourEquipment> TourEquipment { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
@@ -82,6 +82,20 @@ public class ToursContext : DbContext
             entity.HasMany<Checkpoint>(t=>t.Checkpoints)
                   .WithOne()
                   .HasForeignKey(c => c.TourId);
+
+            entity.HasMany(t => t.Equipment)
+              .WithMany()
+              .UsingEntity<TourEquipment>(
+                  j => j.HasOne(te => te.Equipment)
+                        .WithMany()
+                        .HasForeignKey(te => te.EquipmentId),
+                  j => j.HasOne(te => te.Tour)
+                        .WithMany()
+                        .HasForeignKey(te => te.TourId),
+                  j =>
+                  {
+                      j.ToTable("TourEquipment");
+                  });
 
             entity.HasMany<Object>(t =>t.Objects)
                   .WithOne()
@@ -157,6 +171,26 @@ public class ToursContext : DbContext
                   .HasForeignKey(r => r.TourId);
         });
     }
+    /*
+    private static void ConfigureTourEquipment(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TourEquipment>(entity =>
+        {
+            entity.HasKey(te => new { te.TourId, te.EquipmentId });
+
+            entity.HasOne(te => te.Tour)
+                  .WithMany() // Tour nema kolekciju TourEquipment
+                  .HasForeignKey(te => te.TourId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(te => te.Equipment)
+                  .WithMany() // Equipment nema kolekciju TourEquipment
+                  .HasForeignKey(te => te.EquipmentId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.ToTable("TourEquipment");
+        });
+    } */
 
 
 
