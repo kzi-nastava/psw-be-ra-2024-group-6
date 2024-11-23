@@ -19,6 +19,7 @@ using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Internal;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Internal;
 
@@ -201,6 +202,22 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Ok(boughtTours);
             }
             catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<TourCardDto>> GetMostPopularTours(int count)
+        {
+            try
+            {
+                var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
+                var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
+
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), tour.GetAverageRating())).ToList();
+
+            }
+            catch (Exception e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }

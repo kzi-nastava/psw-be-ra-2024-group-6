@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
@@ -41,5 +42,29 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 
         }
 
+        public List<Checkpoint> GetMostPopularDestinations(int count = 4)
+        {
+            try
+            {
+
+                var popularDestinations = _dbContext.Checkpoints
+                    .GroupBy(ch => new
+                    {
+                        City = ch.Location.City,
+                        Country = ch.Location.Country,
+                        ch.TourId
+                    })
+                    .OrderByDescending(g => g.Count())
+                    .Take(count)
+                    .Select(g => g.OrderByDescending(ch => ch.Name).First())
+                    .ToList();
+
+                return popularDestinations;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error fetching most popular destinations", e);
+            }
+        }
     }
 }

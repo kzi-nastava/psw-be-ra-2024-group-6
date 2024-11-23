@@ -61,7 +61,7 @@ namespace Explorer.Blog.Core.UseCases
                 {
                     Description = blog.Description,
                     Id = blog.Id,
-                    ImageUrl = blog.Pictures.First().Url,
+                    ImageUrl = blog.Pictures.FirstOrDefault()?.Url,
                     Title = blog.Title,
                     CreatedAt = blog.CreatedAt
                 });

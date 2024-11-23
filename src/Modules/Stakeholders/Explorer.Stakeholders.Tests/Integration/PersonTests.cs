@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Explorer.API.Controllers.Stakeholders;
 using System.Collections.Generic;
+using Explorer.Blog.API.Public;
+using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.API.Public;
 
 namespace Explorer.Stakeholders.Tests.Integration
 {
@@ -121,7 +124,20 @@ namespace Explorer.Stakeholders.Tests.Integration
             result.StatusCode.ShouldBe(200);
         }
 
-        
+        [Fact]
+        public void Retrieves_most_popular_authors()
+        {
+            // Arange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateLandingPageController(scope);
+
+            // Act
+            var result = ((ObjectResult)controller.GetMostPopularAuthors().Result)?.Value as List<PersonDto>;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(3);
+        }
 
         private static PersonController CreateController(IServiceScope scope)
         {
@@ -136,6 +152,18 @@ namespace Explorer.Stakeholders.Tests.Integration
             return new PersonController(scope.ServiceProvider.GetRequiredService<IPersonService>(), scope.ServiceProvider.GetRequiredService<IUserService>())
             {
                 ControllerContext = BuildContext(id.ToString())
+            };
+        }
+
+        private static LandingPageController CreateLandingPageController(IServiceScope scope)
+        {
+            return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>(),
+                scope.ServiceProvider.GetRequiredService<IAuthorService>(),
+                scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+                scope.ServiceProvider.GetRequiredService<IRatingService>(),
+                scope.ServiceProvider.GetRequiredService<IBlogService>())
+            {
+                ControllerContext = BuildContext("-2")
             };
         }
     }
