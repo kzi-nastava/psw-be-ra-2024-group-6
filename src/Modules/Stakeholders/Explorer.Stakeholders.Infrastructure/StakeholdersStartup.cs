@@ -41,6 +41,7 @@ public static class StakeholdersStartup
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IInternalInstructorService, InternalInstructorService>();
         services.AddScoped<IAuthorService, AuthorService>();
+        services.AddScoped<IInternalTourPersonService, InternalTourPersonService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)

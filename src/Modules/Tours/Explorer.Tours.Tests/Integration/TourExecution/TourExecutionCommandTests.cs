@@ -9,13 +9,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.API.Controllers.Tourist;
+using Explorer.Payments.API.Internal;
+using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.UseCases.Shopping;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Explorer.Tours.API.Public;
-using Explorer.Tours.API.Public.Shopping;
 
 namespace Explorer.Tours.Tests.Integration.TourExecution
 {
@@ -168,7 +170,6 @@ namespace Explorer.Tours.Tests.Integration.TourExecution
             return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>(),
            scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
            scope.ServiceProvider.GetRequiredService<ITourService>(),
-           scope.ServiceProvider.GetRequiredService<IPurchaseTokenService>(),
            scope.ServiceProvider.GetRequiredService<IObjectService>())
             {
                 ControllerContext = BuildContext("-21")
