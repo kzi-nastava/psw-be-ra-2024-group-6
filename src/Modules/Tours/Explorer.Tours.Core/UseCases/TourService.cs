@@ -21,6 +21,7 @@ using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Internal;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -336,20 +337,7 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-                List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
-
-                List<Tour> nearbyTours = new List<Tour>();
-
-                foreach (var tour in tours)
-                {
-                    if (tour.IsTourNearby(latitude, longitude, maxDistance))
-                    {
-                        //nearbyToursDtos.Add(new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString()));
-                        tour.setReviews(mapper.Map<List<Review>>(_reviewService.GetReviewsFromTourId(tour.Id)));
-                        nearbyTours.Add(tour);
-                    }
-
-                }
+                List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
 
                 List<TourCardDto> nearbyToursDto = new List<TourCardDto>();
 
@@ -369,6 +357,38 @@ namespace Explorer.Tours.Core.UseCases
             {
                 return Result.Fail(ex.Message);
             }
+        }
+
+        private List<Tour> GetNearbyTours(double latitude, double longitude, double maxDistance)
+        {
+            List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
+
+            List<Tour> nearbyTours = new List<Tour>();
+
+            foreach (var tour in tours)
+            {
+                if (tour.IsTourNearby(latitude, longitude, maxDistance))
+                {
+                    //nearbyToursDtos.Add(new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString()));
+                    tour.setReviews(mapper.Map<List<Review>>(_reviewService.GetReviewsFromTourId(tour.Id)));
+                    nearbyTours.Add(tour);
+                }
+
+            }
+
+            return nearbyTours;
+        }
+
+        public Result<List<TourMapDto>> FindToursOnMapNearby(double latitude, double longitude, double maxDistance)
+        {
+            List<TourMapDto> nearbyToursDtos = new List<TourMapDto>();
+            List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
+            foreach (Tour tour in nearbyTours)
+            {
+                nearbyToursDtos.Add(new TourMapDto(mapper.Map<LocationReadDto>(tour.Checkpoints.First().Location)));
+            }
+
+            return nearbyToursDtos;
         }
 
     }

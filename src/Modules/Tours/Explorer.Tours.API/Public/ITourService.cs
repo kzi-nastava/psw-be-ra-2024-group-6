@@ -27,6 +27,7 @@ namespace Explorer.Tours.API.Public
         Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize);
         Result<TourPreviewDto> GetTourPreview(long tourId);
         Result<List<TourCardDto>> FindToursNearby(double latitude, double longitude, double radius);
+        Result<List<TourMapDto>> FindToursOnMapNearby(double latitude, double longitude, double radius);
         //Result GetTourDetailsByTourId(int tourId);
 
 
