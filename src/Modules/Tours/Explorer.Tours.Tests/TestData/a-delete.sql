@@ -4,8 +4,4 @@ DELETE FROM tours."Checkpoints";
 DELETE FROM tours."Equipment";
 DELETE FROM tours."TouristEquipmentManagers";
 DELETE FROM tours."TourExecutions";
-DELETE FROM tours."OrderItems";
-DELETE FROM tours."ShoppingCarts";
 DELETE FROM tours."Reviews";
-
-
