@@ -20,15 +20,15 @@ public class BlogContext : DbContext
             .Property(item => item.Ratings).HasColumnType("jsonb");
 
         modelBuilder.Entity<BlogDomain.Blogs.Blog>()
-                    .HasMany(b => b.Pictures) // Blog ima mnogo slika
-                    .WithOne(p => p.Blog)      // Slika pripada jednom blogu
-                    .HasForeignKey(p => p.BlogId)  // Strani ključ je BlogId
-                    .OnDelete(DeleteBehavior.Cascade);  // Kada se obriše blog, brišu se i slike
+                    .HasMany(b => b.Pictures) 
+                    .WithOne(p => p.Blog)      
+                    .HasForeignKey(p => p.BlogId)  
+                    .OnDelete(DeleteBehavior.Cascade);  
         modelBuilder.Entity<Comment>()
-                    .HasOne(c => c.Blog)         // Komentar pripada jednom blogu
-                    .WithMany(b => b.Comments)    // Blog može imati više komentara
-                    .HasForeignKey(c => c.BlogId) // Strani ključ u Comment tabeli je BlogId
-                    .OnDelete(DeleteBehavior.Cascade); // Kada se obriše blog, brišu se i komentari
+                    .HasOne(c => c.Blog)         
+                    .WithMany(b => b.Comments)    
+                    .HasForeignKey(c => c.BlogId) 
+                    .OnDelete(DeleteBehavior.Cascade); 
         modelBuilder.HasDefaultSchema("blog");
 
     }

@@ -14,11 +14,14 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Explorer.Stakeholders.API.Public;
+using Explorer.Payments.API.Internal;
+using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Shopping;
+using Explorer.Tours.API.Internal;
+using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.API.Internal;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -28,12 +31,12 @@ namespace Explorer.Tours.Core.UseCases
         private readonly ICrudRepository<Tour> crudRepository;
         private readonly ICheckpointService _checkpointService;
         private readonly IObjectService _objectService;
-        private readonly IPersonService _personService;
-        private readonly IPurchaseTokenService _tokenService;
+        private readonly IInternalTourPersonService _personService;
+        private readonly IInternalPurchaseTokenService _tokenService;
         private readonly IReviewService _reviewService;
 
         private readonly IMapper mapper;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IPersonService personService, IPurchaseTokenService token, IReviewService reviewService) : base(repository, mapper)
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
@@ -45,6 +48,42 @@ namespace Explorer.Tours.Core.UseCases
             this.mapper = mapper;
             _reviewService = reviewService;
         }
+
+        public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId)
+        {
+            try
+            {
+                // Preuzimanje svih tura sa stranicama
+                var toursResult = GetPaged(page, pageSize); // Poziva već postojeću metodu za stranicu
+                if (toursResult.IsFailed)
+                    return Result.Fail(toursResult.Errors);
+
+                // Preuzimanje purchase tokena za korisnika
+                var purchaseTokensResult = _tokenService.GetByUserId(userId);
+                if (purchaseTokensResult.IsFailed)
+                    return Result.Fail(purchaseTokensResult.Errors);
+
+                // Logika za filtriranje tura koje je korisnik kupio
+                var allTours = toursResult.Value;
+                var purchasedTourIds = purchaseTokensResult.Value
+                    .Where(pt => !pt.isExpired)
+                    .Select(pt => pt.TourId)
+                    .ToHashSet();
+
+                var filteredTours = allTours.Results
+                    .Where(tour => purchasedTourIds.Contains((int)tour.Id))
+                    .ToList();
+
+                var pagedResult = new PagedResult<TourDto>(filteredTours, filteredTours.Count);
+
+                return Result.Ok(pagedResult);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
+
 
         public Result<TourCreateDto> Create(TourCreateDto createTour)
         {
@@ -73,12 +112,21 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<List<TourDto>> GetByUserId(long userId)
+        public Result<List<TourAuthorCardDto>> GetByUserId(long userId)
         {
             try
             {
-                var el = MapToDto(_tourRepository.GetByUserId(userId));
-                return el;
+                List<Tour> tours = _tourRepository.GetByUserId(userId);
+                List<TourAuthorCardDto> tourAuthorCardDtos = new List<TourAuthorCardDto>();
+
+                foreach (Tour tour in tours)
+                {
+                    double avg = tour.GetAverageRating();
+                    TourAuthorCardDto tourAuthorCardDto = new TourAuthorCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg, tour.Status.ToString(), tour.StatusChangeTime);
+                    tourAuthorCardDtos.Add(tourAuthorCardDto);
+                }
+
+                return tourAuthorCardDtos;
             }
             catch (KeyNotFoundException e)
             {
@@ -89,6 +137,22 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
 
+        }
+        public Result<TourDto> GetById(long tourId)
+        {
+            try
+            {
+                var el = MapToDto(_tourRepository.GetById(tourId));
+                return el;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
         }
 
         public Result<TourReadDto> GetTourDetailsByTourId(long tourId, long userId)
@@ -122,6 +186,66 @@ namespace Explorer.Tours.Core.UseCases
             var result = _tokenService.GetByUserAndTour(userId, tourId);
             return (result.Value != null);
         }
+
+        public Result<List<TourCardDto>> GetBoughtTours(long userId)
+        {
+            try
+            {
+                List<TourCardDto> boughtTours = new List<TourCardDto>();
+
+                foreach (var tour in GetAllTourCards(0,0).Value)
+                {
+                    if(checkIfUserBoughtTour(tour.Id, userId))
+                        boughtTours.Add(tour);
+                }
+
+                return Result.Ok(boughtTours);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<TourCardDto>> GetMostPopularTours(int count)
+        {
+            try
+            {
+                var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
+                var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
+
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), tour.GetAverageRating())).ToList();
+
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize)
+        {
+            try
+            {
+                var ids = _checkpointService.GetTourIdsForDestination(city, country, page, pageSize);
+                var tours = _tourRepository.GetAllByIds(ids);
+                var result = new List<DestinationTourDto>();
+
+                foreach (var tour in tours)
+                {
+                    if (tour.IsNotPublished()) continue;
+                    var firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
+                    result.Add(new DestinationTourDto(tour.Name, tour.Description, tour.Difficulty.ToString(), tour.Price.Amount, tour.TotalLength.ToString(), firstCp));
+                }
+
+                return result;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
 
         public Result<TourReadDto> Publish(long tourId, int userId)
         {
@@ -195,7 +319,7 @@ namespace Explorer.Tours.Core.UseCases
             List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
             List<TourReviewDto> reviewDtos = GetTourReviewsDtos(tour.Reviews);
             TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
-                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount, author.Name + " " + author.Surname,
+                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount,author.UserId, author.Name + " " + author.Surname,author.PictureURL,
                 tour.TotalLength.ToString(), durations, firstCp, reviewDtos);
 
             return tourPreviewDto;
@@ -211,12 +335,15 @@ namespace Explorer.Tours.Core.UseCases
 
                 var reviewDto = new TourReviewDto
                 {
+                    Id = review.Id,
                     UserId = reviewer.UserId,
                     Name = reviewer.Name,
                     Surname = reviewer.Surname,
                     Comment = review.Comment,
                     Rating = review.Rating, 
-                    ReviewDate = review.ReviewDate 
+                    ReviewDate = review.ReviewDate,
+                    AuthorImage = reviewer.PictureURL,
+                    Images= review.Images
                 };
 
                 reviewDtos.Add(reviewDto);
@@ -283,5 +410,6 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(ex.Message);
             }
         }
+
     }
 }

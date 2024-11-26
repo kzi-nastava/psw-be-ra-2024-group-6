@@ -44,7 +44,9 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories
         public BlogDomain.Blogs.Blog Get(long id)
         {
             var blog = _dbContext.Blogs.Where(t => t.Id == id)
-                .Include(t => t.Pictures).FirstOrDefault();
+                .Include(t => t.Pictures)
+                .Include(t => t.Comments)
+                .FirstOrDefault();
             if (blog == null)
             {
                 throw new KeyNotFoundException($"Blog not found: {id}");
@@ -52,10 +54,16 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories
             return blog;
         }
 
+        public IEnumerable<BlogDomain.Blogs.Blog> GetAllBlogsWithPictures()
+        {
+            return _dbContext.Blogs
+                .Include(t => t.Pictures)  
+                .ToList();  
+        }
         public List<Core.Domain.Blogs.Blog>  GetAggregatePaged(int page, int pageSize)
         {
             return _dbContext.Blogs
-                .Skip((page - 1) * pageSize)
+                .Skip(int.Abs((page - 1) * pageSize))
                 .Take(pageSize)
                 .Include(b=>b.Pictures)
                 .ToList();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
+using FluentResults;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
@@ -21,5 +23,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public PagedResult<Tour> GetToursWithReviews(int page, int size);
 
         public List<Tour> GetPublishedToursWithCheckpoints();
+        public Tour GetById(long tourId);
+        public List<Tour> GetAllByIds(List<int> ids);
     }
 }

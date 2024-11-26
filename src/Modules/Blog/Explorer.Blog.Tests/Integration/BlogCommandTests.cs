@@ -32,7 +32,7 @@ namespace Explorer.Blog.Tests.Integration
             {
                 Title = "Moji utisci o Rimu",
                 Description = "Obožavam Rim. Najbolji grad ikada!!!!",
-                UserId = 1,
+                UserId = -1,
                 Status = "Published",
                 CreatedAt = DateTime.Now.ToUniversalTime(), 
                 Pictures = new List<BlogPictureDto>()
@@ -47,7 +47,7 @@ namespace Explorer.Blog.Tests.Integration
             result.Description.ShouldBe(newEntity.Description);
             result.Title.ShouldBe(newEntity.Title);
             result.Status.ShouldBe(newEntity.Status);
-            result.UserId.ShouldBe(1);
+            result.UserId.ShouldBe(-1);
 
             // Assert - Database
             var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Description == newEntity.Description);
@@ -117,7 +117,7 @@ namespace Explorer.Blog.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
 
             // Act
-            var result = ((ObjectResult)controller.GetBlogDetails(-1).Result)?.Value as BlogDto;
+            var result = ((ObjectResult)controller.GetBlogDetails(-1).Result)?.Value as BlogDetailsDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -153,7 +153,7 @@ namespace Explorer.Blog.Tests.Integration
 
         private static BlogController CreateController(IServiceScope scope)
         {
-            return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>(), scope.ServiceProvider.GetRequiredService<ICommentService>())
+            return new BlogController(scope.ServiceProvider.GetRequiredService<IBlogService>())
             {
                 ControllerContext = BuildContext("-1")
             };

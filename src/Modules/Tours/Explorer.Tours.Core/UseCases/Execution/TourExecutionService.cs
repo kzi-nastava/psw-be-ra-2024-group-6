@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
@@ -16,11 +17,11 @@ namespace Explorer.Tours.Core.UseCases.Execution
     public class TourExecutionService : BaseService<TourExecutionDto, TourExecution>, ITourExecutionService
     {
         private readonly ITourExecutionRepository _tourExecutionRepository;
-        private readonly IPurchaseTokenRepository _purchaseTokenRepository;
-        public TourExecutionService(ITourExecutionRepository tourExecutionRepository, IPurchaseTokenRepository _tokenRepository, IMapper mapper) : base(mapper)
+        private readonly IInternalPurchaseTokenService _purchaseTokenService;
+        public TourExecutionService(ITourExecutionRepository tourExecutionRepository, IInternalPurchaseTokenService _token, IMapper mapper) : base(mapper)
         {
             _tourExecutionRepository = tourExecutionRepository;
-            _purchaseTokenRepository = _tokenRepository;
+            _purchaseTokenService = _token;
 
         }
 
@@ -45,24 +46,24 @@ namespace Explorer.Tours.Core.UseCases.Execution
             }
             catch (ArgumentException e)
             {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Invalid argument exception");
             }
         }
 
 
         private bool checkIfTouristBoughtTour(TourExecutionDto tourExecution)
         {
-            return _purchaseTokenRepository.GetByUserAndTour(tourExecution.TouristId, tourExecution.TourId) != null;
+            return _purchaseTokenService.GetByUserAndTour(tourExecution.TouristId, tourExecution.TourId).Value != null;
         }
 
         public Result<TourExecutionDto> FinalizeTourExecution(int tourExecutionId, string status, int touristId)
         {
             try
             {
-                var tour = _tourExecutionRepository.GetByIdAndTouristId(tourExecutionId, touristId);
-                tour.Finalize(status);
-                _tourExecutionRepository.Update(tour);
-                return MapToDto(tour);
+                var tourExecution = _tourExecutionRepository.GetByIdAndTouristId(tourExecutionId, touristId);
+                tourExecution.Finalize(status);
+                var updatedTourExecution = _tourExecutionRepository.Update(tourExecution);
+                return MapToDto(updatedTourExecution);
             }
             catch (KeyNotFoundException e)
             {

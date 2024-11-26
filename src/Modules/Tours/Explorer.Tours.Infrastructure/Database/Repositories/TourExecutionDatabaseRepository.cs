@@ -15,7 +15,13 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         public TourExecutionDatabaseRepository(ToursContext dbContext) : base(dbContext) {}
         public TourExecution? GetByIdAndTouristId(int tourExecutionId, int touristId)
         {
-            return DbContext.TourExecutions.FirstOrDefault(te => te.Id == tourExecutionId && te.TouristId == touristId);
+            var tourExecution = DbContext.TourExecutions.FirstOrDefault(te => te.Id == tourExecutionId && te.TouristId == touristId);
+            if (tourExecution == null)
+            {
+                throw new KeyNotFoundException("Tour execution not found");
+            }
+
+            return tourExecution;
         }
 
         public TourExecution? GetByTourIdAndTouristId(int tourId, int touristId)
