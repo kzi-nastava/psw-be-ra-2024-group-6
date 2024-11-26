@@ -32,16 +32,16 @@ namespace Explorer.Encounters.Core.Domain
 
         public Status Status { get; private set; }
 
-        public TypeEncounter TypeEncounter { get; private set;
-        
-        }
+        public TypeEncounter TypeEncounter { get; private set; }
+        public int CreatorId { get; private set; }
+        public bool IsRequiredForCheckpoint { get; private set; }
         public Encounter()
         {
 
         }
              
 
-        public Encounter(string name,string description,Location loc,int xp,Status status,TypeEncounter type)
+        public Encounter(string name,string description,Location loc,int xp,Status status,TypeEncounter type, int creatorId, bool isRequiredForCheckpoint = false)
         {
             Name = name;
             Description = description;
@@ -49,7 +49,8 @@ namespace Explorer.Encounters.Core.Domain
             Xp = xp;
             Status = status;
             TypeEncounter = type;
-
+            CreatorId = creatorId;
+            IsRequiredForCheckpoint = isRequiredForCheckpoint;
             Validate();
         }
 

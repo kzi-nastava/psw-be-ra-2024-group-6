@@ -19,6 +19,7 @@ namespace Explorer.Encounters.API.Dtos
         public string Status { get; set; }
 
         public string TypeEncounter {  get; set; }
+        public bool IsRequiredForCheckpoint { get; set; }
 
 
     }
