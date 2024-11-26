@@ -19,14 +19,14 @@ namespace Explorer.API.Controllers.Shopping
         }
 
         [HttpGet("{id:long}")]
-        public ActionResult<CouponDTO> GetCoupon(long id)
+        public ActionResult<CouponDto> Get(long id)
         {
             var result = _couponService.Get(id);
             return CreateResponse(result);
         }
 
         [HttpGet("author/{authorId:long}")]
-        public ActionResult<List<CouponDTO>> GetCouponsByAuthor(long authorId)
+        public ActionResult<List<CouponDto>> GetCouponsByAuthor(long authorId)
         {
             var userId = User.UserId();
             var result = _couponService.GetAllByAuthorId(authorId, userId);
@@ -34,16 +34,15 @@ namespace Explorer.API.Controllers.Shopping
         }
 
         [HttpPost]
-        public ActionResult<CouponDTO> CreateCoupon([FromBody] CouponDTO couponDto)
+        public ActionResult<CouponDto> Create([FromBody] CouponDto couponDto)
         {
             var userId = User.UserId();
-            couponDto.AuthorId = userId;
-            var result = _couponService.Create(couponDto);
+            var result = _couponService.Create(couponDto, userId);
             return CreateResponse(result);
         }
 
         [HttpPut("{id:long}")]
-        public ActionResult<CouponDTO> UpdateCoupon([FromBody] CouponDTO couponDto)
+        public ActionResult<CouponDto> Update([FromBody] CouponDto couponDto)
         {
             var userId = User.UserId();
             var result = _couponService.Update(couponDto, userId);
@@ -51,7 +50,7 @@ namespace Explorer.API.Controllers.Shopping
         }
 
         [HttpDelete("{id:long}")]
-        public IActionResult DeleteCoupon(long id)
+        public ActionResult Delete(long id)
         {
             var userId = User.UserId();
 

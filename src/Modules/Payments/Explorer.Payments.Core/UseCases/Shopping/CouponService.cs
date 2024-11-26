@@ -14,7 +14,7 @@ using FluentResults;
 
 namespace Explorer.Payments.Core.UseCases.Shopping
 {
-    public class CouponService : CrudService<CouponDTO, Coupon>, ICouponService
+    public class CouponService : CrudService<CouponDto, Coupon>, ICouponService
     {
         private readonly ICouponRepository _couponRepository;
         private readonly IInternalTourPaymentService _tourPaymentService;
@@ -26,32 +26,39 @@ namespace Explorer.Payments.Core.UseCases.Shopping
             _tourPaymentService = tourPayment;
         }
 
-        public Result<CouponDTO> Get(long id)
+        public Result<CouponDto> Get(long id)
         {
             return MapToDto(_couponRepository.Get(id));
         }
 
 
 
-        public Result<List<CouponDTO>> GetAllByAuthorId(long id, long userId)
+        public Result<List<CouponDto>> GetAllByAuthorId(long id, long userId)
         {
             if(!CheckIfAuthorized(id, userId, null))
-                return Result.Fail("User did not create this coupon.");
-            else
-            {
-                return MapToDto(_couponRepository.GetAllByAuthorId(id));
-            }
+                return Result.Fail(FailureCode.Forbidden).WithError("User did not create this coupon.");
+
+                
+            return MapToDto(_couponRepository.GetAllByAuthorId(id));
+
         }
 
-        public Result<CouponDTO> Update(CouponDTO coupon, long userId)
+        public Result<CouponDto> Create(CouponDto coupon, long userId)
         {
             if (!CheckIfAuthorized(coupon.AuthorId, userId, coupon.TourId))
-                return Result.Fail("User did not create this coupon.");
+                return Result.Fail(FailureCode.Forbidden).WithError("User is not the same as the author or tour is not created by that author.");
+            
 
-            else
-            {
-                return MapToDto(_couponRepository.Update(MapToDomain(coupon)));
-            }
+            return MapToDto(_couponRepository.Create(MapToDomain(coupon)));
+        }
+
+        public Result<CouponDto> Update(CouponDto coupon, long userId)
+        {
+            if (!CheckIfAuthorized(coupon.AuthorId, userId, coupon.TourId))
+                return Result.Fail(FailureCode.Forbidden).WithError("User did not create this coupon.");
+
+            return MapToDto(_couponRepository.Update(MapToDomain(coupon)));
+
 
         }
 
@@ -59,12 +66,11 @@ namespace Explorer.Payments.Core.UseCases.Shopping
         {
             var coupon = Get(id);
             if (!CheckIfAuthorized(coupon.Value.AuthorId, userId, null))
-                return Result.Fail("User did not create this coupon.");
-            else
-            {
-                _couponRepository.Delete(id);
-                return Result.Ok();
-            }
+                return Result.Fail(FailureCode.Forbidden).WithError("User did not create this coupon.");
+
+            _couponRepository.Delete(id);
+            return Result.Ok();
+            
         }
 
 
@@ -77,12 +83,10 @@ namespace Explorer.Payments.Core.UseCases.Shopping
             {
                 return isAuthor;
             }
-            else
-            {
-                var isAuthorOfTour = _tourPaymentService.IsUserAuthor((long)tourId, userId);
 
-                return isAuthor && isAuthorOfTour;
-            }
+            var isAuthorOfTour = _tourPaymentService.IsUserAuthor((long)tourId, userId);
+            return isAuthor && isAuthorOfTour;
+            
         }
     }
 }

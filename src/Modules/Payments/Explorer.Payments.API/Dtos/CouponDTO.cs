@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Payments.API.Dtos
 {
-    public class CouponDTO
+    public class CouponDto
     {
         public int Id { get; set; }
         public string Code {get; set; }

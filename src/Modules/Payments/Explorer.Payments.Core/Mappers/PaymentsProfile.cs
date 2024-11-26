@@ -31,6 +31,6 @@ public class PaymentsProfile : Profile
         CreateMap<PurchaseTokenDto, PurchaseToken>().ReverseMap();
 
 
-        CreateMap<Coupon, CouponDTO>().ReverseMap();
+        CreateMap<Coupon, CouponDto>().ReverseMap();
     }
 }

@@ -11,10 +11,10 @@ namespace Explorer.Payments.API.Public
 {
     public interface ICouponService
     {
-        Result<CouponDTO> Get(long id);
-        Result<List<CouponDTO>> GetAllByAuthorId(long id, long userId);
-        Result<CouponDTO> Create(CouponDTO coupon);
-        Result<CouponDTO> Update(CouponDTO coupon, long userId);
+        Result<CouponDto> Get(long id);
+        Result<List<CouponDto>> GetAllByAuthorId(long id, long userId);
+        Result<CouponDto> Create(CouponDto coupon, long userId);
+        Result<CouponDto> Update(CouponDto coupon, long userId);
         Result Delete(long id, long userId);
     }
 }
