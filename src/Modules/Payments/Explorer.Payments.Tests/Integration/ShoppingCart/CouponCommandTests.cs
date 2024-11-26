@@ -76,7 +76,7 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
         [Theory]
         [InlineData("BBBBBBBB", 25, -11, -1, "2025-12-12", "-11", true)]
         [InlineData("ABBBBBBB", 10, -11, -2, "2025-12-12", "-22", false)] // Not authorized user
-        public void UpdateCoupon_ValidatesAuthorizationAndUpdates(string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId, bool success)
+        public void Updates(string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId, bool success)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = createController(scope, userId);
@@ -111,7 +111,7 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
         [Theory]
         [InlineData(-1, "-11", true)] // Valid delete
         [InlineData(-2, "-22", false)] // Unauthorized delete
-        public void DeleteCoupon_ValidatesAuthorizationAndDeletes(long couponId, string userId, bool success)
+        public void Deletes(long couponId, string userId, bool success)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = createController(scope, userId);
@@ -136,7 +136,7 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
         [Theory]
         [InlineData(-11, "-11", true)] // Valid author and user
         [InlineData(-11, "-22", false)] // Unauthorized user
-        public void GetCouponsByAuthor_ValidatesAuthorizationAndReturnsCoupons(long authorId, string userId, bool success)
+        public void GetAllByAuthor(long authorId, string userId, bool success)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = createController(scope, userId);
