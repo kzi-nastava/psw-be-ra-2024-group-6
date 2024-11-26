@@ -66,5 +66,23 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new Exception("Error fetching most popular destinations", e);
             }
         }
+
+        public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize)
+        {
+            try
+            {
+                return _dbContext.Checkpoints
+                    .Where(ch => ch.Location.City == city && ch.Location.Country == country)
+                    .GroupBy(ch => ch.TourId)
+                    .Select(group => Convert.ToInt32(group.Key))
+                    .Skip(page * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+        }
     }
 }

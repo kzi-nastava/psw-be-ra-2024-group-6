@@ -22,5 +22,6 @@ namespace Explorer.Tours.API.Public.Administration
         public Result<CheckpointDto> Get(long id);
 
         public Result<List<DestinationDto>> GetMostPopularDestinations();
+        public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
     }
 }

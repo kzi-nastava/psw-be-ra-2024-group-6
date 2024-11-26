@@ -72,5 +72,12 @@ namespace Explorer.API.Controllers.Stakeholders
             var result = _blogService.GetHomePaged(page, pageSize);
             return CreateResponse(result);
         }
+
+        [HttpGet("tours-for-destination")]
+        public ActionResult<PagedResult<DestinationTourDto>> GetToursForDestination([FromQuery] string city, [FromQuery] string country, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetToursForDestination(city, country, page, pageSize);
+            return CreateResponse(result);
+        }
     }
 }
