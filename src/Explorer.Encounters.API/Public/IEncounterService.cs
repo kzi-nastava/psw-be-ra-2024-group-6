@@ -15,7 +15,7 @@ namespace Explorer.Encounters.API.Public
 
         Result<EncounterCreateDto> Update(EncounterCreateDto encounterDto);
 
-        Result<List<EncounterReadDto>> GetPaged(int page,int pageSize);
+        Result<List<EncounterReadDto>> GetPaged();
 
         Result<List<EncounterReadDto>> GetAllActiveEncounters();
         Result Delete(long id);

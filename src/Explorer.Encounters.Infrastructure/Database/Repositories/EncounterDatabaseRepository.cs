@@ -55,7 +55,7 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
             return _dbContext.Encounters.First(e => e.Id == Id);
         }
 
-        public List<Encounter> GetPagedEncounters(int page,int size)
+        public List<Encounter> GetPagedEncounters()
         {
             
             return  _dbContext.Encounters.ToList();

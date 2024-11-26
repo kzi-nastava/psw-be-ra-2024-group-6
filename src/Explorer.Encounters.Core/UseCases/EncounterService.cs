@@ -48,10 +48,10 @@ namespace Explorer.Encounters.Core.UseCases
             return Result.Ok();
         }
 
-        public Result<List<EncounterReadDto>> GetPaged(int page, int pageSize)
+        public Result<List<EncounterReadDto>> GetPaged()
         {
             
-                return mapper.Map<List<EncounterReadDto>>(_encounterRepository.GetPagedEncounters(page, pageSize));
+                return mapper.Map<List<EncounterReadDto>>(_encounterRepository.GetPagedEncounters());
             
             
         }

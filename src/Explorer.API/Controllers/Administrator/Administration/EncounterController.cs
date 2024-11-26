@@ -19,9 +19,9 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
         
         [HttpGet]
-        public ActionResult<List<EncounterReadDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<List<EncounterReadDto>> GetAll()
         {
-            var result = _encounterService.GetPaged(page, pageSize);
+            var result = _encounterService.GetPaged();
             return CreateResponse(result);
         }
 
@@ -34,7 +34,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
         
-        [HttpPut("{id:long}")]
+        [HttpPut()]
         public ActionResult<EncounterCreateDto> Update([FromBody] EncounterCreateDto encounterDto)
         {
             var result = _encounterService.Update(encounterDto);
