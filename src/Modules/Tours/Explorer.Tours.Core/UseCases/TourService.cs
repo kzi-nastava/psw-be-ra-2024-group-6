@@ -21,6 +21,8 @@ using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Internal;
+using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
+using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 
 namespace Explorer.Tours.Core.UseCases
@@ -207,6 +209,19 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+        public Result<List<TourMapPreviewDto>> GetTourPreviewsOnMap(double latitude, double longitude)
+        {
+            List<TourMapPreviewDto> toursOnSameLocationDtos = new List<TourMapPreviewDto>();
+            List<Tour> toursOnSameLocation = GetNearbyTours(latitude, longitude, Location.GetTolerance());
+            foreach (Tour tour in toursOnSameLocation)
+            {
+                PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
+                toursOnSameLocationDtos.Add(new TourMapPreviewDto(tour.Id,author.Id,tour.Name, author.Surname,tour.Difficulty.ToString(),tour.Price.Amount,tour.GetAverageRating(),/*tour.Image*/"gas",tour.GetNumberOfReviews(),author.Name,author.PictureURL,mapper.Map<List<TourDurationDto>>(tour.Durations),mapper.Map<DistanceDto>(tour.TotalLength)));
+            }
+
+            return toursOnSameLocationDtos;
+        }
+
 
         public Result<TourReadDto> Publish(long tourId, int userId)
         {
@@ -333,7 +348,6 @@ namespace Explorer.Tours.Core.UseCases
 
 
         public Result<List<TourCardDto>> FindToursNearby(double latitude, double longitude, double maxDistance)
-
         {
             try
             {
@@ -379,13 +393,14 @@ namespace Explorer.Tours.Core.UseCases
             return nearbyTours;
         }
 
-        public Result<List<TourMapDto>> FindToursOnMapNearby(double latitude, double longitude, double maxDistance)
+        public Result<List<TourHoverMapDto>> FindToursOnMapNearby(double latitude, double longitude, double maxDistance)
         {
-            List<TourMapDto> nearbyToursDtos = new List<TourMapDto>();
+            List<TourHoverMapDto> nearbyToursDtos = new List<TourHoverMapDto>();
             List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
             foreach (Tour tour in nearbyTours)
             {
-                nearbyToursDtos.Add(new TourMapDto(mapper.Map<LocationReadDto>(tour.Checkpoints.First().Location)));
+
+                nearbyToursDtos.Add(new TourHoverMapDto(mapper.Map<LocationReadDto>(tour.GetPreviewCheckpoint().Location),tour.Difficulty.ToString(),tour.GetAverageRating(),tour.Name,tour.Price.Amount,tour.Id,/*tour.Image*/"gas"));
             }
 
             return nearbyToursDtos;

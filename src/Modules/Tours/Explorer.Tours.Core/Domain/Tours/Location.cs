@@ -63,4 +63,8 @@ public class Location : ValueObject
     {
         return degrees * Math.PI / 180;
     }
+    public static double GetTolerance()
+    {
+        return 0.02;
+    }
 }

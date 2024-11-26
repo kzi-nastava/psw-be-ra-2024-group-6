@@ -196,9 +196,9 @@ public class Tour : Entity
 
     }
 
-    public List<Checkpoint> GetPreviewCheckpoints()
+    public Checkpoint GetPreviewCheckpoint()
     {
-        throw new NotImplementedException();
+        return Checkpoints.FirstOrDefault();
     }
     public double GetAverageRating()
     {
@@ -257,5 +257,10 @@ public class Tour : Entity
     public void setReviews(List<Review> reviews)
     {
         Reviews = reviews;
+    }
+
+    internal int GetNumberOfReviews()
+    {
+        return Reviews.Count;
     }
 }
