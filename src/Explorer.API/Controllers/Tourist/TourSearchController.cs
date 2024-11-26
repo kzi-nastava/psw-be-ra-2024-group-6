@@ -22,12 +22,6 @@ namespace Explorer.API.Controllers.Tourist
             var result = _tourService.FindToursNearby(latitude, longitude, radius);
             return CreateResponse(result);
         }
-        [HttpGet("map")]
-        public ActionResult<List<TourCardDto>> GetToursOnMapNearby([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
-        {
-            var result = _tourService.FindToursOnMapNearby(latitude, longitude, radius);
-            return CreateResponse(result);
-        }
 
     }
 }
