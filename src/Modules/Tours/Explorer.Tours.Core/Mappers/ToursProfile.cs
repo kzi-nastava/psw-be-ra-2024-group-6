@@ -23,6 +23,7 @@ public class ToursProfile : Profile
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
 
         CreateMap<TourDto, Tour>().ReverseMap();
+        CreateMap<Tour, TourDto>().ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => !src.IsNotPublished()));
 
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 

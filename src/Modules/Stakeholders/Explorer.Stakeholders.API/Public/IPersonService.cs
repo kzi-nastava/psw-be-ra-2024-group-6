@@ -18,5 +18,5 @@ public interface IPersonService
     public Result<PersonDto> GetByUserId(int id);
 
     public Result<PersonDto> Update(PersonDto person);
-        
+
 }

@@ -1,5 +1,6 @@
 using Explorer.Blog.Infrastructure;
 using Explorer.Encounters.Infrastructure;
+using Explorer.Payments.Infrastructure;
 using Explorer.Stakeholders.Infrastructure;
 using Explorer.Tours.Infrastructure;
 
@@ -13,7 +14,7 @@ public static class ModulesConfiguration
         services.ConfigureToursModule();
         services.ConfigureBlogModule();
         services.ConfigureEncountersModule();
-
+        services.ConfigurePaymentsModule();
         return services;
     }
 }
