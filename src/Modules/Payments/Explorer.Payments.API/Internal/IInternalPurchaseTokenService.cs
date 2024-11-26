@@ -13,5 +13,6 @@ namespace Explorer.Payments.API.Internal
         public Result<List<PurchaseTokenDto>> GetByUserId(long id);
         public Result<PurchaseTokenDto> Update(PurchaseTokenDto purchaseToken);
         public Result<PurchaseTokenDto> GetByUserAndTour(long userId, long tourId);
+        public List<int> GetMostBoughtToursIds(int count);
     }
 }

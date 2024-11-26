@@ -73,6 +73,12 @@ namespace Explorer.Stakeholders.Core.UseCases
             var user = _crudRepository.Get(id);
             return user.GetPrimaryRoleName();
         }
+
+        public List<long> GetAllAuthorsIds()
+        {
+            var authorsIds = _userRepository.GetAllAuthorsIds();
+            return authorsIds;
+        }
         
     }
 }
