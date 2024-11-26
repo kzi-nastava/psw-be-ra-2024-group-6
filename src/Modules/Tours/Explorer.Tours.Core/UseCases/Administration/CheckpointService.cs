@@ -65,5 +65,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 .Select(ch => new DestinationDto(ch.Location.City, ch.Location.Country, ch.ImageUrl))
                 .ToList();
         }
+
+        public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize)
+        {
+            return _checkpointRepository.GetTourIdsForDestination(city, country, page, pageSize);
+        }
     }
 }

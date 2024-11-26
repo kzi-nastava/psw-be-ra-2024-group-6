@@ -223,6 +223,29 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize)
+        {
+            try
+            {
+                var ids = _checkpointService.GetTourIdsForDestination(city, country, page, pageSize);
+                var tours = _tourRepository.GetAllByIds(ids);
+                var result = new List<DestinationTourDto>();
+
+                foreach (var tour in tours)
+                {
+                    if (tour.IsNotPublished()) continue;
+                    var firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
+                    result.Add(new DestinationTourDto(tour.Name, tour.Description, tour.Difficulty.ToString(), tour.Price.Amount, tour.TotalLength.ToString(), firstCp));
+                }
+
+                return result;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
 
         public Result<TourReadDto> Publish(long tourId, int userId)
         {
