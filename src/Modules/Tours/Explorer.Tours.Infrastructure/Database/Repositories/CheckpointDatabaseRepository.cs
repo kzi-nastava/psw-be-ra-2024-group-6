@@ -51,8 +51,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                     .GroupBy(ch => new
                     {
                         City = ch.Location.City,
-                        Country = ch.Location.Country,
-                        ch.TourId
+                        Country = ch.Location.Country
                     })
                     .OrderByDescending(g => g.Count())
                     .Take(count)
