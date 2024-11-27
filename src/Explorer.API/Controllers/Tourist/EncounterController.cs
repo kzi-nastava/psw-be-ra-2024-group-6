@@ -1,19 +1,22 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
+using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Explorer.API.Controllers.Tourist
 {
     [Authorize(Policy = "touristPolicy")]
     [Route("api/encounters")]
-    public class EncounterController : BaseApiController
+    public class EncounterTouristController : BaseApiController
     {
-
+        
+        
         private readonly IEncounterService _encounterService;
 
-        public EncounterController(IEncounterService encounterService)
+        public EncounterTouristController(IEncounterService encounterService)
         {
             _encounterService = encounterService;
         }
@@ -24,6 +27,7 @@ namespace Explorer.API.Controllers.Tourist
             var result = _encounterService.GetAllActiveEncounters();
             return CreateResponse(result);
         }
+
 
     }
 }

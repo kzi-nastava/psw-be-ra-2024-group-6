@@ -39,13 +39,17 @@ namespace Explorer.Encounters.Core.UseCases
 
         public Result Delete(long id)
         {
-            var existingEntity = _encounterRepository.GetEncounter(id);
-            if (existingEntity == null)
+            try
             {
-                return Result.Fail(FailureCode.NotFound).WithError($"Encounter with ID {id} not found.");
+
+                _encounterRepository.Delete(id);
+                return Result.Ok();
             }
-            _encounterRepository.Delete(id);
-            return Result.Ok();
+            catch (Exception ex)
+            {
+                return Result.Fail(FailureCode.NotFound)
+                    .WithError($"Encounter with ID {id} not found.");
+            }
         }
 
         public Result<List<EncounterReadDto>> GetPaged()
