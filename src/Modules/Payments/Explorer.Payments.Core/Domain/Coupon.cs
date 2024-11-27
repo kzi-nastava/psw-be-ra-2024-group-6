@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Payments.Core.Domain
@@ -14,21 +9,37 @@ namespace Explorer.Payments.Core.Domain
         public double DiscountPercentage { get; private set; }
         public long AuthorId { get; private set; }
         public long? TourId { get; private set; }
-
         public DateTime? ExpiresDate { get; private set; }
 
         public Coupon()
         {
-
         }
 
-        public Coupon(string code, double discount, long authorId, long tourId)
+        public Coupon(string code, double discount, long authorId, long? tourId)
         {
             Code = code;
             DiscountPercentage = discount;
             AuthorId = authorId;
             TourId = tourId;
             Validate();
+        }
+
+        public void UpdateDiscount(double discount)
+        {
+            if (discount <= 0 || discount > 100)
+                throw new ArgumentException("Discount must be a positive number between 0 and 100.");
+
+            DiscountPercentage = discount;
+        }
+
+        public void UpdateTour(long? tourId)
+        {
+            TourId = tourId;
+        }
+
+        public void UpdateExpirationDate(DateTime? expiresDate)
+        {
+            ExpiresDate = expiresDate;
         }
 
         private void Validate()
@@ -38,7 +49,6 @@ namespace Explorer.Payments.Core.Domain
 
             if (DiscountPercentage <= 0 || DiscountPercentage > 100)
                 throw new ArgumentException("Discount must be a positive number between 0 and 100.");
-
         }
     }
 }

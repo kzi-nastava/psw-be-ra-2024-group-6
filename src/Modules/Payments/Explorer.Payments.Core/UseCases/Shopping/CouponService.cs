@@ -72,17 +72,20 @@ namespace Explorer.Payments.Core.UseCases.Shopping
             if (existingCoupon == null)
                 return Result.Fail(FailureCode.NotFound).WithError("Coupon not found.");
 
+/*            if (existingCoupon.Code != coupon.Code)
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Coupon code cannot be modified.");*/
 
-            if (!IsCodeUnchanged(existingCoupon, coupon))
-                return Result.Fail(FailureCode.InvalidArgument).WithError("Coupon code cannot be modified.");
+            // Ažurirajte polja koristeći metode entiteta
+            existingCoupon.UpdateDiscount(coupon.DiscountPercentage);
+            existingCoupon.UpdateTour(coupon.TourId);
+            existingCoupon.UpdateExpirationDate(coupon.ExpiresDate);
 
-            return MapToDto(_couponRepository.Update(MapToDomain(coupon)));
+            _couponRepository.Update(existingCoupon);
+
+            return MapToDto(existingCoupon);
         }
 
-        private bool IsCodeUnchanged(Coupon existingCoupon, CouponDto updatedCoupon)
-        {
-            return existingCoupon.Code == updatedCoupon.Code;
-        }
+
 
         public Result Delete(long id, long userId)
         {
