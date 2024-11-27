@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Encounters.Core.Domain
 {
-    public class TouristRank
+    public class TouristRank : Entity
     {
         public int TouristId { get; init; }
 
@@ -27,5 +28,9 @@ namespace Explorer.Encounters.Core.Domain
         public TouristRank() { }
 
 
+        public bool CanCreateEncounter()
+        {
+            return Level >= 10;
+        }
     }
 }

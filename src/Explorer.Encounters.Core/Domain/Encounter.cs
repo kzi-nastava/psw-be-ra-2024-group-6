@@ -65,7 +65,10 @@ namespace Explorer.Encounters.Core.Domain
             return Status == Status.Active;
         }
 
-        
 
+        public void SetCreatorId(int creatorId)
+        {
+            CreatorId = creatorId;
+        }
     }
 }
