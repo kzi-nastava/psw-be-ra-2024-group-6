@@ -15,14 +15,12 @@ namespace Explorer.Encounters.Core.Domain
 
         public int Xp { get; init; }
 
-        public int LevelUpXp {  get; init; }
 
-        public TouristRank(int touristId, int level, int xp, int levelUpXp)
+        public TouristRank(int touristId, int level, int xp)
         {
             TouristId = touristId;
             Level = level;
             Xp = xp;
-            LevelUpXp = levelUpXp;
         }
 
         public TouristRank() { }
