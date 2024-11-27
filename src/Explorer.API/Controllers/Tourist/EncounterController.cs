@@ -10,13 +10,13 @@ namespace Explorer.API.Controllers.Tourist
 {
     [Authorize(Policy = "touristPolicy")]
     [Route("api/encounters")]
-    public class EncounterController : BaseApiController
+    public class EncounterTouristController : BaseApiController
     {
         
         
         private readonly IEncounterService _encounterService;
 
-        public EncounterController(IEncounterService encounterService)
+        public EncounterTouristController(IEncounterService encounterService)
         {
             _encounterService = encounterService;
         }
