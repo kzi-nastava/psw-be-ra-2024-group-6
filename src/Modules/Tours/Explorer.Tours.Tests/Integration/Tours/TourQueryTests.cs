@@ -57,45 +57,50 @@ namespace Explorer.Tours.Tests.Integration.Tours
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
+           
+                dbContext.Equipment.Add(new Equipment("Voda", "Količina vode varira od temperature i trajanja ture. Preporuka je da se pije pola litre vode na jedan sat umerena fizičke aktivnosti (npr. hajk u prirodi bez značajnog uspona) po umerenoj vrućini"));
+                dbContext.SaveChanges();
+            
+
             TourCreateDto tourCreateDto = new TourCreateDto
             {
                 Checkpoints = new List<CheckpointCreateDto>() {
 
-                new CheckpointCreateDto
-                {
-                    Description = "Test",
-                    Name = "Test",
-                    ImageUrl = "Test",
-                    Location= new LocationCreateDto()
+                    new CheckpointCreateDto
                     {
-                        Latitude = 20,
-                        Longitude = 20,
-                        City = "Test",
-                        Country = "Test"
-                    },
-                    Secret = "Test",
-                },
-            },
-                Objects = new List<ObjectCreateDto>() {
-
-                 new ObjectCreateDto {
                         Description = "Test",
                         Name = "Test",
                         ImageUrl = "Test",
-            Category = "WC",
-            Location = new LocationCreateDto {
-                        Latitude = 20,
-                        Longitude = 20,
-                        City = "Test",
-                        Country = "Test"
+                        Location = new LocationCreateDto()
+                        {
+                            Latitude = 20,
+                            Longitude = 20,
+                            City = "Test",
+                            Country = "Test"
+                        },
+                        Secret = "Test",
+                    },
+                },
+                Objects = new List<ObjectCreateDto>() {
+
+                    new ObjectCreateDto {
+                        Description = "Test",
+                        Name = "Test",
+                        ImageUrl = "Test",
+                        Category = "WC",
+                        Location = new LocationCreateDto {
+                            Latitude = 20,
+                            Longitude = 20,
+                            City = "Test",
+                            Country = "Test"
+                        }
                     }
-        }
-                }, 
-                 TourInfo = new TourDto()
-                 {
+                },
+                TourInfo = new TourDto()
+                {
                     Description = "Test",
                     Name = "Test",
-                    Difficulty ="Easy",
+                    Difficulty = "Easy",
                     Tags = new List<string> { "Test" },
                     Price = new PriceDto()
                     {
@@ -115,8 +120,17 @@ namespace Explorer.Tours.Tests.Integration.Tours
                             Duration = TimeOnly.FromDateTime(DateTime.UtcNow),
                             TransportType = "Bike"
                         }
+                    },
+                    Equipment = new List<EquipmentDto>()
+                    {
+                        new EquipmentDto()
+                        {
+                            Id = 11,
+                            Name = "Voda",
+                            Description = "Količina vode varira od temperature i trajanja ture. Preporuka je da se pije pola litre vode na jedan sat umerena fizičke aktivnosti (npr. hajk u prirodi bez značajnog uspona) po umerenoj vrućini"
+                        }
                     }
-                 } 
+                 }
             };
             //Art 
             var result = ((ObjectResult)controller.Create(tourCreateDto).Result)?.Value as TourCreateDto;
