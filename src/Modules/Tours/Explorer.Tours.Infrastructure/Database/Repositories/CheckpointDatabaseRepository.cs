@@ -51,8 +51,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                     .GroupBy(ch => new
                     {
                         City = ch.Location.City,
-                        Country = ch.Location.Country,
-                        ch.TourId
+                        Country = ch.Location.Country
                     })
                     .OrderByDescending(g => g.Count())
                     .Take(count)
@@ -64,6 +63,24 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             catch (Exception e)
             {
                 throw new Exception("Error fetching most popular destinations", e);
+            }
+        }
+
+        public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize)
+        {
+            try
+            {
+                return _dbContext.Checkpoints
+                    .Where(ch => ch.Location.City == city && ch.Location.Country == country)
+                    .GroupBy(ch => ch.TourId)
+                    .Select(group => Convert.ToInt32(group.Key))
+                    .Skip(page * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException(e.Message);
             }
         }
     }

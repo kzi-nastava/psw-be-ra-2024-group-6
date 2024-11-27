@@ -16,5 +16,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 
         Checkpoint Get(long id);
         public List<Checkpoint> GetMostPopularDestinations(int count = 4);
+        public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
     }
 }

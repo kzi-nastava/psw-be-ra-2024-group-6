@@ -32,5 +32,6 @@ namespace Explorer.Tours.API.Public
 
         Result<List<TourCardDto>> GetBoughtTours(long userId);
         public Result<List<TourCardDto>> GetMostPopularTours(int count);
+        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize);
     }
 }
