@@ -16,9 +16,10 @@ namespace Explorer.Tours.API.Dtos.TourDtos
         public double Price { get; set; }
         public string Difficulty { get; set; }
         public string Image { get; set; }
+        public bool IsLocationUnique { get; set; }
 
         public TourHoverMapDto(LocationReadDto location, string difficulty, double averageRating, string tourName,
-            double price, long id, string image)
+            double price, long id, string image, bool isLocationUnique)
         {
             Location = location;
             Difficulty = difficulty;
@@ -27,6 +28,7 @@ namespace Explorer.Tours.API.Dtos.TourDtos
             Price = price;
             Id = id;
             Image = image;
+            IsLocationUnique = isLocationUnique;
         }
     }
 }

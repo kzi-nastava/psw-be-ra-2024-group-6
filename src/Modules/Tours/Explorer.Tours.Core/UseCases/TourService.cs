@@ -212,7 +212,7 @@ namespace Explorer.Tours.Core.UseCases
         public Result<List<TourMapPreviewDto>> GetTourPreviewsOnMap(double latitude, double longitude)
         {
             List<TourMapPreviewDto> toursOnSameLocationDtos = new List<TourMapPreviewDto>();
-            List<Tour> toursOnSameLocation = GetNearbyTours(latitude, longitude, Location.GetTolerance());
+            List<Tour> toursOnSameLocation = GetNearbyVisibleTours(latitude, longitude, Location.GetTolerance());
             foreach (Tour tour in toursOnSameLocation)
             {
                 PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
@@ -329,25 +329,7 @@ namespace Explorer.Tours.Core.UseCases
         }
 
 
-
-
-        //public Result<TourDetailsDto> GetTourDetailsByTourId(long tourId)
-        //{
-        /*Tour tour = crudRepository.Get(tourId);
-
-        TourDto tourDto = MapToDto(tour);
-
-        List<CheckpointDto> Checkpoints = _checkpointService.GetByTourId(tourId).Value;
-        List<ObjectDto> Objects = _objectService.GetByTourId(tourId).Value;
-
-        foreach (CheckpointDto checkpointDto in Checkpoints)
-        {
-            new CheckpointReadDto(checkpointDto., checkpointDto.Name, checkpointDto.Description, checkpointDto.ImageUrl) 
-        }
-        */
-
-
-        public Result<List<TourCardDto>> FindToursNearby(double latitude, double longitude, double maxDistance)
+        public Result<List<TourCardDto>> GetSearchedToursNearby(double latitude, double longitude, double maxDistance)
         {
             try
             {
@@ -376,7 +358,16 @@ namespace Explorer.Tours.Core.UseCases
         private List<Tour> GetNearbyTours(double latitude, double longitude, double maxDistance)
         {
             List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
+            return FindNearbyTours(tours,latitude, longitude, maxDistance);
+        }
+        private List<Tour> GetNearbyVisibleTours(double latitude, double longitude, double maxDistance)
+        {
+            List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
+            return FindNearbyVisibleTours(tours, latitude, longitude, maxDistance);
+        }
 
+        private List<Tour> FindNearbyTours(List<Tour> tours, double latitude, double longitude, double maxDistance)
+        {
             List<Tour> nearbyTours = new List<Tour>();
 
             foreach (var tour in tours)
@@ -392,15 +383,47 @@ namespace Explorer.Tours.Core.UseCases
 
             return nearbyTours;
         }
+        private List<Tour> FindNearbyVisibleTours(List<Tour> tours, double latitude, double longitude, double maxDistance)
+        {
+            List<Tour> nearbyTours = new List<Tour>();
+
+            foreach (var tour in tours)
+            {
+                if (tour.IsTourVisibleNearby(latitude, longitude, maxDistance))
+                {
+                    //nearbyToursDtos.Add(new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString()));
+                    tour.setReviews(mapper.Map<List<Review>>(_reviewService.GetReviewsFromTourId(tour.Id)));
+                    nearbyTours.Add(tour);
+                }
+
+            }
+
+            return nearbyTours;
+        }
 
         public Result<List<TourHoverMapDto>> FindToursOnMapNearby(double latitude, double longitude, double maxDistance)
         {
             List<TourHoverMapDto> nearbyToursDtos = new List<TourHoverMapDto>();
             List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
+            Dictionary<Location, bool> locations = new Dictionary<Location, bool>();
             foreach (Tour tour in nearbyTours)
             {
-
-                nearbyToursDtos.Add(new TourHoverMapDto(mapper.Map<LocationReadDto>(tour.GetPreviewCheckpoint().Location),tour.Difficulty.ToString(),tour.GetAverageRating(),tour.Name,tour.Price.Amount,tour.Id,/*tour.Image*/"gas"));
+                KeyValuePair<Location,bool> location = locations.FirstOrDefault(l => l.Key.IsLocationSame(tour.GetPreviewCheckpoint().Location));
+                if (location.Equals(default(KeyValuePair<Location, bool>)))
+                {
+                    nearbyToursDtos.Add(new TourHoverMapDto(
+                        mapper.Map<LocationReadDto>(tour.GetPreviewCheckpoint().Location), tour.Difficulty.ToString(),
+                        tour.GetAverageRating(), tour.Name, tour.Price.Amount, tour.Id, /*tour.Image*/"gas", true));
+                    locations.Add(tour.GetPreviewCheckpoint().Location, true);
+                }
+                else if(location.Value == true)
+                {
+                    nearbyToursDtos.ForEach(nT =>
+                    {
+                        if (nT.Location.Latitude == location.Key.Latitude && nT.Location.Longitude == location.Key.Longitude)
+                            nT.IsLocationUnique = false;
+                    });
+                }
             }
 
             return nearbyToursDtos;

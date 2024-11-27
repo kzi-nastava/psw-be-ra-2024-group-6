@@ -254,6 +254,13 @@ public class Tour : Entity
         }
         return false;
     }
+    public bool IsTourVisibleNearby(double latitude, double longitude, double maxDistance)
+    {
+            double distance = Checkpoints.First().GetCheckpointDistance(latitude, longitude);
+            if (distance <= maxDistance)
+                return true;
+        return false;
+    }
     public void setReviews(List<Review> reviews)
     {
         Reviews = reviews;
