@@ -15,7 +15,7 @@ namespace Explorer.Payments.Core.Domain
         public long AuthorId { get; private set; }
         public long? TourId { get; private set; }
 
-        public DateTime ExpiresDate { get; private set; }
+        public DateTime? ExpiresDate { get; private set; }
 
         public Coupon()
         {
@@ -39,8 +39,6 @@ namespace Explorer.Payments.Core.Domain
             if (DiscountPercentage <= 0 || DiscountPercentage > 100)
                 throw new ArgumentException("Discount must be a positive number between 0 and 100.");
 
-            if (ExpiresDate < DateTime.UtcNow)
-                throw new ArgumentException("ExpiresDate cannot be in the past.");
         }
     }
 }

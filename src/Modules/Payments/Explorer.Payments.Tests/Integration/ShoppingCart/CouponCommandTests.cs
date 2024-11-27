@@ -135,27 +135,14 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
 
         [Theory]
         [InlineData(-11, "-11", true)] // Valid author and user
-        [InlineData(-11, "-22", false)] // Unauthorized user
         public void GetAllByAuthor(long authorId, string userId, bool success)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = createController(scope, userId);
-
-
-
-            if (success)
-            {
-                var result = controller.GetCouponsByAuthor(authorId);
-                var coupons = ((ObjectResult)result.Result).Value as List<CouponDto>;
-                coupons.ShouldNotBeNull();
-                coupons.All(c => c.AuthorId == authorId).ShouldBeTrue();
-            }
-            else
-            {
-                var result = (ObjectResult)controller.GetCouponsByAuthor(authorId).Result;
-                result.StatusCode.ShouldBe(403);
-                
-            }
+            var result = controller.GetCouponsByAuthor();
+            var coupons = ((ObjectResult)result.Result).Value as List<CouponDto>;
+            coupons.ShouldNotBeNull();
+            coupons.All(c => c.AuthorId == authorId).ShouldBeTrue();
         }
 
 

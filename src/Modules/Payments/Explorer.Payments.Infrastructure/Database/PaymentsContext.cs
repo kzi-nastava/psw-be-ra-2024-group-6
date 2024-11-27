@@ -58,14 +58,15 @@ public class PaymentsContext : DbContext
                 .HasMaxLength(8); 
 
             entity.HasIndex(c => c.Code)
-                .IsUnique(); 
+                .IsUnique();
 
 
             entity.Property(c => c.ExpiresDate)
                 .HasConversion(
-                    v => v.ToUniversalTime(), 
-                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc) 
+                    v => v.HasValue ? v.Value.ToUniversalTime() : (DateTime?)null, // Ako ima vrednost, konvertuj u UTC
+                    v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : (DateTime?)null // Ako ima vrednost, postavi na UTC
                 );
+
 
 
         });

@@ -21,15 +21,15 @@ namespace Explorer.API.Controllers.Shopping
         [HttpGet("{id:long}")]
         public ActionResult<CouponDto> Get(long id)
         {
-            var result = _couponService.Get(id);
+            var result = _couponService.GetById(id);
             return CreateResponse(result);
         }
 
-        [HttpGet("author/{authorId:long}")]
-        public ActionResult<List<CouponDto>> GetCouponsByAuthor(long authorId)
+        [HttpGet("author/")]
+        public ActionResult<List<CouponDto>> GetCouponsByAuthor()
         {
             var userId = User.UserId();
-            var result = _couponService.GetAllByAuthorId(authorId, userId);
+            var result = _couponService.GetAllByAuthorId(userId);
             return CreateResponse(result);
         }
 
@@ -37,7 +37,8 @@ namespace Explorer.API.Controllers.Shopping
         public ActionResult<CouponDto> Create([FromBody] CouponDto couponDto)
         {
             var userId = User.UserId();
-            var result = _couponService.Create(couponDto, userId);
+            couponDto.AuthorId = userId;
+            var result = _couponService.Create(couponDto);
             return CreateResponse(result);
         }
 

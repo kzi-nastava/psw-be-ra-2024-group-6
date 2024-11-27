@@ -71,10 +71,6 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
                 .Where(c => c.AuthorId == authorId)
                 .ToList();
 
-            if (!coupons.Any())
-            {
-                throw new KeyNotFoundException($"No coupons found for author with id {authorId}.");
-            }
 
             return coupons;
         }

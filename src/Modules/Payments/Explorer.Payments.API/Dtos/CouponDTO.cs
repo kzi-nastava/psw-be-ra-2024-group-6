@@ -14,6 +14,6 @@ namespace Explorer.Payments.API.Dtos
         public double DiscountPercentage { get;set; }
         public long AuthorId { get; set; }
         public long? TourId { get; set; }
-        public DateTime ExpiresDate { get; set; }
+        public DateTime? ExpiresDate { get; set; }
     }
 }

@@ -237,6 +237,12 @@ public class Tour : Entity
         return Status != Status.Published;
     }
 
+
+    public bool IsPublished()
+    {
+        return Status == Status.Published;
+    }
+
     public bool IsUserAuthor(long userId)
     {
         return AuthorId==userId;
