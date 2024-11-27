@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.Core.Domain;
+﻿using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
-    public class BundleDatabaseRepository : IBundleRepository
+    public class BundleDatabaseRepository : CrudDatabaseRepository<Bundle,ToursContext>, IBundleRepository
     {
         private readonly ToursContext _context;
 
-        public BundleDatabaseRepository(ToursContext context)
+        public BundleDatabaseRepository(ToursContext context) : base(context)
         {
             _context = context;
         }
@@ -39,19 +40,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return bd;
         }
 
-        public Bundle Update(Bundle bundle)
-        {
-            try
-            {
-                _context.Entry(bundle).State = EntityState.Modified;
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException e)
-            {
-                throw new KeyNotFoundException(e.Message);
-            }
-            return bundle;
-        }
 
         public Bundle GetById(long bundleId)
         {

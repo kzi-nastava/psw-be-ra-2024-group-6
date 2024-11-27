@@ -5,6 +5,7 @@ using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -46,6 +47,7 @@ public class ToursContext : DbContext
         {
             entity.Property(e => e.Status)
                .HasConversion<string>();
+
         });
     }
 

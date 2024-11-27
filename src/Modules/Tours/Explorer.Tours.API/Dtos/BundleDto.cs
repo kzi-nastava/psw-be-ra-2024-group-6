@@ -15,5 +15,7 @@ namespace Explorer.Tours.API.Dtos
         public string Status { get; set; }
         public List<int> TourIds { get; set; }
         public long AuthorId { get; set; }
+
+        public bool Publishable { get; set; }
     }
 }

@@ -15,19 +15,22 @@ namespace Explorer.Tours.Core.Domain
     {
         public string Name { get; private set; }
         public double Price { get; private set; }
-        public Status Status { get; private set; } = Status.Draft;
+        public Status Status { get; private set; }
         public List<int> TourIds { get; private set; }
         public long AuthorId { get; private set; }
+        public bool Publishable { get; private set; }
 
 
         private Bundle() { }
-        public Bundle(string? name,double price,List<int> tours,int author)
+        public Bundle(string? name,double price,List<int> tours,int author,bool publishable,Status status)
         {
             
             Name = name;
             Price = price;
             TourIds = tours;
             AuthorId = author;
+            Publishable = publishable;
+            Status = status;
 
         }
 
@@ -38,7 +41,7 @@ namespace Explorer.Tours.Core.Domain
 
         private bool CanPublish()
         {
-            return Status != Status.Published;
+            return Status != Status.Published && Publishable;
 
         }
 

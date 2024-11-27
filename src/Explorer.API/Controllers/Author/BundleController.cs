@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,11 @@ namespace Explorer.API.Controllers.Author
             _bundleService = bundleService;
         }
 
-        [HttpGet]
-        public ActionResult<List<BundleDto>> GetAll()
+        [HttpGet("author")]
+        public ActionResult<List<BundleDto>> GetAllAuthor()
         {
-            var result = _bundleService.GetAll();
+            long userId = User.UserId();
+            var result = _bundleService.GetAllByUserId(userId);
             return CreateResponse(result);
         }
 
@@ -31,6 +33,15 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [HttpPut]
+        public ActionResult<BundleDto> Update([FromBody] BundleDto bundle)
+        {
+            var result = _bundleService.Update(bundle);
+            return CreateResponse(result);
+
+        }
+        
+ 
 
 
     }

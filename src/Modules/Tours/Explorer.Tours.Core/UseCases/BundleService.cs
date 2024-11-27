@@ -26,6 +26,21 @@ namespace Explorer.Tours.Core.UseCases
            
         }
 
+        public Result<BundleDto> Update(BundleDto bundle)
+        {
+            try
+            {
+
+                Bundle bundle_m = _bundleRepository.Update(MapToDomain(bundle));
+                return MapToDto(bundle_m);
+
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Result.Fail("bundle not found");
+            }
+        }
+
         public Result<BundleDto> Publish(long bundleId)
         {
             try
@@ -64,12 +79,19 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<List<BundleDto>> GetAll()
+        public Result<List<BundleDto>> GetAllByUserId(long userId)
         {
             try
             {
                 var bundles = _bundleRepository.GetAll();
-                return MapToDto(bundles);
+                List<Bundle> bundles_filtered = new List<Bundle>();
+                foreach (var bundle in bundles)
+                {
+                    if(bundle.AuthorId == userId)
+                        bundles_filtered.Add(bundle);
+                }
+
+                return MapToDto(bundles_filtered);
             }
             catch(Exception e)
             {

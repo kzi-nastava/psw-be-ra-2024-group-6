@@ -11,10 +11,12 @@ namespace Explorer.Tours.API.Public
 {
     public interface IBundleService
     {
-        Result<List<BundleDto>> GetAll();
+        Result<List<BundleDto>> GetAllByUserId(long userId);
         Result<BundleDto> Create(BundleDto bundle);
         Result<BundleDto> Publish(long bundleId);
         Result<BundleDto> Archive(long bundleId);
+        Result<BundleDto> Update(BundleDto bundle);
+
 
 
     }
