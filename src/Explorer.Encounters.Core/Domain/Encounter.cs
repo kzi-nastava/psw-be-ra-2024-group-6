@@ -12,7 +12,7 @@ namespace Explorer.Encounters.Core.Domain
     {
         Active,
         Draft,
-        Archieved
+        Archived
     }
 
     public enum TypeEncounter { 
