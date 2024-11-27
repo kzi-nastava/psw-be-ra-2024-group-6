@@ -30,9 +30,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpGet]
         public ActionResult<List<EncounterReadDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _encounterService.GetPaged(page, pageSize);
-            Debug.WriteLine("IMA NAS UKUPNO");
-            Debug.WriteLine(result.Value.Count);
+            var result = _encounterService.GetPaged();
             return CreateResponse(result);
         }
 
