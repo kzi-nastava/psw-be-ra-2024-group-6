@@ -15,7 +15,8 @@ namespace Explorer.Encounters.Core.Mappers
         {
             CreateMap<EncounterCreateDto, Encounter>().ReverseMap();
             CreateMap<EncounterReadDto,Encounter>().ReverseMap();
-
+            CreateMap<EncounterByTouristCreateDto, Encounter>().ReverseMap();
+            CreateMap<EncounterByTouristReadDto, Encounter>().ReverseMap();
         }
         
     }

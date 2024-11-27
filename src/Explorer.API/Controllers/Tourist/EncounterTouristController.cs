@@ -5,6 +5,7 @@ using Explorer.Stakeholders.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -25,6 +26,13 @@ namespace Explorer.API.Controllers.Tourist
         public ActionResult<List<EncounterReadDto>> GetAllActiveEncounters()
         {
             var result = _encounterService.GetAllActiveEncounters();
+            return CreateResponse(result);
+        }
+
+        [HttpPost()]
+        public ActionResult<EncounterReadDto> Create([FromBody] EncounterByTouristCreateDto encounter)
+        {
+            var result = _encounterService.CreateByTourist(encounter, User.UserId());
             return CreateResponse(result);
         }
 

@@ -17,8 +17,8 @@ public class Checkpoint : Entity
     public string Description { get; private set; }
     public string ImageUrl { get; private set; }
     public  Location Location { get; private set; }
-
-    public string Secret {  get; private set; }
+    public string Secret { get; private set; }
+    public List<long> EncounterIds { get; private set; }
 
     public Checkpoint() { }
     public Checkpoint(string? name, string? description, string? imageUrl, long tourId,Location location, string secret)
@@ -29,6 +29,7 @@ public class Checkpoint : Entity
         Location = location;
         TourId = tourId;
         Secret = secret;
+        EncounterIds = new List<long>();
         Validate();
        
     }
@@ -52,6 +53,11 @@ public class Checkpoint : Entity
     {
         return Location.CalculateDistance(longitude, latitude);
 
+    }
+
+    public void AddEncounterId(int encounterId)
+    {
+        EncounterIds.Add(encounterId);
     }
 }
 
