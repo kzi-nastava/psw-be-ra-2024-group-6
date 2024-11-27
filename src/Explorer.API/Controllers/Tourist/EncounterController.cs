@@ -12,7 +12,8 @@ namespace Explorer.API.Controllers.Tourist
     [Route("api/encounters")]
     public class EncounterController : BaseApiController
     {
-
+        
+        
         private readonly IEncounterService _encounterService;
 
         public EncounterController(IEncounterService encounterService)
@@ -27,33 +28,6 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpGet]
-        public ActionResult<List<EncounterReadDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var result = _encounterService.GetPaged();
-            return CreateResponse(result);
-        }
-
-        [HttpPost]
-        public ActionResult<EncounterCreateDto> Create([FromBody] EncounterCreateDto encounter)
-        {
-            var result = _encounterService.Create(encounter);
-            return CreateResponse(result);
-        }
-
-        [HttpPost]
-        public ActionResult<EncounterCreateDto> Update([FromBody] EncounterCreateDto encounter)
-        {
-            var result = _encounterService.Update(encounter);
-            return CreateResponse(result);
-        }
-
-        [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
-        {
-            var result = _encounterService.Delete(id);
-            return CreateResponse(result);
-        }
 
     }
 }
