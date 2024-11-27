@@ -19,6 +19,7 @@ using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Internal;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
@@ -200,6 +201,45 @@ namespace Explorer.Tours.Core.UseCases
                 }
 
                 return Result.Ok(boughtTours);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<TourCardDto>> GetMostPopularTours(int count)
+        {
+            try
+            {
+                var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
+                var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
+
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), tour.GetAverageRating())).ToList();
+
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize)
+        {
+            try
+            {
+                var ids = _checkpointService.GetTourIdsForDestination(city, country, page, pageSize);
+                var tours = _tourRepository.GetAllByIds(ids);
+                var result = new List<DestinationTourDto>();
+
+                foreach (var tour in tours)
+                {
+                    if (tour.IsNotPublished()) continue;
+                    var firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
+                    result.Add(new DestinationTourDto(tour.Name, tour.Description, tour.Difficulty.ToString(), tour.Price.Amount, tour.TotalLength.ToString(), firstCp));
+                }
+
+                return result;
             }
             catch (KeyNotFoundException e)
             {
