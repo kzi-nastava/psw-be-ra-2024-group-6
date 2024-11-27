@@ -14,9 +14,9 @@ namespace Explorer.Encounters.Core.Domain
 
         public int Xp { get; init; }
 
-        public bool LevelUpXp {  get; init; }
+        public int LevelUpXp {  get; init; }
 
-        public TouristRank(int touristId, int level, int xp, bool levelUpXp)
+        public TouristRank(int touristId, int level, int xp, int levelUpXp)
         {
             TouristId = touristId;
             Level = level;

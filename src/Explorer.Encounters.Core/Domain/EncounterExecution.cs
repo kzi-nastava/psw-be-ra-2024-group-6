@@ -16,7 +16,7 @@ namespace Explorer.Encounters.Core.Domain
     public class EncounterExecution : Entity
     {
         public int EncounterId { get; init; }
-        public int touristId { get; init; }
+        public int TouristId { get; init; }
         public EncounterExecutionStatus Status { get; private set; }
 
         public DateTime TimeOfCompletion { get;private set; }
@@ -25,7 +25,7 @@ namespace Explorer.Encounters.Core.Domain
         public EncounterExecution(int encounterId, int touristId)
         {
             EncounterId = encounterId;
-            this.touristId = touristId;
+            this.TouristId = touristId;
             Status = EncounterExecutionStatus.STARTED;
             TimeOfCompletion = DateTime.UtcNow;
             Validate();
