@@ -116,6 +116,25 @@ namespace Explorer.Encounters.Core.UseCases
 
             }
         }
+
+        public Result AcceptEncounter(int encounterId)
+        {
+            try
+            {
+                var encounter = _encounterRepository.GetEncounter(encounterId);
+                if (encounter == null)
+                    return Result.Fail(FailureCode.NotFound).WithError("Encounter not found.");
+
+                encounter.AcceptEncounter();  
+                _encounterRepository.Update(encounter);  
+
+                return Result.Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 }
 
