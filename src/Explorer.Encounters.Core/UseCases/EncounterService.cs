@@ -37,6 +37,7 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+
         public Result Delete(long id)
         {
             try
@@ -65,6 +66,14 @@ namespace Explorer.Encounters.Core.UseCases
             
             return mapper.Map<List<EncounterReadDto>> (_encounterRepository.GetAllActiveEncounters());
             
+        }
+        public Result<List<SocialEncounterReadDto>> GetAllActiveSocialEncounters()
+        {
+            var activeEncounters = _encounterRepository.GetAllActiveEncounters()
+                .Cast<SocialEncounter>()
+                .ToList();
+
+            return mapper.Map<List<SocialEncounterReadDto>>(activeEncounters);
         }
 
         public Result<EncounterCreateDto> Update(EncounterCreateDto encounterDto)

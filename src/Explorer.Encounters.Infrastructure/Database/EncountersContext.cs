@@ -18,6 +18,13 @@ namespace Explorer.Encounters.Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("encounters");
+            modelBuilder.Entity<SocialEncounter>()
+                .ToTable("SocialEncounters")
+                .HasBaseType<Encounter>();
+            modelBuilder.Entity<HiddenEncounter>()
+                .ToTable("HiddenEncounters")
+                .HasBaseType<Encounter>();
+
             ConfigureEncounter(modelBuilder);
         }
 
@@ -27,7 +34,14 @@ namespace Explorer.Encounters.Infrastructure.Database
             {
 
                 entity.Property(e => e.Location).HasColumnType("jsonb");
+
             });
+            modelBuilder.Entity<HiddenEncounter>(entity =>
+            {
+                entity.Property(e => e.HiddenLocation).HasColumnType("jsonb");
+            });
+
+
         }
     }
 }
