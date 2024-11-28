@@ -47,6 +47,13 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var result = _encounterService.Delete(id);
             return CreateResponse(result);
         }
-        
+
+        [HttpPost("{encounterId}/accept")]
+        public ActionResult AcceptEncounter(int encounterId)
+        {
+            var result = _encounterService.AcceptEncounter(encounterId);
+            return CreateResponse(result);
+        }
+
     }
 }

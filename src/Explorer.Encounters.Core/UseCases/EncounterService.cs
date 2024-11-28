@@ -71,6 +71,25 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+        public Result AcceptEncounter(int encounterId)
+        {
+            try
+            {
+                var encounter = _encounterRepository.GetEncounter(encounterId);
+                if (encounter == null)
+                    return Result.Fail(FailureCode.NotFound).WithError("Encounter not found.");
+
+                encounter.AcceptEncounter();  // Prihvati Encounter
+                _encounterRepository.Update(encounter);  // Ažuriraj podatke u bazi
+
+                return Result.Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
         public Result<List<EncounterReadDto>> GetPaged()
         {
             
