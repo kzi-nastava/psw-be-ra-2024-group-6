@@ -18,6 +18,7 @@ using Explorer.Encounters.Infrastructure.Database;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain;
 using Explorer.Stakeholders.API.Public.Administration;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Explorer.Encounters.Tests.Integration
 {
@@ -36,7 +37,7 @@ namespace Explorer.Encounters.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
             var newEncounter = new EncounterCreateDto()
             {
-                Id = 50,
+                Id = -4,
                 Name = "Hidden Treasure",
                 Description = "Find the hidden treasure in the forest",
                 Location = new LocationDto()
@@ -189,12 +190,83 @@ namespace Explorer.Encounters.Tests.Integration
             result.StatusCode.ShouldBe(404);
         }
 
+        [Fact]
+        public void Creates_encounter_by_tourist()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateTouristController(scope, "-2");
+            var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+            var newEncounter = new EncounterByTouristCreateDto()
+            {
+                Name = "Encounter by tourist",
+                Description = "Find the hidden treasure in the forest",
+                Location = new LocationDto()
+                {
+                    Latitude = 19.042,
+                    Longitude = 18.025
+                },
+                Xp = 100,
+                Status = "Active", 
+                TypeEncounter = "Location"
+            };
+
+            // Act
+            var result = ((ObjectResult)controller.Create(newEncounter).Result)?.Value as EncounterByTouristReadDto; 
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.Id.ShouldNotBe(0);
+            result.Name.ShouldBe(newEncounter.Name);
+        
+            // Assert - Database
+            var storedEntity = dbContext.Encounters.FirstOrDefault(i => i.Name == newEncounter.Name);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Id.ShouldBe(result.Id);
+        }
+
+        [Fact]
+        public void Create_fails_by_not_eligible_tourist()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateTouristController(scope, "-3");
+            var newEncounter = new EncounterByTouristCreateDto()
+            {
+                Name = "Encounter",
+                Description = "Find the hidden treasure in the forest",
+                Location = new LocationDto()
+                {
+                    Latitude = 19.042,
+                    Longitude = 18.025
+                },
+                Xp = 100,
+                Status = "Active", 
+                TypeEncounter = "Location"
+            };
+
+            // Act
+            var result = (ObjectResult)controller.Create(newEncounter).Result;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(403);
+        }
+
 
         private static EncounterController CreateController(IServiceScope scope)
         {
             return new EncounterController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
             {
                 ControllerContext = BuildContext("-1")
+            };
+        }
+
+        private static EncounterTouristController CreateTouristController(IServiceScope scope, string userId)
+        {
+            return new EncounterTouristController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
+            {
+                ControllerContext = BuildContext(userId)
             };
         }
     }

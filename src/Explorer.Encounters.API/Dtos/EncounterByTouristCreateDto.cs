@@ -6,22 +6,13 @@ using System.Threading.Tasks;
 
 namespace Explorer.Encounters.API.Dtos
 {
-    public class EncounterCreateDto
+    public class EncounterByTouristCreateDto
     {
-        public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
         public LocationDto Location {  get; set; }
-
         public int Xp {  get; set; }
-
         public string Status { get; set; }
-
         public string TypeEncounter {  get; set; }
-        public int CreatorId { get; set; }
-        public bool IsRequiredForCheckpoint { get; set; }
-
-
     }
 }

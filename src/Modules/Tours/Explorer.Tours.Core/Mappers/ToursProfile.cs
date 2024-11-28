@@ -21,6 +21,7 @@ public class ToursProfile : Profile
     {
         CreateMap<ReviewDto, Review>().ReverseMap();
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
+        CreateMap<BundleDto,Bundle>().ReverseMap();
 
         CreateMap<TourDto, Tour>().ReverseMap();
         CreateMap<Tour, TourDto>().ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => !src.IsNotPublished()));

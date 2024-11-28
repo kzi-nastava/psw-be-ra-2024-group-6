@@ -13,16 +13,63 @@ using System.Threading.Tasks;
 
 namespace Explorer.Encounters.Core.UseCases
 {
-    public class EncounterService : CrudService<EncounterCreateDto,Encounter>,IEncounterService
+    public class EncounterService : CrudService<EncounterCreateDto,Encounter>, IEncounterService
     {
 
         private readonly IEncounterRepository _encounterRepository;
         private readonly IMapper mapper;
+        private readonly ITouristRankService _touristRankService;
     
-        public EncounterService(IMapper mapper,IEncounterRepository encounterRepository, ICrudRepository<Encounter> repository) :base(repository, mapper) 
+        public EncounterService(IMapper mapper,IEncounterRepository encounterRepository, ICrudRepository<Encounter> repository, ITouristRankService touristRankService) :base(repository, mapper) 
         {
             _encounterRepository = encounterRepository;
             this.mapper = mapper;
+            _touristRankService = touristRankService;
+        }
+
+        public Result<EncounterCreateDto> Create(EncounterCreateDto encounterDto)
+        {
+            try
+            {
+                return MapToDto(_encounterRepository.Create(mapper.Map<Encounter>(encounterDto)));
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result Delete(long id)
+        {
+            try
+            {
+
+                _encounterRepository.Delete(id);
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(FailureCode.NotFound)
+                    .WithError($"Encounter with ID {id} not found.");
+            }
+        }
+
+
+        public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounterDto, int creatorId)
+        {
+            try
+            {
+                if (!_touristRankService.CanCreateEncounter(creatorId).Value)
+                    return Result.Fail(FailureCode.Forbidden).WithError("Tourist is not eligible to create encounter.");
+                var encounter = mapper.Map<Encounter>(encounterDto);
+                encounter.SetCreatorId(creatorId);
+                var result = _encounterRepository.Create(encounter);
+                return mapper.Map<EncounterByTouristReadDto>(result);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
 
         public Result<EncounterCreateDto> Create(EncounterCreateDto encounterDto)
@@ -96,3 +143,4 @@ namespace Explorer.Encounters.Core.UseCases
         }
     }
 }
+
