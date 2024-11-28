@@ -39,20 +39,6 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result Delete(long id)
-        {
-            try
-            {
-
-                _encounterRepository.Delete(id);
-                return Result.Ok();
-            }
-            catch (Exception ex)
-            {
-                return Result.Fail(FailureCode.NotFound)
-                    .WithError($"Encounter with ID {id} not found.");
-            }
-        }
 
 
         public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounterDto, int creatorId)
@@ -72,17 +58,6 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<EncounterCreateDto> Create(EncounterCreateDto encounterDto)
-        {
-            try
-            {
-                return MapToDto(_encounterRepository.Create(mapper.Map<Encounter>(encounterDto)));
-            }
-            catch (Exception e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            }
-        }
 
 
         public Result Delete(long id)

@@ -16,7 +16,7 @@ namespace Explorer.Encounters.Core.Domain
         {
         }
         public HiddenEncounter(string name, string description, Location loc, int xp, Status status, TypeEncounter type,
-            int range, Location hiddenLocation, string imageUrl) : base(name, description, loc, xp, status, type)
+            int range, Location hiddenLocation, string imageUrl,int creatorId,bool isRequiredForCheckpoint) : base(name, description, loc, xp, status, type,creatorId,isRequiredForCheckpoint)
         {
             Range = range;
             HiddenLocation = hiddenLocation;
