@@ -30,6 +30,7 @@ namespace Explorer.Encounters.Core.Mappers
 
             CreateMap<EncounterByTouristCreateDto, Encounter>().ReverseMap();
             CreateMap<EncounterByTouristReadDto, Encounter>().ReverseMap();
+            CreateMap<EncounterExecutionDto, EncounterExecution>().ReverseMap();
         }
         
     }
