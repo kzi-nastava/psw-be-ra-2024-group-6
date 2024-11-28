@@ -68,20 +68,16 @@ namespace Explorer.Payments.Core.UseCases.Shopping
                 return Result.Fail(FailureCode.Forbidden).WithError("User did not create this coupon.");
 
             if (coupon.TourId != null && !IsUserAuthorOfTour(coupon.AuthorId, (long)coupon.TourId))
-                return Result.Fail(FailureCode.Forbidden).WithError("User is not author of specified tour");
+                return Result.Fail(FailureCode.Forbidden).WithError("User is not author of specified tour.");
 
             var existingCoupon = _couponRepository.Get(coupon.Id);
             if (existingCoupon == null)
                 return Result.Fail(FailureCode.NotFound).WithError("Coupon not found.");
 
-/*            if (existingCoupon.Code != coupon.Code)
-                return Result.Fail(FailureCode.InvalidArgument).WithError("Coupon code cannot be modified.");*/
+            // Ažuriranje
+            existingCoupon.Update(coupon);
 
-            // Ažurirajte polja koristeći metode entiteta
-            existingCoupon.UpdateDiscount(coupon.DiscountPercentage);
-            existingCoupon.UpdateTour(coupon.TourId);
-            existingCoupon.UpdateExpirationDate(coupon.ExpiresDate);
-
+            // Snimanje u repozitorijum
             _couponRepository.Update(existingCoupon);
 
             return MapToDto(existingCoupon);
@@ -89,10 +85,12 @@ namespace Explorer.Payments.Core.UseCases.Shopping
 
 
 
+
+
         public Result Delete(long couponId, long userId)
         {
             var coupon = _couponRepository.Get(couponId);
-            if (!coupon.IsUserAuthorOfCoupon(userId, couponId))
+            if (!coupon.IsUserAuthorOfCoupon(userId, coupon.AuthorId))
                 return Result.Fail(FailureCode.Forbidden).WithError("User did not create this coupon.");
 
             _couponRepository.Delete(couponId);

@@ -11,6 +11,7 @@ namespace Explorer.Payments.Core.Domain
         public long? TourId { get; private set; }
         public DateTime? ExpiresDate { get; private set; }
 
+
         public Coupon()
         {
         }
@@ -24,21 +25,32 @@ namespace Explorer.Payments.Core.Domain
             Validate();
         }
 
-        public void UpdateDiscount(double discount)
+
+        public Coupon Update(Coupon updatedCoupon)
         {
+            if (updatedCoupon == null)
+                throw new ArgumentNullException(nameof(updatedCoupon));
+
+            if (Code != updatedCoupon.Code)
+                throw new InvalidOperationException("Coupon code cannot be modified.");
+
+            // Ažuriranje samo dozvoljenih polja
+            DiscountPercentage = updatedCoupon.DiscountPercentage;
+            TourId = updatedCoupon.TourId;
+            ExpiresDate = updatedCoupon.ExpiresDate;
+
+            // Validacija nakon ažuriranja
             Validate();
-            DiscountPercentage = discount;
+
+            return this; // Vraća ažuriranu instancu
         }
 
-        public void UpdateTour(long? tourId)
-        {
-            TourId = tourId;
-        }
 
-        public void UpdateExpirationDate(DateTime? expiresDate)
-        {
-            ExpiresDate = expiresDate;
-        }
+
+
+
+
+
 
         private void Validate()
         {
