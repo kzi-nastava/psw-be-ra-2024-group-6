@@ -15,19 +15,19 @@ namespace Explorer.Encounters.Core.Domain
     };
     public class EncounterExecution : Entity
     {
-        public int EncounterId { get; init; }
+        public long EncounterId { get; init; }
         public int TouristId { get; init; }
         public EncounterExecutionStatus Status { get; private set; }
 
-        public DateTime TimeOfCompletion { get;private set; }
+        public DateTime? TimeOfCompletion { get;private set; }
 
-
-        public EncounterExecution(int encounterId, int touristId)
+        public EncounterExecution(long encounterId, int touristId)
         {
             EncounterId = encounterId;
             this.TouristId = touristId;
             Status = EncounterExecutionStatus.STARTED;
-            TimeOfCompletion = DateTime.UtcNow;
+
+            
             Validate();
         }
 
@@ -38,5 +38,15 @@ namespace Explorer.Encounters.Core.Domain
         {
             return true;
         }
+
+        public void Complete()
+        {
+            TimeOfCompletion = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+            Status = EncounterExecutionStatus.COMPLETED;
+        }
+
+
+
+
     }
 }

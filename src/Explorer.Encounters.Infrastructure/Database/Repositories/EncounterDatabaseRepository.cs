@@ -69,5 +69,6 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         }
 
+
     }
 }

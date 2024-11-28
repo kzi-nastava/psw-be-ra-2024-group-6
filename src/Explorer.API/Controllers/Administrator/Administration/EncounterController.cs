@@ -34,6 +34,19 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
         
+        [HttpPost("social")]
+        public ActionResult<SocialEncounterCreateDto> CreateSocialEncounter([FromBody] SocialEncounterCreateDto encounterDto)
+        {
+            var result = _encounterService.Create(encounterDto);
+            return CreateResponse(result);
+        }
+        [HttpPost("hidden")]
+        public ActionResult<HiddenEncounterDto> CreateHiddenEncounter([FromBody] HiddenEncounterDto encounterDto)
+        {
+            var result = _encounterService.Create(encounterDto);
+            return CreateResponse(result);
+        }
+
         [HttpPut()]
         public ActionResult<EncounterCreateDto> Update([FromBody] EncounterCreateDto encounterDto)
         {

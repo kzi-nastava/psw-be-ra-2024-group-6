@@ -27,49 +27,6 @@ namespace Explorer.Encounters.Core.UseCases
             _touristRankService = touristRankService;
         }
 
-        public Result<EncounterCreateDto> Create(EncounterCreateDto encounterDto)
-        {
-            try
-            {
-                return MapToDto(_encounterRepository.Create(mapper.Map<Encounter>(encounterDto)));
-            }
-            catch (Exception e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            }
-        }
-
-        public Result Delete(long id)
-        {
-            try
-            {
-
-                _encounterRepository.Delete(id);
-                return Result.Ok();
-            }
-            catch (Exception ex)
-            {
-                return Result.Fail(FailureCode.NotFound)
-                    .WithError($"Encounter with ID {id} not found.");
-            }
-        }
-
-        public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounterDto, int creatorId)
-        {
-            try
-            {
-                if (!_touristRankService.CanCreateEncounter(creatorId).Value)
-                    return Result.Fail(FailureCode.Forbidden).WithError("Tourist is not eligible to create encounter.");
-                var encounter = mapper.Map<Encounter>(encounterDto);
-                encounter.SetCreatorId(creatorId);
-                var result = _encounterRepository.Create(encounter);
-                return mapper.Map<EncounterByTouristReadDto>(result);
-            }
-            catch (Exception e)
-            {
-                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-        }
 
         public Result AcceptEncounter(int encounterId)
         {
@@ -123,5 +80,62 @@ namespace Explorer.Encounters.Core.UseCases
 
             }
         }
+
+        public Result<List<SocialEncounterReadDto>> GetAllActiveSocialEncounters()
+        {
+            var activeEncounters = _encounterRepository.GetAllActiveEncounters()
+                .Cast<SocialEncounter>()
+                .ToList();
+
+            return mapper.Map<List<SocialEncounterReadDto>>(activeEncounters);
+        }
+
+
+        public Result Delete(long id)
+        {
+            try
+            {
+
+                _encounterRepository.Delete(id);
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(FailureCode.NotFound)
+                    .WithError($"Encounter with ID {id} not found.");
+            }
+        }
+
+
+        public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounterDto, int creatorId)
+        {
+            try
+            {
+                if (!_touristRankService.CanCreateEncounter(creatorId).Value)
+                    return Result.Fail(FailureCode.Forbidden).WithError("Tourist is not eligible to create encounter.");
+                var encounter = mapper.Map<Encounter>(encounterDto);
+                encounter.SetCreatorId(creatorId);
+                var result = _encounterRepository.Create(encounter);
+                return mapper.Map<EncounterByTouristReadDto>(result);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<EncounterCreateDto> Create(EncounterCreateDto encounterDto)
+        {
+            try
+            {
+                return MapToDto(_encounterRepository.Create(mapper.Map<Encounter>(encounterDto)));
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+
     }
 }
