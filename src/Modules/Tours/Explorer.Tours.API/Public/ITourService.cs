@@ -33,5 +33,7 @@ namespace Explorer.Tours.API.Public
 
         Result<List<TourCardDto>> GetBoughtTours(long userId);
         Result <List<TourMapPreviewDto>> GetTourPreviewsOnMap(double latitude, double longitude);
+        public Result<List<TourCardDto>> GetMostPopularTours(int count);
+        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize);
     }
 }

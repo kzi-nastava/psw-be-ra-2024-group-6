@@ -24,13 +24,6 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpGet("best")]
-        public ActionResult<PagedResult<RatingReadDto>> GetBestRatings([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var result = _ratingService.GetBestPaged(page, pageSize);
-            return CreateResponse(result);
-        }
-
         [HttpPost]
         public ActionResult<RatingDto> Create([FromBody] RatingDto ratingDto)
         {
