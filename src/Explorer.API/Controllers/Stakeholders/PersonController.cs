@@ -63,5 +63,7 @@ namespace Explorer.API.Controllers.Stakeholders
             var result = _personService.GetFollowers(userId);
             return CreateResponse(result);
         }
+
+
     }
 }
