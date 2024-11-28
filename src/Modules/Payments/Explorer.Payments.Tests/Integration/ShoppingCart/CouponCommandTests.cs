@@ -74,16 +74,16 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
         }
 
         [Theory]
-        [InlineData("BBBBBBBB", 25, -11, -1, "2025-12-12", "-11", true)]
-        [InlineData("ABBBBBBB", 10, -11, -2, "2025-12-12", "-22", false)] // Not authorized user
-        public void Updates(string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId, bool success)
+        [InlineData(-1, "BBBBBBBB", 25, -11, -1, "2025-12-12", "-11", true)]
+        [InlineData(-3, "ABBBBBBA", 10, -11, -2, "2025-12-12", "-22", false)] // Not authorized user
+        public void Updates(long id, string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId, bool success)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = createController(scope, userId);
 
             var dto = new CouponDto()
             {
-                Id = -1,
+                Id = id,
                 AuthorId = authorId,
                 TourId = tourId,
                 ExpiresDate = expiresDate,
@@ -121,7 +121,7 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
             if (success)
             {
                 var result = controller.Delete(couponId);
-                result.ShouldBeOfType<NoContentResult>();
+                
                 var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
                 dbContext.Coupons.FirstOrDefault(c => c.Id == couponId).ShouldBeNull();
             }

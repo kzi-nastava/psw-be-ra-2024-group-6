@@ -53,14 +53,9 @@ namespace Explorer.API.Controllers.Shopping
         [HttpDelete("{id:long}")]
         public ActionResult Delete(long id)
         {
-            var userId = User.UserId();
+            var userId = User.UserId(); 
 
             var result = _couponService.Delete(id, userId);
-
-            if (result.IsSuccess)
-            {
-                return NoContent();
-            }
 
             return CreateResponse(result);
         }

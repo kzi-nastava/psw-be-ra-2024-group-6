@@ -51,7 +51,7 @@ namespace Explorer.Payments.Core.UseCases.Shopping
 
         public Result<CouponDto> Create(CouponDto coupon)
         {
-            if (coupon.TourId != null && !CheckIfAuthorOfTour(coupon.AuthorId, (long)coupon.TourId))
+            if (coupon.TourId != null && !IsUserAuthorOfTour(coupon.AuthorId, (long)coupon.TourId))
                 return Result.Fail(FailureCode.Forbidden).WithError("User is not author of specified tour");
 
             coupon.Code = _codeGenerator.GenerateCouponCode();
@@ -60,12 +60,14 @@ namespace Explorer.Payments.Core.UseCases.Shopping
             return MapToDto(_couponRepository.Create(MapToDomain(coupon)));
         }
 
-        public Result<CouponDto> Update(CouponDto coupon, long userId)
+        public Result<CouponDto> Update(CouponDto couponDto, long userId)
         {
-            if (!CheckIfAuthor(coupon.AuthorId, userId))
+            var coupon = MapToDomain(couponDto);
+
+            if (!coupon.IsUserAuthorOfCoupon(userId, coupon.AuthorId))
                 return Result.Fail(FailureCode.Forbidden).WithError("User did not create this coupon.");
 
-            if (coupon.TourId != null && !CheckIfAuthorOfTour(coupon.AuthorId, (long)coupon.TourId))
+            if (coupon.TourId != null && !IsUserAuthorOfTour(coupon.AuthorId, (long)coupon.TourId))
                 return Result.Fail(FailureCode.Forbidden).WithError("User is not author of specified tour");
 
             var existingCoupon = _couponRepository.Get(coupon.Id);
@@ -87,27 +89,21 @@ namespace Explorer.Payments.Core.UseCases.Shopping
 
 
 
-        public Result Delete(long id, long userId)
+        public Result Delete(long couponId, long userId)
         {
-            var coupon = GetById(id);
-            if (!CheckIfAuthor(coupon.Value.AuthorId, userId))
+            var coupon = _couponRepository.Get(couponId);
+            if (!coupon.IsUserAuthorOfCoupon(userId, couponId))
                 return Result.Fail(FailureCode.Forbidden).WithError("User did not create this coupon.");
 
-            _couponRepository.Delete(id);
+            _couponRepository.Delete(couponId);
             return Result.Ok();
             
         }
 
 
-        private bool CheckIfAuthorOfTour(long authorId, long tourId)
+        private bool IsUserAuthorOfTour(long authorId, long tourId)
         {
             return _tourPaymentService.IsUserAuthor(tourId, authorId);
-        }
-
-        private bool CheckIfAuthor(long authorId, long userId)
-        {
-            var isAuthor = authorId == userId;
-            return isAuthor;
         }
     }
 }

@@ -26,9 +26,7 @@ namespace Explorer.Payments.Core.Domain
 
         public void UpdateDiscount(double discount)
         {
-            if (discount <= 0 || discount > 100)
-                throw new ArgumentException("Discount must be a positive number between 0 and 100.");
-
+            Validate();
             DiscountPercentage = discount;
         }
 
@@ -49,6 +47,11 @@ namespace Explorer.Payments.Core.Domain
 
             if (DiscountPercentage <= 0 || DiscountPercentage > 100)
                 throw new ArgumentException("Discount must be a positive number between 0 and 100.");
+        }
+
+        public bool IsUserAuthorOfCoupon(long userId, long authorId)
+        {
+            return userId == authorId;
         }
     }
 }
