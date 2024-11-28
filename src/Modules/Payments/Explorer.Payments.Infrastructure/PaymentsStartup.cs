@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Payments.API.Internal;
+using Explorer.Payments.Core.UseCases;
 
 namespace Explorer.Payments.Infrastructure;
 
@@ -33,15 +34,19 @@ public static class PaymentsStartup
         services.AddScoped<IPurchaseTokenService, PurchaseTokenService>();
         services.AddScoped<IInternalPurchaseTokenService, InternalPurchaseTokenService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<IInternalWalletService, InternalWalletService>();
+        services.AddScoped<IWalletService,WalletService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<PurchaseToken>), typeof(CrudDatabaseRepository<PurchaseToken, PaymentsContext>));
         services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, PaymentsContext>));
+        services.AddScoped(typeof(ICrudRepository<Wallet>), typeof(CrudDatabaseRepository<Wallet, PaymentsContext>));
 
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
         services.AddScoped<IPurchaseTokenRepository, PurchaseTokenDatabaseRepository>();
+        services.AddScoped<IWalletRepository, WalletDatabaseRepository>();
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),
