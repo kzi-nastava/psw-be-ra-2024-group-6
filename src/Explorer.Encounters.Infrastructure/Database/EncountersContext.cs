@@ -12,6 +12,7 @@ namespace Explorer.Encounters.Infrastructure.Database
     {
         public DbSet<Encounter> Encounters { get; set; }
         public DbSet<TouristRank> TouristRanks { get; set; }
+        public DbSet<EncounterExecution> EncounterExecutions { get; set; }
 
         public EncountersContext(DbContextOptions<EncountersContext> options) : base(options) { }
 
@@ -26,8 +27,11 @@ namespace Explorer.Encounters.Infrastructure.Database
                 .ToTable("HiddenEncounters")
                 .HasBaseType<Encounter>();
 
+            
+
             ConfigureEncounter(modelBuilder);
             ConfigureTouristRank(modelBuilder);
+            ConfigureEncounterExecution(modelBuilder);
         }
 
         private void ConfigureEncounter(ModelBuilder modelBuilder)
@@ -50,5 +54,14 @@ namespace Explorer.Encounters.Infrastructure.Database
         {
             modelBuilder.Entity<TouristRank>().HasIndex(tr => tr.TouristId).IsUnique();
         }
+
+        private void ConfigureEncounterExecution(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<EncounterExecution>()
+                .HasOne<Encounter>() 
+                .WithMany()         
+                .HasForeignKey(e => e.EncounterId); 
+        }
+
     }
 }

@@ -31,6 +31,7 @@ namespace Explorer.Encounters.Infrastructure
         {
             services.AddScoped<ITouristRankService, TouristRankService>();
             services.AddScoped<IEncounterService, EncounterService>();
+            services.AddScoped<IEncounterExecutionService, EncounterExecutionService>();
         }
 
         private static void SetupInfrastructure(IServiceCollection services)
@@ -38,6 +39,8 @@ namespace Explorer.Encounters.Infrastructure
             services.AddScoped(typeof(ICrudRepository<Encounter>), typeof(CrudDatabaseRepository<Encounter, EncountersContext>));
             services.AddScoped<IEncounterRepository, EncounterDatabaseRepository>();
             services.AddScoped<ITouristRankRepository, TouristRankDatabaseRepository>();
+            services.AddScoped(typeof(ICrudRepository<EncounterExecution>), typeof(CrudDatabaseRepository<EncounterExecution, EncountersContext>));
+            services.AddScoped<IEncounterExecutionRepository, EncounterExecutionDatabaseRepository>();
 
             services.AddDbContext<EncountersContext>(options =>
                 options.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),
