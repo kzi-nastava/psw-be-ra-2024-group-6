@@ -5,6 +5,7 @@ using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -20,6 +21,8 @@ public class ToursContext : DbContext
 
     public DbSet<Review> Reviews { get; set; }
 
+    public DbSet<Bundle> Bundles { get; set; }
+
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,10 +35,21 @@ public class ToursContext : DbContext
         ConfigureReview(modelBuilder);
         ConfigureEquipment(modelBuilder);
         ConfigureTouristEquipmentManager(modelBuilder);
+        ConfigureBundle(modelBuilder);
+        
         modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
         modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
     }
-    
+
+    private void ConfigureBundle(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Bundle>(entity =>
+        {
+            entity.Property(e => e.Status)
+               .HasConversion<string>();
+
+        });
+    }
 
     private void ConfigureEquipment(ModelBuilder modelBuilder)
     {
