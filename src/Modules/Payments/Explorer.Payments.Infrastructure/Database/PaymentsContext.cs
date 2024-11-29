@@ -14,6 +14,7 @@ public class PaymentsContext : DbContext
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<PurchaseToken> PurchaseTokens { get; set; }
     public DbSet<Wallet> Wallets { get; set; }
+    public DbSet<Product> Products { get; set; }
     public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,6 +24,8 @@ public class PaymentsContext : DbContext
         ConfigureOrderItem(modelBuilder);
         ConfigureShoppingCart(modelBuilder);
         ConfigureWallet(modelBuilder);
+        ConfigureProduct(modelBuilder);
+
     }
     private static void ConfigureShoppingCart(ModelBuilder modelBuilder)
     {
@@ -54,6 +57,16 @@ public class PaymentsContext : DbContext
             entity.Property(w => w.UserId).IsRequired();
             entity.Property(w => w.AdventureCoins).IsRequired();
             //entity.HasIndex(w => w.UserId).IsUnique();
+        });
+    }
+    private static void ConfigureProduct(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.Property(product => product.Price).HasColumnType("jsonb");
+            entity.HasOne<OrderItem>()
+                  .WithOne(oi => oi.Product)
+                  .HasForeignKey<OrderItem>(oi => oi.ProductId);
         });
     }
 }
