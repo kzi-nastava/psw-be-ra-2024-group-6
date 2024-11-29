@@ -24,7 +24,7 @@ public class ToursProfile : Profile
         CreateMap<BundleDto,Bundle>().ReverseMap();
 
         CreateMap<TourDto, Tour>().ReverseMap();
-        CreateMap<Tour, TourDto>().ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => !src.IsNotPublished()));
+        CreateMap<Tour, TourDto>().ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => src.IsPublished()));
 
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 
