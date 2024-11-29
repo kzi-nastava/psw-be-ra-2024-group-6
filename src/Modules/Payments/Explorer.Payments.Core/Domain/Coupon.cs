@@ -34,20 +34,15 @@ namespace Explorer.Payments.Core.Domain
             if (Code != updatedCoupon.Code)
                 throw new InvalidOperationException("Coupon code cannot be modified.");
 
-            // Ažuriranje samo dozvoljenih polja
+            
             DiscountPercentage = updatedCoupon.DiscountPercentage;
-            TourId = updatedCoupon.TourId;
-            ExpiresDate = updatedCoupon.ExpiresDate;
 
-            // Validacija nakon ažuriranja
             Validate();
 
-            return this; // Vraća ažuriranu instancu
+            TourId = updatedCoupon.TourId;
+            ExpiresDate = updatedCoupon.ExpiresDate;
+            return this; 
         }
-
-
-
-
 
 
 
