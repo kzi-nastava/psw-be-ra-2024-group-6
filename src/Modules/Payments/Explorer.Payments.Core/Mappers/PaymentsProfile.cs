@@ -29,6 +29,7 @@ public class PaymentsProfile : Profile
 
 
         CreateMap<PurchaseTokenDto, PurchaseToken>().ReverseMap();
+
         CreateMap<WalletDto, Wallet>().ReverseMap();
 
         CreateMap<ProductDto, Product>()
@@ -39,6 +40,6 @@ public class PaymentsProfile : Profile
                     .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.Amount))
                     .ForMember(dest => dest.ResourceId, opt => opt.MapFrom(src => (long?)src.ResourceId));
 
-
+        CreateMap<Coupon, CouponDto>().ReverseMap();
     }
 }

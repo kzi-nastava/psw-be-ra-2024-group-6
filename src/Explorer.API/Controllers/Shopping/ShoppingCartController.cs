@@ -2,10 +2,13 @@
 using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Shopping
 {
+    [Authorize(Policy = "touristPolicy")]
+    [Route("api/tourist/shop")]
     public class ShoppingCartController : BaseApiController
     {
         private readonly IShoppingCartService _shoppingCartService;

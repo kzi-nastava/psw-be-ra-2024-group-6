@@ -15,6 +15,7 @@ public class PaymentsContext : DbContext
     public DbSet<PurchaseToken> PurchaseTokens { get; set; }
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Coupon> Coupons { get; set; }
     public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,7 +26,7 @@ public class PaymentsContext : DbContext
         ConfigureShoppingCart(modelBuilder);
         ConfigureWallet(modelBuilder);
         ConfigureProduct(modelBuilder);
-
+        ConfigureCoupon(modelBuilder);
     }
     private static void ConfigureShoppingCart(ModelBuilder modelBuilder)
     {
@@ -67,6 +68,27 @@ public class PaymentsContext : DbContext
             entity.HasOne<OrderItem>()
                   .WithOne(oi => oi.Product)
                   .HasForeignKey<OrderItem>(oi => oi.ProductId);
+        });
+    }
+
+    private static void ConfigureCoupon(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Coupon>(entity =>
+        {
+
+            entity.Property(c => c.Code)
+                .IsRequired()
+                .HasMaxLength(8); 
+
+            entity.HasIndex(c => c.Code)
+                .IsUnique();
+
+
+            entity.Property(c => c.ExpiresDate)
+                .HasConversion(
+                    v => v.HasValue ? v.Value.ToUniversalTime() : (DateTime?)null, // Ako ima vrednost, konvertuj u UTC
+                    v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : (DateTime?)null // Ako ima vrednost, postavi na UTC
+                );
         });
     }
 }
