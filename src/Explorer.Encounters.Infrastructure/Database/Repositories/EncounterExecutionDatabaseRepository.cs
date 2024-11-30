@@ -66,7 +66,6 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
         }
         public EncounterExecution GetById(long id)
         {
-            Debug.WriteLine("MALA MIKA PIKA PISINA" + id);
             return _dbContext.EncounterExecutions.First(e => e.Id == id);
         }
     }

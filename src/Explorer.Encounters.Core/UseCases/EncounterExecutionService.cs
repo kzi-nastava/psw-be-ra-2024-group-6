@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,12 +18,14 @@ namespace Explorer.Encounters.Core.UseCases
     public class EncounterExecutionService : CrudService<EncounterExecutionDto,EncounterExecution>, IEncounterExecutionService
     {
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
+        private readonly IEncounterService _encounterService;
         private readonly IMapper mapper;
 
-        public EncounterExecutionService(ICrudRepository<EncounterExecution> repository,IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper) : base(repository, mapper)
+        public EncounterExecutionService(IEncounterService encounterService, ICrudRepository<EncounterExecution> repository,IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper) : base(repository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             this.mapper = mapper;
+            _encounterService = encounterService;
         }
         public Result<EncounterExecutionDto> Create(EncounterExecutionDto encounterDto)
         {
@@ -78,21 +81,89 @@ namespace Explorer.Encounters.Core.UseCases
 
         public Result<EncounterExecutionDto> StartMiscExecution(long encounterId, int touristId)
         {
+            EncounterReadDto encounter = _encounterService.GetById(encounterId).Value;
+            if (!((TypeEncounter)Enum.Parse(typeof(TypeEncounter), encounter.TypeEncounter) == TypeEncounter.Misc))
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter is not a misc encounter.");
+            }
+
             EncounterExecution execution = new EncounterExecution(encounterId, touristId);
             EncounterExecutionDto dto = MapToDto(execution);
             return Create(dto);
         }
-        public Result<EncounterExecutionDto> FinishMiscExecution(long executionId)
+        public Result<EncounterExecutionDto> FinishMiscExecution(long executionId, int touristId)
         {
             EncounterExecution e = _encounterExecutionRepository.GetById(executionId);
-            Debug.WriteLine("DABOOOOOOOOOOOOOOME" + e.Id + e.TouristId);
+
+            if (e.TouristId != touristId)
+            {
+                return Result.Fail(FailureCode.Forbidden).WithError("You are not allowed to finish this encounter.");
+            }
+
+            EncounterReadDto encounter = _encounterService.GetById(e.EncounterId).Value;
+
+            if (!((TypeEncounter)Enum.Parse(typeof(TypeEncounter), encounter.TypeEncounter) == TypeEncounter.Misc))
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter is not a misc encounter.");
+            }
+
             e.Complete();
             return Update(e);
         }
+
+        public Result<HiddenEncounterExecutionDto> StartHiddenExecution(long encounterId, int touristId)
+        {
+
+            EncounterReadDto encounter = _encounterService.GetById(encounterId).Value;
+
+            if (!(encounter is HiddenEncounterReadDto))
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter is not a hidden encounter.");
+            }
+
+            HiddenEncounterExecution execution = new HiddenEncounterExecution(encounterId, touristId);
+            HiddenEncounterExecutionDto executionDto = mapper.Map<HiddenEncounterExecutionDto>(execution);
+
+
+
+            return Create(executionDto).Map(result => (HiddenEncounterExecutionDto)result);
+        }
+
+        public Result<HiddenEncounterExecutionDto> ProcessHiddenExecution(long executionId, int touristId, LocationDto currentPosition)
+        {
+            EncounterExecution execution = _encounterExecutionRepository.GetById(executionId);
+
+            if (execution.TouristId != touristId)
+            {
+                return Result.Fail(FailureCode.Forbidden).WithError("You are not allowed to finish this encounter.");
+            }
+
+            EncounterReadDto encounter = _encounterService.GetById(execution.EncounterId).Value;
+
+            if(!(encounter is HiddenEncounterReadDto))
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter is not a hidden encounter.");
+            }
+
+            HiddenEncounterReadDto hiddenEncounter = (HiddenEncounterReadDto)encounter;
+
+            HiddenEncounterExecution hiddenExecution = (HiddenEncounterExecution)execution;
+            
+            hiddenExecution.AddTimePassed(currentPosition.Latitude, currentPosition.Longitude, hiddenEncounter.HiddenLocation.Latitude, hiddenEncounter.HiddenLocation.Longitude);
+
+            if(hiddenExecution.Did30SecondsPass()) 
+                hiddenExecution.Complete();
+
+            var result = Update(hiddenExecution);
+
+            return mapper.Map<HiddenEncounterExecutionDto>(result.Value);
+        }
+
+
         public Result<EncounterExecutionDto> GetById(long id)
         {
             var result = _encounterExecutionRepository.GetById(id);
-            return Create(MapToDto(result));
+            return MapToDto(result);
         }
 
 

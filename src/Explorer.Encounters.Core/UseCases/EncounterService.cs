@@ -116,6 +116,12 @@ namespace Explorer.Encounters.Core.UseCases
 
             }
         }
+
+        public Result<EncounterReadDto> GetById(long id)
+        {
+            var result = _encounterRepository.GetById(id);
+            return mapper.Map<EncounterReadDto>(result);
+        }
     }
 }
 
