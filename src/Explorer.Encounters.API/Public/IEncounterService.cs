@@ -20,6 +20,8 @@ namespace Explorer.Encounters.API.Public
         Result<List<EncounterReadDto>> GetAllActiveEncounters();
         Result<List<SocialEncounterReadDto>> GetAllActiveSocialEncounters();
         Result Delete(long id);
+
+        Result<EncounterReadDto> GetById(long id);
         public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounter, int creatorId);
     }
 }
