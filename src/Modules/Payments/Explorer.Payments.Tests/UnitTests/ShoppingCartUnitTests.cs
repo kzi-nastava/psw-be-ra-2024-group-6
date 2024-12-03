@@ -20,7 +20,7 @@ namespace Explorer.Payments.Tests.Integration.Tourist
             var shoppingCart = new Core.Domain.ShoppingCart(userId, new Price(0));
 
             // Act
-            var result = shoppingCart.AddItem(tourId, tourName, price);
+            var result = shoppingCart.AddTour(tourId, tourName, price);
 
             // Assert
             result.ShouldNotBeNull();
@@ -33,8 +33,8 @@ namespace Explorer.Payments.Tests.Integration.Tourist
         {
             // Arrange
             var shoppingCart = new Core.Domain.ShoppingCart(1, new Price(0));
-            shoppingCart.AddItem(101, "Tour A", 50.0);
-            shoppingCart.AddItem(102, "Tour B", 30.0);
+            shoppingCart.AddTour(101, "Tour A", 50.0);
+            shoppingCart.AddTour(102, "Tour B", 30.0);
 
             // Assert Total Price after additions
             shoppingCart.TotalPrice.Amount.ShouldBe(80.0);

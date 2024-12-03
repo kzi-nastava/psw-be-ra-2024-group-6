@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.API.Controllers.Administrator.Administration;
 
 namespace Explorer.Encounters.Tests.Integration
 {
@@ -41,9 +42,9 @@ namespace Explorer.Encounters.Tests.Integration
             result.Count.ShouldBe(3);
         }
 
-        private static EncounterController CreateController(IServiceScope scope)
+        private static EncounterTouristController CreateController(IServiceScope scope)
         {
-            return new EncounterController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
+            return new EncounterTouristController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
             {
                 ControllerContext = BuildContext("-1")
             };
