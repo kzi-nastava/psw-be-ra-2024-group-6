@@ -81,7 +81,7 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
 
 
 
-    public Result<ShoppingCartDto> RemoveItem(int userId, int resourceId)
+    public Result<ShoppingCartDto> RemoveItem(int userId, int itemId)
     {
 
         var sc = _shoppingCartRepository.GetByUserId(userId);
@@ -89,7 +89,7 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
         {
             return Result.Fail<ShoppingCartDto>("Shopping cart not found.");
         }
-        sc.RemoveItem(resourceId);
+        sc.RemoveItem(itemId);
         _shoppingCartRepository.Update(sc);
         return MapToDto(mapper.Map<ShoppingCart>(sc));
     }
