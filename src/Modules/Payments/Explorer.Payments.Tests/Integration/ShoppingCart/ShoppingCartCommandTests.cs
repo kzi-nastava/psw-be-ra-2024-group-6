@@ -51,7 +51,7 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope, userId);
 
-            var result = controller.AddItem(tourId);
+            var result = controller.AddItem(tourId, 1);
             var shoppingCartDto = ((ObjectResult)result.Result).Value as ShoppingCartDto;
 
             shoppingCartDto.ShouldNotBeNull();
@@ -78,7 +78,7 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
         public void ChecksOutCart()
         {
             // Arrange
-            string userId = "-30";
+            string userId = "-22";
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope, userId);
 

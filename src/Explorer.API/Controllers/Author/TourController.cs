@@ -15,6 +15,7 @@ namespace Explorer.API.Controllers.Author
     {
         private readonly ITourService _tourService;
 
+
         public TourController(ITourService tourService)
         {
             _tourService = tourService;
