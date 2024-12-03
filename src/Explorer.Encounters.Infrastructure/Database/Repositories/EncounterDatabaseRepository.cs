@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Encounters.API.Dtos;
+using FluentResults;
 
 namespace Explorer.Encounters.Infrastructure.Database.Repositories
 {
@@ -69,6 +71,9 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         }
 
-
+        public Encounter GetById(long id)
+        {
+            return _dbContext.Encounters.First(e => e.Id == id);
+        }
     }
 }
