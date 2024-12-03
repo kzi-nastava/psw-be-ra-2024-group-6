@@ -17,8 +17,8 @@ public interface IShoppingCartService
 
     public Result<ShoppingCartDto> GetByUserId(long userId);
 
-    public Result<ShoppingCartDto> AddItem(long userId, long tourId);
-    public Result<ShoppingCartDto> RemoveItem(int userId, int itemId);
+    public Result<ShoppingCartDto> AddItem(long userId, long resourceId, long resourceTypeId);
+    public Result<ShoppingCartDto> RemoveItem(int userId, int resourceId);
 
-    public Result<CheckoutResultDto> Checkout(long userId);
+    public Result<CheckoutResultDto> Checkout(int userId);
 }

@@ -39,20 +39,7 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result Delete(long id)
-        {
-            try
-            {
 
-                _encounterRepository.Delete(id);
-                return Result.Ok();
-            }
-            catch (Exception ex)
-            {
-                return Result.Fail(FailureCode.NotFound)
-                    .WithError($"Encounter with ID {id} not found.");
-            }
-        }
 
         public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounterDto, int creatorId)
         {
@@ -71,6 +58,23 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+
+
+        public Result Delete(long id)
+        {
+            try
+            {
+
+                _encounterRepository.Delete(id);
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(FailureCode.NotFound)
+                    .WithError($"Encounter with ID {id} not found.");
+            }
+        }
+
         public Result<List<EncounterReadDto>> GetPaged()
         {
             
@@ -84,6 +88,14 @@ namespace Explorer.Encounters.Core.UseCases
             
             return mapper.Map<List<EncounterReadDto>> (_encounterRepository.GetAllActiveEncounters());
             
+        }
+        public Result<List<SocialEncounterReadDto>> GetAllActiveSocialEncounters()
+        {
+            var activeEncounters = _encounterRepository.GetAllActiveEncounters()
+                .Cast<SocialEncounter>()
+                .ToList();
+
+            return mapper.Map<List<SocialEncounterReadDto>>(activeEncounters);
         }
 
         public Result<EncounterCreateDto> Update(EncounterCreateDto encounterDto)
@@ -104,5 +116,12 @@ namespace Explorer.Encounters.Core.UseCases
 
             }
         }
+
+        public Result<EncounterReadDto> GetById(long id)
+        {
+            var result = _encounterRepository.GetById(id);
+            return mapper.Map<EncounterReadDto>(result);
+        }
     }
 }
+
