@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
@@ -22,11 +23,13 @@ namespace Explorer.Tours.Core.UseCases
     {
         private readonly IBundleRepository _bundleRepository;
         private readonly IPurchaseTokenRepository _purchaseTokenRepository;
+        private readonly IWalletRepository _walletRepository;
 
-        public BundleService(IBundleRepository bundleRepository,IPurchaseTokenRepository purchaseTokenRepository, IMapper mapper) : base( mapper)
+        public BundleService(IBundleRepository bundleRepository,IPurchaseTokenRepository purchaseTokenRepository,IWalletRepository  walletRepository, IMapper mapper) : base( mapper)
         {
             _bundleRepository = bundleRepository;
             _purchaseTokenRepository = purchaseTokenRepository;
+            _walletRepository = walletRepository;
            
         }
 
@@ -34,12 +37,20 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-                foreach(int tour in bundle.TourIds)
+                Wallet wallet = _walletRepository.GetByUserId(userId);
+                if(wallet.AdventureCoins < bundle.Price)
+                {
+                    return Result.Fail(FailureCode.Forbidden).WithError("Not enough coins.");
+                }
+
+                foreach (int tour in bundle.TourIds)
                 {
                     PurchaseToken token = new PurchaseToken(userId, tour,DateTime.UtcNow,false);
                     _purchaseTokenRepository.Create(token);
                 }
 
+                wallet.AdventureCoins -= (long)bundle.Price;
+                _walletRepository.Update(wallet);
                 return bundle;
             }
             catch (ArgumentException ex)
