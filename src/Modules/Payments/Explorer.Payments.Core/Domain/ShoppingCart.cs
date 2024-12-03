@@ -20,23 +20,24 @@ public class ShoppingCart : Entity
         OrderItems = new List<OrderItem>();
     }
 
-    public OrderItem AddItem(long tourId, string name, double price)
+    public OrderItem AddTour(long tourId, string name, double price)
     {
         if (TourAlreadyInItems(tourId))
         {
-            return OrderItems.FirstOrDefault(t => t.TourId == tourId);
+            return OrderItems.FirstOrDefault(t => t.ProductId == tourId);
         }
 
         var newPrice = new Price(price);
-        var newItem = new OrderItem(Id, tourId, name, newPrice);
+        var newProduct = new Product(newPrice, 1, tourId);
+        var newItem = new OrderItem(Id, name, newPrice, newProduct);
         OrderItems.Add(newItem);
         CalculateTotalPrice(price, true);
         return newItem;
     }
 
-    private bool TourAlreadyInItems(long tourId)
+    private bool TourAlreadyInItems(long? tourId)
     {
-        return OrderItems.Any(item => item.TourId == tourId);
+        return OrderItems.Any(item => item.ProductId == tourId);
     }
 
     public void RemoveItem(int itemId)
@@ -69,7 +70,7 @@ public class ShoppingCart : Entity
 
         foreach (var item in OrderItems)
         {
-            var token = new PurchaseToken(this.UserId, item.TourId, DateTime.UtcNow, false);
+            var token = new PurchaseToken(this.UserId, item.ProductId, DateTime.UtcNow, false);
 
             tokens.Add(token);
         }

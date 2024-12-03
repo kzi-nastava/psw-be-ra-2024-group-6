@@ -42,6 +42,7 @@ public static class StakeholdersStartup
         services.AddScoped<IInternalInstructorService, InternalInstructorService>();
         services.AddScoped<IAuthorService, AuthorService>();
         services.AddScoped<IInternalTourPersonService, InternalTourPersonService>();
+        services.AddScoped<IInternalUserPaymentService, InternalUserPaymentService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)

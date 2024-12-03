@@ -18,21 +18,21 @@ namespace Explorer.API.Controllers.Shopping
             _shoppingCartService = shoppingCartService;
         }
 
-        [HttpPut("removeItem/{itemId:int}")]
-        public ActionResult<ShoppingCartDto> RemoveItem(int itemId)
+        [HttpPut("removeItem/{resourceId:int}")]
+        public ActionResult<ShoppingCartDto> RemoveItem(int resourceId)
         {
             var userId = User.UserId();
 
-            var result = _shoppingCartService.RemoveItem(userId, itemId);
+            var result = _shoppingCartService.RemoveItem(userId, resourceId);
             return CreateResponse(result);
         }
 
-        [HttpPost("shoppingItem/{tourId:int}")]
-        public ActionResult<ShoppingCartDto> AddItem(int tourId)
+        [HttpPost("shoppingItem/{resourceId:long}/{resourceTypeId:long}")]
+        public ActionResult<ShoppingCartDto> AddItem(int resourceId, int resourceTypeId)
         {
             var userId = User.UserId();
 
-            var result = _shoppingCartService.AddItem(userId, tourId);
+            var result = _shoppingCartService.AddItem(userId, resourceId, resourceTypeId);
             return CreateResponse(result);
         }
 

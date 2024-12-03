@@ -80,7 +80,7 @@ namespace Explorer.Stakeholders.Tests.Integration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
-            int notificationId = 1;
+            int notificationId = -1;
 
             var result = (ObjectResult)controller.MarkNotificationAsRead(notificationId);
 
