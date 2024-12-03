@@ -1,4 +1,4 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Payments.API.Internal;
+using Explorer.Payments.Core.UseCases;
 
 namespace Explorer.Payments.Infrastructure;
 
@@ -33,6 +34,8 @@ public static class PaymentsStartup
         services.AddScoped<IPurchaseTokenService, PurchaseTokenService>();
         services.AddScoped<IInternalPurchaseTokenService, InternalPurchaseTokenService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<IInternalWalletService, InternalWalletService>();
+        services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<ICouponService, CouponService>();
     }
 
@@ -40,6 +43,10 @@ public static class PaymentsStartup
     {
         services.AddScoped(typeof(ICrudRepository<PurchaseToken>), typeof(CrudDatabaseRepository<PurchaseToken, PaymentsContext>));
         services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, PaymentsContext>));
+
+        services.AddScoped(typeof(ICrudRepository<Wallet>), typeof(CrudDatabaseRepository<Wallet, PaymentsContext>));
+        services.AddScoped<IWalletRepository, WalletDatabaseRepository>();
+
         services.AddScoped(typeof(ICrudRepository<Coupon>), typeof(CrudDatabaseRepository<Coupon, PaymentsContext>));
 
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
