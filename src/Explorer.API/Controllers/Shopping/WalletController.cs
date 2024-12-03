@@ -23,10 +23,10 @@ namespace Explorer.API.Controllers.Shopping
             return CreateResponse(result);
         }
 
-        [HttpPut]
-        public ActionResult<WalletDto> Update([FromBody] WalletDto walletDto)
+        [HttpPut("{senderId:int}")]
+        public ActionResult<WalletDto> Update(int senderId, [FromBody] WalletDto walletDto)
         {
-            var result = _walletService.Update(walletDto);
+            var result = _walletService.Update(walletDto,senderId);
             return CreateResponse(result);
         }
         [HttpGet("users")]

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using FluentResults;
+using Explorer.Stakeholders.API.Internal;
 
 namespace Explorer.Payments.Core.UseCases
 {
@@ -17,10 +18,12 @@ namespace Explorer.Payments.Core.UseCases
     {
         private readonly ICrudRepository<Wallet> _crudRepository;
         private readonly IWalletRepository _walletRepository;
+        private readonly IInternalNotificationService _internalNotificationService;
         private readonly IMapper mapper;
 
-        public WalletService(ICrudRepository<Wallet> crudRepository, IWalletRepository walletRepository, IMapper mapper) : base(crudRepository, mapper)
+        public WalletService(ICrudRepository<Wallet> crudRepository, IWalletRepository walletRepository, IInternalNotificationService internalNotificationService, IMapper mapper) : base(crudRepository, mapper)
         {
+            this._internalNotificationService = internalNotificationService;
             this._walletRepository = walletRepository;
             this._crudRepository = crudRepository;
             this.mapper = mapper;
@@ -29,8 +32,9 @@ namespace Explorer.Payments.Core.UseCases
         {
             return MapToDto(_walletRepository.GetByUserId(userId));
         }
-        public new Result<WalletDto> Update(WalletDto wallet)
+        public Result<WalletDto> Update(WalletDto wallet, long senderId)
         {
+            _internalNotificationService.SendWalletNotification(wallet.UserId, senderId, wallet.AdventureCoins);    //sends a notification to the user whose wallet was updated
             return MapToDto(_walletRepository.Update(MapToDomain(wallet)));
         }
         public PagedResult<WalletDto> GetPaged()
