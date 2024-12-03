@@ -29,7 +29,11 @@ namespace Explorer.API.Controllers.Shopping
             var result = _walletService.Update(walletDto);
             return CreateResponse(result);
         }
-
-
+        [HttpGet("users")]
+        public ActionResult<WalletDto> GetPaged()
+        {
+            var result = _walletService.GetPaged();
+            return Ok(result);
+        }
     }
 }
