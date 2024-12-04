@@ -79,8 +79,11 @@ namespace Explorer.Stakeholders.Core.UseCases
                 long? recieverPersonId = 0;
                 if (userId != 0)
                 {
-                    recieverPersonId = _personRepository.GetByUserId(userId).Id;
-                
+                    var person = _personRepository.GetByUserId(userId);
+                    if (person != null)
+                    {
+                        recieverPersonId = person.Id;
+                    }
                 }
                 List<Notification> notifications = _notificationRepository.GetNotificationsByUserId((int)recieverPersonId); //changed it to be personId instead of userId because the personId is stored
 

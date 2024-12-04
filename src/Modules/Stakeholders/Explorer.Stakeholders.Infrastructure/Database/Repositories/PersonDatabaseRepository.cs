@@ -35,8 +35,6 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             {
                 throw new KeyNotFoundException(ex.Message);
             }
-
-
         }
 
         public Person Update(Person person) 
