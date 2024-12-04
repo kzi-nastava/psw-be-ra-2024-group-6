@@ -77,6 +77,6 @@ public class ShoppingCart : Entity
         OrderItems.Clear();
         TotalPrice = new Price(0);
 
-        return tokens;
+        return tokens;sasasaassa
     }
 }
