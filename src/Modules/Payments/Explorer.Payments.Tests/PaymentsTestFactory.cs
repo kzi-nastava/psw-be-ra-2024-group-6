@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Tours.Infrastructure.Database;
 
 namespace Explorer.Payments.Tests;
@@ -22,6 +23,11 @@ public class PaymentsTestFactory : BaseTestFactory<PaymentsContext>
         descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ToursContext>));
         services.Remove(descriptor!);
         services.AddDbContext<ToursContext>(SetupTestContext());
+
+        descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<StakeholdersContext>));
+        services.Remove(descriptor!);
+        services.AddDbContext<StakeholdersContext>(SetupTestContext());
+
         return services;
 
     }
