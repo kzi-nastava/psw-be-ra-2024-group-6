@@ -27,9 +27,16 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<List<PersonDto>> GetMostPopularAuthors()
         {
-            var authorsIds = _userService.GetAllAuthorsIds();
-            var result = _personRepository.GetMostFollowedAuthors(authorsIds);
-            return MapToDto(result);
+            try
+            {
+                var authorsIds = _userService.GetAllAuthorsIds();
+                var result = _personRepository.GetMostFollowedAuthors(authorsIds);
+                return MapToDto(result);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
     }
 }
