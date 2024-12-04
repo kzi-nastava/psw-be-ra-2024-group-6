@@ -57,10 +57,15 @@ namespace Explorer.Encounters.Infrastructure.Database
 
         private void ConfigureEncounterExecution(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<EncounterExecution>()
                 .HasOne<Encounter>() 
                 .WithMany()         
-                .HasForeignKey(e => e.EncounterId); 
+                .HasForeignKey(e => e.EncounterId);
+
+            modelBuilder.Entity<HiddenEncounterExecution>()
+                .ToTable("HiddenEncounterExecutions")
+                .HasBaseType<EncounterExecution>();
         }
 
     }

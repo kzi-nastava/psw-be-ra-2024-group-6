@@ -41,14 +41,15 @@ namespace Explorer.Encounters.Core.UseCases
 
 
 
-        public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounterDto, int creatorId)
+        public Result<EncounterByTouristReadDto> CreateByTourist(EncounterCreateDto encounterDto, int creatorId)
         {
             try
             {
                 if (!_touristRankService.CanCreateEncounter(creatorId).Value)
                     return Result.Fail(FailureCode.Forbidden).WithError("Tourist is not eligible to create encounter.");
                 var encounter = mapper.Map<Encounter>(encounterDto);
-                encounter.SetCreatorId(creatorId);
+                encounter.CreatorId = creatorId;
+                encounter.Status = Status.Draft;
                 var result = _encounterRepository.Create(encounter);
                 return mapper.Map<EncounterByTouristReadDto>(result);
             }
@@ -117,6 +118,7 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+
         public Result AcceptEncounter(int encounterId)
         {
             try
@@ -125,8 +127,8 @@ namespace Explorer.Encounters.Core.UseCases
                 if (encounter == null)
                     return Result.Fail(FailureCode.NotFound).WithError("Encounter not found.");
 
-                encounter.AcceptEncounter();  
-                _encounterRepository.Update(encounter);  
+                encounter.AcceptEncounter();
+                _encounterRepository.Update(encounter);
 
                 return Result.Ok();
             }
@@ -134,6 +136,13 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
+        }
+
+        public Result<EncounterReadDto> GetById(long id)
+        {
+            var result = _encounterRepository.GetById(id);
+            return mapper.Map<EncounterReadDto>(result);
+
         }
     }
 }

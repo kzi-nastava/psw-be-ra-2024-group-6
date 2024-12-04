@@ -17,7 +17,7 @@ namespace Explorer.Encounters.Core.Domain
     {
         public long EncounterId { get; init; }
         public int TouristId { get; init; }
-        public EncounterExecutionStatus Status { get; private set; }
+        public EncounterExecutionStatus Status { get; internal set; }
 
         public DateTime? TimeOfCompletion { get;private set; }
 

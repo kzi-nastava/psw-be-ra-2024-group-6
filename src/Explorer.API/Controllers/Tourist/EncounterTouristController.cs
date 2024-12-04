@@ -29,13 +29,25 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpPost()]
-        public ActionResult<EncounterReadDto> Create([FromBody] EncounterByTouristCreateDto encounter)
+        [HttpPost]
+        public ActionResult<EncounterReadDto> Create([FromBody] EncounterCreateDto encounter)
         {
             var result = _encounterService.CreateByTourist(encounter, User.UserId());
             return CreateResponse(result);
         }
 
+        [HttpPost("social")]
+        public ActionResult<EncounterReadDto> CreateSocialEncounter([FromBody] SocialEncounterCreateDto socialEncounter)
+        {
+            var result = _encounterService.CreateByTourist(socialEncounter, User.UserId());
+            return CreateResponse(result);
+        }
 
+        [HttpPost("hidden")]
+        public ActionResult<EncounterReadDto> CreateHiddenEncounter([FromBody] HiddenEncounterDto hiddenEncounter)
+        {
+            var result = _encounterService.CreateByTourist(hiddenEncounter, User.UserId());
+            return CreateResponse(result);
+        }
     }
 }
