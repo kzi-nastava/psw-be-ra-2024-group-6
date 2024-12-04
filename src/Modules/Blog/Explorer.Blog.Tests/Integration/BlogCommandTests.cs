@@ -35,7 +35,8 @@ namespace Explorer.Blog.Tests.Integration
                 UserId = -1,
                 Status = "Published",
                 CreatedAt = DateTime.Now.ToUniversalTime(), 
-                Pictures = new List<BlogPictureDto>()
+                Pictures = new List<BlogPictureDto>(),
+                Tags = new List<string> { "Novi Sad", "Beograd", "Torino" }
             };
 
             // Act
@@ -48,6 +49,12 @@ namespace Explorer.Blog.Tests.Integration
             result.Title.ShouldBe(newEntity.Title);
             result.Status.ShouldBe(newEntity.Status);
             result.UserId.ShouldBe(-1);
+            result.Tags.ShouldNotBeNull();
+            result.Tags.Count.ShouldBe(newEntity.Tags.Count);
+
+            result.Tags[0].ShouldBe("Rim");
+            result.Tags[1].ShouldBe("Putovanja");
+            result.Tags[2].ShouldBe("Italija");
 
             // Assert - Database
             var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Description == newEntity.Description);
