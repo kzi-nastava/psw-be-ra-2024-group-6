@@ -34,6 +34,12 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
         {
             try
             {
+
+                var existingWallet = _dbContext.Wallets.Find(wallet.Id);
+                if (existingWallet != null)
+                {
+                    _dbContext.Entry(existingWallet).State = EntityState.Detached;
+                }
                 _dbContext.Entry(wallet).State = EntityState.Modified;
                 _dbContext.SaveChanges();
             }
