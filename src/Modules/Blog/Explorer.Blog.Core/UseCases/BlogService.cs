@@ -36,7 +36,7 @@ namespace Explorer.Blog.Core.UseCases
 
             foreach(CommentDto comment in blogDto.Comments)
             {
-                UserDto commentAuthor = _internalInstructorService.Get(comment.UserId).Value;
+                UserDto commentAuthor = _internalInstructorService.Get(blog.UserId).Value;
                 comment.AuthorUsername = commentAuthor.Username;
 
             }
