@@ -17,5 +17,15 @@ namespace Explorer.Encounters.Core.Domain
             PeopleCount = peopleCount;
             Radius = radius;
         }
+
+        public bool IsUserInRadius(Location userLocation)
+        {
+            var dLat = userLocation.Latitude - Location.Latitude;
+            var dLon = userLocation.Longitude - Location.Longitude;
+
+            var distance = Math.Sqrt(dLat * dLat + dLon * dLon);
+
+            return distance <= Radius;
+        }
     }
 }

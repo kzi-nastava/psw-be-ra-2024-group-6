@@ -22,5 +22,6 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
         public List<Encounter> GetAllActiveEncounters();
 
         public Encounter GetById(long id);
+        public SocialEncounter GetSocialEncounterById(long id);
     }
 }
