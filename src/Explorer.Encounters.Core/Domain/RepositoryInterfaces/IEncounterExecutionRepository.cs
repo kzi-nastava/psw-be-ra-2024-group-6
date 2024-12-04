@@ -14,7 +14,8 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
         public void Delete(long id);
         public EncounterExecution GetEncounterExecutionByTouristId(int id);
         public List<EncounterExecution> GetPagedEncounterExecutions();
-        public EncounterExecution GetEncounterExecution(long encounterId,int touristId);
         public EncounterExecution GetById(long id);
+        public SocialEncounterExecution? GetStartedSocialByEncounterId(long encounterId);
+        public SocialEncounterExecution? GetStartedSocialEncounterById(long id);
     }
 }

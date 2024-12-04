@@ -75,5 +75,10 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
         {
             return _dbContext.Encounters.First(e => e.Id == id);
         }
+
+        public SocialEncounter GetSocialEncounterById(long id)
+        {
+            return _dbContext.Encounters.OfType<SocialEncounter>().FirstOrDefault(enc => enc.Id == id);
+        }
     }
 }

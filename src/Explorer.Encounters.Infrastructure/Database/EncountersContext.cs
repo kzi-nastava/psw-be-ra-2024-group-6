@@ -66,6 +66,10 @@ namespace Explorer.Encounters.Infrastructure.Database
             modelBuilder.Entity<HiddenEncounterExecution>()
                 .ToTable("HiddenEncounterExecutions")
                 .HasBaseType<EncounterExecution>();
+
+            modelBuilder.Entity<SocialEncounterExecution>()
+                .ToTable("SocialEncounterExecutions")
+                .HasBaseType<EncounterExecution>();
         }
 
     }
