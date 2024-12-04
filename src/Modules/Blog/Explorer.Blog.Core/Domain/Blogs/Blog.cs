@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-
 namespace Explorer.Blog.Core.Domain.Blogs
 {
     public class Blog : Entity
@@ -20,12 +19,13 @@ namespace Explorer.Blog.Core.Domain.Blogs
         public List<BlogPicture> Pictures { get; private set; }
         public List<Rating> Ratings { get; private set; } = new List<Rating>();
         public List<Comment> Comments { get; private set; }
+        public List<string> Tags { get; private set; }
 
         private Blog() {
             Ratings = new List<Rating>();
         }
 
-        public Blog(string title, string description, Status status, int userId, List<BlogPicture> pictures = null, List<Rating> ratings = null)
+        public Blog(string title, string description, Status status, int userId, List<BlogPicture> pictures = null, List<Rating> ratings = null, List<string> tags = null)
         {
             if (string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(description)) throw new ArgumentNullException("Invalid title.");
             if (status == null) throw new ArgumentNullException("Invalid status.");
@@ -37,6 +37,7 @@ namespace Explorer.Blog.Core.Domain.Blogs
             Pictures = pictures ?? new List<BlogPicture>();
             Ratings = ratings ?? new List<Rating>();
             Comments = new List<Comment>();
+            Tags = tags ?? new List<string>();
         }
     }
 
@@ -48,5 +49,4 @@ namespace Explorer.Blog.Core.Domain.Blogs
         Active,
         Popular
     }
-
 }
