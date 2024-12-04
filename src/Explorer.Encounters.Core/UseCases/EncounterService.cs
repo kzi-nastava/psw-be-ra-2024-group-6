@@ -41,14 +41,15 @@ namespace Explorer.Encounters.Core.UseCases
 
 
 
-        public Result<EncounterByTouristReadDto> CreateByTourist(EncounterByTouristCreateDto encounterDto, int creatorId)
+        public Result<EncounterByTouristReadDto> CreateByTourist(EncounterCreateDto encounterDto, int creatorId)
         {
             try
             {
                 if (!_touristRankService.CanCreateEncounter(creatorId).Value)
                     return Result.Fail(FailureCode.Forbidden).WithError("Tourist is not eligible to create encounter.");
                 var encounter = mapper.Map<Encounter>(encounterDto);
-                encounter.SetCreatorId(creatorId);
+                encounter.CreatorId = creatorId;
+                encounter.Status = Status.Draft;
                 var result = _encounterRepository.Create(encounter);
                 return mapper.Map<EncounterByTouristReadDto>(result);
             }

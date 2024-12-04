@@ -79,6 +79,15 @@ namespace Explorer.Stakeholders.Core.UseCases
             var authorsIds = _userRepository.GetAllAuthorsIds();
             return authorsIds;
         }
-        
+
+        public Result<UserDto> GetWithoutPassword(long id)
+        {
+            var user = _crudRepository.Get(id);
+            var result = MapToDto(user);
+            result.Password = "";
+            return result;
+        }
+
+
     }
 }
