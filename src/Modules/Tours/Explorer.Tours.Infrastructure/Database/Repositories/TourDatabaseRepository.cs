@@ -167,5 +167,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new Exception("Error finding nearby tours", ex);
             }
         }
+
+        public Tour GetByIdWithEquipment(long tourId)
+        {
+            return _context.Tours.Include(t => t.Equipment)
+                                 .FirstOrDefault(t => t.Id == tourId);
+        }
     }
 }
