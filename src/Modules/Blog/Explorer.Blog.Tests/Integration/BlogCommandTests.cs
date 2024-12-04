@@ -52,9 +52,9 @@ namespace Explorer.Blog.Tests.Integration
             result.Tags.ShouldNotBeNull();
             result.Tags.Count.ShouldBe(newEntity.Tags.Count);
 
-            result.Tags[0].ShouldBe("Rim");
-            result.Tags[1].ShouldBe("Putovanja");
-            result.Tags[2].ShouldBe("Italija");
+            result.Tags[0].ShouldBe("Novi Sad");
+            result.Tags[1].ShouldBe("Beograd");
+            result.Tags[2].ShouldBe("Torino");
 
             // Assert - Database
             var storedEntity = dbContext.Blogs.FirstOrDefault(i => i.Description == newEntity.Description);
@@ -131,8 +131,24 @@ namespace Explorer.Blog.Tests.Integration
             result.Id.ShouldBe(-1);
             result.Comments.ShouldNotBeEmpty();
 
-        } 
+        }
 
+        [Fact]
+        public void Retrieves_blogs_by_tag()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var tag = "TORINO"; // The tag we want to search for
+
+            // Act
+            var result = ((ObjectResult)controller.GetBlogsByTag(tag).Result)?.Value as List<BlogDto>;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count.ShouldBeGreaterThan(0); // Ensure there are blogs with this tag
+            result.All(blog => blog.Tags.Any(t => t.Equals(tag, StringComparison.OrdinalIgnoreCase))).ShouldBeTrue();
+        }
 
         [Fact]
         public void Update_fails_invalid_id()

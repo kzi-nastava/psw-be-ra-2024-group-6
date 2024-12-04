@@ -17,10 +17,6 @@ public class BlogContext : DbContext
             .HasColumnType("jsonb");
 
         modelBuilder.Entity<BlogDomain.Blogs.Blog>()
-            .Property(b => b.Tags)
-            .HasColumnType("jsonb");
-
-        modelBuilder.Entity<BlogDomain.Blogs.Blog>()
             .HasMany(b => b.Pictures) 
             .WithOne(p => p.Blog)      
             .HasForeignKey(p => p.BlogId)  
