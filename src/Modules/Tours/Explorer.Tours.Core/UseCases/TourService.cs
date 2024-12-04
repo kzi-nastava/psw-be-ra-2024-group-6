@@ -403,31 +403,51 @@ namespace Explorer.Tours.Core.UseCases
 
         public Result<List<TourHoverMapDto>> FindToursOnMapNearby(double latitude, double longitude, double maxDistance)
         {
-            List<TourHoverMapDto> nearbyToursDtos = new List<TourHoverMapDto>();
             List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
-            Dictionary<Location, bool> locations = new Dictionary<Location, bool>();
+            var uniqueLocations = new HashSet<string>();
+            var nearbyToursDtos = new List<TourHoverMapDto>();
+
             foreach (Tour tour in nearbyTours)
             {
-                KeyValuePair<Location,bool> location = locations.FirstOrDefault(l => l.Key.IsLocationSame(tour.GetPreviewCheckpoint().Location));
-                if (location.Equals(default(KeyValuePair<Location, bool>)))
+                var location = tour.GetPreviewCheckpoint().Location;
+                string locationKey = $"{location.Latitude},{location.Longitude}";
+
+                if (uniqueLocations.Add(locationKey))
                 {
-                    nearbyToursDtos.Add(new TourHoverMapDto(
-                        mapper.Map<LocationReadDto>(tour.GetPreviewCheckpoint().Location), tour.Difficulty.ToString(),
-                        tour.GetAverageRating(), tour.Name, tour.Price.Amount, tour.Id, /*tour.Image*/"gas", true));
-                    locations.Add(tour.GetPreviewCheckpoint().Location, true);
+                    nearbyToursDtos.Add(CreateTourHoverMapDto(tour, true));
                 }
-                else if(location.Value == true)
+                else
                 {
-                    nearbyToursDtos.ForEach(nT =>
-                    {
-                        if (nT.Location.Latitude == location.Key.Latitude && nT.Location.Longitude == location.Key.Longitude)
-                            nT.IsLocationUnique = false;
-                    });
+                    MarkLocationAsNonUnique(nearbyToursDtos, location);
                 }
             }
 
             return nearbyToursDtos;
         }
+        private TourHoverMapDto CreateTourHoverMapDto(Tour tour, bool isLocationUnique)
+        {
+            return new TourHoverMapDto(
+                mapper.Map<LocationReadDto>(tour.GetPreviewCheckpoint().Location),
+                tour.Difficulty.ToString(),
+                tour.GetAverageRating(),
+                tour.Name,
+                tour.Price.Amount,
+                tour.Id,
+                /*tour.Image*/ "gas",
+                isLocationUnique
+            );
+        }
 
+        private void MarkLocationAsNonUnique(List<TourHoverMapDto> tourDtos, Location location)
+        {
+            foreach (var dto in tourDtos)
+            {
+                if (dto.Location.Latitude == location.Latitude && dto.Location.Longitude == location.Longitude)
+                {
+                    dto.IsLocationUnique = false;
+                    break;
+                }
+            }
+        }
     }
 }
