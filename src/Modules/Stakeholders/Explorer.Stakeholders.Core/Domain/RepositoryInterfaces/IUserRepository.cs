@@ -1,4 +1,6 @@
-﻿namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+﻿using FluentResults;
+
+namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 
 public interface IUserRepository
 {
@@ -9,5 +11,5 @@ public interface IUserRepository
     public string GetUserEmail(long userId);
     public User GetById(long id);
     public List<User> GetByIds(List<int> instructorIds);
-
+    public List<long> GetAllAuthorsIds();
 }

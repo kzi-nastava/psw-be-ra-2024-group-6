@@ -62,4 +62,22 @@ public class PurchaseTokenDatabaseRepository : IPurchaseTokenRepository
         }
         return token;
     }
+
+    public List<int> GetMostBoughtToursIds(int count)
+    {
+        try
+        {
+            return _dbContext.PurchaseTokens
+                .GroupBy(p => p.TourId)
+                .Select(g => new { TourId = g.Key, Count = g.Count() })
+                .OrderByDescending(g => g.Count)
+                .Take(count)
+                .Select(g => Convert.ToInt32(g.TourId))
+                .ToList();
+        }
+        catch (Exception e)
+        {
+            throw new Exception("An error occurred while fetching the most bought tours.", e);
+        }
+    }
 }

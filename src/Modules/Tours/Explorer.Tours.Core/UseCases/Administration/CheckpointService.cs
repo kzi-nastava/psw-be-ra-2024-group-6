@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using FluentResults;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using System.Diagnostics;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -56,6 +58,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        public Result<List<DestinationDto>> GetMostPopularDestinations()
+        {
+            var result = _checkpointRepository.GetMostPopularDestinations();
+            return result
+                .Select(ch => new DestinationDto(ch.Location.City, ch.Location.Country, ch.ImageUrl))
+                .ToList();
+        }
 
+        public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize)
+        {
+            return _checkpointRepository.GetTourIdsForDestination(city, country, page, pageSize);
+        }
     }
 }

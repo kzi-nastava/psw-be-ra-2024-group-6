@@ -14,4 +14,5 @@ public interface IPurchaseTokenRepository
 
     public PurchaseToken? GetByUserAndTour(long userId, long tourId);
     public PurchaseToken Update(PurchaseToken token);
+    public List<int> GetMostBoughtToursIds(int count);
 }

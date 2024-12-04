@@ -56,6 +56,29 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
         }
 
-  
+        public List<Person> GetMostFollowedAuthors(List<long> authorsIds, int count = 4)
+        {
+            try
+            {
+                if (authorsIds == null || authorsIds.Count == 0)
+                {
+                    throw new ArgumentException("authorIds cannot be empty or null.");
+                }
+
+                var query = @"SELECT * 
+                      FROM stakeholders.""People"" 
+                      WHERE ""Id"" = ANY ({0}) 
+                      ORDER BY jsonb_array_length(""Followers"") DESC 
+                      LIMIT {1}";
+
+                return _dbContext.People
+                    .FromSqlRaw(query, authorsIds.ToArray(), count)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error fetching most followed authors", e);
+            }
+        }
     }
 }
