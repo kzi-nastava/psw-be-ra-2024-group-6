@@ -9,10 +9,15 @@ public class BlogProfile : Profile
 {
     public BlogProfile()
     {
-        CreateMap<BlogDto, BlogDomain.Blogs.Blog>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
-        .ReverseMap()
-        .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+        CreateMap<BlogDto, BlogDomain.Blogs.Blog>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+            .ReverseMap()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+
         CreateMap<BlogPictureDto, BlogPicture>().ReverseMap();
+
         CreateMap<BlogDto, BlogHomeDto>()
             .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Pictures.First().Url))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
@@ -20,9 +25,12 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
-        CreateMap<BlogDetailsDto, BlogDomain.Blogs.Blog>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
-        .ReverseMap()
-        .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+        CreateMap<BlogDetailsDto, BlogDomain.Blogs.Blog>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+            .ReverseMap()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
         CreateMap<RatingDto, Rating>()
             .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => Enum.Parse<VoteType>(src.VoteType, true)))
