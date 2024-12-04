@@ -34,7 +34,13 @@ namespace Explorer.Payments.Core.UseCases
         }
         public Result<WalletDto> Update(WalletDto wallet, long senderId)
         {
-            _internalNotificationService.SendWalletNotification(wallet.UserId, senderId, wallet.AdventureCoins);    //sends a notification to the user whose wallet was updated
+            long AdventureCoinsAwarded = wallet.AdventureCoins;
+            Wallet oldWallet = _walletRepository.GetByUserId(wallet.UserId);
+            if (oldWallet != null) 
+            {
+                AdventureCoinsAwarded = wallet.AdventureCoins - oldWallet.AdventureCoins;
+            }
+            _internalNotificationService.SendWalletNotification(wallet.UserId, senderId, AdventureCoinsAwarded);    //sends a notification to the user whose wallet was updated
             return MapToDto(_walletRepository.Update(MapToDomain(wallet)));
         }
         public PagedResult<WalletDto> GetPaged()
