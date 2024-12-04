@@ -13,7 +13,8 @@ public class PaymentsContext : DbContext
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<PurchaseToken> PurchaseTokens { get; set; }
-
+    public DbSet<Wallet> Wallets { get; set; }
+    public DbSet<Product> Products { get; set; }
     public DbSet<Coupon> Coupons { get; set; }
     public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }
 
@@ -23,6 +24,8 @@ public class PaymentsContext : DbContext
 
         ConfigureOrderItem(modelBuilder);
         ConfigureShoppingCart(modelBuilder);
+        ConfigureWallet(modelBuilder);
+        ConfigureProduct(modelBuilder);
         ConfigureCoupon(modelBuilder);
     }
     private static void ConfigureShoppingCart(ModelBuilder modelBuilder)
@@ -47,6 +50,26 @@ public class PaymentsContext : DbContext
                 .HasForeignKey(oi => oi.ShoppingCartId);
         });
     }
+    private static void ConfigureWallet(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Wallet>(entity =>
+        {
+            entity.HasKey(w => w.Id);
+            entity.Property(w => w.UserId).IsRequired();
+            entity.Property(w => w.AdventureCoins).IsRequired();
+            //entity.HasIndex(w => w.UserId).IsUnique();
+        });
+    }
+    private static void ConfigureProduct(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.Property(product => product.Price).HasColumnType("jsonb");
+            entity.HasOne<OrderItem>()
+                  .WithOne(oi => oi.Product)
+                  .HasForeignKey<OrderItem>(oi => oi.ProductId);
+        });
+    }
 
     private static void ConfigureCoupon(ModelBuilder modelBuilder)
     {
@@ -66,9 +89,6 @@ public class PaymentsContext : DbContext
                     v => v.HasValue ? v.Value.ToUniversalTime() : (DateTime?)null, // Ako ima vrednost, konvertuj u UTC
                     v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : (DateTime?)null // Ako ima vrednost, postavi na UTC
                 );
-
-
-
         });
     }
 }

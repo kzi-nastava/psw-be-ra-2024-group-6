@@ -28,7 +28,6 @@ namespace Explorer.Encounters.Core.Mappers
                 .Include<SocialEncounterCreateDto, SocialEncounter>().ReverseMap();
 
 
-            CreateMap<EncounterByTouristCreateDto, Encounter>().ReverseMap();
             CreateMap<EncounterByTouristReadDto, Encounter>().ReverseMap();
 
 

@@ -58,7 +58,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
         }
 
-        // sends notification to author or tourist, for tour issues
+        // sends notification to author or tourist
         public Result SendNotification(NotificationDto notificationDto)
         {
             try

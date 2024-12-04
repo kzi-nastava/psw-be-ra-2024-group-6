@@ -197,7 +197,7 @@ namespace Explorer.Encounters.Tests.Integration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateTouristController(scope, "-2");
             var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-            var newEncounter = new EncounterByTouristCreateDto()
+            var newEncounter = new EncounterCreateDto()
             {
                 Name = "Encounter by tourist",
                 Description = "Find the hidden treasure in the forest",
@@ -231,7 +231,7 @@ namespace Explorer.Encounters.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateTouristController(scope, "-3");
-            var newEncounter = new EncounterByTouristCreateDto()
+            var newEncounter = new EncounterCreateDto()
             {
                 Name = "Encounter",
                 Description = "Find the hidden treasure in the forest",
