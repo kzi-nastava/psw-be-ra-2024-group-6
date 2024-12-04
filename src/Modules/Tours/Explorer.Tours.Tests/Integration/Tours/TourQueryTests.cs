@@ -55,41 +55,41 @@ namespace Explorer.Tours.Tests.Integration.Tours
             //Arange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();          
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             TourCreateDto tourCreateDto = new TourCreateDto
             {
                 Checkpoints = new List<CheckpointCreateDto>() {
 
-                    new CheckpointCreateDto
+                new CheckpointCreateDto
+                {
+                    Description = "Test",
+                    Name = "Test",
+                    ImageUrl = "Test",
+                    Location= new LocationCreateDto()
                     {
-                        Description = "Test",
-                        Name = "Test",
-                        ImageUrl = "Test",
-                        Location = new LocationCreateDto()
-                        {
-                            Latitude = 20,
-                            Longitude = 20,
-                            City = "Test",
-                            Country = "Test"
-                        },
-                        Secret = "Test",
+                        Latitude = 20,
+                        Longitude = 20,
+                        City = "Test",
+                        Country = "Test"
                     },
+                    Secret = "Test",
                 },
+            },
                 Objects = new List<ObjectCreateDto>() {
 
-                    new ObjectCreateDto {
+                 new ObjectCreateDto {
                         Description = "Test",
                         Name = "Test",
                         ImageUrl = "Test",
-                        Category = "WC",
-                        Location = new LocationCreateDto {
-                            Latitude = 20,
-                            Longitude = 20,
-                            City = "Test",
-                            Country = "Test"
-                        }
+            Category = "WC",
+            Location = new LocationCreateDto {
+                        Latitude = 20,
+                        Longitude = 20,
+                        City = "Test",
+                        Country = "Test"
                     }
+        }
                 },
                 TourInfo = new TourDto()
                 {
@@ -116,7 +116,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                             TransportType = "Bike"
                         }
                     }
-                 }
+                }
             };
             //Art 
             var result = ((ObjectResult)controller.Create(tourCreateDto).Result)?.Value as TourCreateDto;
@@ -125,7 +125,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
             result.ShouldNotBeNull();
             dbContext.Tours.Count().ShouldBe(6);
             dbContext.Tours.FirstOrDefault(x => x.Name == result.TourInfo.Name).ShouldNotBeNull();
-            dbContext.Checkpoints.FirstOrDefault(x=>x.Name=="Test").ShouldNotBeNull();
+            dbContext.Checkpoints.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
             dbContext.Objects.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
         }
         [Fact]
