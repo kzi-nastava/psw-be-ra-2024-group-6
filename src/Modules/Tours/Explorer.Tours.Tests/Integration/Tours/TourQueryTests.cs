@@ -55,12 +55,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
             //Arange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-
-           
-                dbContext.Equipment.Add(new Equipment("Voda", "Količina vode varira od temperature i trajanja ture. Preporuka je da se pije pola litre vode na jedan sat umerena fizičke aktivnosti (npr. hajk u prirodi bez značajnog uspona) po umerenoj vrućini"));
-                dbContext.SaveChanges();
-            
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();          
 
             TourCreateDto tourCreateDto = new TourCreateDto
             {
@@ -119,15 +114,6 @@ namespace Explorer.Tours.Tests.Integration.Tours
                         {
                             Duration = TimeOnly.FromDateTime(DateTime.UtcNow),
                             TransportType = "Bike"
-                        }
-                    },
-                    Equipment = new List<EquipmentDto>()
-                    {
-                        new EquipmentDto()
-                        {
-                            Id = 11,
-                            Name = "Voda",
-                            Description = "Količina vode varira od temperature i trajanja ture. Preporuka je da se pije pola litre vode na jedan sat umerena fizičke aktivnosti (npr. hajk u prirodi bez značajnog uspona) po umerenoj vrućini"
                         }
                     }
                  }

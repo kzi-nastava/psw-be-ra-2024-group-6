@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Internal;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
@@ -12,10 +13,12 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
+    private readonly IInternalWalletService _internalWalletService;
     private readonly ICrudRepository<Person> _personRepository;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IInternalWalletService internalWalletService)
     {
+        _internalWalletService = internalWalletService; 
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
@@ -46,6 +49,7 @@ public class AuthenticationService : IAuthenticationService
         {
             var user = _userRepository.Create(new User(account.Username, account.Password, UserRole.Tourist, true));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email));
+            var wallet = _internalWalletService.Create(user.Id);
 
             return _tokenGenerator.GenerateAccessToken(user, person.Id);
         }

@@ -10,4 +10,6 @@ namespace Explorer.Tours.API.Internal;
 public interface IInternalTourPaymentService
 {
     TourDto Get(long id);
+
+    bool IsUserAuthor(long tourId, long userId);
 }
