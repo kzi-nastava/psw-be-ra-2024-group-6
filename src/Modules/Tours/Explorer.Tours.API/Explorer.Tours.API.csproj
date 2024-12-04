@@ -8,9 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Explorer.BuildingBlocks.Core\Explorer.BuildingBlocks.Core.csproj" />
+    <ProjectReference Include="..\..\Blog\Explorer.Blog.Core\Explorer.Blog.Core.csproj" />
   </ItemGroup>
-	<ItemGroup>
-		<Folder Include="Internal\" />
-	</ItemGroup>
 
 </Project>

@@ -35,23 +35,20 @@ namespace Explorer.API.Controllers.Author_Tourist
             var result = _blogService.Update(blog);
             return CreateResponse(result);
         }
+
 		[HttpGet("{id:int}")]
 		public ActionResult<BlogDto> Get([FromQuery] int id)
         {
 			return CreateResponse(_blogService.Get(id));
 		}
+
 		[HttpGet]
 		public ActionResult<PagedResult<BlogDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
 		{
 			var result = _blogService.GetPaged(page, pageSize);
 			return CreateResponse(result);
 		}
-        [HttpGet("home")]
-        public ActionResult<List<BlogHomeDto>> GetAllHome([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var result = _blogService.GetHomePaged(page, pageSize);
-            return CreateResponse(result);
-        }
+
         [HttpDelete("{id:int}")]
 		public ActionResult<BlogDto> Delete([FromQuery] int id)
 		{
@@ -70,6 +67,13 @@ namespace Explorer.API.Controllers.Author_Tourist
         {
             var blogResult = _blogService.GetBlogDetails(id);
             return CreateResponse(blogResult);
-        } 
-	}
+        }
+
+        [HttpGet("byTag")]
+        public ActionResult<List<BlogDto>> GetBlogsByTag([FromQuery] string tag)
+        {
+            var result = _blogService.GetBlogsByTag(tag);
+            return CreateResponse(result);
+        }
+    }
 }

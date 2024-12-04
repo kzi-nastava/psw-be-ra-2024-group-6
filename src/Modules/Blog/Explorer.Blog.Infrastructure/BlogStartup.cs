@@ -12,7 +12,6 @@ using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 using Explorer.Blog.Infrastructure.Database.Repositories;
 
 namespace Explorer.Blog.Infrastructure;
-
 public static class BlogStartup
 {
     public static IServiceCollection ConfigureBlogModule(this IServiceCollection services)
@@ -30,7 +29,6 @@ public static class BlogStartup
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IBlogRepository, BlogDatabaseRepository>();
         services.AddScoped<ICommentRepository, CommentDatabaseRepository>();
-
     }
 
     private static void SetupInfrastructure(IServiceCollection services)

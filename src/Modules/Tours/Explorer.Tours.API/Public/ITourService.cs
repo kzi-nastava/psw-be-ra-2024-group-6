@@ -12,9 +12,11 @@ namespace Explorer.Tours.API.Public
 {
     public interface ITourService
     {
-        Result<List<TourDto>> GetByUserId(long userId);
+        Result<List<TourAuthorCardDto>> GetByUserId(long userId);
         Result<TourDto> GetById(long tourId);
         Result<PagedResult<TourDto>> GetPaged(int page, int pageSize);
+
+        public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId);
         Result Delete(int id);
         Result<TourCreateDto> Create(TourCreateDto tour);
         Result<TourReadDto> Publish(long tourId, int userId);
@@ -29,5 +31,7 @@ namespace Explorer.Tours.API.Public
 
 
         Result<List<TourCardDto>> GetBoughtTours(long userId);
+        public Result<List<TourCardDto>> GetMostPopularTours(int count);
+        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize);
     }
 }

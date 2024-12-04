@@ -15,10 +15,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.API.Controllers.Stakeholders;
+using Explorer.Blog.API.Public;
+using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
 using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.PriceDtos;
+using Explorer.Tours.API.Internal;
+using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Tests.Integration.Tours
@@ -85,12 +90,12 @@ namespace Explorer.Tours.Tests.Integration.Tours
                         Country = "Test"
                     }
         }
-                }, 
-                 TourInfo = new TourDto()
-                 {
+                },
+                TourInfo = new TourDto()
+                {
                     Description = "Test",
                     Name = "Test",
-                    Difficulty ="Easy",
+                    Difficulty = "Easy",
                     Tags = new List<string> { "Test" },
                     Price = new PriceDto()
                     {
@@ -111,7 +116,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                             TransportType = "Bike"
                         }
                     }
-                 } 
+                }
             };
             //Art 
             var result = ((ObjectResult)controller.Create(tourCreateDto).Result)?.Value as TourCreateDto;
@@ -120,7 +125,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
             result.ShouldNotBeNull();
             dbContext.Tours.Count().ShouldBe(6);
             dbContext.Tours.FirstOrDefault(x => x.Name == result.TourInfo.Name).ShouldNotBeNull();
-            dbContext.Checkpoints.FirstOrDefault(x=>x.Name=="Test").ShouldNotBeNull();
+            dbContext.Checkpoints.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
             dbContext.Objects.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
         }
         [Fact]
@@ -152,9 +157,36 @@ namespace Explorer.Tours.Tests.Integration.Tours
             }
         }
 
+        [Fact]
+        public void Retrieves_most_popular_tours()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateLandingPageController(scope);
+
+            // Act
+            var result = ((ObjectResult)controller.GetMostPopularTours(3).Result)?.Value as List<TourCardDto>;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(3);
+        }
+
         private static TourController CreateController(IServiceScope scope)
         {
             return new TourController(scope.ServiceProvider.GetRequiredService<ITourService>())
+            {
+                ControllerContext = BuildContext("-2")
+            };
+        }
+
+        private static LandingPageController CreateLandingPageController(IServiceScope scope)
+        {
+            return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>(),
+                scope.ServiceProvider.GetRequiredService<IAuthorService>(),
+                scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+                scope.ServiceProvider.GetRequiredService<IRatingService>(),
+                scope.ServiceProvider.GetRequiredService<IBlogService>())
             {
                 ControllerContext = BuildContext("-2")
             };
