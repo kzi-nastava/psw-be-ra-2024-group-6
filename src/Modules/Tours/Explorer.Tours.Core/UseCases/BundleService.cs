@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
@@ -22,10 +23,10 @@ namespace Explorer.Tours.Core.UseCases
     public class BundleService : BaseService<BundleDto,Bundle> , IBundleService
     {
         private readonly IBundleRepository _bundleRepository;
-        private readonly IPurchaseTokenRepository _purchaseTokenRepository;
-        private readonly IWalletRepository _walletRepository;
+        private readonly IInternalPurchaseTokenService _purchaseTokenRepository;
+        private readonly IInternalWalletService _walletRepository;
 
-        public BundleService(IBundleRepository bundleRepository,IPurchaseTokenRepository purchaseTokenRepository,IWalletRepository  walletRepository, IMapper mapper) : base( mapper)
+        public BundleService(IBundleRepository bundleRepository,IInternalPurchaseTokenService purchaseTokenRepository,IInternalWalletService  walletRepository, IMapper mapper) : base( mapper)
         {
             _bundleRepository = bundleRepository;
             _purchaseTokenRepository = purchaseTokenRepository;
@@ -37,7 +38,7 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-                Wallet wallet = _walletRepository.GetByUserId(userId);
+                WalletDto wallet = _walletRepository.GetByUserId(userId).Value;
                 if(wallet.AdventureCoins < bundle.Price)
                 {
                     return Result.Fail(FailureCode.Forbidden).WithError("Not enough coins.");
@@ -45,8 +46,16 @@ namespace Explorer.Tours.Core.UseCases
 
                 foreach (int tour in bundle.TourIds)
                 {
-                    PurchaseToken token = new PurchaseToken(userId, tour,DateTime.UtcNow,false);
-                    _purchaseTokenRepository.Create(token);
+                    
+                    PurchaseTokenDto dto = new PurchaseTokenDto
+                    {
+                        UserId = userId,
+                        TourId = tour,
+                        PurchaseDate = DateTime.UtcNow,
+                        isExpired = false
+
+                    };
+                    _purchaseTokenRepository.Create(dto);
                 }
 
                 wallet.AdventureCoins -= (long)bundle.Price;

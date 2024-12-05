@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using Explorer.API.Controllers.Shopping;
 using Explorer.Payments.API.Dtos;
 using IShoppingCartService = Explorer.Payments.API.Public.IShoppingCartService;
+using Explorer.Payments.API.Public;
+using Explorer.Tours.API.Internal;
+using Explorer.Tours.API.Public;
 
 namespace Explorer.Payments.Tests.Integration.ShoppingCart
 {
@@ -21,7 +24,8 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
 
         private static ShoppingCartController CreateController(IServiceScope scope, string userId = "-1")
         {
-            var controller = new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>())
+            var controller = new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>(),
+                scope.ServiceProvider.GetRequiredService<ICouponService>(),scope.ServiceProvider.GetRequiredService<ITourService>())
             {
                 ControllerContext = BuildLocalContext(userId)
             };

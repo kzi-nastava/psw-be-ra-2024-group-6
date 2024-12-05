@@ -10,5 +10,7 @@ namespace Explorer.Payments.Core.Domain.RepositoryInterfaces
     public interface ICouponRepository : ICrudRepository<Coupon>
     {
         List<Coupon> GetAllByAuthorId(long authorId);
+
+        List<Coupon> GetAll();
     }
 }

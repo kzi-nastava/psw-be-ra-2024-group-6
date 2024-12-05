@@ -35,7 +35,13 @@ namespace Explorer.Payments.Core.UseCases.Shopping
 
         public Result<CouponDto> GetByCode(string code)
         {
-            throw new NotImplementedException();
+            foreach (Coupon c in _couponRepository.GetAll()) 
+            {
+                if (code == c.Code && c.ExpiresDate > DateTime.UtcNow)
+                    return MapToDto(c);
+            }
+            return Result.Fail(FailureCode.NotFound).WithError("Coupon not found.");
+
         }
 
 

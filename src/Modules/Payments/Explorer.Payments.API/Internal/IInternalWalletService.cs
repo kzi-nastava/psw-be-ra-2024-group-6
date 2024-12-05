@@ -11,5 +11,8 @@ namespace Explorer.Payments.API.Internal
     public interface IInternalWalletService
     {
         public Result<WalletDto> Create(long userId);
+
+        public Result<WalletDto> Update(WalletDto wallet);
+        public Result<WalletDto> GetByUserId(long userId);
     }
 }

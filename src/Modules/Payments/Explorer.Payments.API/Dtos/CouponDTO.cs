@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Payments.API.Dtos
 {
+    
     public class CouponDto
     {
         public long Id { get; set; }
@@ -15,5 +16,10 @@ namespace Explorer.Payments.API.Dtos
         public long AuthorId { get; set; }
         public long? TourId { get; set; }
         public DateTime? ExpiresDate { get; set; }
+
+        public bool Used { get; set; }
+
+       
+
     }
 }
