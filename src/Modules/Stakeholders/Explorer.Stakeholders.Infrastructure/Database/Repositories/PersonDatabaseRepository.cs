@@ -35,8 +35,6 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             {
                 throw new KeyNotFoundException(ex.Message);
             }
-
-
         }
 
         public Person Update(Person person) 
@@ -75,9 +73,9 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
                     .FromSqlRaw(query, authorsIds.ToArray(), count)
                     .ToList();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw new Exception("Error fetching most followed authors", ex);
+                throw new Exception("Error fetching most followed authors", e);
             }
         }
     }

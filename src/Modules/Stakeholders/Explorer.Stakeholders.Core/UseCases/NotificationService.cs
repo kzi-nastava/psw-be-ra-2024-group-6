@@ -76,7 +76,16 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             try
             {
-                List<Notification> notifications = _notificationRepository.GetNotificationsByUserId(userId);
+                long? recieverPersonId = 0;
+                if (userId != 0)
+                {
+                    var person = _personRepository.GetByUserId(userId);
+                    if (person != null)
+                    {
+                        recieverPersonId = person.Id;
+                    }
+                }
+                List<Notification> notifications = _notificationRepository.GetNotificationsByUserId((int)recieverPersonId); //changed it to be personId instead of userId because the personId is stored
 
                 // Ako nema notifikacija, vraća se prazna lista
                 return notifications.Any()
