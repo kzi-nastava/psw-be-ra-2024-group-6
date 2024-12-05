@@ -52,6 +52,7 @@ public static class PaymentsStartup
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
         services.AddScoped<IPurchaseTokenRepository, PurchaseTokenDatabaseRepository>();
         services.AddScoped<ICouponRepository, CouponDatabaseRepository>();
+        services.AddScoped<IPaymentRecordRepository, PaymentRecordDatabaseRepository>();
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),

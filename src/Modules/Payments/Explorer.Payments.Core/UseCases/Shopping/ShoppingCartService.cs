@@ -22,17 +22,19 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
     private readonly IInternalTourPaymentService _tourPaymentService;
     private readonly IInternalUserPaymentService _internalUserPaymentService;
     private readonly IWalletRepository _walletRepository;
+    private readonly IPaymentRecordRepository _paymentRecordRepository;
     private readonly IMapper mapper;
 
     public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,
 
-        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService, IMapper mapper) : base(crudRepository, mapper)
+        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService, IPaymentRecordRepository paymentRecordRepository, IMapper mapper) : base(crudRepository, mapper)
     {
         _shoppingCartRepository = shoppingCartRepository;
         _purchaseTokenRepository = purchaseTokenRepository;
         _tourPaymentService = tourPaymentService;
         _walletRepository = walletRepository;
         _internalUserPaymentService = userPaymentService;
+        _paymentRecordRepository = paymentRecordRepository;
         this.mapper = mapper;
     }
 
@@ -133,6 +135,10 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
         foreach (var token in tokens)
         {
             _purchaseTokenRepository.Create(token);
+            // save the payment history
+            var tour = _tourPaymentService.Get(token.TourId);
+            var tourPrice = new Price(tour.Price.Amount);
+            _paymentRecordRepository.Create(new PaymentRecord(token.UserId, token.TourId, tourPrice, DateTime.UtcNow));
             // send notification
             SendNotification(token.TourId, userId, "You have successfully bought tour: " + token.TourId);
         }
