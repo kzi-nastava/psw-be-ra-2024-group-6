@@ -80,7 +80,8 @@ namespace Explorer.Blog.Core.UseCases
                     Id = blog.Id,
                     ImageUrl = blog.Pictures.FirstOrDefault()?.Url,
                     Title = blog.Title,
-                    CreatedAt = blog.CreatedAt
+                    CreatedAt = blog.CreatedAt,
+                    Tags = blog.Tags
                 });
             }
             return blogDtos;

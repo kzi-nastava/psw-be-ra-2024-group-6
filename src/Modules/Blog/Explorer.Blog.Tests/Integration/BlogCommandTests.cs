@@ -142,7 +142,7 @@ namespace Explorer.Blog.Tests.Integration
             var tag = "TORINO"; // The tag we want to search for
 
             // Act
-            var result = ((ObjectResult)controller.GetBlogsByTag(tag).Result)?.Value as List<BlogDto>;
+            var result = ((ObjectResult)controller.GetBlogsByTag(tag).Result)?.Value as List<BlogHomeDto>;
 
             // Assert
             result.ShouldNotBeNull();
