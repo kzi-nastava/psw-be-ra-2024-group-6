@@ -39,6 +39,13 @@ namespace Explorer.API.Controllers.Stakeholders
             return CreateResponse(result);
         }
 
+        [HttpGet("userProfile/{userId:int}")]
+        public ActionResult<User> GetUserProfile(int userId)
+        {
+            var result = _userService.GetWithoutPassword(userId);
+            return CreateResponse(result);
+        }
+
 
         [HttpPut]
         public ActionResult<PersonDto> Update([FromBody] PersonDto person)
@@ -63,5 +70,7 @@ namespace Explorer.API.Controllers.Stakeholders
             var result = _personService.GetFollowers(userId);
             return CreateResponse(result);
         }
+
+
     }
 }

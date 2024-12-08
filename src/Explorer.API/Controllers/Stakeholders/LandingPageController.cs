@@ -50,7 +50,6 @@ namespace Explorer.API.Controllers.Stakeholders
             return CreateResponse(result);
         }
 
-
         [HttpGet("most-popular-tours")]
         public ActionResult<List<TourCardDto>> GetMostPopularTours(int count = 4)
         {

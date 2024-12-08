@@ -100,6 +100,7 @@ public class Tour : Entity
         Checkpoints.Remove(checkpoint);
     }
 
+
     public void RemoveObject(Object obj)
     {
         if (Objects == null)
@@ -236,7 +237,13 @@ public class Tour : Entity
         return Status != Status.Published;
     }
 
-    internal bool IsUserAuthor(long userId)
+
+    public bool IsPublished()
+    {
+        return Status == Status.Published;
+    }
+
+    public bool IsUserAuthor(long userId)
     {
         return AuthorId==userId;
     }
@@ -252,6 +259,13 @@ public class Tour : Entity
                 return true;
             }
         }
+        return false;
+    }
+    public bool IsTourVisibleNearby(double latitude, double longitude, double maxDistance)
+    {
+            double distance = Checkpoints.First().GetCheckpointDistance(latitude, longitude);
+            if (distance <= maxDistance)
+                return true;
         return false;
     }
     public void setReviews(List<Review> reviews)

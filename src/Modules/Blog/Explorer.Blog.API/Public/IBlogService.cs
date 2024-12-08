@@ -17,7 +17,7 @@ namespace Explorer.Blog.API.Public
         Result<BlogDto> Get(int id);
 		Result Delete(int id);
         Result<BlogDetailsDto> GetBlogDetails(long id);
-
+        Result<List<BlogDto>> GetBlogsByTag(string tag);
         Result<List<BlogDto>> GetAllBlogs();
         Result<List<BlogHomeDto>> GetHomePaged(int page, int pageSize);
     }

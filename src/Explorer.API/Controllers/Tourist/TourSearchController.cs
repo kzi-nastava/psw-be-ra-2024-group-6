@@ -19,7 +19,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpGet]
         public ActionResult<List<TourCardDto>> SearchToursNearby([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
         {
-            var result = _tourService.FindToursNearby(latitude, longitude, radius);
+            var result = _tourService.GetSearchedToursNearby(latitude, longitude, radius);
             return CreateResponse(result);
         }
 

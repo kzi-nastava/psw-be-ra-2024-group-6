@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Stakeholders.API.Internal;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
@@ -79,6 +80,13 @@ namespace Explorer.Stakeholders.Core.UseCases
             var authorsIds = _userRepository.GetAllAuthorsIds();
             return authorsIds;
         }
-        
+
+        public Result<UserDto> GetWithoutPassword(long id)
+        {
+            var user = _crudRepository.Get(id);
+            var result = MapToDto(user);
+            result.Password = "";
+            return result;
+        }
     }
 }

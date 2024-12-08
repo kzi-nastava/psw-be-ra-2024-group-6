@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Encounters.API.Dtos;
+using FluentResults;
 
 namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
 {
@@ -18,5 +20,8 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
         public List<Encounter> GetPagedEncounters();
 
         public List<Encounter> GetAllActiveEncounters();
+
+        public Encounter GetById(long id);
+        public SocialEncounter GetSocialEncounterById(long id);
     }
 }

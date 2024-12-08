@@ -27,4 +27,10 @@ public class InternalTourPaymentService : CrudService<TourDto, Tour>, IInternalT
     {
         return mapper.Map<TourDto>(tourRepository.Get(id));
     }
+
+    public bool IsUserAuthor(long tourId, long userId)
+    {
+        var tour = tourRepository.Get(tourId);
+        return tour.IsUserAuthor(userId);
+    }
 }
