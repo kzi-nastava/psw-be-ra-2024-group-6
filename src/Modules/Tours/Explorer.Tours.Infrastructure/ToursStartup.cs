@@ -66,6 +66,7 @@ public static class ToursStartup
         services.AddScoped<IReviewRepository, ReviewDatabaseRepository>();
         services.AddScoped<ITourRepository, TourDatabaseRepository>();
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
+        services.AddScoped<IEquipmentRepository, EquipmentRepository>();
         services.AddScoped<IBundleRepository, BundleDatabaseRepository>();
 
 

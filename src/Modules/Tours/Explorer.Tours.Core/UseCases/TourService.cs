@@ -38,9 +38,10 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IInternalPurchaseTokenService _tokenService;
         private readonly IReviewService _reviewService;
         private readonly IAuthorRecommenderService _authorRecommenderService;
-
         private readonly IMapper mapper;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService,IAuthorRecommenderService authorRecommenderService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService) : base(repository, mapper)
+        private readonly IEquipmentRepository _equipmentRepository;
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService,IAuthorRecommenderService authorRecommenderService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService, IEquipmentRepository equipment) : base(repository, mapper)
+
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
@@ -51,6 +52,7 @@ namespace Explorer.Tours.Core.UseCases
             _authorRecommenderService = authorRecommenderService;
             this.mapper = mapper;
             _reviewService = reviewService;
+            _equipmentRepository = equipment;
         }
 
         public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId)
@@ -94,6 +96,22 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 Tour tour = mapper.Map<Tour>(createTour.TourInfo);
+
+                var equipmentIds = createTour.TourInfo.Equipment.Select(e => e.Id).ToList();
+                var existingEquipment = _equipmentRepository.GetByIds(equipmentIds);
+
+                if (existingEquipment.Count != equipmentIds.Count)
+                {
+                    return Result.Fail("One or more equipment items do not exist in the database.");
+                }
+
+                // Poveži postojeće Equipment entitete sa turom
+                foreach(Equipment equipment in existingEquipment)
+                {
+                    tour.AddEquipment(equipment);
+                }
+
+                // Sačuvaj turu koristeći repozitorijum
                 Tour newTour = crudRepository.Create(tour);
                 foreach (CheckpointCreateDto ch in createTour.Checkpoints)
                 {
@@ -163,7 +181,7 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-                Tour tour = crudRepository.Get(tourId);
+                Tour tour = _tourRepository.GetByIdWithEquipment(tourId);
                 if (!tour.IsUserAuthor(userId) && !checkIfUserBoughtTour(tourId, userId))
                     return Result.Fail(FailureCode.Forbidden).WithError("You are not authorized to view this tour.");
                 TourDto tourDto = MapToDto(tour);

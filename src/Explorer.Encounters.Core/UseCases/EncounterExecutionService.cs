@@ -159,13 +159,52 @@ namespace Explorer.Encounters.Core.UseCases
             return mapper.Map<HiddenEncounterExecutionDto>(result.Value);
         }
 
+        public Result<EncounterExecutionDto> StartSocialEncounterExecution(long encounterId, int touristId)
+        {
+            EncounterReadDto encounter = _encounterService.GetById(encounterId).Value;
+
+            if (!(encounter is SocialEncounterReadDto))
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter is not a social encounter.");
+            }
+
+            var socialEncounterExecution = _encounterExecutionRepository.GetStartedSocialByEncounterId(encounterId);
+            if (socialEncounterExecution != null)
+            {
+                socialEncounterExecution.AddTouristId(touristId);
+            }
+            else
+            {
+                socialEncounterExecution = new SocialEncounterExecution(encounterId, touristId);
+                _encounterExecutionRepository.Create(socialEncounterExecution);
+            }
+
+            return mapper.Map<EncounterExecutionDto>(socialEncounterExecution);
+        }
+
+        //public Result<int> UpdateSocialExecutionLocation(long encounterExecutionId, LocationDto location, int userId)
+        //{
+            //try
+            //{
+            //    var socialEncounterExecution = _encounterExecutionRepository.GetStartedSocialEncounterById(encounterExecutionId);
+            //    if (!_encounterService.IsUserInSocialEncounterRange(socialEncounterExecution.EncounterId, location))
+            //    {
+            //        socialEncounterExecution.TouristIds.Remove(userId);
+            //    }
+
+            //    return socialEncounterExecution.TouristIds.Count;
+            //}
+            //catch (Exception e)
+            //{
+            //    return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            //}
+        //}
+
 
         public Result<EncounterExecutionDto> GetById(long id)
         {
             var result = _encounterExecutionRepository.GetById(id);
             return MapToDto(result);
         }
-
-
     }
 }
