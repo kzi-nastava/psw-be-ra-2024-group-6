@@ -11,6 +11,7 @@ namespace Explorer.Tours.API.Dtos
         public long UserId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string ImageUrl { get; set; }
         public int Ranking { get; set; }
 
 

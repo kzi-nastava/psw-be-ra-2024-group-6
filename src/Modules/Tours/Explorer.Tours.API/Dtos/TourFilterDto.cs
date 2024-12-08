@@ -12,8 +12,8 @@ namespace Explorer.Tours.API.Dtos
     {
         public double? MinPrice { get; set; }
         public double? MaxPrice { get; set; }
-        public string Name { get; set; }
-        public string Tag { get; set; }
+        public string? Name { get; set; }
+        public string? Tag { get; set; }
         public double? MinLength { get; set; }
         public double? MaxLength { get; set; }
         public TourDurationDto? MinDuration { get; set; }

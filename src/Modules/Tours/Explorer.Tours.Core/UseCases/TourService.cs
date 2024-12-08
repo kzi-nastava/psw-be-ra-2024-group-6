@@ -234,7 +234,7 @@ namespace Explorer.Tours.Core.UseCases
                 var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
                 var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
 
-                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), tour.GetAverageRating())).ToList();
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,mapper.Map<DistanceDto>(tour.TotalLength), tour.GetAverageRating(),tour.Difficulty.ToString(),tour.GetNumberOfReviews(),mapper.Map<List<TourDurationDto>>(tour.Durations))).ToList();
 
             }
             catch (Exception e)
@@ -319,7 +319,7 @@ namespace Explorer.Tours.Core.UseCases
                 if (tour.Status == Status.Published)
                 {
                     double avg = tour.GetAverageRating();
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,tour.TotalLength.ToString(),avg);
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
 
 
                     tourCardDtos.Add(tourCardDto);
@@ -385,7 +385,7 @@ namespace Explorer.Tours.Core.UseCases
                 {
                    
                         double avg = tour.GetAverageRating();
-                        TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg);
+                        TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,mapper.Map<DistanceDto>(tour.TotalLength), avg,tour.Difficulty.ToString(),tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
                         
 
                     nearbyToursDto.Add(tourCardDto);
@@ -416,7 +416,7 @@ namespace Explorer.Tours.Core.UseCases
                     break;
 
                 case "priceDESC":
-                    tours = tours.OrderByDescending(tour => tour.Price).ToList();
+                    tours = tours.OrderByDescending(tour => tour.Price.Amount).ToList();
                     break;
 
                 case "ratingASC":
@@ -443,7 +443,7 @@ namespace Explorer.Tours.Core.UseCases
             {
 
                     double avg = tour.GetAverageRating();
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg);
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
                     tourCardDtos.Add(tourCardDto);
             }
             return tourCardDtos;
@@ -490,7 +490,7 @@ namespace Explorer.Tours.Core.UseCases
             {
 
                 double avg = tour.GetAverageRating();
-                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg);
+                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
                 tourCardDtos.Add(tourCardDto);
             }
 

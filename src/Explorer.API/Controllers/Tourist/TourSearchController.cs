@@ -30,7 +30,7 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
         [HttpGet("sort")]
-        public ActionResult<List<TourCardDto>> SortTours([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius,string criteria)
+        public ActionResult<List<TourCardDto>> SortTours([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius,[FromQuery]string criteria)
         {
             var result = _tourService.GetSortedTours(latitude,longitude,radius,criteria);
             return CreateResponse(result);

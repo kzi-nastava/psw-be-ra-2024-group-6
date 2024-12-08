@@ -57,7 +57,8 @@ namespace Explorer.Tours.Core.UseCases
                     UserId = author.Key,
                     Ranking = ranking,
                     Name = personDto.Name,
-                    Surname = personDto.Surname
+                    Surname = personDto.Surname,
+                    ImageUrl = personDto.PictureURL
                 });
                 ranking++;
                 if (authorLeaderboardDtos.Count == count)
