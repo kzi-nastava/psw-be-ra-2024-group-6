@@ -36,7 +36,10 @@ public class Location : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Longitude;
+        yield return Latitude;
+        yield return City;
+        yield return Country;
     }
 
     public string ToString()
@@ -62,5 +65,14 @@ public class Location : ValueObject
     public static double DegreesToRadians(double degrees)
     {
         return degrees * Math.PI / 180;
+    }
+    public static double GetTolerance()
+    {
+        return 0.02;
+    }
+
+    public bool IsLocationSame(Location location)
+    {
+        return CalculateDistance(location.Latitude, location.Longitude) <= GetTolerance();
     }
 }

@@ -26,11 +26,13 @@ namespace Explorer.Tours.API.Public
         Result<TourReadDto> GetTourDetailsByTourId(long tourId,long userId);
         Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize);
         Result<TourPreviewDto> GetTourPreview(long tourId);
-        Result<List<TourCardDto>> FindToursNearby(double latitude, double longitude, double radius);
+        Result<List<TourCardDto>> GetSearchedToursNearby(double latitude, double longitude, double radius);
+        Result<List<TourHoverMapDto>> FindToursOnMapNearby(double latitude, double longitude, double radius);
         //Result GetTourDetailsByTourId(int tourId);
 
 
         Result<List<TourCardDto>> GetBoughtTours(long userId);
+        Result <List<TourMapPreviewDto>> GetTourPreviewsOnMap(double latitude, double longitude);
         public Result<List<TourCardDto>> GetMostPopularTours(int count);
         public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize);
     }
