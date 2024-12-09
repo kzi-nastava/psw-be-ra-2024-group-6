@@ -27,5 +27,6 @@ namespace Explorer.Encounters.API.Public
         public Result<EncounterByTouristReadDto> CreateSocialEncounterByTourist(SocialEncounterCreateDto encounterDto, int creatorId);
         public Result<List<EncounterReadDto>> GetAllActiveTouristsEncounters();
         public bool IsUserInSocialEncounterRange(long encounterId, LocationDto location);
+        public SocialEncounterReadDto? GetSocialById(long encounterId);
     }
 }

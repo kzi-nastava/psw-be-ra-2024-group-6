@@ -114,6 +114,19 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+        public SocialEncounterReadDto? GetSocialById(long encounterId)
+        {
+            try
+            {
+                var socialEncounter = _encounterRepository.GetSocialEncounterById(encounterId);
+                return mapper.Map<SocialEncounterReadDto>(socialEncounter);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
+        }
+
 
         public Result Delete(long id)
         {
