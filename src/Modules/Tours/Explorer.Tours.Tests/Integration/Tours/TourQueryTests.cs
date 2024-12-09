@@ -65,7 +65,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                 {
                     Description = "Test",
                     Name = "Test",
-                    ImageUrl = "Test",
+                    ImageData = "Test",
                     Location= new LocationCreateDto()
                     {
                         Latitude = 20,
