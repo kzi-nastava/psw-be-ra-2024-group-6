@@ -31,5 +31,12 @@ namespace Explorer.Encounters.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        public void AddExperiencePoints(int userId, int xp)
+        {
+            var touristRank = _touristRankRepository.GetByTouristId(userId);
+            touristRank.AddExperiencePoints(xp);
+            _touristRankRepository.Update(touristRank);
+        }
     }
 }

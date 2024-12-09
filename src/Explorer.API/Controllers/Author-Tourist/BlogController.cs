@@ -70,7 +70,7 @@ namespace Explorer.API.Controllers.Author_Tourist
         }
 
         [HttpGet("byTag")]
-        public ActionResult<List<BlogDto>> GetBlogsByTag([FromQuery] string tag)
+        public ActionResult<List<BlogHomeDto>> GetBlogsByTag([FromQuery] string tag)
         {
             var result = _blogService.GetBlogsByTag(tag);
             return CreateResponse(result);

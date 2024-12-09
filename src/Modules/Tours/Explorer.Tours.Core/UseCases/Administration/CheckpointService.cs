@@ -62,7 +62,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             var result = _checkpointRepository.GetMostPopularDestinations();
             return result
-                .Select(ch => new DestinationDto(ch.Location.City, ch.Location.Country, ch.ImageUrl))
+                .Select(ch => new DestinationDto(ch.Location.City, ch.Location.Country, ch.ImageData))
                 .ToList();
         }
 

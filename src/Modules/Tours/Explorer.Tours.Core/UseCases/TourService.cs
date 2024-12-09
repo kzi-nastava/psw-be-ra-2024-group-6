@@ -37,10 +37,11 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IInternalTourPersonService _personService;
         private readonly IInternalPurchaseTokenService _tokenService;
         private readonly IReviewService _reviewService;
-        private readonly IEquipmentRepository _equipmentRepository;
-
+        private readonly IAuthorRecommenderService _authorRecommenderService;
         private readonly IMapper mapper;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService, IEquipmentRepository equipment) : base(repository, mapper)
+        private readonly IEquipmentRepository _equipmentRepository;
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService,IAuthorRecommenderService authorRecommenderService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService, IEquipmentRepository equipment) : base(repository, mapper)
+
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
@@ -48,7 +49,7 @@ namespace Explorer.Tours.Core.UseCases
             _checkpointService = checkpointService;
             _personService = personService;
             _tokenService = token;
-
+            _authorRecommenderService = authorRecommenderService;
             this.mapper = mapper;
             _reviewService = reviewService;
             _equipmentRepository = equipment;
@@ -251,7 +252,7 @@ namespace Explorer.Tours.Core.UseCases
                 var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
                 var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
 
-                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), tour.GetAverageRating())).ToList();
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,mapper.Map<DistanceDto>(tour.TotalLength), tour.GetAverageRating(),tour.Difficulty.ToString(),tour.GetNumberOfReviews(),mapper.Map<List<TourDurationDto>>(tour.Durations))).ToList();
 
             }
             catch (Exception e)
@@ -336,7 +337,7 @@ namespace Explorer.Tours.Core.UseCases
                 if (tour.Status == Status.Published)
                 {
                     double avg = tour.GetAverageRating();
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,tour.TotalLength.ToString(),avg);
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
 
 
                     tourCardDtos.Add(tourCardDto);
@@ -402,8 +403,8 @@ namespace Explorer.Tours.Core.UseCases
                 {
                    
                         double avg = tour.GetAverageRating();
-                        TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg);
-
+                        TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,mapper.Map<DistanceDto>(tour.TotalLength), avg,tour.Difficulty.ToString(),tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
+                        
 
                     nearbyToursDto.Add(tourCardDto);
                 }
@@ -415,6 +416,105 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(ex.Message);
             }
         }
+
+        public Result<List<AuthorLeaderboardDto>> GetAuthorLeaderboard(double latitude, double longitude, double maxDistance)
+        {
+            List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
+            List<long> authorIds = nearbyTours.Select(tour => tour.AuthorId).Distinct().ToList();
+            return _authorRecommenderService.GetBestAuthors(authorIds,5);
+        }
+
+        public Result<List<TourCardDto>> GetSortedTours(double latitude, double longitude, double maxDistance,string criteria)
+        {
+            List<Tour> tours = GetNearbyTours(latitude,longitude,maxDistance);
+            switch (criteria)
+            {
+                case "priceASC":
+                    tours = tours.OrderBy(tour => tour.Price.Amount).ToList();
+                    break;
+
+                case "priceDESC":
+                    tours = tours.OrderByDescending(tour => tour.Price.Amount).ToList();
+                    break;
+
+                case "ratingASC":
+                    tours = tours.OrderBy(tour => tour.GetAverageRating()).ToList();
+                    break;
+
+                case "ratingDESC":
+                    tours = tours.OrderByDescending(tour => tour.GetAverageRating()).ToList();
+                    break;
+
+                case "lengthASC":
+                    tours = tours.OrderBy(tour => tour.TotalLength.Length).ToList();
+                    break;
+
+                case "lengthDESC":
+                    tours = tours.OrderByDescending(tour => tour.TotalLength.Length).ToList();
+                    break;
+
+                default:
+                    return Result.Fail("Bad request");
+            }
+            List<TourCardDto> tourCardDtos = new List<TourCardDto>();
+            foreach (Tour tour in tours)
+            {
+
+                    double avg = tour.GetAverageRating();
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
+                    tourCardDtos.Add(tourCardDto);
+            }
+            return tourCardDtos;
+        }
+
+        public Result<List<TourCardDto>> GetFilteredTours(double latitude, double longitude, double radius, TourFilterDto tourFiltersDto)
+        {
+            List<Tour> tours = GetNearbyTours(latitude, longitude, radius);
+
+            if (!string.IsNullOrEmpty(tourFiltersDto.Name))
+            {
+                tours = tours.Where(tour => tour.Name.Contains(tourFiltersDto.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            if (tourFiltersDto.MinPrice.HasValue)
+            {
+                tours = tours.Where(tour => tour.Price.Amount >= tourFiltersDto.MinPrice.Value).ToList();
+            }
+            if (tourFiltersDto.MaxPrice.HasValue)
+            {
+                tours = tours.Where(tour => tour.Price.Amount <= tourFiltersDto.MaxPrice.Value).ToList();
+            }
+            if (!string.IsNullOrEmpty(tourFiltersDto.Tag))
+            {
+                tours = tours.Where(tour => tour.Tags.Contains(tourFiltersDto.Tag)).ToList();
+            }
+            if (tourFiltersDto.MinLength.HasValue)
+            {
+                tours = tours.Where(tour => tour.TotalLength.Length >= tourFiltersDto.MinLength).ToList();
+            }
+            if (tourFiltersDto.MaxLength.HasValue)
+            {
+                tours = tours.Where(tour => tour.TotalLength.Length <= tourFiltersDto.MaxLength).ToList();
+            }
+            if (tourFiltersDto.MinDuration!=null)
+            {
+                tours = tours.Where(tour => tour.Durations.Any(d=> d.Duration>=tourFiltersDto.MinDuration.Duration && d.TransportType.ToString()==tourFiltersDto.MinDuration.TransportType)).ToList();
+            }
+            if (tourFiltersDto.MaxDuration!=null)
+            {
+                tours = tours.Where(tour => tour.Durations.Any(d => d.Duration <= tourFiltersDto.MaxDuration.Duration && d.TransportType.ToString() == tourFiltersDto.MaxDuration.TransportType)).ToList();
+            }
+            List<TourCardDto> tourCardDtos = new List<TourCardDto>();
+            foreach (Tour tour in tours)
+            {
+
+                double avg = tour.GetAverageRating();
+                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
+                tourCardDtos.Add(tourCardDto);
+            }
+
+            return tourCardDtos;
+        }
+
 
         private List<Tour> GetNearbyTours(double latitude, double longitude, double maxDistance)
         {

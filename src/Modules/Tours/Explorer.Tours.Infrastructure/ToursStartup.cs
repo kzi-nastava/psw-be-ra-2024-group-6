@@ -46,6 +46,7 @@ public static class ToursStartup
         services.AddScoped<IInternalProblemTourAuthorService, ProblemTourService>();
         services.AddScoped<IInternalTourPaymentService, InternalTourPaymentService>();
         services.AddScoped<IBundleService, BundleService>();
+        services.AddScoped<IAuthorRecommenderService, AuthorRecommenderService>();
 
     }
 

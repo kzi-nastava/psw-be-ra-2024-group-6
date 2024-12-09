@@ -56,13 +56,13 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        //[HttpPost("update-location/{encounterExecutionId:long}")]
-        //public ActionResult<SocialEncounterReadDto> UpdateLocation(long encounterExecutionId,
-        //    [FromBody] LocationDto location)
-        //{
-        //    var result = _encounterExecutionService.UpdateSocialExecutionLocation(encounterExecutionId, location, User.UserId());
-        //    return CreateResponse(result);
-        //}
+        [HttpPost("update-location/{encounterExecutionId:long}")]
+        public ActionResult<SocialEncounterReadDto> UpdateLocation(long encounterExecutionId,
+            [FromBody] LocationDto location)
+        {
+            var result = _encounterExecutionService.UpdateSocialExecutionLocation(encounterExecutionId, location, User.UserId());
+            return CreateResponse(result);
+        }
 
     }
 }
