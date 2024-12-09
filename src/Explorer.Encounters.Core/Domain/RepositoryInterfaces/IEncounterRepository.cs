@@ -19,7 +19,9 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
 
         public List<Encounter> GetPagedEncounters();
 
+
         public List<Encounter> GetAllActiveEncounters();
+        public List<Encounter> GetAllActiveEncountersForTourist(int touristId);
 
         public Encounter GetById(long id);
         public SocialEncounter GetSocialEncounterById(long id);

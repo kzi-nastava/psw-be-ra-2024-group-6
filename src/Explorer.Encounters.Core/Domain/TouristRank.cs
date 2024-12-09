@@ -34,7 +34,11 @@ namespace Explorer.Encounters.Core.Domain
         public void AddExperiencePoints(int xp)
         {
             Xp += xp;
-            // TODO: LevelUp
+            if (Xp >= 1000)
+            {
+                Level++;
+                Xp -= 1000;
+            }
         }
     }
 }
