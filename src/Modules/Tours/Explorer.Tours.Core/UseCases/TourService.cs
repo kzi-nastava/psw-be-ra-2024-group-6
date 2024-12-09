@@ -237,7 +237,7 @@ namespace Explorer.Tours.Core.UseCases
                 PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
                 toursOnSameLocationDtos.Add(new TourMapPreviewDto(tour.Id, author.Id, tour.Name, author.Surname,
                     tour.Difficulty.ToString(), tour.Price.Amount, tour.GetAverageRating(), /*tour.Image*/"gas",
-                    tour.GetNumberOfReviews(), author.Name, author.PictureURL,
+                    tour.GetNumberOfReviews(), author.Name, author.ImageData,
                     mapper.Map<List<TourDurationDto>>(tour.Durations), mapper.Map<DistanceDto>(tour.TotalLength)));
             }
 
@@ -356,7 +356,7 @@ namespace Explorer.Tours.Core.UseCases
             List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
             List<TourReviewDto> reviewDtos = GetTourReviewsDtos(tour.Reviews);
             TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
-                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount,author.UserId, author.Name + " " + author.Surname,author.PictureURL,
+                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount,author.UserId, author.Name + " " + author.Surname,author.ImageData,
                 tour.TotalLength.ToString(), durations, firstCp, reviewDtos);
 
             return tourPreviewDto;
@@ -379,7 +379,7 @@ namespace Explorer.Tours.Core.UseCases
                     Comment = review.Comment,
                     Rating = review.Rating, 
                     ReviewDate = review.ReviewDate,
-                    AuthorImage = reviewer.PictureURL,
+                    AuthorImage = reviewer.ImageData,
                     Images= review.Images
                 };
 

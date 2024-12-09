@@ -11,6 +11,7 @@ using FluentResults;
 using Explorer.BuildingBlocks.Core.UseCases;
 using FluentResults;
 using Explorer.Stakeholders.Core.Domain.Persons;
+using Explorer.Payments.Core.Domain;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {
@@ -42,7 +43,17 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
             try
             {
+                if (person.Followings.Count == 0 || person.Followers.Count == 0)
+                {
+                    InjectFollowersAndFollowing(person); // added this because the personDto didnt have followers/following for some reason and it was setting them to null EVERY UPDATE
+                }
+                var existingPerson = _dbContext.People.Find(person.Id);
+                if (existingPerson != null)
+                {
+                    _dbContext.Entry(existingPerson).State = EntityState.Detached;
+                }
                 _dbContext.People.Update(person);
+                _dbContext.Entry(person).State = EntityState.Modified;
                 _dbContext.SaveChanges();
                 return person;
             }
@@ -52,6 +63,16 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
             }
 
+        }
+        public Person InjectFollowersAndFollowing(Person person)
+        {
+            Person person1 = _dbContext.People.FirstOrDefault(p => p.Id == person.Id);
+            if(person1 != null)
+            {
+                person.Followers = person1.Followers;
+                person.Followings = person1.Followings;
+            }
+            return person;
         }
 
         public List<Person> GetMostFollowedAuthors(List<long> authorsIds, int count = 4)

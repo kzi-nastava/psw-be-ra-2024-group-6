@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
-using Explorer.Payments.Core.UseCases.Shopping;
 
 namespace Explorer.API.Controllers.Tourist
 {

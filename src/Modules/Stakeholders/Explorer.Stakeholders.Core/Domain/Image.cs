@@ -17,13 +17,6 @@ namespace Explorer.Stakeholders.Core.Domain
         {
             this.name = name;
             this.data = data;
-            Validate();
         }
-        private void Validate()
-        {
-            if(String.IsNullOrEmpty(name)) throw new ArgumentException("Name cannot be empty");
-            if(String.IsNullOrEmpty(data)) throw new ArgumentException("Data cannot be empty");
-        }
-
     }
 }

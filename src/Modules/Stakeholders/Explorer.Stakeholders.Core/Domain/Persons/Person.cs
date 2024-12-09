@@ -14,9 +14,9 @@ public class Person : Entity
     public string Motto { get; private set; }
     public long? ImageId { get; set; }
 
-    public List<Follower> Followers { get; private set; } //ko tebe prati kao korisnika
+    public List<Follower> Followers { get; set; } //ko tebe prati kao korisnika
 
-    public List<Follower> Followings { get; private set; } //
+    public List<Follower> Followings { get; set; } //
 
 
     public Person() {
