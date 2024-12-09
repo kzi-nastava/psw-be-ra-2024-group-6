@@ -40,7 +40,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
                     Longitude = 19.8335,
                 },
                 TourId = -3,
-                ImageUrl = "neka/putanja",
+                ImageData = "neka/putanja",
                 Secret = "Veoma velika tajna"
 
             };
@@ -98,7 +98,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
                     Latitude = 45.2671,
                     Longitude = 19.8335,
                 },
-                ImageUrl = "neka/putanja/doslike",
+                ImageData = "neka/putanja/doslike",
                 TourId = -2,
                 Secret = "tajna 123"
 
@@ -141,7 +141,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
                     Longitude = 19.8335,
                 },
                 TourId = 0,
-                ImageUrl = "neka/putanja/doslike",
+                ImageData = "neka/putanja/doslike",
                 Secret = "Neka tajna.."
             };
 
