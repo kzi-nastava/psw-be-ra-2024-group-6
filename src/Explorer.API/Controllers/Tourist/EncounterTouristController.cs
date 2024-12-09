@@ -53,7 +53,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpGet("all-tourist-encounters")]
         public ActionResult<EncounterReadDto> GetAllActiveTouristsEncounters()
         {
-            var result = _encounterService.GetAllActiveTouristsEncounters();
+            var result = _encounterService.GetAllActiveEncountersForTourist(User.UserId());
             return CreateResponse(result);
         }
     }

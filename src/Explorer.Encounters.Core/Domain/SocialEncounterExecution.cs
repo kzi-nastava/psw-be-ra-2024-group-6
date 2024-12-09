@@ -31,15 +31,12 @@ namespace Explorer.Encounters.Core.Domain
                 TouristIds.Add(touristId);
         }
 
-        public bool Complete(int peopleCount)
+        public bool CompleteIfRequiredPeoplePresent(int peopleCount)
         {
-            if (TouristIds.Count >= peopleCount)
-            {
-                Status = EncounterExecutionStatus.COMPLETED;
-                return true;
-            }
+            if (TouristIds.Count < peopleCount) return false;
+            Status = EncounterExecutionStatus.COMPLETED;
+            return true;
 
-            return false;
         }
     }
 }

@@ -19,13 +19,15 @@ namespace Explorer.Encounters.Core.UseCases
     {
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
         private readonly IEncounterService _encounterService;
+        private readonly ITouristRankService _touristRankService;
         private readonly IMapper mapper;
 
-        public EncounterExecutionService(IEncounterService encounterService, ICrudRepository<EncounterExecution> repository,IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper) : base(repository, mapper)
+        public EncounterExecutionService(IEncounterService encounterService,ICrudRepository<EncounterExecution> repository,IEncounterExecutionRepository encounterExecutionRepository, ITouristRankService touristRankService, IMapper mapper) : base(repository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             this.mapper = mapper;
             _encounterService = encounterService;
+            _touristRankService = touristRankService;
         }
         public Result<EncounterExecutionDto> Create(EncounterExecutionDto encounterDto)
         {
@@ -172,6 +174,7 @@ namespace Explorer.Encounters.Core.UseCases
             if (socialEncounterExecution != null)
             {
                 socialEncounterExecution.AddTouristId(touristId);
+                _encounterExecutionRepository.Update(socialEncounterExecution);
             }
             else
             {
@@ -182,23 +185,42 @@ namespace Explorer.Encounters.Core.UseCases
             return mapper.Map<EncounterExecutionDto>(socialEncounterExecution);
         }
 
-        //public Result<int> UpdateSocialExecutionLocation(long encounterExecutionId, LocationDto location, int userId)
-        //{
-            //try
-            //{
-            //    var socialEncounterExecution = _encounterExecutionRepository.GetStartedSocialEncounterById(encounterExecutionId);
-            //    if (!_encounterService.IsUserInSocialEncounterRange(socialEncounterExecution.EncounterId, location))
-            //    {
-            //        socialEncounterExecution.TouristIds.Remove(userId);
-            //    }
+        public Result<SocialEncounterExecutionStatusDto> UpdateSocialExecutionLocation(long encounterExecutionId, LocationDto location, int userId)
+        {
+            try
+            {
+                var completed = false;
+                var socialEncounterExecution = _encounterExecutionRepository.GetStartedSocialEncounterById(encounterExecutionId);
+                if (socialEncounterExecution == null)
+                {
+                    return new SocialEncounterExecutionStatusDto(0, true);
+                }
+                if (!_encounterService.IsUserInSocialEncounterRange(socialEncounterExecution.EncounterId, location))
+                {
+                    socialEncounterExecution.TouristIds.Remove(userId);
+                    _encounterExecutionRepository.Update(socialEncounterExecution);
+                }
+                else
+                {
+                    var socialEncounter = _encounterService.GetSocialById(socialEncounterExecution.EncounterId);
+                    if (socialEncounterExecution.CompleteIfRequiredPeoplePresent(socialEncounter.PeopleCount))
+                    {
+                        completed = true;
+                        _encounterExecutionRepository.Update(socialEncounterExecution);
+                        foreach (var id in socialEncounterExecution.TouristIds)
+                        {
+                            _touristRankService.AddExperiencePoints(id, socialEncounter.Xp);
+                        }
+                    }
+                }
 
-            //    return socialEncounterExecution.TouristIds.Count;
-            //}
-            //catch (Exception e)
-            //{
-            //    return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            //}
-        //}
+                return new SocialEncounterExecutionStatusDto(socialEncounterExecution.TouristIds.Count, completed);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
 
 
         public Result<EncounterExecutionDto> GetById(long id)

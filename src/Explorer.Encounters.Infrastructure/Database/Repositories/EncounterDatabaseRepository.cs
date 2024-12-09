@@ -66,8 +66,13 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public List<Encounter> GetAllActiveEncounters()
         {
+            return _dbContext.Encounters.Where(e => e.Status == Status.Active).ToList();
+        }
 
-            return _dbContext.Encounters.Where(e => e.Status == Status.Active).ToList() ;
+        public List<Encounter> GetAllActiveEncountersForTourist(int touristId)
+        {
+
+            return _dbContext.Encounters.Where(e => e.Status == Status.Active && e.CreatorId != touristId).ToList();
 
         }
 
