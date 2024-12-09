@@ -35,7 +35,6 @@ public class Tour : Entity
     public Distance TotalLength { get; private set; }
     public DateTime StatusChangeTime { get; private set; }
     public List<TourDuration> Durations { get; private set; }
-
     public List<Checkpoint> Checkpoints { get; private set; }
     public List<Object> Objects { get; private set; }
     public List<Equipment> Equipment { get; private set; }
@@ -275,6 +274,8 @@ public class Tour : Entity
 
     internal int GetNumberOfReviews()
     {
-        return Reviews.Count;
+        if(Reviews!=null)
+            return Reviews.Count;
+        return 0;
     }
 }

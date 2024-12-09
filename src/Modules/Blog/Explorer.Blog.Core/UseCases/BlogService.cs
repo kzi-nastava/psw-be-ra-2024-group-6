@@ -54,7 +54,7 @@ namespace Explorer.Blog.Core.UseCases
             List<Domain.Blogs.Blog> blogs = _blogRepository.GetAggregatePaged(page, pageSize);
             List<BlogHomeDto> blogDtos = new List<BlogHomeDto>();
 
-            foreach (Domain.Blogs.Blog blog in blogs)
+            foreach (var blog in blogs)
             {
                 blogDtos.Add(new BlogHomeDto()
                 {
@@ -68,11 +68,23 @@ namespace Explorer.Blog.Core.UseCases
             return blogDtos;
         }
 
-        public Result<List<BlogDto>> GetBlogsByTag(string tag)
+        public Result<List<BlogHomeDto>> GetBlogsByTag(string tag)
         {
             var blogs = _blogRepository.GetBlogsByTag(tag).ToList();
-            var blogDto = _mapper.Map<List<BlogDto>>(blogs);
-            return Result.Ok(blogDto);
+            List<BlogHomeDto> blogDtos = new List<BlogHomeDto>();
+            foreach (var blog in blogs)
+            {
+                blogDtos.Add(new BlogHomeDto()
+                {
+                    Description = blog.Description,
+                    Id = blog.Id,
+                    ImageUrl = blog.Pictures.FirstOrDefault()?.Url,
+                    Title = blog.Title,
+                    CreatedAt = blog.CreatedAt,
+                    Tags = blog.Tags
+                });
+            }
+            return blogDtos;
         }
     }
 }

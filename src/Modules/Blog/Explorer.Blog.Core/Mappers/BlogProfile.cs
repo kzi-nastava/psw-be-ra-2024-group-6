@@ -23,7 +23,8 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap()
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
         CreateMap<BlogDetailsDto, BlogDomain.Blogs.Blog>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
