@@ -21,8 +21,13 @@ public class ToursProfile : Profile
     {
         CreateMap<ReviewDto, Review>().ReverseMap();
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
+        CreateMap<BundleDto,Bundle>().ReverseMap();
 
-        CreateMap<TourDto, Tour>().ReverseMap();
+        CreateMap<TourDto, Tour>().ForMember(dest => dest.Equipment, opt => opt.Ignore()) 
+                                .ReverseMap()
+                                .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment));
+        //CreateMap<Tour, TourDto>().ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => !src.IsNotPublished()));
+        CreateMap<Tour, TourDto>().ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => src.IsPublished()));
 
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 

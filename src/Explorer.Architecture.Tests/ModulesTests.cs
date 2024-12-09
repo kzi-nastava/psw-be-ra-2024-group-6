@@ -1,4 +1,5 @@
 using ArchUnitNET.xUnit;
+using Explorer.Tours.Core.Domain.Tours;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
 namespace Explorer.Architecture.Tests;
@@ -88,6 +89,22 @@ public class ModulesTests : BaseArchitecturalTests
         new object[]
         {
             "Stakeholders"
+        },
+        new object[]
+        {
+            "Payments"
+        },
+        new object[]
+        {
+            "Tours"
+        },
+        new object[]
+        {
+            "Blog"
+        },
+        new object[]
+        {
+            "Encounters"
         }
     };
 }

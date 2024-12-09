@@ -46,7 +46,7 @@ public class ReviewDatabaseRepository : IReviewRepository
     {
         try
         {
-            var existingReview = _dbContext.PurchaseTokens.Find(review.Id);
+            var existingReview = _dbContext.Reviews.Find(review.Id);
             if (existingReview != null)
             {
                 _dbContext.Entry(existingReview).State = EntityState.Detached;

@@ -57,4 +57,12 @@ public class UserDatabaseRepository : IUserRepository
                           .ToList();
         return users;
     }
+
+    public List<long> GetAllAuthorsIds()
+    {
+        return _dbContext.Users
+            .Where(u => u.Role == UserRole.Author)
+            .Select(u => u.Id)
+            .ToList();
+    }
 }

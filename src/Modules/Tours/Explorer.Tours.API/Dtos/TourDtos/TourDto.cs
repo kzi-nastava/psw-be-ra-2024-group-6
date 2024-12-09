@@ -22,5 +22,7 @@ namespace Explorer.Tours.API.Dtos.TourDtos
         public DistanceDto TotalLength { get; set; }
         public DateTime? StatusChangeTime { get; set; }
         public List<TourDurationDto> Durations { get; set; }
+        public bool IsPublished { get; set; }
+        public List<EquipmentDto> Equipment { get; set; } = new List<EquipmentDto>();
     }
 }

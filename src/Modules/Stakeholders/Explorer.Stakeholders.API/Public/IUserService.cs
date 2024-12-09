@@ -14,9 +14,11 @@ namespace Explorer.Stakeholders.API.Public
         public PagedResult<UserDto> GetPaged();
         public Result<UserDto> Update(UserDto user);
 
+        public Result<UserDto> GetWithoutPassword(long id);
 
         public Result<UserDto> Get(long id);
         public Result<string> GetUserRole(long id);
+        public List<long> GetAllAuthorsIds();
 
     }
 }

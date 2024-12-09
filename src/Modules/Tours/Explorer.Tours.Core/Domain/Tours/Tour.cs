@@ -100,6 +100,7 @@ public class Tour : Entity
         Checkpoints.Remove(checkpoint);
     }
 
+
     public void RemoveObject(Object obj)
     {
         if (Objects == null)
@@ -196,9 +197,9 @@ public class Tour : Entity
 
     }
 
-    public List<Checkpoint> GetPreviewCheckpoints()
+    public Checkpoint GetPreviewCheckpoint()
     {
-        throw new NotImplementedException();
+        return Checkpoints.FirstOrDefault();
     }
     public double GetAverageRating()
     {
@@ -231,14 +232,18 @@ public class Tour : Entity
         return totalRating / Reviews.Count;
     }
 
-
-
-    public bool CheckIfNotPublished()
+    public bool IsNotPublished()
     {
         return Status != Status.Published;
     }
 
-    internal bool IsUserAuthor(long userId)
+
+    public bool IsPublished()
+    {
+        return Status == Status.Published;
+    }
+
+    public bool IsUserAuthor(long userId)
     {
         return AuthorId==userId;
     }
@@ -256,8 +261,20 @@ public class Tour : Entity
         }
         return false;
     }
+    public bool IsTourVisibleNearby(double latitude, double longitude, double maxDistance)
+    {
+            double distance = Checkpoints.First().GetCheckpointDistance(latitude, longitude);
+            if (distance <= maxDistance)
+                return true;
+        return false;
+    }
     public void setReviews(List<Review> reviews)
     {
         Reviews = reviews;
+    }
+
+    internal int GetNumberOfReviews()
+    {
+        return Reviews.Count;
     }
 }
