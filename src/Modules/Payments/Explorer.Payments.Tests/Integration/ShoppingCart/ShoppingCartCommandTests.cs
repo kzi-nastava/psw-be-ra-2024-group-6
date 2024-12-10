@@ -24,8 +24,7 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
 
         private static ShoppingCartController CreateController(IServiceScope scope, string userId = "-1")
         {
-            var controller = new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>(),
-                scope.ServiceProvider.GetRequiredService<ICouponService>(),scope.ServiceProvider.GetRequiredService<ITourService>())
+            var controller = new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>())
             {
                 ControllerContext = BuildLocalContext(userId)
             };

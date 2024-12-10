@@ -33,6 +33,7 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
 
         }
 
+
         public Coupon Get(long id)
         {
             var coupon = _dbContext.Coupons

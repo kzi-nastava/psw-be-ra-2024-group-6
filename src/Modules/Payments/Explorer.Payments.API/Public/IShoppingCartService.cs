@@ -13,6 +13,8 @@ public interface IShoppingCartService
     Result<ShoppingCartDto> Get(int id);
     Result<ShoppingCartDto> Create(ShoppingCartDto shoppingCart);
     Result<ShoppingCartDto> Update(ShoppingCartDto shoppingCart);
+
+    Result<CouponDto>? CheckAndApplyCoupon(string code,int userId);
     Result Delete(int id);
 
     public Result<ShoppingCartDto> GetByUserId(long userId);

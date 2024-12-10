@@ -6,6 +6,7 @@ using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Internal;
+using Explorer.Tours.API.Public;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -22,18 +23,22 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
     private readonly IInternalTourPaymentService _tourPaymentService;
     private readonly IInternalUserPaymentService _internalUserPaymentService;
     private readonly IWalletRepository _walletRepository;
+    private readonly ICouponService _couponService;
+    private readonly ICouponRepository _couponRepository;
     private readonly IMapper mapper;
 
     public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,
 
-        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService, IMapper mapper) : base(crudRepository, mapper)
+        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService,ICouponService couponService, IMapper mapper, ICouponRepository couponRepository) : base(crudRepository, mapper)
     {
         _shoppingCartRepository = shoppingCartRepository;
         _purchaseTokenRepository = purchaseTokenRepository;
         _tourPaymentService = tourPaymentService;
         _walletRepository = walletRepository;
+        _couponService = couponService;
         _internalUserPaymentService = userPaymentService;
         this.mapper = mapper;
+        _couponRepository = couponRepository;
     }
 
 
@@ -156,7 +161,95 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
 
         return Result.Ok(resultDto);
     }
-    
+
+    public Result<CouponDto>? CheckAndApplyCoupon(string code,int userId)
+    {
+        var res = _couponService.GetByCode(code);
+        if (res == null && res.Value == null)
+        {
+            return Result.Fail<CouponDto>("Not a valid code.");
+        }
+
+
+        var coupon = res.Value;
+
+        if (coupon.Used)
+        {
+            return Result.Fail<CouponDto>("Expired or used code.");
+        }
+
+        // Retrieve the shopping cart
+        var shop = GetByUserId(userId).Value;
+        if (shop == null)
+        {
+            return Result.Fail<CouponDto>("Empty shopping cart");
+        }
+
+        
+        var totalPrice = 0;
+        bool couponApplied = false;
+        bool first = false;
+        OrderItemDto max = new OrderItemDto();
+
+        foreach (var item in shop.OrderItems)
+        {
+            if (!first)
+            {
+                max = item;
+                first = true;
+            }
+
+            if (item.Price > max.Price)
+                max = item;
+
+            if (coupon.DiscountPercentage > 0)
+            {
+
+                if (coupon.TourId == item.Product.ResourceId && !couponApplied)
+                {
+                    item.Product.Price = item.Product.Price * (1 - coupon.DiscountPercentage / 100);
+                    item.Price = item.Product.Price;
+                    couponApplied = true;
+                    coupon.Used = true;
+                }
+
+
+            }
+        }
+
+        foreach (var item in shop.OrderItems)
+        {
+
+            if (coupon.DiscountPercentage > 0)
+            {
+                var coupA = coupon.AuthorId;
+                var currA = _tourPaymentService.Get((long)item.Product.ResourceId).AuthorId;
+                if (coupon.TourId == null && !couponApplied && item == max && currA == coupA)
+                {
+                    item.Product.Price = item.Product.Price * (1 - coupon.DiscountPercentage / 100);
+                    item.Price = item.Product.Price;
+                    couponApplied = true;
+                    coupon.Used = true;
+                }
+
+
+            }
+        }
+
+        foreach (var item in shop.OrderItems)
+        {
+            totalPrice += (int)item.Price;
+        }
+
+
+        shop.Price = totalPrice;
+
+        Update(shop);
+        _couponService.SimpleUpdate(coupon);
+        return res;
+    }
+
+
     private void SendNotification(long tourId, long receiverId, string content)
     {
         _internalUserPaymentService.SendNotification(content, receiverId, tourId, false);

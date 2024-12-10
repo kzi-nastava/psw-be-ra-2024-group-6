@@ -44,6 +44,7 @@ namespace Explorer.Payments.Core.Domain
 
             TourId = updatedCoupon.TourId;
             ExpiresDate = updatedCoupon.ExpiresDate;
+            Used = updatedCoupon.Used;
             return this; 
         }
 
