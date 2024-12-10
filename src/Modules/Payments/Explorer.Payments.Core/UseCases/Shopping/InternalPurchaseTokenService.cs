@@ -40,6 +40,11 @@ namespace Explorer.Payments.Core.UseCases.Shopping
             return MapToDto(_purchaseTokenRepository.GetByUserAndTour(userId, tourId));
         }
 
+        public Result<PurchaseTokenDto> Create(PurchaseTokenDto purchaseToken)
+        {
+            return MapToDto(_purchaseTokenRepository.Create(MapToDomain(purchaseToken)));
+        }
+
         public List<int> GetMostBoughtToursIds(int count)
         {
             return _purchaseTokenRepository.GetMostBoughtToursIds(count);

@@ -1,9 +1,15 @@
 ﻿using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Internal;
+using Explorer.Tours.API.Public;
+using Explorer.Tours.Core.UseCases;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Common;
 
 namespace Explorer.API.Controllers.Shopping
 {
@@ -13,9 +19,12 @@ namespace Explorer.API.Controllers.Shopping
     {
         private readonly IShoppingCartService _shoppingCartService;
 
+
         public ShoppingCartController(IShoppingCartService shoppingCartService)
         {
             _shoppingCartService = shoppingCartService;
+  
+
         }
 
         [HttpPut("removeItem/{resourceId:int}")]
@@ -35,6 +44,15 @@ namespace Explorer.API.Controllers.Shopping
             var result = _shoppingCartService.AddItem(userId, resourceId, resourceTypeId);
             return CreateResponse(result);
         }
+
+        [HttpGet("coupon/{code}")]
+        public ActionResult<CouponDto> CheckCoupon(string code)
+        {
+            var res = _shoppingCartService.CheckAndApplyCoupon(code, User.UserId());
+
+            return CreateResponse(res);
+        }
+
 
         [HttpPost("checkout")]
         public ActionResult<CheckoutResultDto> CheckoutCart()

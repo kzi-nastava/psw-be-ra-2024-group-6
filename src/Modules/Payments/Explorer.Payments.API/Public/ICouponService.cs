@@ -18,5 +18,6 @@ namespace Explorer.Payments.API.Public
         Result<CouponDto> Create(CouponDto coupon);
         Result<CouponDto> Update(CouponDto coupon, long userId);
         Result Delete(long id, long userId);
+        Result <CouponDto> SimpleUpdate(CouponDto coupon);
     }
 }
