@@ -11,7 +11,7 @@ namespace Explorer.Payments.Core.Domain
         public long? TourId { get; private set; }
         public DateTime? ExpiresDate { get; private set; }
 
-        public bool Used { get; private set; }
+        public bool Used { get; private set; } = false;
 
 
         public Coupon()
@@ -24,7 +24,7 @@ namespace Explorer.Payments.Core.Domain
             DiscountPercentage = discount;
             AuthorId = authorId;
             TourId = tourId;
-            Used = false;
+            
             Validate();
         }
 
