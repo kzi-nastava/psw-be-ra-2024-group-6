@@ -138,7 +138,9 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
             // save the payment history
             var tour = _tourPaymentService.Get(token.TourId);
             var tourPrice = new Price(tour.Price.Amount);
-            _paymentRecordRepository.Create(new PaymentRecord(token.UserId, token.TourId, tourPrice, DateTime.UtcNow));
+
+            // ako je tura - ResourceTypeId = 1
+            _paymentRecordRepository.Create(new PaymentRecord(token.UserId, token.TourId, 1, tourPrice, DateTime.UtcNow));
             // send notification
             SendNotification(token.TourId, userId, "You have successfully bought tour: " + token.TourId);
         }

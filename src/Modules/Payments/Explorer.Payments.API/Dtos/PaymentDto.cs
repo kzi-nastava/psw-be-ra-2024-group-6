@@ -10,7 +10,8 @@ public class PaymentDto
 {
     public int Id { get; set; }
     public long TouristId { get; set; }
-    public long TourId { get; set; }
+    public long ResourceId { get; set; }
+    public int ResourceTypeId { get; set; }
     public double Price { get; set; }
     public DateTime PaymentDate { get; set; }
 }
