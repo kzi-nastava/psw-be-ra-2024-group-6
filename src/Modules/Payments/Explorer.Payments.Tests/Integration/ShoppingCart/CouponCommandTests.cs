@@ -50,7 +50,8 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
                 TourId = tourId,
                 ExpiresDate = expiresDate,
                 Code = code,
-                DiscountPercentage = discount
+                DiscountPercentage = discount,
+                Used = false
             };
 
             if (success)
@@ -88,7 +89,8 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
                 TourId = tourId,
                 ExpiresDate = expiresDate,
                 Code = code,
-                DiscountPercentage = discount
+                DiscountPercentage = discount,
+                Used = false
             };
 
 
