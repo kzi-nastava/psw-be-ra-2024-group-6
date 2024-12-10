@@ -80,11 +80,11 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<List<EncounterReadDto>> GetAllActiveTouristsEncounters()
+        public Result<List<EncounterReadDto>> GetAllActiveEncountersForTourist(int userId)
         {
             try
             {
-                var activeEncounters = _encounterRepository.GetAllActiveEncounters();
+                var activeEncounters = _encounterRepository.GetAllActiveEncountersForTourist(userId);
                 var encounters = new List<EncounterReadDto>();
                 foreach (var encounter in activeEncounters)
                 {
@@ -111,6 +111,19 @@ namespace Explorer.Encounters.Core.UseCases
             catch (KeyNotFoundException e)
             {
                 return false;
+            }
+        }
+
+        public SocialEncounterReadDto? GetSocialById(long encounterId)
+        {
+            try
+            {
+                var socialEncounter = _encounterRepository.GetSocialEncounterById(encounterId);
+                return mapper.Map<SocialEncounterReadDto>(socialEncounter);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
             }
         }
 
@@ -144,7 +157,7 @@ namespace Explorer.Encounters.Core.UseCases
             return mapper.Map<List<EncounterReadDto>> (_encounterRepository.GetAllActiveEncounters());
             
         }
-        public Result<List<SocialEncounterReadDto>> GetAllActiveSocialEncounters()
+        public Result<List<SocialEncounterReadDto>> GetAllActiveSocialEncounters(int userId)
         {
             var activeEncounters = _encounterRepository.GetAllActiveEncounters()
                 .Cast<SocialEncounter>()

@@ -29,7 +29,8 @@ public class TourDuration : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return TransportType;
+        yield return Duration;
     }
 
     public string ToString()
