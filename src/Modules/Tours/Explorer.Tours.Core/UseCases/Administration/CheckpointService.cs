@@ -45,11 +45,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        public Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointCreateDto checkpointCreateDto)
+        public Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto)
         {
             try
             {
+                checkpointCreateDto.TourId = null;
                 var checkpoint = mapper.Map<Checkpoint>(checkpointCreateDto);
+               // checkpoint.SetTourId(null);
                 CrudRepository.Create(checkpoint);
                 checkpoint.PublicRequest = new PublicCheckpointRequest(checkpoint.Id);
                 CrudRepository.Update(checkpoint);

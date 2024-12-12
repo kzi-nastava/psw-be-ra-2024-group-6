@@ -15,7 +15,7 @@ namespace Explorer.Tours.Core.Domain.Tours;
 
 public class Checkpoint : Entity
 {
-    public long TourId { get; private set; }
+    public long? TourId { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public string ImageData { get; private set; }
@@ -30,7 +30,7 @@ public class Checkpoint : Entity
 
 
     public Checkpoint() { }
-    public Checkpoint(string? name, string? description, string? imageData, long tourId,Location location, string secret, PublicCheckpointRequest? publicRequest = null)
+    public Checkpoint(string? name, string? description, string? imageData, long? tourId,Location location, string secret, PublicCheckpointRequest? publicRequest = null)
     {
         Name = name;
         Description = description;
@@ -40,6 +40,7 @@ public class Checkpoint : Entity
         Secret = secret;
         EncounterIds = new List<long>();
         PublicRequest = publicRequest;
+      //  IsPublic = isPublic;
         UpdateIsPublic();
         Validate();
        
@@ -53,15 +54,12 @@ public class Checkpoint : Entity
     }
 
 
-/*    private void CreateRequest()
-    {
-        PublicRequest = new PublicCheckpointRequest(Id);
-    }
-*/
     private void UpdateIsPublic()
     {
         IsPublic = PublicRequest != null && PublicRequest.Status == PublicCheckpointStatus.Approved;
     }
+
+
 
     public void Update(Checkpoint checkpoint)
     {

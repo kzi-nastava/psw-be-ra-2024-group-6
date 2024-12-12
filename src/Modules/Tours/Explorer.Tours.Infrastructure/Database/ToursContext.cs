@@ -78,7 +78,8 @@ public class ToursContext : DbContext
         {
             entity.HasOne<Tour>()
                 .WithMany(t => t.Checkpoints)
-                .HasForeignKey(c => c.TourId);
+                .HasForeignKey(c => c.TourId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.Property(c => c.Location).HasColumnType("jsonb");
 

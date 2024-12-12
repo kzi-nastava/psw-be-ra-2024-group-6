@@ -39,7 +39,7 @@ namespace Explorer.API.Controllers.Author
 
 
         [HttpPost("public")]
-        public ActionResult<CheckpointDto> CreatePublicCheckpoint([FromBody] CheckpointCreateDto checkpointDto)
+        public ActionResult<CheckpointReadDto> CreatePublicCheckpoint([FromBody] CheckpointDto checkpointDto)
 
         {
             var result = _checkpointService.CreatePublicCheckpoint(checkpointDto);
