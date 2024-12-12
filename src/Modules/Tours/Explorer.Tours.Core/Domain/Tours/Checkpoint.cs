@@ -10,6 +10,9 @@ using System.Xml.Linq;
 
 namespace Explorer.Tours.Core.Domain.Tours;
 
+
+
+
 public class Checkpoint : Entity
 {
     public long TourId { get; private set; }
@@ -20,8 +23,14 @@ public class Checkpoint : Entity
     public string Secret { get; private set; }
     public List<long> EncounterIds { get; private set; }
 
+    public PublicCheckpointRequest? PublicRequest { get; set; }
+
+    public bool IsPublic { get; private set; }
+
+
+
     public Checkpoint() { }
-    public Checkpoint(string? name, string? description, string? imageData, long tourId,Location location, string secret)
+    public Checkpoint(string? name, string? description, string? imageData, long tourId,Location location, string secret, PublicCheckpointRequest? publicRequest = null)
     {
         Name = name;
         Description = description;
@@ -30,6 +39,8 @@ public class Checkpoint : Entity
         TourId = tourId;
         Secret = secret;
         EncounterIds = new List<long>();
+        PublicRequest = publicRequest;
+        UpdateIsPublic();
         Validate();
        
     }
@@ -39,6 +50,17 @@ public class Checkpoint : Entity
         if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description");
         if (string.IsNullOrWhiteSpace(ImageData)) throw new ArgumentException("Invalid image data");
 
+    }
+
+
+/*    private void CreateRequest()
+    {
+        PublicRequest = new PublicCheckpointRequest(Id);
+    }
+*/
+    private void UpdateIsPublic()
+    {
+        IsPublic = PublicRequest != null && PublicRequest.Status == PublicCheckpointStatus.Approved;
     }
 
     public void Update(Checkpoint checkpoint)
@@ -55,9 +77,6 @@ public class Checkpoint : Entity
 
     }
 
-    public void AddEncounterId(int encounterId)
-    {
-        EncounterIds.Add(encounterId);
-    }
+
 }
 

@@ -23,6 +23,8 @@ public class ToursContext : DbContext
 
     public DbSet<Bundle> Bundles { get; set; }
 
+    public DbSet<PublicCheckpointRequest> PublicCheckpointRequests { get; set; }
+
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,7 +38,9 @@ public class ToursContext : DbContext
         ConfigureEquipment(modelBuilder);
         ConfigureTouristEquipmentManager(modelBuilder);
         ConfigureBundle(modelBuilder);
-        
+        ConfigurePublicCheckpointRequest(modelBuilder);
+
+
         modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
         modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
     }
@@ -77,6 +81,29 @@ public class ToursContext : DbContext
                 .HasForeignKey(c => c.TourId);
 
             entity.Property(c => c.Location).HasColumnType("jsonb");
+
+
+            entity.HasOne(c => c.PublicRequest)
+                .WithOne()
+                .HasForeignKey<PublicCheckpointRequest>(p => p.CheckpointId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
+
+
+    private void ConfigurePublicCheckpointRequest(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PublicCheckpointRequest>(entity =>
+        {
+            entity.HasOne<Checkpoint>()
+                .WithOne(c => c.PublicRequest)
+                .HasForeignKey<PublicCheckpointRequest>(p => p.CheckpointId);
+
+            entity.Property(p => p.Status)
+                .HasConversion<string>();
+
+            entity.Property(p => p.AdminComment)
+                .HasMaxLength(500); 
         });
     }
 
