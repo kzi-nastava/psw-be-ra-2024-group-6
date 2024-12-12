@@ -45,6 +45,27 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        public Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto)
+        {
+            try
+            {
+                checkpointCreateDto.TourId = null;
+                var checkpoint = mapper.Map<Checkpoint>(checkpointCreateDto);
+               // checkpoint.SetTourId(null);
+                CrudRepository.Create(checkpoint);
+                checkpoint.PublicRequest = new PublicCheckpointRequest(checkpoint.Id);
+                CrudRepository.Update(checkpoint);
+                var checkpointReadDto = mapper.Map<CheckpointReadDto>(checkpoint);
+
+                return Result.Ok(checkpointReadDto);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+
         public Result<CheckpointDto> Get(long id) 
         {
             try
