@@ -5,3 +5,4 @@ DELETE FROM tours."Equipment";
 DELETE FROM tours."TouristEquipmentManagers";
 DELETE FROM tours."TourExecutions";
 DELETE FROM tours."Reviews";
+DELETE FROM tours."PublicCheckpointRequests"
