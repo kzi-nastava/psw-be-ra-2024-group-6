@@ -9,16 +9,18 @@ namespace Explorer.Blog.Core.Domain.Blogs
 {
     public class BlogPicture : Entity
     {
-        public string Url { get; private set; }
+        public string Name { get; private set; }
+        public string Data { get; private set; }
         public long BlogId { get; private set; }
         public Blog Blog { get; private set; }
 
         public BlogPicture() { }
-        public BlogPicture(string url, long blogId, Blog blog = null)
+        public BlogPicture(string name, long blogId, string data, Blog blog = null)
         {
-            Url = url;
+            Name = name;
             BlogId = blogId;
             Blog = blog;
+            Data = data;
         }
     }
 }
