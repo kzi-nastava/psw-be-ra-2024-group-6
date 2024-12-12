@@ -33,17 +33,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
             List<CheckpointReadDto> el = _checkpointRepository.GetByTourId(tourId).Select(mapper.Map<CheckpointReadDto>).ToList();
             return el;
         }
-        public Result<CheckpointReadDto> Create(CheckpointCreateDto checkpointCreateDto)
+        public Result<CheckpointDto> Create(CheckpointCreateDto checkpointCreateDto)
         {
             try
             {
-                var checkpoint = mapper.Map<Checkpoint>(checkpointCreateDto);
-
-                CrudRepository.Create(checkpoint);
-
-                var checkpointReadDto = mapper.Map<CheckpointReadDto>(checkpoint);
-
-                return Result.Ok(checkpointReadDto);
+                return MapToDto(CrudRepository.Create(mapper.Map<Checkpoint>(checkpointCreateDto)));
             }
             catch (Exception e)
             {
