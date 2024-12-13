@@ -14,6 +14,7 @@ namespace Explorer.Payments.Core.Mappers
         public SaleProfile()
         {
             CreateMap<SaleDto, Sale>().ReverseMap();
+
         }
     }
 }

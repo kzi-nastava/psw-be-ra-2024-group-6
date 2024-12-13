@@ -16,18 +16,21 @@ using System.Collections.Generic;
 using System.Linq;
 
 using System.Threading.Tasks;
+using Explorer.Tours.API.Internal;
 
 
 
 namespace Explorer.Payments.Core.UseCases.Shopping
 {
-    internal class SaleService : CrudService<SaleDto, Sale>, ISaleService
+    public class SaleService : CrudService<SaleDto, Sale>, ISaleService
     {
-        private readonly ISaleRepository _commentRepository;
+        private readonly ICrudRepository<Sale> _saleRepository;
         private readonly IMapper _mapper;
-        public SaleService(ISaleRepository commentRepository, ICrudRepository<Sale> repository, IMapper mapper) : base(repository, mapper)
+        private readonly IInternalTourPaymentService _tourPaymentService;
+        public SaleService(ISaleRepository saleRepository, ICrudRepository<Sale> repository, IInternalTourPaymentService tourPaymentService, IMapper mapper) : base(repository, mapper)
         {
-            _commentRepository = commentRepository;
+            _saleRepository = repository;
+            _tourPaymentService = tourPaymentService;
             _mapper = mapper;
         }
 

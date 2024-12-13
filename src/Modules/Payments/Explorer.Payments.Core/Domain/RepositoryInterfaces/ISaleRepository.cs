@@ -8,11 +8,9 @@ namespace Explorer.Payments.Core.Domain.RepositoryInterfaces
 {
     public interface ISaleRepository
     {
-        public ShoppingCart Create(ShoppingCart cart);
-        public ShoppingCart Update(ShoppingCart cart);
+        public Sale Create(Sale sale);
+        public Sale Update(Sale sale);
         public void Delete(long id);
-        public ShoppingCart? Get(long id);
-
-        public ShoppingCart? GetByUserId(long id);
+        public Sale? Get(long id);
     }
 }

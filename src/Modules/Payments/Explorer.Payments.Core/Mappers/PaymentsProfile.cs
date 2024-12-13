@@ -29,5 +29,7 @@ public class PaymentsProfile : Profile
 
 
         CreateMap<PurchaseTokenDto, PurchaseToken>().ReverseMap();
+
+        CreateMap<SaleDto, Sale>().ReverseMap();
     }
 }
