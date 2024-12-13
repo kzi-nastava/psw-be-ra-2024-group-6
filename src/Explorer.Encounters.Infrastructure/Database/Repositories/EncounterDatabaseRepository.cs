@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Encounters.API.Dtos;
+using FluentResults;
 
 namespace Explorer.Encounters.Infrastructure.Database.Repositories
 {
@@ -64,10 +66,24 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public List<Encounter> GetAllActiveEncounters()
         {
+            return _dbContext.Encounters.Where(e => e.Status == Status.Active).ToList();
+        }
 
-            return _dbContext.Encounters.Where(e => e.Status == Status.Active).ToList() ;
+        public List<Encounter> GetAllActiveEncountersForTourist(int touristId)
+        {
+
+            return _dbContext.Encounters.Where(e => e.Status == Status.Active && e.CreatorId != touristId).ToList();
 
         }
 
+        public Encounter GetById(long id)
+        {
+            return _dbContext.Encounters.First(e => e.Id == id);
+        }
+
+        public SocialEncounter GetSocialEncounterById(long id)
+        {
+            return _dbContext.Encounters.OfType<SocialEncounter>().FirstOrDefault(enc => enc.Id == id);
+        }
     }
 }

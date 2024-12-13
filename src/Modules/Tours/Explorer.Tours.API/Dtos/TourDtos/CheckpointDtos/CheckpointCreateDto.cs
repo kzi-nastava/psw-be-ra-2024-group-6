@@ -12,7 +12,7 @@ namespace Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos
         public LocationCreateDto Location { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        public string ImageData { get; set; }
         public long? TourId { get; set; }
         public string Secret {  get; set; }
     }

@@ -45,6 +45,8 @@ public static class ToursStartup
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IInternalProblemTourAuthorService, ProblemTourService>();
         services.AddScoped<IInternalTourPaymentService, InternalTourPaymentService>();
+        services.AddScoped<IBundleService, BundleService>();
+        services.AddScoped<IAuthorRecommenderService, AuthorRecommenderService>();
 
     }
 
@@ -64,6 +66,8 @@ public static class ToursStartup
         services.AddScoped<IReviewRepository, ReviewDatabaseRepository>();
         services.AddScoped<ITourRepository, TourDatabaseRepository>();
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
+        services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+        services.AddScoped<IBundleRepository, BundleDatabaseRepository>();
 
 
 

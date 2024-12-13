@@ -29,15 +29,18 @@ namespace Explorer.Encounters.Infrastructure
 
         private static void SetupCore(IServiceCollection services)
         {
+            services.AddScoped<ITouristRankService, TouristRankService>();
             services.AddScoped<IEncounterService, EncounterService>();
+            services.AddScoped<IEncounterExecutionService, EncounterExecutionService>();
         }
 
         private static void SetupInfrastructure(IServiceCollection services)
         {
-
-
             services.AddScoped(typeof(ICrudRepository<Encounter>), typeof(CrudDatabaseRepository<Encounter, EncountersContext>));
             services.AddScoped<IEncounterRepository, EncounterDatabaseRepository>();
+            services.AddScoped<ITouristRankRepository, TouristRankDatabaseRepository>();
+            services.AddScoped(typeof(ICrudRepository<EncounterExecution>), typeof(CrudDatabaseRepository<EncounterExecution, EncountersContext>));
+            services.AddScoped<IEncounterExecutionRepository, EncounterExecutionDatabaseRepository>();
 
             services.AddDbContext<EncountersContext>(options =>
                 options.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),

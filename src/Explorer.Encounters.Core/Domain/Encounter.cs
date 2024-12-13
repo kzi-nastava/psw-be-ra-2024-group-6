@@ -12,7 +12,7 @@ namespace Explorer.Encounters.Core.Domain
     {
         Active,
         Draft,
-        Archieved
+        Archived
     }
 
     public enum TypeEncounter { 
@@ -30,18 +30,18 @@ namespace Explorer.Encounters.Core.Domain
 
         public int Xp {  get; private set; }
 
-        public Status Status { get; private set; }
+        public Status Status { get; set; }
 
-        public TypeEncounter TypeEncounter { get; private set;
-        
-        }
+        public TypeEncounter TypeEncounter { get; private set; }
+        public int CreatorId { get; set; }
+        public bool IsRequiredForCheckpoint { get; private set; }
         public Encounter()
         {
 
         }
              
 
-        public Encounter(string name,string description,Location loc,int xp,Status status,TypeEncounter type)
+        public Encounter(string name,string description,Location loc,int xp,Status status,TypeEncounter type, int creatorId, bool isRequiredForCheckpoint = false)
         {
             Name = name;
             Description = description;
@@ -49,7 +49,8 @@ namespace Explorer.Encounters.Core.Domain
             Xp = xp;
             Status = status;
             TypeEncounter = type;
-
+            CreatorId = creatorId;
+            IsRequiredForCheckpoint = isRequiredForCheckpoint;
             Validate();
         }
 
@@ -63,8 +64,5 @@ namespace Explorer.Encounters.Core.Domain
         {
             return Status == Status.Active;
         }
-
-        
-
     }
 }
