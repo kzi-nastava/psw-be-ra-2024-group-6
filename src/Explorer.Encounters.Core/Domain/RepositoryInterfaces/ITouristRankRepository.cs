@@ -1,6 +1,8 @@
-﻿namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
 
-public interface ITouristRankRepository
+namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+
+public interface ITouristRankRepository : ICrudRepository<TouristRank>
 {
     public TouristRank GetByTouristId(int touristId);
 }

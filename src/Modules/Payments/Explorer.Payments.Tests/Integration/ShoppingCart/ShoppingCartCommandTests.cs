@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using Explorer.API.Controllers.Shopping;
 using Explorer.Payments.API.Dtos;
 using IShoppingCartService = Explorer.Payments.API.Public.IShoppingCartService;
+using Explorer.Payments.API.Public;
+using Explorer.Tours.API.Internal;
+using Explorer.Tours.API.Public;
 
 namespace Explorer.Payments.Tests.Integration.ShoppingCart
 {

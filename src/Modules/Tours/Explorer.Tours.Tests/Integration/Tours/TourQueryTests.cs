@@ -65,7 +65,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                 {
                     Description = "Test",
                     Name = "Test",
-                    ImageUrl = "Test",
+                    ImageData = "Test",
                     Location= new LocationCreateDto()
                     {
                         Latitude = 20,
@@ -90,12 +90,12 @@ namespace Explorer.Tours.Tests.Integration.Tours
                         Country = "Test"
                     }
         }
-                }, 
-                 TourInfo = new TourDto()
-                 {
+                },
+                TourInfo = new TourDto()
+                {
                     Description = "Test",
                     Name = "Test",
-                    Difficulty ="Easy",
+                    Difficulty = "Easy",
                     Tags = new List<string> { "Test" },
                     Price = new PriceDto()
                     {
@@ -116,7 +116,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                             TransportType = "Bike"
                         }
                     }
-                 } 
+                }
             };
             //Art 
             var result = ((ObjectResult)controller.Create(tourCreateDto).Result)?.Value as TourCreateDto;
@@ -125,7 +125,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
             result.ShouldNotBeNull();
             dbContext.Tours.Count().ShouldBe(6);
             dbContext.Tours.FirstOrDefault(x => x.Name == result.TourInfo.Name).ShouldNotBeNull();
-            dbContext.Checkpoints.FirstOrDefault(x=>x.Name=="Test").ShouldNotBeNull();
+            dbContext.Checkpoints.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
             dbContext.Objects.FirstOrDefault(x => x.Name == "Test").ShouldNotBeNull();
         }
         [Fact]

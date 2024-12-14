@@ -23,6 +23,17 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
             throw new NotImplementedException();
         }
 
+        public List<Coupon> GetAll()
+        {
+            List<Coupon> cs = _dbContext.Coupons.ToList();
+            if (cs != null)
+                return cs;
+            else
+                throw new KeyNotFoundException($"Coupons  not found.");
+
+        }
+
+
         public Coupon Get(long id)
         {
             var coupon = _dbContext.Coupons

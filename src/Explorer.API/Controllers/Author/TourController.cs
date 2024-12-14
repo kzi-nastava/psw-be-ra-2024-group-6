@@ -9,7 +9,7 @@ using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.API.Controllers.Author
 {
-    [Authorize(Policy = "authorPolicy")]
+//    [Authorize(Policy = "authorPolicy")]
     [Route("api/tours")]
     public class TourController : BaseApiController
     {
@@ -30,6 +30,7 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
         [HttpGet("author")]
         public ActionResult<List<TourDto>> GetByUserId()
         {
@@ -40,7 +41,8 @@ namespace Explorer.API.Controllers.Author
 
         }
 
-         [HttpGet("{tourId:int}")]
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("{tourId:int}")]
          public ActionResult<TourReadDto> GetTourDetailsByTourId(long tourId)
          {
              int userId = User.UserId();
@@ -49,6 +51,7 @@ namespace Explorer.API.Controllers.Author
 
          }
 
+        [Authorize(Policy = "authorPolicy")]
         [HttpPost]
          public ActionResult<TourCreateDto> Create([FromBody] TourCreateDto tour)
          {
@@ -57,6 +60,7 @@ namespace Explorer.API.Controllers.Author
              return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
         [HttpPatch("archive/{tourId:long}")]
         public ActionResult<TourReadDto> ArchieveTour(long tourId)
         {
@@ -65,6 +69,7 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
         [HttpPatch("publish/{tourId:long}")]
         public ActionResult<TourReadDto> PublishTour(long tourId)
         {
@@ -73,6 +78,7 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
         [HttpPut("{id:int}")]
         public ActionResult<TourDto> Update([FromBody] TourDto tour)
         {
@@ -80,6 +86,7 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {

@@ -35,7 +35,14 @@ namespace Explorer.Payments.Core.UseCases.Shopping
 
         public Result<CouponDto> GetByCode(string code)
         {
-            throw new NotImplementedException();
+            foreach (Coupon c in _couponRepository.GetAll()) 
+            {
+
+                if (code == c.Code && c.ExpiresDate > DateTime.UtcNow)
+                    return MapToDto(c);
+            }
+            return Result.Fail(FailureCode.NotFound).WithError("Coupon not found.");
+
         }
 
 
@@ -69,6 +76,23 @@ namespace Explorer.Payments.Core.UseCases.Shopping
 
             if (coupon.TourId != null && !IsUserAuthorOfTour(coupon.AuthorId, (long)coupon.TourId))
                 return Result.Fail(FailureCode.Forbidden).WithError("User is not author of specified tour.");
+
+            var existingCoupon = _couponRepository.Get(coupon.Id);
+            if (existingCoupon == null)
+                return Result.Fail(FailureCode.NotFound).WithError("Coupon not found.");
+
+            // Ažuriranje
+            existingCoupon.Update(coupon);
+
+            // Snimanje u repozitorijum
+            _couponRepository.Update(existingCoupon);
+
+            return MapToDto(existingCoupon);
+        }
+
+        public Result<CouponDto> SimpleUpdate(CouponDto couponDto)
+        {
+            var coupon = MapToDomain(couponDto);
 
             var existingCoupon = _couponRepository.Get(coupon.Id);
             if (existingCoupon == null)

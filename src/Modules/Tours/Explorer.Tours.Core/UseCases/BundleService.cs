@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Internal;
+using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.Domain;
+using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos;
 using Explorer.Tours.API.Public;
@@ -18,12 +23,62 @@ namespace Explorer.Tours.Core.UseCases
     public class BundleService : BaseService<BundleDto,Bundle> , IBundleService
     {
         private readonly IBundleRepository _bundleRepository;
-       
+        private readonly IInternalPurchaseTokenService _purchaseTokenRepository;
+        private readonly IInternalWalletService _walletRepository;
 
-        public BundleService(IBundleRepository bundleRepository, IMapper mapper) : base( mapper)
+        public BundleService(IBundleRepository bundleRepository,IInternalPurchaseTokenService purchaseTokenRepository,IInternalWalletService  walletRepository, IMapper mapper) : base( mapper)
         {
             _bundleRepository = bundleRepository;
+            _purchaseTokenRepository = purchaseTokenRepository;
+            _walletRepository = walletRepository;
            
+        }
+
+        public Result<BundleDto> Buy(BundleDto bundle,int userId)
+        {
+            try
+            {
+                WalletDto wallet = _walletRepository.GetByUserId(userId).Value;
+                if(wallet.AdventureCoins < bundle.Price)
+                {
+                    return Result.Fail(FailureCode.Forbidden).WithError("Not enough coins.");
+                }
+
+                foreach (int tour in bundle.TourIds)
+                {
+                    
+                    PurchaseTokenDto dto = new PurchaseTokenDto
+                    {
+                        UserId = userId,
+                        TourId = tour,
+                        PurchaseDate = DateTime.UtcNow,
+                        isExpired = false
+
+                    };
+                    _purchaseTokenRepository.Create(dto);
+                }
+
+                wallet.AdventureCoins -= (long)bundle.Price;
+                _walletRepository.Update(wallet);
+                return bundle;
+            }
+            catch (ArgumentException ex)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Invalid argument exception");
+
+            }
+        }
+        public Result<List<BundleDto>> GetAll()
+        {
+            try
+            {
+                var bundles = _bundleRepository.GetAll();
+                return MapToDto(bundles);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
 
         public Result<BundleDto> Update(BundleDto bundle)

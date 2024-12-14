@@ -18,13 +18,18 @@ namespace Explorer.Encounters.API.Public
         Result<List<EncounterReadDto>> GetPaged();
 
         Result<List<EncounterReadDto>> GetAllActiveEncounters();
-        Result<List<SocialEncounterReadDto>> GetAllActiveSocialEncounters();
         Result Delete(long id);
 
         Result AcceptEncounter(int encounterId);
 
         Result<EncounterReadDto> GetById(long id);
         public Result<EncounterByTouristReadDto> CreateByTourist(EncounterCreateDto encounter, int creatorId);
+
+
+        public Result<EncounterByTouristReadDto> CreateSocialEncounterByTourist(SocialEncounterCreateDto encounterDto, int creatorId);
+        public Result<List<EncounterReadDto>> GetAllActiveEncountersForTourist(int userId);
+        public bool IsUserInSocialEncounterRange(long encounterId, LocationDto location);
+        public SocialEncounterReadDto? GetSocialById(long encounterId);
 
     }
 }

@@ -11,18 +11,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Encounters.Infrastructure.Database.Repositories
 {
-    public class TouristRankDatabaseRepository : ITouristRankRepository
+    public class TouristRankDatabaseRepository : CrudDatabaseRepository<TouristRank, EncountersContext>, ITouristRankRepository
     {
-        private readonly EncountersContext _context;
-
-        public TouristRankDatabaseRepository(EncountersContext dbContext)
-        {
-            _context = dbContext;
-        }
+        public TouristRankDatabaseRepository(EncountersContext dbContext) : base(dbContext) {}
 
         public TouristRank GetByTouristId(int touristId)
         {
-            var touristRank = _context.TouristRanks.FirstOrDefault(tr => tr.TouristId == touristId);
+            var touristRank = DbContext.TouristRanks.FirstOrDefault(tr => tr.TouristId == touristId);
             if (touristRank == null) throw new KeyNotFoundException("Not found: " + touristId);
             return touristRank;
         }

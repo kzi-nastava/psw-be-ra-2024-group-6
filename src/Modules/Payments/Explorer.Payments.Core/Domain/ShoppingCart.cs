@@ -13,12 +13,15 @@ public class ShoppingCart : Entity
     public Price TotalPrice { get; private set; }
     public List<OrderItem> OrderItems { get; private set; }
 
+    public ShoppingCart() { }
     public ShoppingCart(long userId, Price totalPrice)
     {
         UserId = userId;
         TotalPrice = totalPrice;
         OrderItems = new List<OrderItem>();
     }
+
+
 
     public OrderItem AddTour(long tourId, string name, double price)
     {
@@ -51,6 +54,7 @@ public class ShoppingCart : Entity
         }
 
     }
+
 
     private void CalculateTotalPrice(double newPrice, bool add)
     {

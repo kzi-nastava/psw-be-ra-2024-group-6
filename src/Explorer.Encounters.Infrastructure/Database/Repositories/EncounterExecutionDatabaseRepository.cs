@@ -59,14 +59,26 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         }
 
-        public EncounterExecution GetEncounterExecution(long encounterId, int touristId)
-        {
-
-            return _dbContext.EncounterExecutions.First(e => e.EncounterId == encounterId && e.TouristId == touristId);
-        }
         public EncounterExecution GetById(long id)
         {
             return _dbContext.EncounterExecutions.First(e => e.Id == id);
+        }
+
+        public SocialEncounterExecution? GetStartedSocialByEncounterId(long encounterId)
+        {
+            return _dbContext.EncounterExecutions
+                //.AsEnumerable() // Forces the query to be evaluated on the client side
+                .OfType<SocialEncounterExecution>()
+                .FirstOrDefault(exec => exec.EncounterId == encounterId 
+                                        && exec.Status == EncounterExecutionStatus.STARTED);
+        }
+
+        public SocialEncounterExecution? GetStartedSocialEncounterById(long id)
+        {
+            return _dbContext.EncounterExecutions
+                .OfType<SocialEncounterExecution>()
+                .FirstOrDefault(exec => exec.Id == id
+                                        && exec.Status == EncounterExecutionStatus.STARTED);
         }
     }
 }

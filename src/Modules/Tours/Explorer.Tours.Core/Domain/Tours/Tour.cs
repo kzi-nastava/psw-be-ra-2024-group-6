@@ -35,7 +35,6 @@ public class Tour : Entity
     public Distance TotalLength { get; private set; }
     public DateTime StatusChangeTime { get; private set; }
     public List<TourDuration> Durations { get; private set; }
-
     public List<Checkpoint> Checkpoints { get; private set; }
     public List<Object> Objects { get; private set; }
     public List<Equipment> Equipment { get; private set; }
@@ -197,9 +196,9 @@ public class Tour : Entity
 
     }
 
-    public List<Checkpoint> GetPreviewCheckpoints()
+    public Checkpoint GetPreviewCheckpoint()
     {
-        throw new NotImplementedException();
+        return Checkpoints.FirstOrDefault();
     }
     public double GetAverageRating()
     {
@@ -261,8 +260,22 @@ public class Tour : Entity
         }
         return false;
     }
+    public bool IsTourVisibleNearby(double latitude, double longitude, double maxDistance)
+    {
+            double distance = Checkpoints.First().GetCheckpointDistance(latitude, longitude);
+            if (distance <= maxDistance)
+                return true;
+        return false;
+    }
     public void setReviews(List<Review> reviews)
     {
         Reviews = reviews;
+    }
+
+    internal int GetNumberOfReviews()
+    {
+        if(Reviews!=null)
+            return Reviews.Count;
+        return 0;
     }
 }

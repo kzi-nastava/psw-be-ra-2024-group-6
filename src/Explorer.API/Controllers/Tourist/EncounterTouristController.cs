@@ -39,7 +39,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost("social")]
         public ActionResult<EncounterReadDto> CreateSocialEncounter([FromBody] SocialEncounterCreateDto socialEncounter)
         {
-            var result = _encounterService.CreateByTourist(socialEncounter, User.UserId());
+            var result = _encounterService.CreateSocialEncounterByTourist(socialEncounter, User.UserId());
             return CreateResponse(result);
         }
 
@@ -47,6 +47,13 @@ namespace Explorer.API.Controllers.Tourist
         public ActionResult<EncounterReadDto> CreateHiddenEncounter([FromBody] HiddenEncounterDto hiddenEncounter)
         {
             var result = _encounterService.CreateByTourist(hiddenEncounter, User.UserId());
+            return CreateResponse(result);
+        }
+
+        [HttpGet("all-tourist-encounters")]
+        public ActionResult<EncounterReadDto> GetAllActiveTouristsEncounters()
+        {
+            var result = _encounterService.GetAllActiveEncountersForTourist(User.UserId());
             return CreateResponse(result);
         }
     }

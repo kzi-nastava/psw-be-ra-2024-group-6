@@ -11,9 +11,9 @@ namespace Explorer.Encounters.Core.Domain
     {
         public int TouristId { get; init; }
 
-        public int Level { get; init; }
+        public int Level { get; private set; }
 
-        public int Xp { get; init; }
+        public int Xp { get; private set; }
 
 
         public TouristRank(int touristId, int level, int xp)
@@ -29,6 +29,16 @@ namespace Explorer.Encounters.Core.Domain
         public bool CanCreateEncounter()
         {
             return Level >= 10;
+        }
+
+        public void AddExperiencePoints(int xp)
+        {
+            Xp += xp;
+            if (Xp >= 1000)
+            {
+                Level++;
+                Xp -= 1000;
+            }
         }
     }
 }
