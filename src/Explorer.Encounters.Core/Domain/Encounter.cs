@@ -36,7 +36,6 @@ namespace Explorer.Encounters.Core.Domain
         public int CreatorId { get; set; }
         public bool IsRequiredForCheckpoint { get; private set; }
 
-        public bool IsAccepted { get; private set; }
 
         public Encounter()
         {
@@ -54,7 +53,6 @@ namespace Explorer.Encounters.Core.Domain
             TypeEncounter = type;
             CreatorId = creatorId;
             IsRequiredForCheckpoint = isRequiredForCheckpoint;
-            IsAccepted = false;
             Validate();
         }
 
@@ -78,7 +76,6 @@ namespace Explorer.Encounters.Core.Domain
 
         public void AcceptEncounter()
         {
-            IsAccepted = true;
             Status = Status.Active;
         }
 
