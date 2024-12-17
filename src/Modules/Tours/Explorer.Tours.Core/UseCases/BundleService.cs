@@ -7,6 +7,7 @@ using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Internal;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
@@ -25,12 +26,14 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IBundleRepository _bundleRepository;
         private readonly IInternalPurchaseTokenService _purchaseTokenRepository;
         private readonly IInternalWalletService _walletRepository;
+        private readonly ITourRepository _tourRepository;
 
-        public BundleService(IBundleRepository bundleRepository,IInternalPurchaseTokenService purchaseTokenRepository,IInternalWalletService  walletRepository, IMapper mapper) : base( mapper)
+        public BundleService(IBundleRepository bundleRepository,IInternalPurchaseTokenService purchaseTokenRepository,IInternalWalletService  walletRepository,ITourRepository tourRepository, IMapper mapper) : base( mapper)
         {
             _bundleRepository = bundleRepository;
             _purchaseTokenRepository = purchaseTokenRepository;
             _walletRepository = walletRepository;
+            _tourRepository = tourRepository;
            
         }
 
@@ -158,7 +161,8 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
-
+                Tour tour = _tourRepository.Get(bundle.TourIds[0]);
+                bundle.ImageData = tour.Checkpoints[0].ImageData;
                 var result = _bundleRepository.Create(MapToDomain(bundle));
                 return MapToDto(result);
             }
