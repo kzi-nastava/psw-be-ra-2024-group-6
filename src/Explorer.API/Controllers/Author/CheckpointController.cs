@@ -17,7 +17,7 @@ namespace Explorer.API.Controllers.Author
             _checkpointService = checkpointService;
         }
 
-        [HttpGet("{toudId:long}")]
+        [HttpGet("{tourId:long}")]
         public ActionResult<PagedResult<CheckpointReadDto>> GetByTourId(long tourId)
         {
             var result = _checkpointService.GetByTourId(tourId);
