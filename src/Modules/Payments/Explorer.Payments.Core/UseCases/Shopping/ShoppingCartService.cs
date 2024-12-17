@@ -23,13 +23,14 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
     private readonly IInternalTourPaymentService _tourPaymentService;
     private readonly IInternalUserPaymentService _internalUserPaymentService;
     private readonly IWalletRepository _walletRepository;
+    private readonly IPaymentRecordRepository _paymentRecordRepository;
     private readonly ICouponService _couponService;
-    private readonly ICouponRepository _couponRepository;
+   // private readonly ICouponRepository _couponRepository;
     private readonly IMapper mapper;
 
     public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,
 
-        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService,ICouponService couponService, IMapper mapper, ICouponRepository couponRepository) : base(crudRepository, mapper)
+        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService, IPaymentRecordRepository paymentRecordRepository,ICouponService couponService, IMapper mapper) : base(crudRepository, mapper)
     {
         _shoppingCartRepository = shoppingCartRepository;
         _purchaseTokenRepository = purchaseTokenRepository;
@@ -37,8 +38,9 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
         _walletRepository = walletRepository;
         _couponService = couponService;
         _internalUserPaymentService = userPaymentService;
+        _paymentRecordRepository = paymentRecordRepository;
         this.mapper = mapper;
-        _couponRepository = couponRepository;
+        
     }
 
 
@@ -138,6 +140,12 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
         foreach (var token in tokens)
         {
             _purchaseTokenRepository.Create(token);
+            // save the payment history
+            var tour = _tourPaymentService.Get(token.TourId);
+            var tourPrice = new Price(tour.Price.Amount);
+
+            // ako je tura - ResourceTypeId = 1
+            _paymentRecordRepository.Create(new PaymentRecord(token.UserId, token.TourId, 1, tourPrice, DateTime.UtcNow));
             // send notification
             SendNotification(token.TourId, userId, "You have successfully bought tour: " + token.TourId);
         }
