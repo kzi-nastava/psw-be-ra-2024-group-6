@@ -9,7 +9,7 @@ using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.API.Controllers.Author
 {
-//    [Authorize(Policy = "authorPolicy")]
+//  [Authorize(Policy = "authorPolicy")]
     [Route("api/tours")]
     public class TourController : BaseApiController
     {
