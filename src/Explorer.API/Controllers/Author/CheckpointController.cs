@@ -38,11 +38,12 @@ namespace Explorer.API.Controllers.Author
         }
 
 
-        [HttpPost("public")]
-        public ActionResult<CheckpointReadDto> CreatePublicCheckpoint([FromBody] CheckpointDto checkpointDto)
 
+
+        [HttpGet("nearby")]
+        public ActionResult<List<CheckpointDto>> GetNearbyPublicCheckpoints([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
         {
-            var result = _checkpointService.CreatePublicCheckpoint(checkpointDto);
+            var result = _checkpointService.GetNearbyPublicCheckpoints(latitude, longitude, radius);
             return CreateResponse(result);
         }
 
