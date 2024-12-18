@@ -60,7 +60,7 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
                     throw new KeyNotFoundException("Wallet not found.");
                 }
 
-                existingWallet.AdventureCoins = (long)price.Amount;
+                existingWallet.AdventureCoins = price.Amount;
 
                 _dbContext.Entry(existingWallet).State = EntityState.Modified;
                 _dbContext.SaveChanges();

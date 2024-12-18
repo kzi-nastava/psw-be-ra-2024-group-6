@@ -34,7 +34,7 @@ namespace Explorer.Payments.Core.UseCases
         }
         public Result<WalletDto> Update(WalletDto wallet, long senderId)
         {
-            long AdventureCoinsAwarded = wallet.AdventureCoins;
+            double AdventureCoinsAwarded = wallet.AdventureCoins;
             Wallet oldWallet = _walletRepository.GetByUserId(wallet.UserId);
             if (oldWallet != null) 
             {
