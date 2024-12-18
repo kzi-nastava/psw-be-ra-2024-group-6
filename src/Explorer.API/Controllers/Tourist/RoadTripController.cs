@@ -18,7 +18,7 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpPost()]
-        public ActionResult<RoadTripReadDto> Create([FromQuery] RoadTripCreateDto roadTripCreate)
+        public ActionResult<RoadTripReadDto> Create([FromBody] RoadTripCreateDto roadTripCreate)
         {
             var result = _roadTripService.CreateRoadTrip(roadTripCreate, User.UserId());
             return CreateResponse(result);
