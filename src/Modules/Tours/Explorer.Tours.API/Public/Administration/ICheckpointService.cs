@@ -20,7 +20,10 @@ namespace Explorer.Tours.API.Public.Administration
         Result<List<CheckpointReadDto>> GetByTourId(long tourId);
         Result<CheckpointDto> Create(CheckpointCreateDto checkpointCreateDto);
 
+        
         Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto);
+
+        Result<List<CheckpointDto>> GetNearbyPublicCheckpoints(double latitude, double longitude, double radius);
 
         public Result<CheckpointDto> Get(long id);
         public Result<List<DestinationDto>> GetMostPopularDestinations();
