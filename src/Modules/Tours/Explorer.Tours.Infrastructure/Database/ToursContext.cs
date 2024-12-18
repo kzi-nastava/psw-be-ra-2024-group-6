@@ -169,10 +169,10 @@ public class ToursContext : DbContext
             entity.Property(roadTrip => roadTrip.TotalLength)
                 .HasColumnType("jsonb");
 
-            entity.Property(roadTrip => roadTrip.PublicCheckpoints)
+            entity.Property(roadTrip => roadTrip.PublicCheckpointIds)
                 .HasColumnType("jsonb");
 
-            entity.Property(roadTrip => roadTrip.Tours)
+            entity.Property(roadTrip => roadTrip.TourIds)
                 .HasColumnType("jsonb");
         });
     }

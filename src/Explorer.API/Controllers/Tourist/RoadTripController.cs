@@ -23,5 +23,12 @@ namespace Explorer.API.Controllers.Tourist
             var result = _roadTripService.CreateRoadTrip(roadTripCreate, User.UserId());
             return CreateResponse(result);
         }
+
+        [HttpGet]
+        public ActionResult<List<RoadTripReadDto>> GetAllRoadTripsForTourist()
+        {
+            var result = _roadTripService.GetAllByTouristId(User.UserId());
+            return CreateResponse(result);
+        }
     }
 }
