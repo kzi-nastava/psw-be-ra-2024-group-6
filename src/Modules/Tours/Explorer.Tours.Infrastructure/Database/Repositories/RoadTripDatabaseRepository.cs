@@ -23,5 +23,10 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _context.SaveChanges();
             return roadTrip;
         }
+
+        public List<RoadTrip> GetAllByTouristId(int touristId)
+        {
+            return _context.RoadTrips.Where(rt => rt.TouristId == touristId).ToList();
+        }
     }
 }

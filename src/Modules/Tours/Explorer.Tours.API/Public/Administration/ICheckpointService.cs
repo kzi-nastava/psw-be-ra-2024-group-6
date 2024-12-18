@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.Tours.API.Public.Administration
 {
@@ -25,8 +26,8 @@ namespace Explorer.Tours.API.Public.Administration
         Result<List<CheckpointDto>> GetNearbyPublicCheckpoints(double latitude, double longitude, double radius);
 
         public Result<CheckpointDto> Get(long id);
-
         public Result<List<DestinationDto>> GetMostPopularDestinations();
         public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
+        public List<CheckpointReadDto> GetCheckpointsByIds(List<int> checkpointIds);
     }
 }

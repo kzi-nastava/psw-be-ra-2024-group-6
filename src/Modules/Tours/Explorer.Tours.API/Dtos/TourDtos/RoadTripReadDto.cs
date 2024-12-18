@@ -16,5 +16,16 @@ namespace Explorer.Tours.API.Dtos.TourDtos
         public List<CheckpointReadDto> PublicCheckpoints { get; set; }
         public string Difficulty { get; private set; }
         public DistanceDto TotalLength { get; private set; }
+
+        public RoadTripReadDto() { }
+        public RoadTripReadDto(int id, int touristId, List<TourDto> tours, List<CheckpointReadDto> publicCheckpoints, string difficulty, DistanceDto totalLength)
+        {
+            Id = id;
+            TouristId = touristId;
+            Tours = tours;
+            PublicCheckpoints = publicCheckpoints;
+            Difficulty = difficulty;
+            TotalLength = totalLength;
+        }
     }
 }
