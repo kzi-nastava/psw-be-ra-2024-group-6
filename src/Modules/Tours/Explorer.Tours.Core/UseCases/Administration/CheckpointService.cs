@@ -45,15 +45,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        public Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto)
+        public Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto, long userId)
         {
             try
             {
                 checkpointCreateDto.TourId = null;
-                var checkpoint = mapper.Map<Checkpoint>(checkpointCreateDto);
-               // checkpoint.SetTourId(null);
+                var checkpoint = mapper.Map<Checkpoint>(checkpointCreateDto); ;
                 CrudRepository.Create(checkpoint);
-                checkpoint.PublicRequest = new PublicCheckpointRequest(checkpoint.Id);
+                checkpoint.PublicRequest = new PublicCheckpointRequest(checkpoint.Id,  userId);
                 CrudRepository.Update(checkpoint);
                 var checkpointReadDto = mapper.Map<CheckpointReadDto>(checkpoint);
 
@@ -79,6 +78,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        public Result<List<CheckpointReadDto>> GetPendingPublicCheckpoints()
+        {
+            var pendingCheckpoints = _checkpointRepository.GetPendingPublicCheckpoints();
+            var result = pendingCheckpoints.Select(mapper.Map<CheckpointReadDto>).ToList();
+            return Result.Ok(result);
+        }
+
+
         public Result<List<DestinationDto>> GetMostPopularDestinations()
         {
             var result = _checkpointRepository.GetMostPopularDestinations();
@@ -90,6 +97,24 @@ namespace Explorer.Tours.Core.UseCases.Administration
         public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize)
         {
             return _checkpointRepository.GetTourIdsForDestination(city, country, page, pageSize);
+        }
+
+        public Result<CheckpointReadDto> ApproveCheckpointRequest(long checkpointId)
+        {
+            var checkpoint = _checkpointRepository.Get(checkpointId);
+            checkpoint.ApprovePublicRequest();
+            checkpoint.Update(checkpoint);
+            _checkpointRepository.Update(checkpoint);
+            return mapper.Map<CheckpointReadDto>(checkpoint);
+        }
+
+        public Result<CheckpointReadDto> RejectCheckpointRequest(long checkpointId, string comment)
+        {
+            var checkpoint = _checkpointRepository.Get(checkpointId);
+            checkpoint.RejectPublicRequest(comment);
+            checkpoint.Update(checkpoint);
+            _checkpointRepository.Update(checkpoint);
+            return mapper.Map<CheckpointReadDto>(checkpoint);
         }
     }
 }

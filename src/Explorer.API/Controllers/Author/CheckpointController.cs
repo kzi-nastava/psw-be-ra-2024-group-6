@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
@@ -42,7 +43,8 @@ namespace Explorer.API.Controllers.Author
         public ActionResult<CheckpointReadDto> CreatePublicCheckpoint([FromBody] CheckpointDto checkpointDto)
 
         {
-            var result = _checkpointService.CreatePublicCheckpoint(checkpointDto);
+            var userId = User.UserId();
+            var result = _checkpointService.CreatePublicCheckpoint(checkpointDto, userId);
             return CreateResponse(result);
         }
 
