@@ -21,9 +21,9 @@ public class ToursProfile : Profile
     {
         CreateMap<ReviewDto, Review>().ReverseMap();
         CreateMap<EquipmentDto, Equipment>().ReverseMap();
-        CreateMap<BundleDto,Bundle>().ReverseMap();
+        CreateMap<BundleDto, Bundle>().ReverseMap();
 
-        CreateMap<TourDto, Tour>().ForMember(dest => dest.Equipment, opt => opt.Ignore()) 
+        CreateMap<TourDto, Tour>().ForMember(dest => dest.Equipment, opt => opt.Ignore())
                                 .ReverseMap()
                                 .ForMember(dest => dest.Equipment, opt => opt.MapFrom(src => src.Equipment));
         //CreateMap<Tour, TourDto>().ForMember(dest => dest.IsPublished, opt => opt.MapFrom(src => !src.IsNotPublished()));
@@ -32,11 +32,14 @@ public class ToursProfile : Profile
         CreateMap<TouristEquipmentManagerDto, TouristEquipmentManager>().ReverseMap();
 
         CreateMap<Tour, TourReadDto>().ReverseMap();
-        CreateMap<Price,PriceDto>().ReverseMap();
+        CreateMap<Price, PriceDto>().ReverseMap();
         CreateMap<TourDuration, TourDurationDto>().ReverseMap();
-        CreateMap<Distance,DistanceDto>().ReverseMap();
+        CreateMap<Distance, DistanceDto>()
+            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Unit.ToString())) // Enum to String
+            .ReverseMap()
+            .ForMember(dest => dest.Unit, opt => opt.MapFrom(src => Enum.Parse<DistanceUnit>(src.Unit, true)));
         //CreateMap<TourCardDto, Tour>().ReverseMap();
-        CreateMap<TourReviewDto,Review>().ReverseMap();
+        CreateMap<TourReviewDto, Review>().ReverseMap();
         CreateMap<TourCardDto, Tour>()
             .ReverseMap().ForMember(dest => dest.Distance, opt => opt.MapFrom(src => src.TotalLength.Length + src.TotalLength.Unit.ToString()));
 
@@ -48,5 +51,13 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Position.Longitude))
             .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Position.Latitude));
+
+        CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
+        CreateMap<Checkpoint, CheckpointReadDto>()
+            .ForMember(dest => dest.PublicRequest, opt => opt.MapFrom(src => src.PublicRequest))
+            .ReverseMap();
+        CreateMap<RoadTripCreateDto, RoadTrip>().ReverseMap();
+        CreateMap<RoadTrip, RoadTripReadDto>()
+            .ForMember(rt => rt.Difficulty, opt => opt.MapFrom(src => src.Difficulty.ToString()));
     }
 }

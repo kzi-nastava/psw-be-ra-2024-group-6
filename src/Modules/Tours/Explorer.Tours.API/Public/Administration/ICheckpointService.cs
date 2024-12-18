@@ -28,6 +28,9 @@ namespace Explorer.Tours.API.Public.Administration
 
         Result<List<DestinationDto>> GetMostPopularDestinations();
         List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
+        Result<List<CheckpointDto>> GetNearbyPublicCheckpoints(double latitude, double longitude, double radius);
+
+        public Result<CheckpointDto> Get(long id);
 
         Result<CheckpointReadDto> ApproveCheckpointRequest(long checkpointId, long adminId);
         Result<CheckpointReadDto> RejectCheckpointRequest(long checkpointId, string comment, long adminId);

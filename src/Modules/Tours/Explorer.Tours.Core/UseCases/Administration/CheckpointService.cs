@@ -66,6 +66,28 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        public Result<List<CheckpointDto>> GetNearbyPublicCheckpoints(double latitude, double longitude, double radius)
+        {
+            return FilterNearbyPublicCheckpoints(latitude, longitude, radius);
+        }
+
+        public List<CheckpointDto> FilterNearbyPublicCheckpoints(double latitude, double longitude, double radius)
+        {
+            var allPublicCheckpoints = _checkpointRepository.GetAllPublic();
+
+            var nearbyCheckpoints = allPublicCheckpoints
+                .Where(checkpoint =>
+                    checkpoint.GetCheckpointDistance(latitude, longitude) <= radius)
+                .ToList();
+
+
+            return nearbyCheckpoints.Select(checkpoint =>
+            {
+                var dto = mapper.Map<CheckpointDto>(checkpoint);
+                dto.Secret = null; // Postavljanje Secret na null
+                return dto;
+            }).ToList();
+        }
 
         public Result<CheckpointDto> Get(long id) 
         {

@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Dtos.TourDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,16 +73,23 @@ public class ShoppingCart : Entity
     {
         var tokens = new List<PurchaseToken>();
 
+        double total = 0;
         foreach (var item in OrderItems)
         {
             var token = new PurchaseToken(this.UserId, item.ProductId, DateTime.UtcNow, false);
 
             tokens.Add(token);
+            total += item.Price.Amount;
         }
 
         OrderItems.Clear();
-        TotalPrice = new Price(0);
+        TotalPrice = new Price(total);
 
         return tokens;
+    }
+
+    public void setPriceToZero()
+    {
+        TotalPrice = new Price(0);
     }
 }
