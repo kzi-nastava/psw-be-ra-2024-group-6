@@ -26,7 +26,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             _personService = personService;
             _mapper = mapper;
         }
-        public Result SendWalletNotification(long recieverId,long senderId,long adventureCoins)
+        public Result SendWalletNotification(long recieverId,long senderId, double adventureCoins)
         {
             try
             {

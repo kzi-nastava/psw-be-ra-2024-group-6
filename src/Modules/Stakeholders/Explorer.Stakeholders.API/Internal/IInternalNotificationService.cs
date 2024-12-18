@@ -10,6 +10,6 @@ namespace Explorer.Stakeholders.API.Internal
 {
     public interface IInternalNotificationService
     {
-        public Result SendWalletNotification(long recieverId, long senderId,long adventureCoins);
+        public Result SendWalletNotification(long recieverId, long senderId, double adventureCoins);
     }
 }
