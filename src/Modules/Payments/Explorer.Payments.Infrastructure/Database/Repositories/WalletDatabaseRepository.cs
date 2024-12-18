@@ -49,5 +49,28 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
             }
             return wallet;
         }
+        public Wallet UpdatePrice(Wallet wallet, Price price)
+        {
+            try
+            {
+                var existingWallet = _dbContext.Wallets.Find(wallet.Id);
+
+                if (existingWallet == null)
+                {
+                    throw new KeyNotFoundException("Wallet not found.");
+                }
+
+                existingWallet.AdventureCoins = (long)price.Amount;
+
+                _dbContext.Entry(existingWallet).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new ApplicationException("An error occurred while updating the wallet.", e);
+            }
+
+            return wallet;
+        }
     }
 }
