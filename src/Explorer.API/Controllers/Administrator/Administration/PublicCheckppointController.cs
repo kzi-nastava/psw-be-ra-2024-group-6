@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos.TourDtos.CheckpointDtos;
+﻿using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointDtos;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,8 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpPost("{checkpointId:long}/approve")]
         public ActionResult<CheckpointReadDto> ApproveCheckpoint(long checkpointId)
         {
-            var result = _checkpointService.ApproveCheckpointRequest(checkpointId);
+            var userId = User.UserId();
+            var result = _checkpointService.ApproveCheckpointRequest(checkpointId, userId);
             return CreateResponse(result);
         }
 
@@ -38,7 +40,9 @@ namespace Explorer.API.Controllers.Administrator.Administration
             if (string.IsNullOrWhiteSpace(rejectDto.Comment))
                 return BadRequest("Comment is required to reject a public checkpoint request.");
 
-            var result = _checkpointService.RejectCheckpointRequest(checkpointId, rejectDto.Comment);
+            var userId = User.UserId();
+
+            var result = _checkpointService.RejectCheckpointRequest(checkpointId, rejectDto.Comment, userId);
             return CreateResponse(result);
         }
     }

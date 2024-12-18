@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using FluentResults;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using System.Diagnostics;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
@@ -19,10 +20,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
     public class CheckpointService : CrudService<CheckpointDto, Checkpoint>,ICheckpointService
     {
         private readonly ICheckpointRepository _checkpointRepository;
+        private readonly IInternalNotificationService _notificationService;
         private readonly IMapper mapper;
-        public CheckpointService(ICrudRepository<Checkpoint> crudRepository,ICheckpointRepository checkpointRepository, IMapper mapper) : base(crudRepository, mapper)
+        public CheckpointService(ICrudRepository<Checkpoint> crudRepository,ICheckpointRepository checkpointRepository, IInternalNotificationService notificationService, IMapper mapper) : base(crudRepository, mapper)
         {
-
+            _notificationService = notificationService;
             _checkpointRepository = checkpointRepository;
             this.mapper = mapper;
         }
@@ -99,22 +101,34 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return _checkpointRepository.GetTourIdsForDestination(city, country, page, pageSize);
         }
 
-        public Result<CheckpointReadDto> ApproveCheckpointRequest(long checkpointId)
+        public Result<CheckpointReadDto> ApproveCheckpointRequest(long checkpointId, long adminId)
         {
             var checkpoint = _checkpointRepository.Get(checkpointId);
             checkpoint.ApprovePublicRequest();
             checkpoint.Update(checkpoint);
             _checkpointRepository.Update(checkpoint);
+
+
+            var message = $"Your public checkpoint request '{checkpoint.Name}' has been approved.";
+            _notificationService.SendPublicCheckpointRequestNotification(checkpoint.PublicRequest.UserId, message, adminId);
+
             return mapper.Map<CheckpointReadDto>(checkpoint);
         }
 
-        public Result<CheckpointReadDto> RejectCheckpointRequest(long checkpointId, string comment)
+
+        public Result<CheckpointReadDto> RejectCheckpointRequest(long checkpointId, string comment, long adminId)
         {
             var checkpoint = _checkpointRepository.Get(checkpointId);
             checkpoint.RejectPublicRequest(comment);
             checkpoint.Update(checkpoint);
             _checkpointRepository.Update(checkpoint);
+
+
+            var message = $"Your public checkpoint request '{checkpoint.Name}' has been rejected. Reason: {comment}";
+            _notificationService.SendPublicCheckpointRequestNotification(checkpoint.PublicRequest.UserId, message, adminId);
+
             return mapper.Map<CheckpointReadDto>(checkpoint);
         }
+
     }
 }

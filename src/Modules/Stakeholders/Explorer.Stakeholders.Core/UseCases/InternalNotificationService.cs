@@ -52,5 +52,30 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
             }
         }
+
+        public Result SendPublicCheckpointRequestNotification(long receiverId, string message, long adminId)
+        {
+            try
+            {
+                var notificationDto = new NotificationDto
+                {
+                    Content = message,
+                    Type = "None",
+                    ReceiverPersonId = receiverId,
+                    SenderPersonId = adminId,
+                    LinkId = null,
+                    CreatedAt = DateTime.UtcNow,
+                    IsRead = false
+                };
+
+                _notificationRepository.Add(_mapper.Map<Notification>(notificationDto));
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
+            }
+        }
     }
 }
+
