@@ -12,6 +12,7 @@ using Explorer.Stakeholders.API.Internal;
 using AutoMapper;
 using Explorer.Stakeholders.API.Public;
 
+
 namespace Explorer.Stakeholders.Core.UseCases
 {
     public class InternalNotificationService : IInternalNotificationService
@@ -57,18 +58,8 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             try
             {
-                var notificationDto = new NotificationDto
-                {
-                    Content = message,
-                    Type = "None",
-                    ReceiverPersonId = receiverId,
-                    SenderPersonId = adminId,
-                    LinkId = null,
-                    CreatedAt = DateTime.UtcNow,
-                    IsRead = false
-                };
-
-                _notificationRepository.Add(_mapper.Map<Notification>(notificationDto));
+                var notification = new Notification(message, NotificationType.None, null, receiverId, adminId);
+                _notificationRepository.Add(notification);
                 return Result.Ok();
             }
             catch (Exception ex)

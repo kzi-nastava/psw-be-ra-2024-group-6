@@ -38,7 +38,7 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
-
+        [HttpPost("public")]
         public ActionResult<CheckpointReadDto> CreatePublicCheckpoint([FromBody] CheckpointDto checkpointDto)
 
         {

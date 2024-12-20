@@ -9,11 +9,11 @@ namespace Explorer.API.Controllers.Administrator.Administration
 {
     [Authorize(Policy = "administratorPolicy")]
     [Route("api/administration/public-checkpoints")]
-    public class PublicCheckppointController : BaseApiController
+    public class PublicCheckpointController : BaseApiController
     {
         private readonly ICheckpointService _checkpointService;
 
-        public PublicCheckppointController(ICheckpointService checkpointService)
+        public PublicCheckpointController(ICheckpointService checkpointService)
         {
             _checkpointService = checkpointService;
         }
