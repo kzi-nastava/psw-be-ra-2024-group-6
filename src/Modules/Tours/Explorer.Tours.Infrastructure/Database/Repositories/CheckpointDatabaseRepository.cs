@@ -7,9 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
-
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
     public class CheckpointDatabaseRepository : ICheckpointRepository
@@ -100,16 +97,16 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
         }
 
-        public List<Checkpoint> GetPublicCheckpointsInBox(LatLngDto northEastCoord, LatLngDto southWestCoord)
+        public List<Checkpoint> GetPublicCheckpointsInBox(double northEastCoordLat, double northEastCoordLng, double southWestCoordLat, double southWestCoordLng)
         {
             try
             {
                 return _dbContext.Checkpoints
                     .Where(ch => ch.IsPublic &&
-                                 ch.Location.Longitude >= southWestCoord.Lng &&
-                                 ch.Location.Longitude <= northEastCoord.Lng &&
-                                 ch.Location.Latitude >= southWestCoord.Lat &&
-                                 ch.Location.Latitude <= northEastCoord.Lat)
+                                 ch.Location.Longitude >= southWestCoordLng &&
+                                 ch.Location.Longitude <= northEastCoordLng &&
+                                 ch.Location.Latitude >= southWestCoordLat &&
+                                 ch.Location.Latitude <= northEastCoordLat)
                     .ToList(); ;
             }
             catch (KeyNotFoundException e)
@@ -117,6 +114,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException(e.Message);
             }
         }
+       
     }
 
 }

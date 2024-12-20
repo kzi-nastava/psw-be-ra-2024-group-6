@@ -168,17 +168,17 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new Exception("Error finding nearby tours", ex);
             }
         }
-        public List<Tour> GetPublishedToursWithCheckpointsInRectangle(LatLngDto northEastCoord,LatLngDto southWestCoord)
+        public List<Tour> GetPublishedToursWithCheckpointsInRectangle(double northEastCoordLat, double northEastCoordLng, double southWestCoordLat, double southWestCoordLng)
         {
             try
             {
                 return _context.Tours
                     .Where(t => t.Status == Status.Published &&
                                 t.Checkpoints.Any() &&
-                                t.Checkpoints.First().Location.Longitude >= southWestCoord.Lng &&
-                                t.Checkpoints.First().Location.Longitude <= northEastCoord.Lng &&
-                                t.Checkpoints.First().Location.Latitude >= southWestCoord.Lat &&
-                                t.Checkpoints.First().Location.Latitude <= northEastCoord.Lat)
+                                t.Checkpoints.First().Location.Longitude >= southWestCoordLng &&
+                                t.Checkpoints.First().Location.Longitude <= northEastCoordLng &&
+                                t.Checkpoints.First().Location.Latitude >= southWestCoordLat &&
+                                t.Checkpoints.First().Location.Latitude <= northEastCoordLat)
                     .Include(t => t.Checkpoints)
                     .ToList();
             }

@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
-
 namespace Explorer.Tours.Core.Domain.Tours;
 
 
@@ -76,15 +74,13 @@ public class Checkpoint : Entity
 
     }
 
-    internal bool IsNearRoad(List<LatLngDto> roadCoords, double maxRadiusKm)
+
+    internal bool IsNearBy(double latitude,double longitude,double maxRadiusKm)
     {
-        foreach (var roadCoord in roadCoords)
+        double distance = GetCheckpointDistance(latitude, longitude);
+        if (distance <= maxRadiusKm)
         {
-            double distance = GetCheckpointDistance(roadCoord.Lat, roadCoord.Lng);
-            if (distance <= maxRadiusKm)
-            {
-                return true;
-            }
+            return true;
         }
 
         return false;

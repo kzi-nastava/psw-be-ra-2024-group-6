@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
-
 namespace Explorer.Tours.Core.Domain.Tours;
 
 public enum Difficulty
@@ -280,18 +278,4 @@ public class Tour : Entity
         return 0;
     }
 
-    internal bool IsTourNearRoad(List<LatLngDto> roadCoords,double maxRadiusKm)
-    {
-        Checkpoint firstCheckpoint = Checkpoints.First();
-        foreach (var roadCoord in roadCoords)
-        {
-            double distance = firstCheckpoint.GetCheckpointDistance(roadCoord.Lat, roadCoord.Lng);
-            if (distance <= maxRadiusKm)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
