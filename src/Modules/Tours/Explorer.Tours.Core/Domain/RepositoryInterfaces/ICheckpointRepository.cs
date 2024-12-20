@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 
@@ -17,5 +18,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         Checkpoint Get(long id);
         public List<Checkpoint> GetMostPopularDestinations(int count = 4);
         public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
+        public List<Checkpoint> GetPublicCheckpointsInBox(LatLngDto northEastCoord, LatLngDto southWestCoord);
     }
 }

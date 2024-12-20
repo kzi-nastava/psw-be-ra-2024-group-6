@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
@@ -26,5 +27,9 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public Tour GetById(long tourId);
         public List<Tour> GetAllByIds(List<int> ids);
         public Tour GetByIdWithEquipment(long tourId);
+
+        public List<Tour> GetPublishedToursWithCheckpointsInRectangle(LatLngDto northEastCoord,
+            LatLngDto southWestCoord);
+
     }
 }

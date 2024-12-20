@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
@@ -22,7 +23,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public Checkpoint Create(Checkpoint checkpoint)
         {
-            Checkpoint ch= _dbContext.Checkpoints.Add(checkpoint).Entity;
+            Checkpoint ch = _dbContext.Checkpoints.Add(checkpoint).Entity;
             _dbContext.SaveChanges();
             return ch;
 
@@ -30,16 +31,16 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public List<Checkpoint> GetByTourId(long tourId)
         {
-                return _dbContext.Checkpoints
-                    .Where(c => c.TourId == tourId)
-                    .ToList();
+            return _dbContext.Checkpoints
+                .Where(c => c.TourId == tourId)
+                .ToList();
         }
 
         public Checkpoint Get(long Id)
         {
             return _dbContext.Checkpoints.First(c => c.Id == Id);
 
-                
+
         }
 
         public List<Checkpoint> GetMostPopularDestinations(int count = 4)
@@ -83,5 +84,24 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException(e.Message);
             }
         }
+
+        public List<Checkpoint> GetPublicCheckpointsInBox(LatLngDto northEastCoord, LatLngDto southWestCoord)
+        {
+            try
+            {
+                return _dbContext.Checkpoints
+                    .Where(ch => ch.IsPublic &&
+                                 ch.Location.Longitude >= southWestCoord.Lng &&
+                                 ch.Location.Longitude <= northEastCoord.Lng &&
+                                 ch.Location.Latitude >= southWestCoord.Lat &&
+                                 ch.Location.Latitude <= northEastCoord.Lat)
+                    .ToList(); ;
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+        }
     }
+
 }
