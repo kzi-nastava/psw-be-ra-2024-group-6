@@ -40,6 +40,22 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         }
 
+
+        public Result<PersonDto> RemoveFollower(int followerId, int userId)
+        {
+            Person follower = _personRepository.GetByUserId(userId);
+            follower.RemoveFollowing(followerId);
+            _personRepository.Update(follower);
+
+            Person following = _personRepository.GetByUserId(followerId);
+            following.RemoveFollower(userId);
+            _personRepository.Update(following);
+
+            return MapToDto(follower);
+
+
+        }
+
         public Result<List<PersonDto>> GetFollowers(int userId)
         {
             try
@@ -60,6 +76,60 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
             catch (Exception e)
             {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<PersonDto>> GetFollowings(int userId)
+        {
+            try
+            {
+                var person = _personRepository.GetByUserId(userId);
+                if (person == null)
+                {
+                    return Result.Fail(FailureCode.NotFound).WithError("User not found");
+                }
+
+                var followings = person.Followings.Select(f => _personRepository.GetByUserId(f.PersonId)).ToList();
+
+                // Mapiraj pronađene korisnike u DTO objekte
+                var followingDtos = followings.Select(MapToDto).ToList();
+
+                return Result.Ok(followingDtos);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<PersonDto>> GetUnfollowings(int userId)
+        {
+            try
+            {
+                var allUsers = _personRepository.GetAllActivePersons(); // List<Person>
+
+                var person = _personRepository.GetByUserId(userId);
+                // Pronađi sve korisnike koje trenutni korisnik prati
+                var followings = person.Followings.Select(f => _personRepository.GetByUserId(f.PersonId)).ToList();
+
+                var followedIds = followings.Select(x => x.Id).ToHashSet();
+
+                // 4. Filtriraj sve korisnike da dobijemo samo one koje user ne prati
+                //    i izbacimo samog sebe jer nema smisla da se vidi
+                var unfollowings = allUsers
+                    .Where(u => u.Id != userId && !followedIds.Contains(u.Id))
+                    .ToList();
+
+                // Mapiraj pronađene korisnike u DTO objekte
+                var unfollowingsDtos = unfollowings.Select(MapToDto).ToList();
+
+                return Result.Ok(unfollowingsDtos);
+            }
+            catch (Exception e)
+            {
+
+
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }

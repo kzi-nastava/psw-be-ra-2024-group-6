@@ -15,5 +15,8 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
         Person Update(Person person);
 
         List<Person> GetMostFollowedAuthors(List<long> authorsIds, int count = 4);
+
+        List<Person> GetAllActivePersons();
+
     }
 }

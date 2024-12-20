@@ -64,10 +64,33 @@ namespace Explorer.API.Controllers.Stakeholders
             return CreateResponse(result);
 
         }
+
+        [HttpDelete("remove/{followerId:int}")]
+        public ActionResult RemoveFollower(int followerId)
+        {
+            var userId = User.UserId();
+            var result = _personService.RemoveFollower(followerId, userId);
+            return CreateResponse(result);
+        }
         [HttpGet("{userId:int}/followers")]
         public ActionResult<List<PersonDto>> GetFollowers(int userId)
         {
             var result = _personService.GetFollowers(userId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("{userId:int}/followings")]
+        public ActionResult<List<PersonDto>> GetFollowings(int userId)
+        {
+            var result = _personService.GetFollowings(userId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("unfollowings")]
+        public ActionResult<List<PersonDto>> GetUnfollowings()
+        {
+            var userId = User.UserId(); 
+            var result = _personService.GetUnfollowings(userId);
             return CreateResponse(result);
         }
 

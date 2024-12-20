@@ -54,6 +54,11 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
         }
 
+        public List<Person> GetAllActivePersons()
+        {
+            return _dbContext.People.ToList();
+        }
+
         public List<Person> GetMostFollowedAuthors(List<long> authorsIds, int count = 4)
         {
             try

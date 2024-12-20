@@ -22,7 +22,7 @@ namespace Explorer.Stakeholders.Core.Domain.Persons
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            throw new NotImplementedException();
+            yield return PersonId;
         }
     }
 }

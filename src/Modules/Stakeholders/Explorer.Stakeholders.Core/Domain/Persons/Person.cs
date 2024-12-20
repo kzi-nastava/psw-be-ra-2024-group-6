@@ -80,4 +80,25 @@ public class Person : Entity
         Followings.Add(new Follower(followingId));
         
     }
+
+    public void RemoveFollower(int followerId)
+    {
+        if (Followers == null)
+        {
+            Followers = new List<Follower>();
+        }
+        Followers.Remove(new Follower(followerId));
+
+
+    }
+
+    public void RemoveFollowing(int followingId)
+    {
+        if (Followings == null)
+        {
+            Followings = new List<Follower>();
+        }
+        Followings.Remove(new Follower(followingId));
+
+    }
 }
