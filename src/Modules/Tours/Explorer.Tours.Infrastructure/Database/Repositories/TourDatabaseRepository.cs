@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
@@ -159,6 +160,25 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             {
                 return _context.Tours
                     .Where(t => t.Status == Status.Published)
+                    .Include(t => t.Checkpoints)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error finding nearby tours", ex);
+            }
+        }
+        public List<Tour> GetPublishedToursWithCheckpointsInRectangle(double northEastCoordLat, double northEastCoordLng, double southWestCoordLat, double southWestCoordLng)
+        {
+            try
+            {
+                return _context.Tours
+                    .Where(t => t.Status == Status.Published &&
+                                t.Checkpoints.Any() &&
+                                t.Checkpoints.First().Location.Longitude >= southWestCoordLng &&
+                                t.Checkpoints.First().Location.Longitude <= northEastCoordLng &&
+                                t.Checkpoints.First().Location.Latitude >= southWestCoordLat &&
+                                t.Checkpoints.First().Location.Latitude <= northEastCoordLat)
                     .Include(t => t.Checkpoints)
                     .ToList();
             }

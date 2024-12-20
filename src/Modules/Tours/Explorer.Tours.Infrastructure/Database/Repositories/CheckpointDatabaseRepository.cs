@@ -7,8 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Explorer.Tours.API.Dtos;
-
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
     public class CheckpointDatabaseRepository : ICheckpointRepository
@@ -22,7 +20,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public Checkpoint Create(Checkpoint checkpoint)
         {
-            Checkpoint ch= _dbContext.Checkpoints.Add(checkpoint).Entity;
+            Checkpoint ch = _dbContext.Checkpoints.Add(checkpoint).Entity;
             _dbContext.SaveChanges();
             return ch;
 
@@ -45,16 +43,16 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public List<Checkpoint> GetByTourId(long tourId)
         {
-                return _dbContext.Checkpoints
-                    .Where(c => c.TourId == tourId)
-                    .ToList();
+            return _dbContext.Checkpoints
+                .Where(c => c.TourId == tourId)
+                .ToList();
         }
 
         public Checkpoint Get(long Id)
         {
             return _dbContext.Checkpoints.First(c => c.Id == Id);
 
-                
+
         }
 
         public List<Checkpoint> GetMostPopularDestinations(int count = 4)
@@ -98,5 +96,25 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException(e.Message);
             }
         }
+
+        public List<Checkpoint> GetPublicCheckpointsInBox(double northEastCoordLat, double northEastCoordLng, double southWestCoordLat, double southWestCoordLng)
+        {
+            try
+            {
+                return _dbContext.Checkpoints
+                    .Where(ch => ch.IsPublic &&
+                                 ch.Location.Longitude >= southWestCoordLng &&
+                                 ch.Location.Longitude <= northEastCoordLng &&
+                                 ch.Location.Latitude >= southWestCoordLat &&
+                                 ch.Location.Latitude <= northEastCoordLat)
+                    .ToList(); ;
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+        }
+       
     }
+
 }

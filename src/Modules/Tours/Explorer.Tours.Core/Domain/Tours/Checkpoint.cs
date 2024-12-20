@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-
 namespace Explorer.Tours.Core.Domain.Tours;
 
 
@@ -76,5 +75,15 @@ public class Checkpoint : Entity
     }
 
 
+    internal bool IsNearBy(double latitude,double longitude,double maxRadiusKm)
+    {
+        double distance = GetCheckpointDistance(latitude, longitude);
+        if (distance <= maxRadiusKm)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 
