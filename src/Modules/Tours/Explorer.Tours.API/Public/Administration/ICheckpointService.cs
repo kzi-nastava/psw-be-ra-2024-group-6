@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.Tours.API.Public.Administration
 {
@@ -32,5 +33,6 @@ namespace Explorer.Tours.API.Public.Administration
 
         Result<CheckpointReadDto> ApproveCheckpointRequest(long checkpointId, long adminId);
         Result<CheckpointReadDto> RejectCheckpointRequest(long checkpointId, string comment, long adminId);
+        public List<CheckpointReadDto> GetCheckpointsByIds(List<int> checkpointIds);
     }
 }

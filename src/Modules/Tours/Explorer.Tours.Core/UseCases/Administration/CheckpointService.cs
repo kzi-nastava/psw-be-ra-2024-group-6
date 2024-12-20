@@ -14,6 +14,8 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Public;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -152,5 +154,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return mapper.Map<CheckpointReadDto>(checkpoint);
         }
 
+
+        public List<CheckpointReadDto> GetCheckpointsByIds(List<int> checkpointIds)
+        {
+            var publicCheckpoints = new List<CheckpointReadDto>();
+            foreach (long checkpointId in checkpointIds)
+            {
+                var checkpoint = _checkpointRepository.Get(checkpointId);
+                publicCheckpoints.Add(mapper.Map<CheckpointReadDto>(checkpoint));
+            }
+
+            return publicCheckpoints;
+        }
     }
 }

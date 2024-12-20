@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
@@ -43,12 +45,24 @@ namespace Explorer.Tours.Core.UseCases
                 publicCheckpoints.Add(_mapper.Map<Checkpoint>(checkpoint));
             }
 
-            var roadTrip = new RoadTrip(userId, tours, publicCheckpoints);
-            roadTrip.CalculateDifficulty();
-            roadTrip.CalculateTotalLength();
+            var roadTrip = new RoadTrip(userId, roadTripCreateDto.TourIds, roadTripCreateDto.PublicCheckpointIds);
+            roadTrip.CalculateDifficulty(tours);
+            roadTrip.CalculateTotalLength(tours);
 
             return _mapper.Map<RoadTripReadDto>(_roadTripRepository.Create(roadTrip));
         }
 
+        public Result<List<RoadTripReadDto>> GetAllByTouristId(int touristId)
+        {
+            var roadTrips = _roadTripRepository.GetAllByTouristId(touristId);
+            var roadTripDtos = new List<RoadTripReadDto>();
+            foreach (var roadTrip in roadTrips)
+            {
+                var tours = _tourService.GetToursByIds(roadTrip.TourIds);
+                var publicCheckpoints = _checkpointService.GetCheckpointsByIds(roadTrip.PublicCheckpointIds);
+                roadTripDtos.Add(new RoadTripReadDto((int)roadTrip.Id, touristId, tours, publicCheckpoints, roadTrip.Difficulty.ToString(), _mapper.Map<DistanceDto>(roadTrip.TotalLength)));
+            }
+            return roadTripDtos;
+        }
     }
 }

@@ -610,5 +610,17 @@ namespace Explorer.Tours.Core.UseCases
                 }
             }
         }
+
+        public List<TourDto> GetToursByIds(List<int> tourIds)
+        {
+            var tours = new List<TourDto>();
+            foreach (long tourId in tourIds)
+            {
+                var tour = _tourRepository.Get(tourId);
+                tours.Add(MapToDto(tour));
+            }
+
+            return tours;
+        }
     }
 }

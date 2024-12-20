@@ -10,33 +10,33 @@ namespace Explorer.Tours.Core.Domain.Tours
     public class RoadTrip : Entity
     {
         public int TouristId { get; private set; }
-        public List<Tour> Tours { get; private set; }
-        public List<Checkpoint> PublicCheckpoints { get; private set; }
+        public List<int> TourIds { get; private set; }
+        public List<int> PublicCheckpointIds { get; private set; }
         public Difficulty Difficulty { get; private set; }
         public Distance TotalLength { get; private set; }
 
         public RoadTrip()
         {
-            Tours = new List<Tour>();
-            PublicCheckpoints = new List<Checkpoint>();
+            TourIds = new List<int>();
+            PublicCheckpointIds = new List<int>();
         }
 
-        public RoadTrip(int touristId, List<Tour> tours, List<Checkpoint> publicCheckpoints)
+        public RoadTrip(int touristId, List<int> tourIds, List<int> publicCheckpointIds)
         {
             TouristId = touristId;
-            Tours = tours ?? new List<Tour>();
-            PublicCheckpoints = publicCheckpoints ?? new List<Checkpoint>();
+            TourIds = tourIds ?? new List<int>();
+            PublicCheckpointIds = publicCheckpointIds ?? new List<int>();
         }
 
-        public void CalculateDifficulty()
+        public void CalculateDifficulty(List<Tour> tours)
         {
-            if (!Tours.Any())
+            if (!tours.Any())
             {
                 Difficulty = Difficulty.Easy;
                 return;
             }
 
-            var difficultyCounts = Tours
+            var difficultyCounts = tours
                 .GroupBy(t => t.Difficulty)
                 .ToDictionary(g => g.Key, g => g.Count());
 
@@ -48,16 +48,16 @@ namespace Explorer.Tours.Core.Domain.Tours
             Difficulty = mostFrequentDifficulty;
         }
 
-        public void CalculateTotalLength()
+        public void CalculateTotalLength(List<Tour> tours)
         {
-            if (!Tours.Any())
+            if (!tours.Any())
             {
                 Difficulty = Difficulty.Easy;
                 return;
             }
 
-            var unit = Tours.First().TotalLength.Unit;
-            TotalLength = new Distance(Tours.Sum(t => t.TotalLength.Length), unit);
+            var unit = tours.First().TotalLength.Unit;
+            TotalLength = new Distance(tours.Sum(t => t.TotalLength.Length), unit);
         }
     }
 }
