@@ -12,5 +12,6 @@ namespace Explorer.Tours.API.Dtos.TourDtos
         public List<LatLngDto> RoadCoords { get; set; }
         public LatLngDto NorthEastCoord { get; set; }
         public LatLngDto SouthWestCoord { get; set; }
+        public double Radius { get; set; }
     }
 }

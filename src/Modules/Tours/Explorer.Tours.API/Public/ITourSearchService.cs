@@ -17,6 +17,6 @@ namespace Explorer.Tours.API.Public
         Result<List<AuthorLeaderboardDto>> GetAuthorLeaderboard(double latitude, double longitude, double radius);
         Result<List<TourCardDto>> GetSortedTours(double latitude, double longitude, double radius, string criteria);
         Result<List<TourCardDto>> GetFilteredTours(double latitude, double longitude, double radius, TourFilterDto tourFiltersDto);
-        Result<RoadTripHoverMapDto> GetRoadTripSuggestions(RoadTripDto roadTripDto, double roadRadius=1);
+        Result<RoadTripHoverMapDto> GetRoadTripSuggestions(RoadTripDto roadTripDto);
     }
 }

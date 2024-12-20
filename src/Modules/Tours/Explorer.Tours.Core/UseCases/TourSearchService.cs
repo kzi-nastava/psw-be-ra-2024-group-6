@@ -292,13 +292,13 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
-        public Result<RoadTripHoverMapDto> GetRoadTripSuggestions(RoadTripDto roadTripDto,double roadRadius)
+        public Result<RoadTripHoverMapDto> GetRoadTripSuggestions(RoadTripDto roadTripDto)
         {
             List<Tour> publishedToursInBbox = _tourRepository.GetPublishedToursWithCheckpointsInRectangle(roadTripDto.NorthEastCoord.Lat,roadTripDto.NorthEastCoord.Lng, roadTripDto.SouthWestCoord.Lat,roadTripDto.SouthWestCoord.Lng);
             List<Checkpoint> publicCheckpoints = _checkpointRepository.GetPublicCheckpointsInBox(roadTripDto.NorthEastCoord.Lat, roadTripDto.NorthEastCoord.Lng, roadTripDto.SouthWestCoord.Lat, roadTripDto.SouthWestCoord.Lng);
             roadTripDto.RoadCoords = RemoveUnnecessaryCoords(roadTripDto.RoadCoords);
-            List<TourHoverMapDto> toursNearRoadDto = FindToursNearRoad(publishedToursInBbox,roadTripDto.RoadCoords,roadRadius);
-            List<CheckpointHoverMapDto> checkpointsNearRoadDto = FindCheckpointsNearRoad(publicCheckpoints,roadTripDto.RoadCoords, roadRadius);
+            List<TourHoverMapDto> toursNearRoadDto = FindToursNearRoad(publishedToursInBbox,roadTripDto.RoadCoords,roadTripDto.Radius);
+            List<CheckpointHoverMapDto> checkpointsNearRoadDto = FindCheckpointsNearRoad(publicCheckpoints,roadTripDto.RoadCoords, roadTripDto.Radius);
             return new RoadTripHoverMapDto(toursNearRoadDto, checkpointsNearRoadDto);
         }
 
