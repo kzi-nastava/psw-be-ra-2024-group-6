@@ -95,4 +95,24 @@ public class PaymentsContext : DbContext
                 );
         });
     }
+    
+    private static void ConfigureSale(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Sale>(entity =>
+        {
+            entity.Property(s => s.StartDate)
+                .IsRequired()
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                );
+
+            entity.Property(s => s.EndDate)
+                .IsRequired()
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                );
+        });
+    }
 }

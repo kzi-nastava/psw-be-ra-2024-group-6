@@ -10,7 +10,7 @@ namespace Explorer.Payments.Core.Domain
     public class Sale : Entity
     {
 
-        public List<int> TourIds { get; private set; }
+        public int TourId { get; private set; }
 
         public DateTime StartDate { get; private set; }
 
@@ -18,11 +18,12 @@ namespace Explorer.Payments.Core.Domain
 
         public double SalePercentage { get; private set; } 
 
+        public Sale() { }
 
-        public Sale(List<int> tourIds, DateTime startDate, DateTime endDate, double salePercentage)
+        public Sale(int tourId, DateTime startDate, DateTime endDate, double salePercentage)
         {
             if (DateTime.Compare(endDate, startDate.AddDays(14)) < 0) throw new ArgumentNullException("Sale must be at least 2 weeks long");
-            TourIds = tourIds;
+            TourId = tourId;
             StartDate = startDate;
             EndDate = endDate;
             SalePercentage = salePercentage;   

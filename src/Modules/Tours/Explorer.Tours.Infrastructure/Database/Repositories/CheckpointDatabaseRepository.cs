@@ -29,6 +29,21 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         }
 
+        public List<Checkpoint> GetAllPublic()
+        {
+            try
+            {
+                return _dbContext.Checkpoints
+                    .Where(c => c.IsPublic)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error fetching public checkpoints", e);
+            }
+        }
+
+
         public List<Checkpoint> GetByTourId(long tourId)
         {
             return _dbContext.Checkpoints

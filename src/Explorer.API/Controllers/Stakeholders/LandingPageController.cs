@@ -6,6 +6,7 @@ using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Internal;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
@@ -45,6 +46,16 @@ namespace Explorer.API.Controllers.Stakeholders
             var result = _tourSearchService.FindToursOnMapNearby(latitude, longitude, radius);
             return CreateResponse(result);
         }
+
+
+
+        [HttpGet("nearby-checkpoints")]
+        public ActionResult<List<CheckpointDto>> GetNearbyPublicCheckpoints([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
+        {
+            var result = _checkpointService.GetNearbyPublicCheckpoints(latitude, longitude, radius);
+            return CreateResponse(result);
+        }
+
         [HttpGet("map-preview")]
         public ActionResult<List<TourHoverMapDto>> GetTourPreviewsOnMap([FromQuery] double longitude, [FromQuery]  double latitude )
         {

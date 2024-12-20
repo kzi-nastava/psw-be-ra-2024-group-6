@@ -10,6 +10,6 @@ namespace Explorer.Payments.API.Dtos
     {
         public int? Id { get; set; }
         public long UserId { get; set; }
-        public long AdventureCoins { get; set; }
+        public double AdventureCoins { get; set; }
     }
 }

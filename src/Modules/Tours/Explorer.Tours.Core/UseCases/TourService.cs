@@ -384,5 +384,16 @@ namespace Explorer.Tours.Core.UseCases
 
             return reviewDtos;
         }
+        public List<TourDto> GetToursByIds(List<int> tourIds)
+        {
+            var tours = new List<TourDto>();
+            foreach (long tourId in tourIds)
+            {
+                var tour = _tourRepository.Get(tourId);
+                tours.Add(MapToDto(tour));
+            }
+
+            return tours;
+        }
     }
 }

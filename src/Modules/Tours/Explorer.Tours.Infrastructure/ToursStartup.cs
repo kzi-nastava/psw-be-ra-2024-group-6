@@ -48,7 +48,8 @@ public static class ToursStartup
         services.AddScoped<IBundleService, BundleService>();
         services.AddScoped<IAuthorRecommenderService, AuthorRecommenderService>();
         services.AddScoped<ITourSearchService, TourSearchService>();
-
+        services.AddScoped<IRoadTripService, RoadTripService>();
+        services.AddScoped<ITouristFavoritesService, TouristFavoritesService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -69,7 +70,8 @@ public static class ToursStartup
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
         services.AddScoped<IEquipmentRepository, EquipmentRepository>();
         services.AddScoped<IBundleRepository, BundleDatabaseRepository>();
-
+        services.AddScoped<IRoadTripRepository, RoadTripDatabaseRepository>();
+        services.AddScoped<ITouristFavoritesRepository, TouristFavoritesDatabaseRepository>();
 
 
         services.AddDbContext<ToursContext>(opt =>

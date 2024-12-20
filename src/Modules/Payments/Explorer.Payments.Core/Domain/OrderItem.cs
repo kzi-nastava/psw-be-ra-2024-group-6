@@ -11,7 +11,7 @@ public class OrderItem : Entity
 {
     public long ShoppingCartId { get; init; }
     public string Name { get; init; }
-    public Price Price { get; init; }
+    public Price Price { get; set; }
     public long ProductId { get; init; }
     public Product Product { get; init; }
 

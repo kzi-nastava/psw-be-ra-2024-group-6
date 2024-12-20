@@ -10,9 +10,9 @@ namespace Explorer.Payments.Core.Domain
     public class Wallet : Entity
     {
         public long UserId { get; init; }
-        public long AdventureCoins {  get; set; }
+        public double AdventureCoins {  get; set; }
 
-        public Wallet(long UserId, long AdventureCoins)
+        public Wallet(long UserId, double AdventureCoins)
         {
             this.UserId = UserId;
             this.AdventureCoins = AdventureCoins;
