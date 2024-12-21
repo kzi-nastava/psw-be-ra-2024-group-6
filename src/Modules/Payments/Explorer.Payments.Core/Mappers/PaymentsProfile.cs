@@ -41,5 +41,13 @@ public class PaymentsProfile : Profile
                     .ForMember(dest => dest.ResourceId, opt => opt.MapFrom(src => (long?)src.ResourceId));
 
         CreateMap<Coupon, CouponDto>().ReverseMap();
+
+        CreateMap<PaymentRecord, PaymentRecordDto>()
+           .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.Amount)); // Assuming Price has a Value property
+
+        // Mapping from PaymentRecordDto to PaymentRecord
+        CreateMap<PaymentRecordDto, PaymentRecord>()
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => new Price(src.Price))) // Assuming Price has a constructor that accepts a double
+            .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Optional: Avoid overwriting default values with null
     }
 }

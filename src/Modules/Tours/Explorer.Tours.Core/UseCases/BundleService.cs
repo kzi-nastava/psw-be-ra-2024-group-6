@@ -2,11 +2,11 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Internal;
-using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.PriceDtos;
 using Explorer.Tours.API.Internal;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.Core.Domain;
@@ -27,13 +27,22 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IInternalPurchaseTokenService _purchaseTokenRepository;
         private readonly IInternalWalletService _walletRepository;
         private readonly ITourRepository _tourRepository;
-
-        public BundleService(IBundleRepository bundleRepository,IInternalPurchaseTokenService purchaseTokenRepository,IInternalWalletService  walletRepository,ITourRepository tourRepository, IMapper mapper) : base( mapper)
+        private readonly IPaymentRecordService _paymentRecordService;
+        private readonly ICheckpointRepository _checkpoinRepository;
+        public BundleService(IBundleRepository bundleRepository,
+            IInternalPurchaseTokenService purchaseTokenRepository
+            ,IInternalWalletService  walletRepository,
+            ITourRepository tourRepository,
+            IPaymentRecordService paymentRecordService ,
+            ICheckpointRepository checkpointRepository,
+            IMapper mapper) : base( mapper)
         {
             _bundleRepository = bundleRepository;
             _purchaseTokenRepository = purchaseTokenRepository;
             _walletRepository = walletRepository;
             _tourRepository = tourRepository;
+            _paymentRecordService = paymentRecordService;
+            _checkpoinRepository = checkpointRepository;
            
         }
 
@@ -60,6 +69,24 @@ namespace Explorer.Tours.Core.UseCases
                     };
                     _purchaseTokenRepository.Create(dto);
                 }
+
+                PriceDto price = new PriceDto
+                {
+                    Amount = bundle.Price
+                };
+
+                PaymentRecordDto record = new PaymentRecordDto
+                {
+                    TouristId = userId,
+                    ResourceId = (long)bundle.Id,
+                    ResourceTypeId = 2,
+                    Price = bundle.Price,
+                    PaymentDate = DateTime.UtcNow,
+
+                };
+                
+                _paymentRecordService.Create(record);
+
 
                 wallet.AdventureCoins -= (long)bundle.Price;
                 _walletRepository.Update(wallet);
@@ -162,7 +189,8 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 Tour tour = _tourRepository.Get(bundle.TourIds[0]);
-                bundle.ImageData = tour.Checkpoints[0].ImageData;
+                List<Checkpoint> checkpoints = _checkpoinRepository.GetByTourId(tour.Id);
+                bundle.ImageData = checkpoints[0].ImageData;
                 var result = _bundleRepository.Create(MapToDomain(bundle));
                 return MapToDto(result);
             }

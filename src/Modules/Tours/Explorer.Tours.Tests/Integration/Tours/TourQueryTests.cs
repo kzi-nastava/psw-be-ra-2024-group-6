@@ -81,7 +81,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                  new ObjectCreateDto {
                         Description = "Test",
                         Name = "Test",
-                        ImageUrl = "Test",
+                        ImageData = "Test",
             Category = "WC",
             Location = new LocationCreateDto {
                         Latitude = 20,
