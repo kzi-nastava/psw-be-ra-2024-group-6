@@ -29,7 +29,7 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
     private readonly ISaleRepository _saleRepository;
     private readonly IMapper mapper;
 
-    public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,
+    public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,IPaymentRecordRepository paymentRecordRepository,
 
         IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService,ICouponService couponService, IMapper mapper, ICouponRepository couponRepository, ISaleRepository saleRepository) : base(crudRepository, mapper)
     {
