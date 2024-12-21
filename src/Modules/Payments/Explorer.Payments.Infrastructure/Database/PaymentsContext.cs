@@ -19,7 +19,7 @@ public class PaymentsContext : DbContext
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Coupon> Coupons { get; set; }
-
+    public DbSet<PaymentRecord> PaymentRecords { get; set; }
     public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +31,7 @@ public class PaymentsContext : DbContext
         ConfigureWallet(modelBuilder);
         ConfigureProduct(modelBuilder);
         ConfigureCoupon(modelBuilder);
+        ConfigurePaymentRecord(modelBuilder);
     }
     private static void ConfigureShoppingCart(ModelBuilder modelBuilder)
     {
@@ -113,6 +114,14 @@ public class PaymentsContext : DbContext
                     v => v.ToUniversalTime(),
                     v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
                 );
+        });
+    }
+
+    private static void ConfigurePaymentRecord(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PaymentRecord>(entity =>
+        {
+            entity.Property(product => product.Price).HasColumnType("jsonb");
         });
     }
 }
