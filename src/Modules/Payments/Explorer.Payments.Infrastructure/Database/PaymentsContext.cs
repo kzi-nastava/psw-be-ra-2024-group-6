@@ -13,6 +13,9 @@ public class PaymentsContext : DbContext
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<PurchaseToken> PurchaseTokens { get; set; }
+
+    public DbSet<Sale> Sales { get; set; }
+
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Coupon> Coupons { get; set; }
@@ -90,6 +93,26 @@ public class PaymentsContext : DbContext
                 .HasConversion(
                     v => v.HasValue ? v.Value.ToUniversalTime() : (DateTime?)null, // Ako ima vrednost, konvertuj u UTC
                     v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : (DateTime?)null // Ako ima vrednost, postavi na UTC
+                );
+        });
+    }
+    
+    private static void ConfigureSale(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Sale>(entity =>
+        {
+            entity.Property(s => s.StartDate)
+                .IsRequired()
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                );
+
+            entity.Property(s => s.EndDate)
+                .IsRequired()
+                .HasConversion(
+                    v => v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
                 );
         });
     }

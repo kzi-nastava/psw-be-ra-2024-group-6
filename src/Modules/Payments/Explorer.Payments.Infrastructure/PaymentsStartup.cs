@@ -35,16 +35,20 @@ public static class PaymentsStartup
         services.AddScoped<IPurchaseTokenService, PurchaseTokenService>();
         services.AddScoped<IInternalPurchaseTokenService, InternalPurchaseTokenService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+
+        services.AddScoped<ISaleService, SaleService>();
+
         services.AddScoped<IInternalWalletService, InternalWalletService>();
         services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<ICouponService, CouponService>();
-        
+
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<PurchaseToken>), typeof(CrudDatabaseRepository<PurchaseToken, PaymentsContext>));
         services.AddScoped(typeof(ICrudRepository<ShoppingCart>), typeof(CrudDatabaseRepository<ShoppingCart, PaymentsContext>));
+        services.AddScoped(typeof(ICrudRepository<Sale>), typeof(CrudDatabaseRepository<Sale, PaymentsContext>));
 
         services.AddScoped(typeof(ICrudRepository<Wallet>), typeof(CrudDatabaseRepository<Wallet, PaymentsContext>));
         services.AddScoped<IWalletRepository, WalletDatabaseRepository>();
@@ -57,6 +61,9 @@ public static class PaymentsStartup
         services.AddScoped(typeof(ICrudRepository<PaymentRecord>), typeof(CrudDatabaseRepository<PaymentRecord, PaymentsContext>));
 
         services.AddScoped<IPaymentRecordRepository, PaymentRecordDatabaseRepository>();
+
+        services.AddScoped<ISaleRepository, SaleDatabaseRepository>();
+
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),

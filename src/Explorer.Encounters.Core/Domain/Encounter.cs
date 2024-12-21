@@ -35,6 +35,8 @@ namespace Explorer.Encounters.Core.Domain
         public TypeEncounter TypeEncounter { get; private set; }
         public int CreatorId { get; set; }
         public bool IsRequiredForCheckpoint { get; private set; }
+
+
         public Encounter()
         {
 
@@ -64,5 +66,18 @@ namespace Explorer.Encounters.Core.Domain
         {
             return Status == Status.Active;
         }
+
+
+
+        public void SetCreatorId(int creatorId)
+        {
+            CreatorId = creatorId;
+        }
+
+        public void AcceptEncounter()
+        {
+            Status = Status.Active;
+        }
+
     }
 }

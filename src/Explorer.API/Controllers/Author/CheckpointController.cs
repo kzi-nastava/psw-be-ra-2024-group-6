@@ -17,7 +17,7 @@ namespace Explorer.API.Controllers.Author
             _checkpointService = checkpointService;
         }
 
-        [HttpGet("{toudId:long}")]
+        [HttpGet("{tourId:long}")]
         public ActionResult<PagedResult<CheckpointReadDto>> GetByTourId(long tourId)
         {
             var result = _checkpointService.GetByTourId(tourId);
@@ -34,6 +34,16 @@ namespace Explorer.API.Controllers.Author
         public ActionResult<CheckpointDto> Create([FromBody] CheckpointCreateDto checkpointDto)
         {
             var result = _checkpointService.Create(checkpointDto);
+            return CreateResponse(result);
+        }
+
+
+
+
+        [HttpGet("nearby")]
+        public ActionResult<List<CheckpointDto>> GetNearbyPublicCheckpoints([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
+        {
+            var result = _checkpointService.GetNearbyPublicCheckpoints(latitude, longitude, radius);
             return CreateResponse(result);
         }
 

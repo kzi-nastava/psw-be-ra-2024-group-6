@@ -26,5 +26,8 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public Tour GetById(long tourId);
         public List<Tour> GetAllByIds(List<int> ids);
         public Tour GetByIdWithEquipment(long tourId);
+
+        public List<Tour> GetPublishedToursWithCheckpointsInRectangle(double northEastCoordLat,double northEastCoordLng, double southWestCoordLat, double southWestCoordLng);
+
     }
 }
