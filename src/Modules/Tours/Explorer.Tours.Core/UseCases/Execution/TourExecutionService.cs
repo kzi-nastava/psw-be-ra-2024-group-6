@@ -185,5 +185,25 @@ namespace Explorer.Tours.Core.UseCases.Execution
                 return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
             }
         }
+
+        public int CalculateTourStartCount(long tourId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Count();
+        }
+
+        public int CalculateCompletedTourCount(long tourId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Where(te => te.Completion == 100).Count();
+        }
+
+        public int CountUniqueTourists(long tourId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Select(te => te.TouristId).Distinct().Count();
+        }
+
+        public int CountUniqueTouristsForCheckpoint(long tourId, long checkpointId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Where(te => te.CompletedCheckpoints.Any(ch => ch.CheckpointId == checkpointId)).Select(te => te.TouristId).Distinct().Count();
+        }
     }
 }

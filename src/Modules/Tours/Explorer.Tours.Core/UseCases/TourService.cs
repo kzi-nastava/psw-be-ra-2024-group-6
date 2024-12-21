@@ -25,6 +25,8 @@ using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
 using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.StatisticDtos;
+using Explorer.Tours.API.Public.Execution;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -40,7 +42,8 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IAuthorRecommenderService _authorRecommenderService;
         private readonly IMapper mapper;
         private readonly IEquipmentRepository _equipmentRepository;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService,IAuthorRecommenderService authorRecommenderService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService, IEquipmentRepository equipment) : base(repository, mapper)
+        private readonly ITourExecutionService _tourExecutionService;
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService,IAuthorRecommenderService authorRecommenderService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService, IEquipmentRepository equipment, ITourExecutionService tourExecutionService) : base(repository, mapper)
 
         {
             _tourRepository = tourRepository;
@@ -53,6 +56,7 @@ namespace Explorer.Tours.Core.UseCases
             this.mapper = mapper;
             _reviewService = reviewService;
             _equipmentRepository = equipment;
+            _tourExecutionService = tourExecutionService;
         }
 
         public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId)
@@ -609,6 +613,21 @@ namespace Explorer.Tours.Core.UseCases
                     break;
                 }
             }
+        }
+
+        private TourStatisticsDto GetTourStatistics(TourReadDto tourDto)
+        {
+            int startCount = _tourExecutionService.CalculateTourStartCount(tourDto.TourInfo.Id ?? -1);
+            int completionCount = _tourExecutionService.CalculateCompletedTourCount(tourDto.TourInfo.Id ?? -1);
+
+            List<CheckpointVisitStatisticsDto> checkpointStatistics = new List<CheckpointVisitStatisticsDto>();
+            foreach(var checkpoint in tourDto.Checkpoints)
+            {
+                double visitPercentage = (double)_tourExecutionService.CountUniqueTouristsForCheckpoint(tourDto.TourInfo.Id ?? -1, checkpoint.Id) / _tourExecutionService.CountUniqueTourists(tourDto.TourInfo.Id ?? -1);
+                checkpointStatistics.Add(new CheckpointVisitStatisticsDto(checkpoint, visitPercentage));
+            }
+
+            return null;
         }
     }
 }
