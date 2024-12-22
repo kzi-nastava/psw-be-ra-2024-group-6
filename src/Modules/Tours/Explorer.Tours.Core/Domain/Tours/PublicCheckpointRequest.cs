@@ -21,22 +21,32 @@ namespace Explorer.Tours.Core.Domain.Tours
         public PublicCheckpointStatus Status { get; private set; }
         public string? AdminComment { get; private set; }
 
-        public PublicCheckpointRequest(long checkpointId)
+        public long UserId { get; private set; }
+
+        public PublicCheckpointRequest(long checkpointId, long userId)
         {
+            UserId = userId;
             CheckpointId = checkpointId;
             Status = PublicCheckpointStatus.Pending;
         }
 
         public void Approve()
         {
-            Status = PublicCheckpointStatus.Approved;
-            AdminComment = null;
+            if (Status == PublicCheckpointStatus.Pending)
+            {
+                Status = PublicCheckpointStatus.Approved;
+                AdminComment = null;
+            }
+
         }
 
         public void Reject(string comment)
         {
-            Status = PublicCheckpointStatus.Rejected;
-            AdminComment = comment;
+            if (Status == PublicCheckpointStatus.Pending)
+            {
+                Status = PublicCheckpointStatus.Rejected;
+                AdminComment = comment;
+            }
         }
     }
 }
