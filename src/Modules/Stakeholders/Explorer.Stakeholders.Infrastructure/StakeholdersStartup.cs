@@ -45,6 +45,7 @@ public static class StakeholdersStartup
         services.AddScoped<IInternalUserPaymentService, InternalUserPaymentService>();
         services.AddScoped<IInternalUserService, InternalUserService>();
         services.AddScoped<IInternalNotificationService, InternalNotificationService>();
+        services.AddScoped<IInternalPersonService, InternalPersonService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)

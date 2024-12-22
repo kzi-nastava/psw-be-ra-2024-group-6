@@ -23,5 +23,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         Checkpoint Update(Checkpoint checkpoint);
 
         public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
+        public List<Checkpoint> GetPublicCheckpointsInBox(double northEastCoordLat,double northEastCoordLng, double southWestCoordLat,double southWestCoordLng);
     }
 }
