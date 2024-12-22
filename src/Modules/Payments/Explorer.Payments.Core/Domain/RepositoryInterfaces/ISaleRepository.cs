@@ -12,5 +12,6 @@ namespace Explorer.Payments.Core.Domain.RepositoryInterfaces
         public Sale Update(Sale sale);
         public void Delete(long id);
         public Sale? Get(long id);
+        public Sale GetByTourId(long tourId);
     }
 }

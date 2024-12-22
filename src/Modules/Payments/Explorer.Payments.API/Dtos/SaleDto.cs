@@ -8,7 +8,8 @@ namespace Explorer.Payments.API.Dtos
 {
     public class SaleDto
     {
-        public List<int> TourIds { get; set; }
+        public int Id { get; set; }
+        public int TourId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double SalePercentage { get; set; }

@@ -37,5 +37,15 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Sale? GetByTourId(long tourId)
+        {
+            var today = DateTime.UtcNow.Date;
+
+            return _dbContext.Sales
+                .FirstOrDefault(s => s.TourId == tourId
+                                     && s.StartDate <= today
+                                     && s.EndDate >= today);
+        }
     }
 }
