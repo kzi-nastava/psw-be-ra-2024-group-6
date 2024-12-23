@@ -47,8 +47,10 @@ public static class ToursStartup
         services.AddScoped<IInternalTourPaymentService, InternalTourPaymentService>();
         services.AddScoped<IBundleService, BundleService>();
         services.AddScoped<IAuthorRecommenderService, AuthorRecommenderService>();
+        services.AddScoped<ITourSearchService, TourSearchService>();
         services.AddScoped<IRoadTripService, RoadTripService>();
         services.AddScoped<ITouristFavoritesService, TouristFavoritesService>();
+        services.AddScoped<IRoadTripExecutionService, RoadTripExecutionService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -63,7 +65,6 @@ public static class ToursStartup
 
         services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour,ToursContext>));
 
-        services.AddScoped<ITouristEquipmentManagerRepository, TouristEquipmentManagerRepository>();
         services.AddScoped<IReviewRepository, ReviewDatabaseRepository>();
         services.AddScoped<ITourRepository, TourDatabaseRepository>();
         services.AddScoped<ITourExecutionRepository, TourExecutionDatabaseRepository>();
@@ -71,7 +72,7 @@ public static class ToursStartup
         services.AddScoped<IBundleRepository, BundleDatabaseRepository>();
         services.AddScoped<IRoadTripRepository, RoadTripDatabaseRepository>();
         services.AddScoped<ITouristFavoritesRepository, TouristFavoritesDatabaseRepository>();
-
+        services.AddScoped<IRoadTripExecutionRepository, RoadTripExecutionDatabaseRepository>();
 
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),

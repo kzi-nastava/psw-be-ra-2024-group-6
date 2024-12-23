@@ -17,5 +17,7 @@ namespace Explorer.Tours.API.Dtos
         public long AuthorId { get; set; }
 
         public bool Publishable { get; set; }
+
+        public string ImageData { get; set; }
     }
 }

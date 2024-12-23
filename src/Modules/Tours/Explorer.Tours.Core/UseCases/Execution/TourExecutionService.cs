@@ -50,12 +50,10 @@ namespace Explorer.Tours.Core.UseCases.Execution
             }
         }
 
-
         private bool checkIfTouristBoughtTour(TourExecutionDto tourExecution)
         {
             return _purchaseTokenService.GetByUserAndTour(tourExecution.TouristId, tourExecution.TourId).Value != null;
         }
-
         public Result<TourExecutionDto> FinalizeTourExecution(int tourExecutionId, string status, int touristId)
         {
             try
