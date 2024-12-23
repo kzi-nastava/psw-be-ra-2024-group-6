@@ -86,7 +86,24 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             try
             {
-                var el = _personRepository.Update(MapToDomain(person));
+                var followers = _personRepository.GetFollowers(MapToDomain(person));
+                var followings = _personRepository.GetFollowings(MapToDomain(person));
+                var personFowrard = MapToDomain(person);
+                if (personFowrard.Followers.Count == 0)
+                {
+                    foreach (var f in followers)
+                    {
+                        personFowrard.AddFollower(f.PersonId);
+                    }
+                }
+                if (personFowrard.Followings.Count == 0)
+                {
+                    foreach (var f in followings)
+                    {
+                        personFowrard.AddFollowing(f.PersonId);
+                    }
+                }
+                var el = _personRepository.Update(personFowrard);
                 return MapToDto(el);
             }
             catch (KeyNotFoundException e)

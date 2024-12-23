@@ -11,6 +11,8 @@ using FluentResults;
 using Explorer.BuildingBlocks.Core.UseCases;
 using FluentResults;
 using Explorer.Stakeholders.Core.Domain.Persons;
+using Microsoft.IdentityModel.Tokens;
+using Explorer.Payments.Core.Domain;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {
@@ -37,11 +39,16 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             }
         }
 
-        public Person Update(Person person) 
+        public Person Update(Person person)
         {
 
             try
             {
+                var existingPerson = _dbContext.People.Find(person.Id);
+                if (existingPerson != null)
+                {
+                    _dbContext.Entry(existingPerson).State = EntityState.Detached;
+                }
                 _dbContext.People.Update(person);
                 _dbContext.SaveChanges();
                 return person;
@@ -52,6 +59,39 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
             }
 
+        }
+
+        public List<Follower> GetFollowers(Person person)
+        {
+            try
+            {
+                var originalPerson = _dbContext.People.FirstOrDefault(p => p.Id == person.Id);
+                if(originalPerson != null)
+                {
+                    return originalPerson.Followers ?? new List<Follower>(); 
+                }
+                return new List<Follower>();
+            }
+            catch(Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
+        public List<Follower> GetFollowings(Person person)
+        {
+            try
+            {
+                var originalPerson = _dbContext.People.FirstOrDefault(p => p.Id == person.Id);
+                if (originalPerson != null)
+                {
+                    return originalPerson.Followings ?? new List<Follower>();
+                }
+                return new List<Follower>();
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
         }
 
         public List<Person> GetMostFollowedAuthors(List<long> authorsIds, int count = 4)
