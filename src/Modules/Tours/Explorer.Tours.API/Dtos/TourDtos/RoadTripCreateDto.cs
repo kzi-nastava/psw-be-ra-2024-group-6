@@ -9,6 +9,7 @@ namespace Explorer.Tours.API.Dtos.TourDtos
 {
     public class RoadTripCreateDto
     {
+        public string Name { get; set; }
         public List<int> TourIds { get; set; }
         public List<int> PublicCheckpointIds { get; set; }
     }

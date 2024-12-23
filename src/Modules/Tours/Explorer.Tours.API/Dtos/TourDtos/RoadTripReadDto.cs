@@ -11,6 +11,7 @@ namespace Explorer.Tours.API.Dtos.TourDtos
     public class RoadTripReadDto
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public int TouristId { get; set; }
         public List<TourDto> Tours { get; set; }
         public List<CheckpointReadDto> PublicCheckpoints { get; set; }
@@ -18,9 +19,10 @@ namespace Explorer.Tours.API.Dtos.TourDtos
         public DistanceDto TotalLength { get; private set; }
 
         public RoadTripReadDto() { }
-        public RoadTripReadDto(int id, int touristId, List<TourDto> tours, List<CheckpointReadDto> publicCheckpoints, string difficulty, DistanceDto totalLength)
+        public RoadTripReadDto(int id, string name, int touristId, List<TourDto> tours, List<CheckpointReadDto> publicCheckpoints, string difficulty, DistanceDto totalLength)
         {
             Id = id;
+            Name = name;
             TouristId = touristId;
             Tours = tours;
             PublicCheckpoints = publicCheckpoints;
