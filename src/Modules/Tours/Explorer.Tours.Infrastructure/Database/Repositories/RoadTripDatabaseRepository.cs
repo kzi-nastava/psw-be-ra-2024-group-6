@@ -28,5 +28,10 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             return _context.RoadTrips.Where(rt => rt.TouristId == touristId).ToList();
         }
+
+        public RoadTrip Get(long id)
+        {
+            return _context.RoadTrips.Find(id);
+        }
     }
 }
