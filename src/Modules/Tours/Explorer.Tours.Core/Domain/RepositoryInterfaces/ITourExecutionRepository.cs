@@ -16,5 +16,7 @@ public interface ITourExecutionRepository
 
     public List<TourExecution> GetByTourId(long tourId);
 
+    public List<TourExecution> GetByTourIds(List<long> tourIds);
+
 
 }

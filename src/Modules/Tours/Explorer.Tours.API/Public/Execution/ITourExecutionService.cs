@@ -18,4 +18,10 @@ public interface ITourExecutionService
     public int CalculateCompletedTourCount(long tourId);
     public int CountUniqueTourists(long tourId);
     public int CountUniqueTouristsForCheckpoint(long tourId, long checkpointId);
+
+    public int CountAllStartedTours(List<long> tourIds);
+    public int CountAllFinishedTours(List<long> tourIds);
+
+    public List<TourExecutionDto> GetTourExecutionsWithMaxCompletionPerSale(List<long> tourIds);
+
 }
