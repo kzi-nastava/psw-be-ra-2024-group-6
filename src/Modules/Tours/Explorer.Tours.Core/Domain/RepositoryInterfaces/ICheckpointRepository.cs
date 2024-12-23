@@ -17,6 +17,12 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         List<Checkpoint> GetAllPublic();
         Checkpoint Get(long id);
         public List<Checkpoint> GetMostPopularDestinations(int count = 4);
+
+        List<Checkpoint> GetPendingPublicCheckpoints();
+
+        Checkpoint Update(Checkpoint checkpoint);
+
         public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
+        public List<Checkpoint> GetPublicCheckpointsInBox(double northEastCoordLat,double northEastCoordLng, double southWestCoordLat,double southWestCoordLng);
     }
 }

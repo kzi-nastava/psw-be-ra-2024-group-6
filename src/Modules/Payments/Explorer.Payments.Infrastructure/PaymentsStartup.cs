@@ -31,6 +31,7 @@ public static class PaymentsStartup
 
     private static void SetupCore(IServiceCollection services)
     {
+        services.AddScoped<IPaymentRecordService, PaymentRecordService>();
         services.AddScoped<IPurchaseTokenService, PurchaseTokenService>();
         services.AddScoped<IInternalPurchaseTokenService, InternalPurchaseTokenService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
@@ -57,6 +58,9 @@ public static class PaymentsStartup
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
         services.AddScoped<IPurchaseTokenRepository, PurchaseTokenDatabaseRepository>();
         services.AddScoped<ICouponRepository, CouponDatabaseRepository>();
+        services.AddScoped(typeof(ICrudRepository<PaymentRecord>), typeof(CrudDatabaseRepository<PaymentRecord, PaymentsContext>));
+
+        services.AddScoped<IPaymentRecordRepository, PaymentRecordDatabaseRepository>();
 
         services.AddScoped<ISaleRepository, SaleDatabaseRepository>();
 

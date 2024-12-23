@@ -22,14 +22,16 @@ namespace Explorer.API.Controllers.Stakeholders
         private readonly ICheckpointService _checkpointService;
         private readonly IRatingService _ratingService;
         private readonly IBlogService _blogService;
+        private readonly ITourSearchService _tourSearchService;
 
-        public LandingPageController(ITourService tourService, IAuthorService authorService, ICheckpointService checkpointService, IRatingService ratingService, IBlogService blogService)
+        public LandingPageController(ITourService tourService, IAuthorService authorService, ICheckpointService checkpointService, IRatingService ratingService, IBlogService blogService, ITourSearchService tourSearchService)
         {
             _tourService = tourService;
             _authorService = authorService;
             _checkpointService = checkpointService;
             _ratingService = ratingService;
             _blogService = blogService;
+            _tourSearchService = tourSearchService;
         }
 
         [HttpGet("allTours")]
@@ -41,7 +43,7 @@ namespace Explorer.API.Controllers.Stakeholders
         [HttpGet("map-hover")]
         public ActionResult<List<TourHoverMapDto>> GetToursOnMapNearby([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
         {
-            var result = _tourService.FindToursOnMapNearby(latitude, longitude, radius);
+            var result = _tourSearchService.FindToursOnMapNearby(latitude, longitude, radius);
             return CreateResponse(result);
         }
 
@@ -57,7 +59,7 @@ namespace Explorer.API.Controllers.Stakeholders
         [HttpGet("map-preview")]
         public ActionResult<List<TourHoverMapDto>> GetTourPreviewsOnMap([FromQuery] double longitude, [FromQuery]  double latitude )
         {
-            var result = _tourService.GetTourPreviewsOnMap(latitude, longitude);
+            var result = _tourSearchService.GetTourPreviewsOnMap(latitude, longitude);
             return CreateResponse(result);
         }
 

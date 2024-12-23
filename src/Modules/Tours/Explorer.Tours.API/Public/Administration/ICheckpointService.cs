@@ -20,14 +20,19 @@ namespace Explorer.Tours.API.Public.Administration
         Result<List<CheckpointReadDto>> GetByTourId(long tourId);
         Result<CheckpointDto> Create(CheckpointCreateDto checkpointCreateDto);
 
-        
-        Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto);
+        Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto, long userId);
 
+        Result<CheckpointDto> Get(long id);
+
+
+        Result<List<CheckpointReadDto>> GetPendingPublicCheckpoints();
+
+        Result<List<DestinationDto>> GetMostPopularDestinations();
+        List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
         Result<List<CheckpointDto>> GetNearbyPublicCheckpoints(double latitude, double longitude, double radius);
 
-        public Result<CheckpointDto> Get(long id);
-        public Result<List<DestinationDto>> GetMostPopularDestinations();
-        public List<int> GetTourIdsForDestination(string city, string country, int page, int pageSize);
+        Result<CheckpointReadDto> ApproveCheckpointRequest(long checkpointId, long adminId);
+        Result<CheckpointReadDto> RejectCheckpointRequest(long checkpointId, string comment, long adminId);
         public List<CheckpointReadDto> GetCheckpointsByIds(List<int> checkpointIds);
     }
 }

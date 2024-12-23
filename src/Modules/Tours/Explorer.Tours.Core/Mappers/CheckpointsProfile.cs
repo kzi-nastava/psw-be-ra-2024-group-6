@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointDtos;
 
 namespace Explorer.Tours.Core.Mappers
 {
@@ -17,6 +18,7 @@ namespace Explorer.Tours.Core.Mappers
         {
             CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
             CreateMap<Checkpoint, CheckpointCreateDto>().ReverseMap();
+            CreateMap<Checkpoint, CheckpointHoverMapDto>().ReverseMap();
             CreateMap<Checkpoint, CheckpointReadDto>()
                 .ForMember(dest => dest.PublicRequest, opt => opt.MapFrom(src => src.PublicRequest))
                 .ReverseMap();

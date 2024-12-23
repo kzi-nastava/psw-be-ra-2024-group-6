@@ -80,7 +80,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 scope.ServiceProvider.GetRequiredService<IAuthorService>(),
                 scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
                 scope.ServiceProvider.GetRequiredService<IRatingService>(),
-                scope.ServiceProvider.GetRequiredService<IBlogService>())
+                scope.ServiceProvider.GetRequiredService<IBlogService>(), scope.ServiceProvider.GetRequiredService<ITourSearchService>())
             {
                 ControllerContext = BuildContext("-2")
             };

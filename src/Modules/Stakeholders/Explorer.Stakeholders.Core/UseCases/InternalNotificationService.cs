@@ -12,6 +12,7 @@ using Explorer.Stakeholders.API.Internal;
 using AutoMapper;
 using Explorer.Stakeholders.API.Public;
 
+
 namespace Explorer.Stakeholders.Core.UseCases
 {
     public class InternalNotificationService : IInternalNotificationService
@@ -52,5 +53,20 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
             }
         }
+
+        public Result SendPublicCheckpointRequestNotification(long receiverId, string message, long adminId)
+        {
+            try
+            {
+                var notification = new Notification(message, NotificationType.None, null, receiverId, adminId);
+                _notificationRepository.Add(notification);
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(ex.Message);
+            }
+        }
     }
 }
+
