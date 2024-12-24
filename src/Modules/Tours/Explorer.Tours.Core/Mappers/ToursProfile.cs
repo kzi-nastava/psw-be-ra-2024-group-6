@@ -59,5 +59,14 @@ public class ToursProfile : Profile
         CreateMap<RoadTripCreateDto, RoadTrip>().ReverseMap();
         CreateMap<RoadTrip, RoadTripReadDto>()
             .ForMember(rt => rt.Difficulty, opt => opt.MapFrom(src => src.Difficulty.ToString()));
+
+        CreateMap<RoadTripExecution, RoadTripExecutionDto>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Position.Longitude))
+            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Position.Latitude));
+        CreateMap<RoadTripExecutionDto, RoadTripExecution>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Position, opt => opt.MapFrom(src => new TouristPosition(src.Longitude, src.Latitude)));
+        CreateMap<RoadTripExecutionCreateDto, RoadTripExecutionDto>();
     }
 }
