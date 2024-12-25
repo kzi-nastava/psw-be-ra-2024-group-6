@@ -60,7 +60,7 @@ namespace Explorer.Blog.Core.UseCases
                 {
                     Description = blog.Description,
                     Id = blog.Id,
-                    ImageUrl = blog.Pictures.FirstOrDefault()?.Url,
+                    ImageUrl = blog.Pictures.FirstOrDefault()?.Data,
                     Title = blog.Title,
                     CreatedAt = blog.CreatedAt
                 });
@@ -78,7 +78,7 @@ namespace Explorer.Blog.Core.UseCases
                 {
                     Description = blog.Description,
                     Id = blog.Id,
-                    ImageUrl = blog.Pictures.FirstOrDefault()?.Url,
+                    ImageUrl = blog.Pictures.FirstOrDefault()?.Data,
                     Title = blog.Title,
                     CreatedAt = blog.CreatedAt,
                     Tags = blog.Tags

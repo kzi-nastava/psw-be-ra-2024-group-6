@@ -12,5 +12,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         public Bundle Create(Bundle bundle);
         public Bundle Update(Bundle bundle);
         public Bundle GetById(long bundleId);
+        public List<Bundle> GetByTourId(long tourId);
     }
 }

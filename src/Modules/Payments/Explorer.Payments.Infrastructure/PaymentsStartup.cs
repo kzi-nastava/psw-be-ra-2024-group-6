@@ -41,6 +41,8 @@ public static class PaymentsStartup
         services.AddScoped<IInternalWalletService, InternalWalletService>();
         services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<ICouponService, CouponService>();
+        services.AddScoped<IInternalPaymentRecordService, InternalPaymentRecordService>();
+
 
     }
 
