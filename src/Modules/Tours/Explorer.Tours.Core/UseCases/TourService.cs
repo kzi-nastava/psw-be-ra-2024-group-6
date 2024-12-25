@@ -56,7 +56,7 @@ namespace Explorer.Tours.Core.UseCases
 
         }
 
-        public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId)
+        public Result<PagedResult<TourExecutionLifecycleCardDto>> GetFilteredTours(int page, int pageSize, int userId)
         {
             try
             {
@@ -80,8 +80,35 @@ namespace Explorer.Tours.Core.UseCases
                 var filteredTours = allTours.Results
                     .Where(tour => purchasedTourIds.Contains((int)tour.Id))
                     .ToList();
+                //veoma scuffed ali desparate times call for desparate measures
+                List<TourExecutionLifecycleCardDto> TureSaSlikom = new List<TourExecutionLifecycleCardDto>();
+                foreach(var f in filteredTours)
+                {
+                    TourExecutionLifecycleCardDto tourExecutionLifecycleCardDto = new TourExecutionLifecycleCardDto();
+                    tourExecutionLifecycleCardDto.Id = f.Id;
+                    tourExecutionLifecycleCardDto.Name = f.Name;
+                    tourExecutionLifecycleCardDto.Description = f.Description;
+                    tourExecutionLifecycleCardDto.Difficulty = f.Difficulty;
+                    tourExecutionLifecycleCardDto.Tags = f.Tags;
+                    tourExecutionLifecycleCardDto.Price = f.Price;
+                    tourExecutionLifecycleCardDto.Status = f.Status;
+                    tourExecutionLifecycleCardDto.AuthorId = f.AuthorId;
+                    tourExecutionLifecycleCardDto.TotalLength = f.TotalLength;
+                    tourExecutionLifecycleCardDto.StatusChangeTime = f.StatusChangeTime;
+                    tourExecutionLifecycleCardDto.Durations = f.Durations;
+                    tourExecutionLifecycleCardDto.IsPublished = f.IsPublished;
+                    tourExecutionLifecycleCardDto.Equipment = f.Equipment;
+                    var checkpoints = _checkpointService.GetByTourId((long)f.Id);
+                    
+                    if(checkpoints != null && checkpoints.Value.Any()) 
+                    {
+                        var firstCheckpointImage = checkpoints.Value.First().ImageData;
+                        tourExecutionLifecycleCardDto.FirstCheckpointImage = firstCheckpointImage;
+                    }
+                    TureSaSlikom.Add(tourExecutionLifecycleCardDto);
+                }
 
-                var pagedResult = new PagedResult<TourDto>(filteredTours, filteredTours.Count);
+                var pagedResult = new PagedResult<TourExecutionLifecycleCardDto>(TureSaSlikom, TureSaSlikom.Count);
 
                 return Result.Ok(pagedResult);
             }

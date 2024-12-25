@@ -18,7 +18,7 @@ namespace Explorer.Tours.API.Public
         Result<TourDto> GetById(long tourId);
         Result<PagedResult<TourDto>> GetPaged(int page, int pageSize);
 
-        public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId);
+        public Result<PagedResult<TourExecutionLifecycleCardDto>> GetFilteredTours(int page, int pageSize, int userId);
         Result Delete(int id);
         Result<TourCreateDto> Create(TourCreateDto tour);
         Result<TourReadDto> Publish(long tourId, int userId);

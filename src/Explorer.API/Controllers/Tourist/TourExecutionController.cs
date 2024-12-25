@@ -113,7 +113,7 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpGet("options")]
-        public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] int userId)
+        public ActionResult<PagedResult<TourExecutionLifecycleCardDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] int userId)
         {
             var result = _tourService.GetFilteredTours(page, pageSize, userId);
             return CreateResponse(result);
