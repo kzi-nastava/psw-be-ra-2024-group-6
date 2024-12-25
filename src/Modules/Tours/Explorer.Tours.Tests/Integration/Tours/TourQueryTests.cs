@@ -94,6 +94,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                 TourInfo = new TourDto()
                 {
                     Description = "Test",
+                    ImageData = "Test",
                     Name = "Test",
                     Difficulty = "Easy",
                     Tags = new List<string> { "Test" },
