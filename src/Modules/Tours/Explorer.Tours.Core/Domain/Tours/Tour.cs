@@ -26,6 +26,7 @@ public class Tour : Entity
 {
     public string Name { get; private set; }
     public string Description { get; private set; }
+    public string ImageData { get; private set; }
     public Difficulty Difficulty { get; private set; }
     public List<string> Tags { get; private set; }
     public Price Price { get; private set; }
@@ -39,10 +40,11 @@ public class Tour : Entity
     public List<Equipment> Equipment { get; private set; }
     public List<Review> Reviews { get; private set; }
 
-    public Tour(string? name, string? description, Difficulty difficulty, List<string> tags, long authorId, Distance totalLength, List<TourDuration> durations,Price price)
+    public Tour(string? name, string? description, string? imageData, Difficulty difficulty, List<string> tags, long authorId, Distance totalLength, List<TourDuration> durations,Price price)
     {
         Name = name;
         Description = description;
+        ImageData = imageData;
         Difficulty = difficulty;
         Tags = new List<string>(tags);
         AuthorId = authorId;
@@ -192,6 +194,7 @@ public class Tour : Entity
     private bool CanPublish()
     {
         return Status != Status.Published && Checkpoints.Count >= 2 && ValidatePublishInfo();
+        ;
 
     }
 

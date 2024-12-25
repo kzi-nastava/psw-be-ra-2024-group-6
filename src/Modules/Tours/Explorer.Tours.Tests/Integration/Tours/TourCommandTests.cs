@@ -39,6 +39,7 @@ namespace Explorer.Tours.Tests.Integration.Tours;
             Id = -2,
             Name = "Promjenjeno ime",
             Description = "Promjenjena deskripcija.",
+            ImageData = "Slika",
             Difficulty = "Hard",
             Tags = new List<string> { "gas","aa" },
             Price = new PriceDto()
@@ -71,6 +72,7 @@ namespace Explorer.Tours.Tests.Integration.Tours;
         result.Id.ShouldBe(-2);
         result.Name.ShouldBe(updatedTour.Name);
         result.Description.ShouldBe(updatedTour.Description);
+        result.ImageData.ShouldBe(updatedTour.ImageData);
         result.Difficulty.ShouldBe(updatedTour.Difficulty);
         result.Tags.ShouldBe(updatedTour.Tags);
         result.Price.Amount.ShouldBe(updatedTour.Price.Amount);
@@ -95,6 +97,7 @@ namespace Explorer.Tours.Tests.Integration.Tours;
             Id = -1000, // non-existent club ID
             Name = "Test",
             Description = "Promjenjena deskripcija.",
+            ImageData = "Slika prom",
             Difficulty = "Hard",
             Tags = new List<string>(){"gas"},
             Price =new PriceDto()

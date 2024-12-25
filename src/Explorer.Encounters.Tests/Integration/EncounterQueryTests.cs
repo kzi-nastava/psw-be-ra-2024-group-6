@@ -44,7 +44,10 @@ namespace Explorer.Encounters.Tests.Integration
 
         private static EncounterTouristController CreateController(IServiceScope scope)
         {
-            return new EncounterTouristController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
+            var encounterService = scope.ServiceProvider.GetRequiredService<IEncounterService>();
+            var touristRankService = scope.ServiceProvider.GetRequiredService<ITouristRankService>();
+
+            return new EncounterTouristController(encounterService, touristRankService)
             {
                 ControllerContext = BuildContext("-1")
             };
