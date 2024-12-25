@@ -347,5 +347,10 @@ namespace Explorer.Tours.Core.UseCases
             collage.Save(ms, ImageFormat.Png);
             return "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
         }
+
+        public List<long> GetBundleIdsByTourId(long tourId)
+        {
+            return _bundleRepository.GetByTourId(tourId).Select(b => b.Id).ToList();
+        }
     }
 }

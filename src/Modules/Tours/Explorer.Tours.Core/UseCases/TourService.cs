@@ -14,6 +14,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Encounters.API.Dtos;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.API.Dtos;
@@ -25,7 +26,11 @@ using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
 using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.StatisticDtos;
+using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointDtos;
+using Explorer.Encounters.API.Internal;
+using EncounterCreateDto = Explorer.Encounters.API.Dtos.EncounterCreateDto;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -39,11 +44,14 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IInternalPurchaseTokenService _tokenService;
         private readonly IMapper mapper;
         private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IInternalEncounterService _encounterService;
+        private readonly ITourExecutionService _tourExecutionService;
+        private readonly IInternalPaymentRecordService _paymentRecordService;
+        private readonly IBundleService _bundleService;
 
         public TourService(ICrudRepository<Tour> repository, IMapper mapper, ITourRepository tourRepository,
             IObjectService objectService, ICheckpointService checkpointService, IInternalTourPersonService personService,
-            IInternalPurchaseTokenService token, IEquipmentRepository equipment) : base(repository, mapper)
-
+            IInternalPurchaseTokenService token, IEquipmentRepository equipment, ITourExecutionService tourExecutionService, IInternalPaymentRecordService paymentRecordService, IBundleService bundleService, IInternalEncounterService encounterService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
@@ -53,7 +61,10 @@ namespace Explorer.Tours.Core.UseCases
             _tokenService = token;
             this.mapper = mapper;
             _equipmentRepository = equipment;
-
+            _tourExecutionService = tourExecutionService;
+            _paymentRecordService = paymentRecordService;
+            _bundleService = bundleService;
+            _encounterService = encounterService;
         }
 
         public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId)
@@ -91,6 +102,50 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+
+        /*public Result<TourCreateDto> Create(TourCreateDto createTour)
+        {
+            try
+            {
+                Tour tour = mapper.Map<Tour>(createTour.TourInfo);
+
+                var equipmentIds = createTour.TourInfo.Equipment.Select(e => e.Id).ToList();
+                var existingEquipment = _equipmentRepository.GetByIds(equipmentIds);
+
+                if (existingEquipment.Count != equipmentIds.Count)
+                {
+                    return Result.Fail("One or more equipment items do not exist in the database.");
+                }
+
+                // Poveži postojeće Equipment entitete sa turom
+                foreach (Equipment equipment in existingEquipment)
+                {
+                    tour.AddEquipment(equipment);
+                }
+
+                // Sačuvaj turu koristeći repozitorijum
+                Tour newTour = crudRepository.Create(tour);
+                foreach (CheckpointCreateDto ch in createTour.Checkpoints)
+                {
+                    ch.TourId = newTour.Id;
+                    _checkpointService.Create(mapper.Map<CheckpointCreateDto>(ch));
+                }
+
+                foreach (ObjectCreateDto o in createTour.Objects)
+                {
+                    o.TourId = newTour.Id;
+                    _objectService.Create(mapper.Map<ObjectCreateDto>(o));
+                }
+
+                return Result.Ok(createTour);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+
+
+        }*/
 
         public Result<TourCreateDto> Create(TourCreateDto createTour)
         {
@@ -394,6 +449,69 @@ namespace Explorer.Tours.Core.UseCases
             }
 
             return tours;
+        }
+
+        public Result<AllTourStatisticsDto> GetAllTourStatistics(int authorId)
+        {
+            List<long> tourIds = _tourRepository.GetByUserId(authorId).Select(tour => tour.Id).ToList();
+            int totalSales = _paymentRecordService.CalculateToursSalesByAuthor(tourIds);
+            List<BundleDto> bundles = _bundleService.GetAllByUserId(authorId).Value;
+            foreach (var bundle in bundles)
+            {
+                int bundleCount = _paymentRecordService.CountBundleSalesByAuthor(bundle.Id ?? -1);
+                var customerIds = _paymentRecordService.GetCustomerIdsByBundleId(bundle.Id ?? -1);
+                int alreadyBoughtToursCount = _paymentRecordService.CountAlreadyBoughtTours(customerIds, bundle.TourIds);
+                totalSales += bundleCount * bundle.TourIds.Count() - alreadyBoughtToursCount;
+            }
+
+            int startedCount = _tourExecutionService.CountAllStartedTours(tourIds);
+            int completedCount = _tourExecutionService.CountAllFinishedTours(tourIds);
+
+            var tourExecutions = _tourExecutionService.GetTourExecutionsWithMaxCompletionPerSale(tourIds);
+            List<CompletionRateStatisticsDto> completionRateStatisticsDtos = new List<CompletionRateStatisticsDto>();
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 0 && te.Completion < 25).Count(), "0-25%"));
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 25 && te.Completion < 50).Count(), "25-50%"));
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 50 && te.Completion < 75).Count(), "50-75%"));
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 75 && te.Completion <= 100).Count(), "75-100%"));
+
+            AllTourStatisticsDto allTourStatisticsDto = new AllTourStatisticsDto(totalSales, startedCount, completedCount, completionRateStatisticsDtos);
+            return allTourStatisticsDto;
+
+        }
+
+        
+        public Result<List<TourStatisticsPreviewDto>> GetTourStatisticsPreviews(int authorId)
+        {
+            var tours = _tourRepository.GetByUserId(authorId);
+            List<TourStatisticsPreviewDto> tourStatisticsPreview = new List<TourStatisticsPreviewDto>();
+            foreach(var tour in tours)
+            {
+                var bundleIds = _bundleService.GetBundleIdsByTourId(tour.Id);
+                int sales = _paymentRecordService.CalculateTourSales(tour.Id, bundleIds);
+                int startCount = _tourExecutionService.CalculateTourStartCount(tour.Id);
+                int completedCount = _tourExecutionService.CalculateCompletedTourCount(tour.Id);
+                tourStatisticsPreview.Add(new TourStatisticsPreviewDto(tour.Id, tour.Name, tour.Description, startCount, completedCount, sales));
+            }
+            return tourStatisticsPreview;
+        }
+
+
+        public Result<TourStatisticsDto> GetTourStatistics(long tourId, long userId)
+        {
+            int startCount = _tourExecutionService.CalculateTourStartCount(tourId);
+            int completedCount = _tourExecutionService.CalculateCompletedTourCount(tourId);
+
+            List<CheckpointVisitStatisticsDto> checkpointStatistics = new List<CheckpointVisitStatisticsDto>();
+            var tour = GetTourDetailsByTourId(tourId, userId).Value;
+            var bundleIds = _bundleService.GetBundleIdsByTourId(tourId);
+            int sales = _paymentRecordService.CalculateTourSales(tourId, bundleIds);
+            foreach (var checkpoint in tour.Checkpoints)
+            {
+                double visitPercentage = (double)_tourExecutionService.CountUniqueTouristsForCheckpoint(tourId, checkpoint.Id) / _tourExecutionService.CountUniqueTourists(tourId);
+                checkpointStatistics.Add(new CheckpointVisitStatisticsDto(checkpoint, visitPercentage));
+            }
+
+            return new TourStatisticsDto(startCount, completedCount, sales, checkpointStatistics, tour);
         }
     }
 }

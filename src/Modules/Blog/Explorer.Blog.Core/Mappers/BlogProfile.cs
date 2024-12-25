@@ -19,7 +19,7 @@ public class BlogProfile : Profile
         CreateMap<BlogPictureDto, BlogPicture>().ReverseMap();
 
         CreateMap<BlogDto, BlogHomeDto>()
-            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Pictures.First().Url))
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Pictures.First().Data))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))

@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Encounters.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Explorer.Tours.API.Public;
@@ -6,6 +7,7 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.StatisticDtos;
 
 namespace Explorer.API.Controllers.Author
 {
@@ -58,7 +60,9 @@ namespace Explorer.API.Controllers.Author
              tour.TourInfo.AuthorId = User.UserId();
              var result = _tourService.Create(tour);
              return CreateResponse(result);
-        }
+         }
+
+
 
         [Authorize(Policy = "authorPolicy")]
         [HttpPatch("archive/{tourId:long}")]
@@ -94,6 +98,35 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("statistics")]
+        public ActionResult<AllTourStatisticsDto> GetAllTourStatistics()
+        {
+            int userId = User.UserId();
+            var result = _tourService.GetAllTourStatistics(userId);
+            return CreateResponse(result);
+
+        }
+
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("tourStatisticsPreview")]
+        public ActionResult<List<TourStatisticsPreviewDto>> GetTourStatisticsPreviews()
+        {
+            int userId = User.UserId();
+            var result = _tourService.GetTourStatisticsPreviews(userId);
+            return CreateResponse(result);
+
+        }
+
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("tourStatistics/{tourId:long}")]
+        public ActionResult<List<TourStatisticsPreviewDto>> GetTourStatistics(long tourId)
+        {
+            int userId = User.UserId();
+            var result = _tourService.GetTourStatistics(tourId, userId);
+            return CreateResponse(result);
+
+        }
 
     }
 }

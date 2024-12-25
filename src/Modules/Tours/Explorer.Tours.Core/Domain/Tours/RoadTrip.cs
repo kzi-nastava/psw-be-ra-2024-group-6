@@ -9,6 +9,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 {
     public class RoadTrip : Entity
     {
+        public string Name { get; private set; }
         public int TouristId { get; private set; }
         public List<int> TourIds { get; private set; }
         public List<int> PublicCheckpointIds { get; private set; }
@@ -21,8 +22,9 @@ namespace Explorer.Tours.Core.Domain.Tours
             PublicCheckpointIds = new List<int>();
         }
 
-        public RoadTrip(int touristId, List<int> tourIds, List<int> publicCheckpointIds)
+        public RoadTrip(string name, int touristId, List<int> tourIds, List<int> publicCheckpointIds)
         {
+            Name = name;
             TouristId = touristId;
             TourIds = tourIds ?? new List<int>();
             PublicCheckpointIds = publicCheckpointIds ?? new List<int>();

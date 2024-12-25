@@ -319,7 +319,8 @@ namespace Explorer.Tours.Core.UseCases
         {
             foreach (var roadCoord in roadCoords)
             {
-                checkpoint.IsNearBy(roadCoord.Lat,roadCoord.Lng,maxRadiusKm);
+                if (checkpoint.IsNearBy(roadCoord.Lat, roadCoord.Lng, maxRadiusKm))
+                    return true;
             }
 
             return false;

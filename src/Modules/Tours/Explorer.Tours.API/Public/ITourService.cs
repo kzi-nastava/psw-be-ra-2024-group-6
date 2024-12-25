@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Explorer.Tours.API.Dtos;
 using TourCreateDto = Explorer.Tours.API.Dtos.TourDtos.TourCreateDto;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.StatisticDtos;
 
 namespace Explorer.Tours.API.Public
 {
@@ -35,5 +36,8 @@ namespace Explorer.Tours.API.Public
         public Result<List<TourCardDto>> GetMostPopularTours(int count);
         public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize);
         public List<TourDto> GetToursByIds(List<int> tourIds);
+        public Result<AllTourStatisticsDto> GetAllTourStatistics(int authorId);
+        public Result<List<TourStatisticsPreviewDto>> GetTourStatisticsPreviews(int authorId);
+        public Result<TourStatisticsDto> GetTourStatistics(long tourId, long userId);
     }
 }
