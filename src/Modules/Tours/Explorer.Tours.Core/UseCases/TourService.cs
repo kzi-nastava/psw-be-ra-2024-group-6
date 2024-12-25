@@ -14,6 +14,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Encounters.API.Dtos;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.API.Dtos;
@@ -26,6 +27,8 @@ using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
 using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointDtos;
+using Explorer.Encounters.API.Internal;
+using EncounterCreateDto = Explorer.Encounters.API.Dtos.EncounterCreateDto;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -39,10 +42,11 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IInternalPurchaseTokenService _tokenService;
         private readonly IMapper mapper;
         private readonly IEquipmentRepository _equipmentRepository;
+        private readonly IInternalEncounterService _encounterService;
 
         public TourService(ICrudRepository<Tour> repository, IMapper mapper, ITourRepository tourRepository,
             IObjectService objectService, ICheckpointService checkpointService, IInternalTourPersonService personService,
-            IInternalPurchaseTokenService token, IEquipmentRepository equipment) : base(repository, mapper)
+            IInternalPurchaseTokenService token, IEquipmentRepository equipment, IInternalEncounterService encounterService) : base(repository, mapper)
 
         {
             _tourRepository = tourRepository;
@@ -53,6 +57,7 @@ namespace Explorer.Tours.Core.UseCases
             _tokenService = token;
             this.mapper = mapper;
             _equipmentRepository = equipment;
+            _encounterService = encounterService;
 
         }
 
@@ -91,6 +96,50 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+
+        /*public Result<TourCreateDto> Create(TourCreateDto createTour)
+        {
+            try
+            {
+                Tour tour = mapper.Map<Tour>(createTour.TourInfo);
+
+                var equipmentIds = createTour.TourInfo.Equipment.Select(e => e.Id).ToList();
+                var existingEquipment = _equipmentRepository.GetByIds(equipmentIds);
+
+                if (existingEquipment.Count != equipmentIds.Count)
+                {
+                    return Result.Fail("One or more equipment items do not exist in the database.");
+                }
+
+                // Poveži postojeće Equipment entitete sa turom
+                foreach (Equipment equipment in existingEquipment)
+                {
+                    tour.AddEquipment(equipment);
+                }
+
+                // Sačuvaj turu koristeći repozitorijum
+                Tour newTour = crudRepository.Create(tour);
+                foreach (CheckpointCreateDto ch in createTour.Checkpoints)
+                {
+                    ch.TourId = newTour.Id;
+                    _checkpointService.Create(mapper.Map<CheckpointCreateDto>(ch));
+                }
+
+                foreach (ObjectCreateDto o in createTour.Objects)
+                {
+                    o.TourId = newTour.Id;
+                    _objectService.Create(mapper.Map<ObjectCreateDto>(o));
+                }
+
+                return Result.Ok(createTour);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+
+
+        }*/
 
         public Result<TourCreateDto> Create(TourCreateDto createTour)
         {
