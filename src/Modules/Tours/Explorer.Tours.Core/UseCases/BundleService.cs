@@ -91,6 +91,7 @@ namespace Explorer.Tours.Core.UseCases
                         if (token.TourId == tour)
                         {
                             exists = true;
+                            break;
                         }
                         
                       
