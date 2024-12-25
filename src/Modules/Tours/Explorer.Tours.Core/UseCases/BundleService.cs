@@ -2,8 +2,10 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Internal;
+using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
+using Explorer.Payments.Core.UseCases.Shopping;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Dtos.TourDtos;
 using Explorer.Tours.API.Dtos.TourDtos.PriceDtos;
@@ -32,12 +34,15 @@ namespace Explorer.Tours.Core.UseCases
         private readonly ITourRepository _tourRepository;
         private readonly IPaymentRecordService _paymentRecordService;
         private readonly ICheckpointRepository _checkpoinRepository;
+        private readonly IShoppingCartService _shoppingCartService;
         public BundleService(IBundleRepository bundleRepository,
             IInternalPurchaseTokenService purchaseTokenRepository
             ,IInternalWalletService  walletRepository,
             ITourRepository tourRepository,
             IPaymentRecordService paymentRecordService ,
             ICheckpointRepository checkpointRepository,
+            IShoppingCartService shoppingCartService,
+
             IMapper mapper) : base( mapper)
         {
             _bundleRepository = bundleRepository;
@@ -46,6 +51,7 @@ namespace Explorer.Tours.Core.UseCases
             _tourRepository = tourRepository;
             _paymentRecordService = paymentRecordService;
             _checkpoinRepository = checkpointRepository;
+            
            
         }
 
@@ -54,13 +60,22 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 WalletDto wallet = _walletRepository.GetByUserId(userId).Value;
+                List<PurchaseTokenDto> tokens = _purchaseTokenRepository.GetByUserId(userId).Value;
+                int count = 0;
                 if(wallet.AdventureCoins < bundle.Price)
                 {
                     return Result.Fail(FailureCode.Forbidden).WithError("Not enough coins.");
                 }
 
+
+            
+
+
                 foreach (int tour in bundle.TourIds)
                 {
+
+                    Tour tourM = _tourRepository.Get(tour);
+                    bool exists = false;
                     
                     PurchaseTokenDto dto = new PurchaseTokenDto
                     {
@@ -70,7 +85,29 @@ namespace Explorer.Tours.Core.UseCases
                         isExpired = false
 
                     };
-                    _purchaseTokenRepository.Create(dto);
+
+                    foreach (PurchaseTokenDto token in tokens)
+                    {
+                        if (token.TourId == tour)
+                        {
+                            exists = true;
+                        }
+                        
+                      
+                        
+                    }
+
+                    if(!exists)
+                    { 
+                        _purchaseTokenRepository.Create(dto);
+                        count++;
+                    }
+                    
+                }
+
+                if (count == 0)
+                {
+                    return Result.Fail(FailureCode.Conflict).WithError("You already have all of these tours.");
                 }
 
                 PriceDto price = new PriceDto

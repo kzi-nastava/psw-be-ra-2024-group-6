@@ -81,7 +81,7 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
         // ako je bundle
         if(resourceTypeId == 2)
         {
-
+            
         }
 
         _shoppingCartRepository.Update(sc);
