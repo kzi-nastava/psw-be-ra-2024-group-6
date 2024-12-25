@@ -7,6 +7,7 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos.TourDtos;
+using Explorer.Tours.API.Dtos.TourDtos.StatisticDtos;
 
 namespace Explorer.API.Controllers.Author
 {
@@ -97,6 +98,35 @@ namespace Explorer.API.Controllers.Author
             return CreateResponse(result);
         }
 
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("statistics")]
+        public ActionResult<AllTourStatisticsDto> GetAllTourStatistics()
+        {
+            int userId = User.UserId();
+            var result = _tourService.GetAllTourStatistics(userId);
+            return CreateResponse(result);
+
+        }
+
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("tourStatisticsPreview")]
+        public ActionResult<List<TourStatisticsPreviewDto>> GetTourStatisticsPreviews()
+        {
+            int userId = User.UserId();
+            var result = _tourService.GetTourStatisticsPreviews(userId);
+            return CreateResponse(result);
+
+        }
+
+        [Authorize(Policy = "authorPolicy")]
+        [HttpGet("tourStatistics/{tourId:long}")]
+        public ActionResult<List<TourStatisticsPreviewDto>> GetTourStatistics(long tourId)
+        {
+            int userId = User.UserId();
+            var result = _tourService.GetTourStatistics(tourId, userId);
+            return CreateResponse(result);
+
+        }
 
     }
 }

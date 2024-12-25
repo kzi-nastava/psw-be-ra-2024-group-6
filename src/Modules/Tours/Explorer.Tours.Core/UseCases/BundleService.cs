@@ -200,5 +200,10 @@ namespace Explorer.Tours.Core.UseCases
 
             }
         }
+
+        public List<long> GetBundleIdsByTourId(long tourId)
+        {
+            return _bundleRepository.GetByTourId(tourId).Select(b => b.Id).ToList();
+        }
     }
 }

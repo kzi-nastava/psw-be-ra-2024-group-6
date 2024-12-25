@@ -14,4 +14,9 @@ public interface ITourExecutionRepository
     public TourExecution Update(TourExecution tourExecution);
     public ICollection<TourExecution> GetByTouristId(int touristId);
 
+    public List<TourExecution> GetByTourId(long tourId);
+
+    public List<TourExecution> GetByTourIds(List<long> tourIds);
+
+
 }
