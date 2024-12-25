@@ -235,8 +235,12 @@ namespace Explorer.Tours.Core.UseCases.Execution
         {
             try
             {
-                var result = (int)_tourExecutionRepository.GetByTourIdAndTouristId(tourId, userId).Id;
-                return result;
+                var result = _tourExecutionRepository.GetByTourIdAndTouristId(tourId, userId);
+                if(result == null)
+                {
+                    return Result.Fail(FailureCode.NotFound).WithError("Cannot start a road trip because a tour is already started");
+                }
+                return (int)result.Id;
             }
             catch (KeyNotFoundException e)
             {

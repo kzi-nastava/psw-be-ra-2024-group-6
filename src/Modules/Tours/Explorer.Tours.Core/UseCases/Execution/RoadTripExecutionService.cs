@@ -132,14 +132,28 @@ public class RoadTripExecutionService : BaseService<RoadTripExecutionDto, RoadTr
         try
         {
             var roadTripExecution = _roadTripExecutionRepository.GetByIdAndTouristId(roadTripExecutionId, userId);
-            if(roadTripExecution.Completion == 100)
+            if(status == "ABANDONED")
             {
+                foreach(var tourexecution in _tourExecutionRepository.GetByTouristId(userId))
+                {
+                    if(tourexecution.Status == TourExecutionStatus.ONGOING)
+                    {
+                        _tourExecutionService.FinalizeTourExecution((int)tourexecution.Id, status, userId);
+                    }
+                }
                 roadTripExecution.Finalize(status);
+            }else if(status == "COMPLETED")
+            {
+                if(roadTripExecution.Completion == 100)
+                {
+                    roadTripExecution.Finalize(status);
+                }
             }
             else
             {
                 return Result.Fail(FailureCode.Forbidden).WithError("Road trip cannot be completed");
             }
+
             var updatedRoadTripExecution = _roadTripExecutionRepository.Update(roadTripExecution);
             return MapToDto(updatedRoadTripExecution);
         }
