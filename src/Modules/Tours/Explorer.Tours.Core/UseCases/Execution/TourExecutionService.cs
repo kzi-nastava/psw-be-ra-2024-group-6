@@ -7,6 +7,8 @@ using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Internal;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
+using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Execution;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
@@ -18,11 +20,14 @@ namespace Explorer.Tours.Core.UseCases.Execution
     {
         private readonly ITourExecutionRepository _tourExecutionRepository;
         private readonly IInternalPurchaseTokenService _purchaseTokenService;
-        public TourExecutionService(ITourExecutionRepository tourExecutionRepository, IInternalPurchaseTokenService _token, IMapper mapper) : base(mapper)
+        private readonly ICheckpointService _checkpointService;
+        private readonly IMapper _mapper;
+        public TourExecutionService(ITourExecutionRepository tourExecutionRepository, IInternalPurchaseTokenService _token, ICheckpointService checkpointService, IMapper mapper) : base(mapper)
         {
             _tourExecutionRepository = tourExecutionRepository;
             _purchaseTokenService = _token;
-
+            _checkpointService = checkpointService;
+            _mapper = mapper;
         }
 
         public Result<TourExecutionDto> Create(TourExecutionDto tourExecution)
@@ -166,6 +171,25 @@ namespace Explorer.Tours.Core.UseCases.Execution
             }
         }
 
+        public Result<TourExecutionDto> UpdateLocation(int tourExecutionId, double longitude, double latitude)
+        {
+            try
+            {
+                var tourExecution = _tourExecutionRepository.Get(tourExecutionId);
+                tourExecution.SetLastActivity(longitude, latitude);
+                var result = _tourExecutionRepository.Update(tourExecution);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
         public Result<TourExecutionDto> Update(TourExecutionDto tourExecution)
         {
             try
@@ -177,6 +201,46 @@ namespace Explorer.Tours.Core.UseCases.Execution
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message); 
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
+            }
+        }
+
+        public Result<List<CheckpointReadDto>> GetCompletedCheckpoints(int tourExecutionId)
+        {
+            try
+            {
+                var result = _tourExecutionRepository.Get(tourExecutionId);
+                var completedCheckpoints = new List<CheckpointReadDto>();
+                foreach(var completedCheckpoint in result.CompletedCheckpoints)
+                {
+                    var checkpoint = _checkpointService.GetRead(completedCheckpoint.CheckpointId);
+                    completedCheckpoints.Add(checkpoint.Value);
+                }
+                return completedCheckpoints;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
+            }
+        }
+        
+        public Result<int> GetByTourId(int tourId)
+        {
+            try
+            {
+                var result = _tourExecutionRepository.GetByTourId(tourId);
+                return result;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
             catch (Exception e)
             {

@@ -104,6 +104,19 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        public Result<CheckpointReadDto> GetRead(long id)
+        {
+            try
+            {
+                return mapper.Map<CheckpointReadDto>(_checkpointRepository.Get(id));
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+
+            }
+        }
+
         public Result<List<CheckpointReadDto>> GetPendingPublicCheckpoints()
         {
             var pendingCheckpoints = _checkpointRepository.GetPendingPublicCheckpoints();

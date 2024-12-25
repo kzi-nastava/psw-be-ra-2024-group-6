@@ -13,5 +13,8 @@ public interface IRoadTripExecutionRepository
     public void Delete(long id);
     public RoadTripExecution Get(long id);
     public RoadTripExecution Update(RoadTripExecution roadTripExecution);
-    public RoadTripExecution GetByRoadTripId(long roadTripId);
+    public int GetTouristId(long roadTripExecutionId);
+    public ICollection<RoadTripExecution> GetByTouristId(int touristId);
+    public RoadTripExecution GetByIdAndTouristId(int roadTripExecutionId, int touristId);
+    public Boolean IsOneStarted();
 }

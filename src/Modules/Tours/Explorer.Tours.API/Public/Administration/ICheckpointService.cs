@@ -23,7 +23,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<CheckpointReadDto> CreatePublicCheckpoint(CheckpointDto checkpointCreateDto, long userId);
 
         Result<CheckpointDto> Get(long id);
-
+        Result<CheckpointReadDto> GetRead(long id);
 
         Result<List<CheckpointReadDto>> GetPendingPublicCheckpoints();
 
