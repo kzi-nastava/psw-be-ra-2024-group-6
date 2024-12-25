@@ -3,7 +3,7 @@
     VALUES (-1, -1, -1, 'test', '{{"Amount": 0.0}}');
 INSERT INTO payments."OrderItems"(
     "Id", "ShoppingCartId", "ProductId", "Name", "Price")
-    VALUES (-2, -2, -2, 'test', '{{"Amount": 0.0}}');
+    VALUES (-2, -2, -2, 'test', '{{"Amount": 12.0}}');
 
 INSERT INTO payments."OrderItems"(
     "Id", "ShoppingCartId", "ProductId", "Name", "Price")

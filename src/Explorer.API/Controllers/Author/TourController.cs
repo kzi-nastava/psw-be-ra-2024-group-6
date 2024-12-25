@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Encounters.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Explorer.Tours.API.Public;
@@ -9,7 +10,7 @@ using Explorer.Tours.API.Dtos.TourDtos;
 
 namespace Explorer.API.Controllers.Author
 {
-//    [Authorize(Policy = "authorPolicy")]
+//  [Authorize(Policy = "authorPolicy")]
     [Route("api/tours")]
     public class TourController : BaseApiController
     {
@@ -58,7 +59,9 @@ namespace Explorer.API.Controllers.Author
              tour.TourInfo.AuthorId = User.UserId();
              var result = _tourService.Create(tour);
              return CreateResponse(result);
-        }
+         }
+
+
 
         [Authorize(Policy = "authorPolicy")]
         [HttpPatch("archive/{tourId:long}")]

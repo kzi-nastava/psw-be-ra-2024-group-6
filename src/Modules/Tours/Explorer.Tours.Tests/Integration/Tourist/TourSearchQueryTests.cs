@@ -53,7 +53,7 @@ namespace Explorer.Tours.Tests.Integration
 
         private static TourSearchController CreateController(IServiceScope scope)
         {
-            return new TourSearchController(scope.ServiceProvider.GetRequiredService<ITourService>());
+            return new TourSearchController(scope.ServiceProvider.GetRequiredService<ITourSearchService>());
         }
     }
 }

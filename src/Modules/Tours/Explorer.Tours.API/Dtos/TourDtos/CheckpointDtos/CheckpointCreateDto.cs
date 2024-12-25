@@ -15,5 +15,6 @@ namespace Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos
         public string ImageData { get; set; }
         public long? TourId { get; set; }
         public string Secret {  get; set; }
+        public List<long>? EncounterIds { get; set; }
     }
 }

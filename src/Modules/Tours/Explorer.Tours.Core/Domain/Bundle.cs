@@ -19,10 +19,11 @@ namespace Explorer.Tours.Core.Domain
         public List<int> TourIds { get; private set; }
         public long AuthorId { get; private set; }
         public bool Publishable { get; private set; }
+        public string ImageData { get; private set; }
 
 
         private Bundle() { }
-        public Bundle(string? name,double price,List<int> tours,int author,bool publishable,Status status)
+        public Bundle(string? name,double price,List<int> tours,int author,bool publishable,Status status,string imageData)
         {
             
             Name = name;
@@ -31,6 +32,7 @@ namespace Explorer.Tours.Core.Domain
             AuthorId = author;
             Publishable = publishable;
             Status = status;
+            ImageData = imageData;
 
         }
 

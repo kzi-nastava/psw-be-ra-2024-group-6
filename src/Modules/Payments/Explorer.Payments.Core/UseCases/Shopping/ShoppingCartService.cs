@@ -23,13 +23,15 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
     private readonly IInternalTourPaymentService _tourPaymentService;
     private readonly IInternalUserPaymentService _internalUserPaymentService;
     private readonly IWalletRepository _walletRepository;
+    private readonly IPaymentRecordRepository _paymentRecordRepository;
     private readonly ICouponService _couponService;
     private readonly ICouponRepository _couponRepository;
+    private readonly ISaleRepository _saleRepository;
     private readonly IMapper mapper;
 
-    public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,
+    public ShoppingCartService(ICrudRepository<ShoppingCart> crudRepository,IPaymentRecordRepository paymentRecordRepository,
 
-        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService,ICouponService couponService, IMapper mapper, ICouponRepository couponRepository) : base(crudRepository, mapper)
+        IShoppingCartRepository shoppingCartRepository, IPurchaseTokenRepository purchaseTokenRepository, IInternalTourPaymentService tourPaymentService, IWalletRepository walletRepository, IInternalUserPaymentService userPaymentService,ICouponService couponService, IMapper mapper, ICouponRepository couponRepository, ISaleRepository saleRepository) : base(crudRepository, mapper)
     {
         _shoppingCartRepository = shoppingCartRepository;
         _purchaseTokenRepository = purchaseTokenRepository;
@@ -37,8 +39,10 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
         _walletRepository = walletRepository;
         _couponService = couponService;
         _internalUserPaymentService = userPaymentService;
+        _paymentRecordRepository = paymentRecordRepository;
         this.mapper = mapper;
         _couponRepository = couponRepository;
+        _saleRepository = saleRepository;
     }
 
 
@@ -107,6 +111,17 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
             return Result.Fail<CheckoutResultDto>("Shopping cart not found.");
         }
 
+        foreach(var orderItem in sc.OrderItems)
+        {
+            Sale? sale = _saleRepository.GetByTourId(orderItem.ProductId);
+            if (sale != null)
+            {
+                Price price = orderItem.Price;
+                Price newPrice = new Price(price.Amount * (1 - sale.SalePercentage / 100));
+                orderItem.Price = newPrice;
+            }
+        }
+
         var tokens = sc.Checkout();
         if (tokens.Count == 0)
         {
@@ -131,13 +146,20 @@ public class ShoppingCartService : CrudService<ShoppingCartDto, ShoppingCart>, I
         if (wallet.AdventureCoins >= sc.TotalPrice.Amount)
         {
             double newPrice = wallet.AdventureCoins - sc.TotalPrice.Amount;
-            var newWallet = new Wallet(userId, (long)newPrice);
-            _walletRepository.Update(wallet);
+            _walletRepository.UpdatePrice(wallet, new Price(newPrice));
         }
+
+        sc.setPriceToZero();
 
         foreach (var token in tokens)
         {
             _purchaseTokenRepository.Create(token);
+            // save the payment history
+            var tour = _tourPaymentService.Get(token.TourId);
+            var tourPrice = new Price(tour.Price.Amount);
+
+            // ako je tura - ResourceTypeId = 1
+            _paymentRecordRepository.Create(new PaymentRecord(token.UserId, token.TourId, 1, tourPrice, DateTime.UtcNow));
             // send notification
             SendNotification(token.TourId, userId, "You have successfully bought tour: " + token.TourId);
         }

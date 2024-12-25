@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-
 namespace Explorer.Tours.Core.Domain.Tours;
 
 
@@ -40,7 +39,7 @@ public class Checkpoint : Entity
         Secret = secret;
         EncounterIds = new List<long>();
         PublicRequest = publicRequest;
-      //  IsPublic = isPublic;
+       // IsPublic = isPublic;
         UpdateIsPublic();
         Validate();
        
@@ -59,7 +58,24 @@ public class Checkpoint : Entity
         IsPublic = PublicRequest != null && PublicRequest.Status == PublicCheckpointStatus.Approved;
     }
 
+    public void ApprovePublicRequest()
+    {
+        if (PublicRequest != null)
+        {
+            PublicRequest.Approve();
+            UpdateIsPublic();
 
+        }
+    }
+
+    public void RejectPublicRequest(string comment)
+    {
+        if (PublicRequest != null)
+        {
+            PublicRequest.Reject(comment);
+            UpdateIsPublic();
+        }
+    }
 
     public void Update(Checkpoint checkpoint)
     {
@@ -67,6 +83,7 @@ public class Checkpoint : Entity
         this.Description = checkpoint.Description;
         this.ImageData = checkpoint.ImageData;
         this.Location = checkpoint.Location;
+        this.PublicRequest = checkpoint.PublicRequest;
     }
 
     public double GetCheckpointDistance(double longitude, double latitude)
@@ -76,5 +93,15 @@ public class Checkpoint : Entity
     }
 
 
+    internal bool IsNearBy(double latitude,double longitude,double maxRadiusKm)
+    {
+        double distance = GetCheckpointDistance(latitude, longitude);
+        if (distance <= maxRadiusKm)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 
