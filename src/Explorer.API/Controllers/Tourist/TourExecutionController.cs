@@ -159,7 +159,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpGet("get-by-tourid/{tourId:int}")]
         public ActionResult<int> GetByTourId(int tourId)
         {
-            var result = _tourExecutionService.GetByTourId(tourId);
+            var result = _tourExecutionService.GetByTourId(tourId, User.UserId());
             return CreateResponse(result);
         }
 

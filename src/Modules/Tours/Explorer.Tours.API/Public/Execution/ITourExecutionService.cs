@@ -17,5 +17,5 @@ public interface ITourExecutionService
     public Result<TourExecutionDto> GetMostCompleted(int touristId, int tourId);
     public Result<TourExecutionDto> UpdateLocation(int tourExecutionId, double longitude, double latitude);
     public Result<List<CheckpointReadDto>> GetCompletedCheckpoints(int tourExecutionId);
-    public Result<int> GetByTourId(int tourId);
+    public Result<int> GetByTourId(int tourId, int userId);
 }

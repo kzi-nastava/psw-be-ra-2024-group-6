@@ -231,11 +231,11 @@ namespace Explorer.Tours.Core.UseCases.Execution
             }
         }
         
-        public Result<int> GetByTourId(int tourId)
+        public Result<int> GetByTourId(int tourId, int userId)
         {
             try
             {
-                var result = _tourExecutionRepository.GetByTourId(tourId);
+                var result = (int)_tourExecutionRepository.GetByTourIdAndTouristId(tourId, userId).Id;
                 return result;
             }
             catch (KeyNotFoundException e)

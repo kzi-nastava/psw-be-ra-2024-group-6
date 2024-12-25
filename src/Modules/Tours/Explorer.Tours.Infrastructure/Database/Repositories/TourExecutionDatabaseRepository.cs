@@ -33,10 +33,5 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             return DbContext.TourExecutions.Where(te => te.TouristId == touristId).ToList();
         }
-
-        public int GetByTourId(int tourId)
-        {
-            return (int)DbContext.TourExecutions.FirstOrDefault(te => te.TourId == tourId && te.Status == TourExecutionStatus.ONGOING).Id;
-        }
     }
 }
