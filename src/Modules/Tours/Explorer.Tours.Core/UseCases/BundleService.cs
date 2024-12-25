@@ -34,14 +34,14 @@ namespace Explorer.Tours.Core.UseCases
         private readonly ITourRepository _tourRepository;
         private readonly IPaymentRecordService _paymentRecordService;
         private readonly ICheckpointRepository _checkpoinRepository;
-        private readonly IShoppingCartService _shoppingCartService;
+        
         public BundleService(IBundleRepository bundleRepository,
             IInternalPurchaseTokenService purchaseTokenRepository
             ,IInternalWalletService  walletRepository,
             ITourRepository tourRepository,
             IPaymentRecordService paymentRecordService ,
             ICheckpointRepository checkpointRepository,
-            IShoppingCartService shoppingCartService,
+           
 
             IMapper mapper) : base( mapper)
         {
