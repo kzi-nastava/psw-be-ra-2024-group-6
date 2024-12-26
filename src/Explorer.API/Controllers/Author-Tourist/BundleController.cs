@@ -4,9 +4,9 @@ using Explorer.Tours.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Author
+namespace Explorer.API.Controllers.Author_Tourist
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "touristOrAuthorPolicy")]
     [Route("api/bundles")]
     public class BundleController : BaseApiController
     {
@@ -18,11 +18,28 @@ namespace Explorer.API.Controllers.Author
             _bundleService = bundleService;
         }
 
+        [HttpGet]
+        public ActionResult<List<BundleDto>> GetAll()
+        {
+            long userId = User.UserId();
+            var result = _bundleService.GetAll();
+            return CreateResponse(result);
+        }
+
+
         [HttpGet("author")]
         public ActionResult<List<BundleDto>> GetAllAuthor()
         {
             long userId = User.UserId();
             var result = _bundleService.GetAllByUserId(userId);
+            return CreateResponse(result);
+        }
+
+        [HttpPost("buy")]
+        public ActionResult<BundleDto> Buy([FromBody] BundleDto bundle)
+        {
+            var userId = User.UserId();
+            var result = _bundleService.Buy(bundle,userId);
             return CreateResponse(result);
         }
 

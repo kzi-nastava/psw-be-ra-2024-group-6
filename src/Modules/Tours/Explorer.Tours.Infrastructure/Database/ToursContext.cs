@@ -6,6 +6,7 @@ using Explorer.Tours.Core.Domain.ShoppingCarts;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.API.Dtos.TourDtos;
+using System.Reflection.Emit;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -23,6 +24,11 @@ public class ToursContext : DbContext
 
     public DbSet<Bundle> Bundles { get; set; }
 
+    public DbSet<PublicCheckpointRequest> PublicCheckpointRequests { get; set; }
+    public DbSet<RoadTrip> RoadTrips { get; set; }
+    public DbSet<RoadTripExecution> RoadTripExecutions { get; set; }
+    public DbSet<TouristFavorites> TouristFavorites { get; set; }
+
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,16 +36,21 @@ public class ToursContext : DbContext
         modelBuilder.HasDefaultSchema("tours");
 
         ConfigureTour(modelBuilder);
+        ConfigureTourExecution(modelBuilder);
         ConfigureCheckpoint(modelBuilder);
         ConfigureObject(modelBuilder);
         ConfigureReview(modelBuilder);
         ConfigureEquipment(modelBuilder);
         ConfigureTouristEquipmentManager(modelBuilder);
         ConfigureBundle(modelBuilder);
-        
-        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
-        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
+        ConfigurePublicCheckpointRequest(modelBuilder);
+        ConfigureRoadTrip(modelBuilder);
+        ConfigureTouristFavorites(modelBuilder);
+        ConfigureRoadTripExecution(modelBuilder);
+
+
     }
+
 
     private void ConfigureBundle(ModelBuilder modelBuilder)
     {
@@ -74,9 +85,33 @@ public class ToursContext : DbContext
         {
             entity.HasOne<Tour>()
                 .WithMany(t => t.Checkpoints)
-                .HasForeignKey(c => c.TourId);
+                .HasForeignKey(c => c.TourId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.Property(c => c.Location).HasColumnType("jsonb");
+
+
+            entity.HasOne(c => c.PublicRequest)
+                .WithOne()
+                .HasForeignKey<PublicCheckpointRequest>(p => p.CheckpointId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
+
+
+    private void ConfigurePublicCheckpointRequest(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PublicCheckpointRequest>(entity =>
+        {
+            entity.HasOne<Checkpoint>()
+                .WithOne(c => c.PublicRequest)
+                .HasForeignKey<PublicCheckpointRequest>(p => p.CheckpointId);
+
+            entity.Property(p => p.Status)
+                .HasConversion<string>();
+
+            entity.Property(p => p.AdminComment)
+                .HasMaxLength(500); 
         });
     }
 
@@ -128,7 +163,47 @@ public class ToursContext : DbContext
         });
     }
 
+    private void ConfigureRoadTrip(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RoadTrip>(entity =>
+        {
+            entity.HasKey(roadTrip => roadTrip.Id);
 
+            entity.Property(roadTrip => roadTrip.TotalLength)
+                .HasColumnType("jsonb");
 
+            entity.Property(roadTrip => roadTrip.PublicCheckpointIds)
+                .HasColumnType("jsonb");
 
+            entity.Property(roadTrip => roadTrip.TourIds)
+                .HasColumnType("jsonb");
+        });
+    }
+
+    private void ConfigureTouristFavorites(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TouristFavorites>(entity =>
+        {
+            entity.HasKey(tf => tf.Id);
+            entity.Property(tf => tf.FavoriteCheckpointIds)
+                .HasColumnType("jsonb");
+        });
+    }
+
+    private void ConfigureRoadTripExecution(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RoadTripExecution>(entity =>
+        {
+            entity.Property(item => item.Position).HasColumnType("jsonb");
+            entity.Property(item => item.CompletedPublicCheckpoints).HasColumnType("jsonb");
+
+            entity.Property(item => item.TourExecutionIds).HasColumnType("jsonb");
+        });
+    }
+
+    private void ConfigureTourExecution(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TourExecution>().Property(item => item.Position).HasColumnType("jsonb");
+        modelBuilder.Entity<TourExecution>().Property(item => item.CompletedCheckpoints).HasColumnType("jsonb");
+    }
 }

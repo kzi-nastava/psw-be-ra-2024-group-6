@@ -14,6 +14,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Encounters.API.Dtos;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
 using Explorer.Stakeholders.API.Dtos;
@@ -25,6 +26,11 @@ using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
 using Explorer.Tours.API.Dtos.TourDtos.DurationDtos;
 using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.StatisticDtos;
+using Explorer.Tours.API.Public.Execution;
+using Explorer.Tours.API.Dtos.TourDtos.CheckpointDtos;
+using Explorer.Encounters.API.Internal;
+using EncounterCreateDto = Explorer.Encounters.API.Dtos.EncounterCreateDto;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -36,12 +42,16 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IObjectService _objectService;
         private readonly IInternalTourPersonService _personService;
         private readonly IInternalPurchaseTokenService _tokenService;
-        private readonly IReviewService _reviewService;
-        private readonly IAuthorRecommenderService _authorRecommenderService;
         private readonly IMapper mapper;
         private readonly IEquipmentRepository _equipmentRepository;
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper,ITourRepository tourRepository, IObjectService objectService, ICheckpointService checkpointService,IAuthorRecommenderService authorRecommenderService, IInternalTourPersonService personService, IInternalPurchaseTokenService token, IReviewService reviewService, IEquipmentRepository equipment) : base(repository, mapper)
+        private readonly IInternalEncounterService _encounterService;
+        private readonly ITourExecutionService _tourExecutionService;
+        private readonly IInternalPaymentRecordService _paymentRecordService;
+        private readonly IBundleService _bundleService;
 
+        public TourService(ICrudRepository<Tour> repository, IMapper mapper, ITourRepository tourRepository,
+            IObjectService objectService, ICheckpointService checkpointService, IInternalTourPersonService personService,
+            IInternalPurchaseTokenService token, IEquipmentRepository equipment, ITourExecutionService tourExecutionService, IInternalPaymentRecordService paymentRecordService, IBundleService bundleService, IInternalEncounterService encounterService) : base(repository, mapper)
         {
             _tourRepository = tourRepository;
             crudRepository = repository;
@@ -49,10 +59,12 @@ namespace Explorer.Tours.Core.UseCases
             _checkpointService = checkpointService;
             _personService = personService;
             _tokenService = token;
-            _authorRecommenderService = authorRecommenderService;
             this.mapper = mapper;
-            _reviewService = reviewService;
             _equipmentRepository = equipment;
+            _tourExecutionService = tourExecutionService;
+            _paymentRecordService = paymentRecordService;
+            _bundleService = bundleService;
+            _encounterService = encounterService;
         }
 
         public Result<PagedResult<TourDto>> GetFilteredTours(int page, int pageSize, int userId)
@@ -91,6 +103,50 @@ namespace Explorer.Tours.Core.UseCases
         }
 
 
+        /*public Result<TourCreateDto> Create(TourCreateDto createTour)
+        {
+            try
+            {
+                Tour tour = mapper.Map<Tour>(createTour.TourInfo);
+
+                var equipmentIds = createTour.TourInfo.Equipment.Select(e => e.Id).ToList();
+                var existingEquipment = _equipmentRepository.GetByIds(equipmentIds);
+
+                if (existingEquipment.Count != equipmentIds.Count)
+                {
+                    return Result.Fail("One or more equipment items do not exist in the database.");
+                }
+
+                // Poveži postojeće Equipment entitete sa turom
+                foreach (Equipment equipment in existingEquipment)
+                {
+                    tour.AddEquipment(equipment);
+                }
+
+                // Sačuvaj turu koristeći repozitorijum
+                Tour newTour = crudRepository.Create(tour);
+                foreach (CheckpointCreateDto ch in createTour.Checkpoints)
+                {
+                    ch.TourId = newTour.Id;
+                    _checkpointService.Create(mapper.Map<CheckpointCreateDto>(ch));
+                }
+
+                foreach (ObjectCreateDto o in createTour.Objects)
+                {
+                    o.TourId = newTour.Id;
+                    _objectService.Create(mapper.Map<ObjectCreateDto>(o));
+                }
+
+                return Result.Ok(createTour);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+
+
+        }*/
+
         public Result<TourCreateDto> Create(TourCreateDto createTour)
         {
             try
@@ -106,7 +162,7 @@ namespace Explorer.Tours.Core.UseCases
                 }
 
                 // Poveži postojeće Equipment entitete sa turom
-                foreach(Equipment equipment in existingEquipment)
+                foreach (Equipment equipment in existingEquipment)
                 {
                     tour.AddEquipment(equipment);
                 }
@@ -118,6 +174,7 @@ namespace Explorer.Tours.Core.UseCases
                     ch.TourId = newTour.Id;
                     _checkpointService.Create(mapper.Map<CheckpointCreateDto>(ch));
                 }
+
                 foreach (ObjectCreateDto o in createTour.Objects)
                 {
                     o.TourId = newTour.Id;
@@ -144,7 +201,8 @@ namespace Explorer.Tours.Core.UseCases
                 foreach (Tour tour in tours)
                 {
                     double avg = tour.GetAverageRating();
-                    TourAuthorCardDto tourAuthorCardDto = new TourAuthorCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString(), avg, tour.Status.ToString(), tour.StatusChangeTime);
+                    TourAuthorCardDto tourAuthorCardDto = new TourAuthorCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                        tour.TotalLength.ToString(), avg, tour.Status.ToString(), tour.StatusChangeTime);
                     tourAuthorCardDtos.Add(tourAuthorCardDto);
                 }
 
@@ -160,6 +218,7 @@ namespace Explorer.Tours.Core.UseCases
             }
 
         }
+
         public Result<TourDto> GetById(long tourId)
         {
             try
@@ -215,9 +274,9 @@ namespace Explorer.Tours.Core.UseCases
             {
                 List<TourCardDto> boughtTours = new List<TourCardDto>();
 
-                foreach (var tour in GetAllTourCards(0,0).Value)
+                foreach (var tour in GetAllTourCards(0, 0).Value)
                 {
-                    if(checkIfUserBoughtTour(tour.Id, userId))
+                    if (checkIfUserBoughtTour(tour.Id, userId))
                         boughtTours.Add(tour);
                 }
 
@@ -229,22 +288,6 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
-        public Result<List<TourMapPreviewDto>> GetTourPreviewsOnMap(double latitude, double longitude)
-        {
-            List<TourMapPreviewDto> toursOnSameLocationDtos = new List<TourMapPreviewDto>();
-            List<Tour> toursOnSameLocation = GetNearbyVisibleTours(latitude, longitude, Location.GetTolerance());
-            foreach (Tour tour in toursOnSameLocation)
-            {
-                PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
-                toursOnSameLocationDtos.Add(new TourMapPreviewDto(tour.Id, author.Id, tour.Name, author.Surname,
-                    tour.Difficulty.ToString(), tour.Price.Amount, tour.GetAverageRating(), /*tour.Image*/"gas",
-                    tour.GetNumberOfReviews(), author.Name, author.PictureURL,
-                    mapper.Map<List<TourDurationDto>>(tour.Durations), mapper.Map<DistanceDto>(tour.TotalLength)));
-            }
-
-            return toursOnSameLocationDtos;
-        }
-
         public Result<List<TourCardDto>> GetMostPopularTours(int count)
         {
             try
@@ -252,7 +295,9 @@ namespace Explorer.Tours.Core.UseCases
                 var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
                 var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
 
-                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,mapper.Map<DistanceDto>(tour.TotalLength), tour.GetAverageRating(),tour.Difficulty.ToString(),tour.GetNumberOfReviews(),mapper.Map<List<TourDurationDto>>(tour.Durations))).ToList();
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                    mapper.Map<DistanceDto>(tour.TotalLength), tour.GetAverageRating(), tour.Difficulty.ToString(),
+                    tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations))).ToList();
 
             }
             catch (Exception e)
@@ -261,7 +306,8 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
-        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize)
+        public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page,
+            int pageSize)
         {
             try
             {
@@ -273,7 +319,8 @@ namespace Explorer.Tours.Core.UseCases
                 {
                     if (tour.IsNotPublished()) continue;
                     var firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
-                    result.Add(new DestinationTourDto(tour.Name, tour.Description, tour.Difficulty.ToString(), tour.Price.Amount, tour.TotalLength.ToString(), firstCp));
+                    result.Add(new DestinationTourDto(tour.Name, tour.Description, tour.Difficulty.ToString(),
+                        tour.Price.Amount, tour.TotalLength.ToString(), firstCp));
                 }
 
                 return result;
@@ -337,7 +384,9 @@ namespace Explorer.Tours.Core.UseCases
                 if (tour.Status == Status.Published)
                 {
                     double avg = tour.GetAverageRating();
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                        mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(),
+                        tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
 
 
                     tourCardDtos.Add(tourCardDto);
@@ -346,7 +395,7 @@ namespace Explorer.Tours.Core.UseCases
 
             return tourCardDtos;
         }
-        
+
 
 
         public Result<TourPreviewDto> GetTourPreview(long tourId)
@@ -357,7 +406,8 @@ namespace Explorer.Tours.Core.UseCases
             List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
             List<TourReviewDto> reviewDtos = GetTourReviewsDtos(tour.Reviews);
             TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
-                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount,author.UserId, author.Name + " " + author.Surname,author.PictureURL,
+                tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount, author.UserId,
+                author.Name + " " + author.Surname, author.PictureURL,
                 tour.TotalLength.ToString(), durations, firstCp, reviewDtos);
 
             return tourPreviewDto;
@@ -378,10 +428,10 @@ namespace Explorer.Tours.Core.UseCases
                     Name = reviewer.Name,
                     Surname = reviewer.Surname,
                     Comment = review.Comment,
-                    Rating = review.Rating, 
+                    Rating = review.Rating,
                     ReviewDate = review.ReviewDate,
                     AuthorImage = reviewer.PictureURL,
-                    Images= review.Images
+                    Images = review.Images
                 };
 
                 reviewDtos.Add(reviewDto);
@@ -389,226 +439,79 @@ namespace Explorer.Tours.Core.UseCases
 
             return reviewDtos;
         }
-
-
-        public Result<List<TourCardDto>> GetSearchedToursNearby(double latitude, double longitude, double maxDistance)
+        public List<TourDto> GetToursByIds(List<int> tourIds)
         {
-            try
+            var tours = new List<TourDto>();
+            foreach (long tourId in tourIds)
             {
-                List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
-
-                List<TourCardDto> nearbyToursDto = new List<TourCardDto>();
-
-                foreach (Tour tour in nearbyTours)
-                {
-                   
-                        double avg = tour.GetAverageRating();
-                        TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,mapper.Map<DistanceDto>(tour.TotalLength), avg,tour.Difficulty.ToString(),tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
-                        
-
-                    nearbyToursDto.Add(tourCardDto);
-                }
-
-                return nearbyToursDto;
+                var tour = _tourRepository.Get(tourId);
+                tours.Add(MapToDto(tour));
             }
-            catch (Exception ex)
-            {
-                return Result.Fail(ex.Message);
-            }
+
+            return tours;
         }
 
-        public Result<List<AuthorLeaderboardDto>> GetAuthorLeaderboard(double latitude, double longitude, double maxDistance)
+        public Result<AllTourStatisticsDto> GetAllTourStatistics(int authorId)
         {
-            List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
-            List<long> authorIds = nearbyTours.Select(tour => tour.AuthorId).Distinct().ToList();
-            return _authorRecommenderService.GetBestAuthors(authorIds,5);
+            List<long> tourIds = _tourRepository.GetByUserId(authorId).Select(tour => tour.Id).ToList();
+            int totalSales = _paymentRecordService.CalculateToursSalesByAuthor(tourIds);
+            List<BundleDto> bundles = _bundleService.GetAllByUserId(authorId).Value;
+            foreach (var bundle in bundles)
+            {
+                int bundleCount = _paymentRecordService.CountBundleSalesByAuthor(bundle.Id ?? -1);
+                var customerIds = _paymentRecordService.GetCustomerIdsByBundleId(bundle.Id ?? -1);
+                int alreadyBoughtToursCount = _paymentRecordService.CountAlreadyBoughtTours(customerIds, bundle.TourIds);
+                totalSales += bundleCount * bundle.TourIds.Count() - alreadyBoughtToursCount;
+            }
+
+            int startedCount = _tourExecutionService.CountAllStartedTours(tourIds);
+            int completedCount = _tourExecutionService.CountAllFinishedTours(tourIds);
+
+            var tourExecutions = _tourExecutionService.GetTourExecutionsWithMaxCompletionPerSale(tourIds);
+            List<CompletionRateStatisticsDto> completionRateStatisticsDtos = new List<CompletionRateStatisticsDto>();
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 0 && te.Completion < 25).Count(), "0-25%"));
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 25 && te.Completion < 50).Count(), "25-50%"));
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 50 && te.Completion < 75).Count(), "50-75%"));
+            completionRateStatisticsDtos.Add(new CompletionRateStatisticsDto(tourExecutions.Where(te => te.Completion >= 75 && te.Completion <= 100).Count(), "75-100%"));
+
+            AllTourStatisticsDto allTourStatisticsDto = new AllTourStatisticsDto(totalSales, startedCount, completedCount, completionRateStatisticsDtos);
+            return allTourStatisticsDto;
+
         }
 
-        public Result<List<TourCardDto>> GetSortedTours(double latitude, double longitude, double maxDistance,string criteria)
+        
+        public Result<List<TourStatisticsPreviewDto>> GetTourStatisticsPreviews(int authorId)
         {
-            List<Tour> tours = GetNearbyTours(latitude,longitude,maxDistance);
-            switch (criteria)
+            var tours = _tourRepository.GetByUserId(authorId);
+            List<TourStatisticsPreviewDto> tourStatisticsPreview = new List<TourStatisticsPreviewDto>();
+            foreach(var tour in tours)
             {
-                case "priceASC":
-                    tours = tours.OrderBy(tour => tour.Price.Amount).ToList();
-                    break;
-
-                case "priceDESC":
-                    tours = tours.OrderByDescending(tour => tour.Price.Amount).ToList();
-                    break;
-
-                case "ratingASC":
-                    tours = tours.OrderBy(tour => tour.GetAverageRating()).ToList();
-                    break;
-
-                case "ratingDESC":
-                    tours = tours.OrderByDescending(tour => tour.GetAverageRating()).ToList();
-                    break;
-
-                case "lengthASC":
-                    tours = tours.OrderBy(tour => tour.TotalLength.Length).ToList();
-                    break;
-
-                case "lengthDESC":
-                    tours = tours.OrderByDescending(tour => tour.TotalLength.Length).ToList();
-                    break;
-
-                default:
-                    return Result.Fail("Bad request");
+                var bundleIds = _bundleService.GetBundleIdsByTourId(tour.Id);
+                int sales = _paymentRecordService.CalculateTourSales(tour.Id, bundleIds);
+                int startCount = _tourExecutionService.CalculateTourStartCount(tour.Id);
+                int completedCount = _tourExecutionService.CalculateCompletedTourCount(tour.Id);
+                tourStatisticsPreview.Add(new TourStatisticsPreviewDto(tour.Id, tour.Name, tour.Description, startCount, completedCount, sales));
             }
-            List<TourCardDto> tourCardDtos = new List<TourCardDto>();
-            foreach (Tour tour in tours)
-            {
-
-                    double avg = tour.GetAverageRating();
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
-                    tourCardDtos.Add(tourCardDto);
-            }
-            return tourCardDtos;
-        }
-
-        public Result<List<TourCardDto>> GetFilteredTours(double latitude, double longitude, double radius, TourFilterDto tourFiltersDto)
-        {
-            List<Tour> tours = GetNearbyTours(latitude, longitude, radius);
-
-            if (!string.IsNullOrEmpty(tourFiltersDto.Name))
-            {
-                tours = tours.Where(tour => tour.Name.Contains(tourFiltersDto.Name, StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-            if (tourFiltersDto.MinPrice.HasValue)
-            {
-                tours = tours.Where(tour => tour.Price.Amount >= tourFiltersDto.MinPrice.Value).ToList();
-            }
-            if (tourFiltersDto.MaxPrice.HasValue)
-            {
-                tours = tours.Where(tour => tour.Price.Amount <= tourFiltersDto.MaxPrice.Value).ToList();
-            }
-            if (!string.IsNullOrEmpty(tourFiltersDto.Tag))
-            {
-                tours = tours.Where(tour => tour.Tags.Contains(tourFiltersDto.Tag)).ToList();
-            }
-            if (tourFiltersDto.MinLength.HasValue)
-            {
-                tours = tours.Where(tour => tour.TotalLength.Length >= tourFiltersDto.MinLength).ToList();
-            }
-            if (tourFiltersDto.MaxLength.HasValue)
-            {
-                tours = tours.Where(tour => tour.TotalLength.Length <= tourFiltersDto.MaxLength).ToList();
-            }
-            if (tourFiltersDto.MinDuration!=null)
-            {
-                tours = tours.Where(tour => tour.Durations.Any(d=> d.Duration>=tourFiltersDto.MinDuration.Duration && d.TransportType.ToString()==tourFiltersDto.MinDuration.TransportType)).ToList();
-            }
-            if (tourFiltersDto.MaxDuration!=null)
-            {
-                tours = tours.Where(tour => tour.Durations.Any(d => d.Duration <= tourFiltersDto.MaxDuration.Duration && d.TransportType.ToString() == tourFiltersDto.MaxDuration.TransportType)).ToList();
-            }
-            List<TourCardDto> tourCardDtos = new List<TourCardDto>();
-            foreach (Tour tour in tours)
-            {
-
-                double avg = tour.GetAverageRating();
-                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(), tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
-                tourCardDtos.Add(tourCardDto);
-            }
-
-            return tourCardDtos;
+            return tourStatisticsPreview;
         }
 
 
-        private List<Tour> GetNearbyTours(double latitude, double longitude, double maxDistance)
+        public Result<TourStatisticsDto> GetTourStatistics(long tourId, long userId)
         {
-            List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
-            return FindNearbyTours(tours,latitude, longitude, maxDistance);
-        }
-        private List<Tour> GetNearbyVisibleTours(double latitude, double longitude, double maxDistance)
-        {
-            List<Tour> tours = _tourRepository.GetPublishedToursWithCheckpoints();
-            return FindNearbyVisibleTours(tours, latitude, longitude, maxDistance);
-        }
+            int startCount = _tourExecutionService.CalculateTourStartCount(tourId);
+            int completedCount = _tourExecutionService.CalculateCompletedTourCount(tourId);
 
-        private List<Tour> FindNearbyTours(List<Tour> tours, double latitude, double longitude, double maxDistance)
-        {
-            List<Tour> nearbyTours = new List<Tour>();
-
-            foreach (var tour in tours)
+            List<CheckpointVisitStatisticsDto> checkpointStatistics = new List<CheckpointVisitStatisticsDto>();
+            var tour = GetTourDetailsByTourId(tourId, userId).Value;
+            var bundleIds = _bundleService.GetBundleIdsByTourId(tourId);
+            int sales = _paymentRecordService.CalculateTourSales(tourId, bundleIds);
+            foreach (var checkpoint in tour.Checkpoints)
             {
-                if (tour.IsTourNearby(latitude, longitude, maxDistance))
-                {
-                    //nearbyToursDtos.Add(new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString()));
-                    tour.setReviews(mapper.Map<List<Review>>(_reviewService.GetReviewsFromTourId(tour.Id)));
-                    nearbyTours.Add(tour);
-                }
-
+                double visitPercentage = (double)_tourExecutionService.CountUniqueTouristsForCheckpoint(tourId, checkpoint.Id) / _tourExecutionService.CountUniqueTourists(tourId);
+                checkpointStatistics.Add(new CheckpointVisitStatisticsDto(checkpoint, visitPercentage));
             }
 
-            return nearbyTours;
-        }
-        private List<Tour> FindNearbyVisibleTours(List<Tour> tours, double latitude, double longitude, double maxDistance)
-        {
-            List<Tour> nearbyTours = new List<Tour>();
-
-            foreach (var tour in tours)
-            {
-                if (tour.IsTourVisibleNearby(latitude, longitude, maxDistance))
-                {
-                    //nearbyToursDtos.Add(new TourCardDto(tour.Id, tour.Name, tour.Price.Amount, tour.TotalLength.ToString()));
-                    tour.setReviews(mapper.Map<List<Review>>(_reviewService.GetReviewsFromTourId(tour.Id)));
-                    nearbyTours.Add(tour);
-                }
-
-            }
-
-            return nearbyTours;
-        }
-
-        public Result<List<TourHoverMapDto>> FindToursOnMapNearby(double latitude, double longitude, double maxDistance)
-        {
-            List<Tour> nearbyTours = GetNearbyTours(latitude, longitude, maxDistance);
-            var uniqueLocations = new HashSet<string>();
-            var nearbyToursDtos = new List<TourHoverMapDto>();
-
-            foreach (Tour tour in nearbyTours)
-            {
-                var location = tour.GetPreviewCheckpoint().Location;
-                string locationKey = $"{location.Latitude},{location.Longitude}";
-
-                if (uniqueLocations.Add(locationKey))
-                {
-                    nearbyToursDtos.Add(CreateTourHoverMapDto(tour, true));
-                }
-                else
-                {
-                    MarkLocationAsNonUnique(nearbyToursDtos, location);
-                }
-            }
-
-            return nearbyToursDtos;
-        }
-        private TourHoverMapDto CreateTourHoverMapDto(Tour tour, bool isLocationUnique)
-        {
-            return new TourHoverMapDto(
-                mapper.Map<LocationReadDto>(tour.GetPreviewCheckpoint().Location),
-                tour.Difficulty.ToString(),
-                tour.GetAverageRating(),
-                tour.Name,
-                tour.Price.Amount,
-                tour.Id,
-                /*tour.Image*/ "gas",
-                isLocationUnique
-            );
-        }
-
-        private void MarkLocationAsNonUnique(List<TourHoverMapDto> tourDtos, Location location)
-        {
-            foreach (var dto in tourDtos)
-            {
-                if (dto.Location.Latitude == location.Latitude && dto.Location.Longitude == location.Longitude)
-                {
-                    dto.IsLocationUnique = false;
-                    break;
-                }
-            }
+            return new TourStatisticsDto(startCount, completedCount, sales, checkpointStatistics, tour);
         }
     }
 }

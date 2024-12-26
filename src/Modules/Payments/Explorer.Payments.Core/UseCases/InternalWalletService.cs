@@ -29,5 +29,14 @@ namespace Explorer.Payments.Core.UseCases
             var wallet = new Wallet(userId,0);
             return MapToDto(_walletRepository.Create(wallet));
         }
+
+        public Result<WalletDto> GetByUserId(long userId)
+        {
+            return MapToDto(_walletRepository.GetByUserId(userId));
+        }
+        public new Result<WalletDto> Update(WalletDto wallet)
+        {
+            return MapToDto(_walletRepository.Update(MapToDomain(wallet)));
+        }
     }
 }

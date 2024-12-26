@@ -33,5 +33,16 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             return DbContext.TourExecutions.Where(te => te.TouristId == touristId).ToList();
         }
+
+        public List<TourExecution> GetByTourId(long tourId)
+        {
+            return DbContext.TourExecutions.Where(te => te.TourId == tourId).ToList();
+        }
+
+        public List<TourExecution> GetByTourIds(List<long> tourIds)
+        {
+            return DbContext.TourExecutions.Where(te => tourIds.Contains(te.TourId)).ToList();
+        }
+
     }
 }

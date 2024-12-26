@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Explorer.Payments.API.Internal
 {
     public interface IInternalPurchaseTokenService
@@ -14,5 +15,7 @@ namespace Explorer.Payments.API.Internal
         public Result<PurchaseTokenDto> Update(PurchaseTokenDto purchaseToken);
         public Result<PurchaseTokenDto> GetByUserAndTour(long userId, long tourId);
         public List<int> GetMostBoughtToursIds(int count);
+        public Result<PurchaseTokenDto> Create(PurchaseTokenDto purchaseToken);
+
     }
 }

@@ -31,7 +31,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         var newEntity = new ObjectCreateDto
         {
             Name = "Women only WC",
-            ImageUrl = "image/url",
+            ImageData = "image/url",
             Description = "You can relax here ladies",
             Category = "WC",
             Location = new LocationCreateDto()
@@ -88,7 +88,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         {
             Id = -3,
             Name = "Zar Mance",
-            ImageUrl = "/putanja",
+            ImageData = "/putanja",
             Description = "Predaleko je",
             Category = "Restaurant",
             Location = new LocationReadDto()
@@ -109,7 +109,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         result.ShouldNotBeNull();
         result.Id.ShouldBe(-3);
         result.Name.ShouldBe(updatedEntity.Name);
-        result.ImageUrl.ShouldBe(updatedEntity.ImageUrl);
+        result.ImageData.ShouldBe(updatedEntity.ImageData);
         result.Description.ShouldBe(updatedEntity.Description);
         result.Category.ShouldBe(updatedEntity.Category);
         result.TourId.ShouldBe(updatedEntity.TourId);
@@ -132,7 +132,7 @@ public class ObjectCommandTests : BaseToursIntegrationTest
         {
             Id = -1000,
             Name = "Test",
-            ImageUrl = "/test",
+            ImageData = "/test",
             Description = "test",
             Category = "WC",
             Location = new LocationReadDto()

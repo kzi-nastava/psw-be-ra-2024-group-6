@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,7 @@ namespace Explorer.API.Controllers.Author
             _checkpointService = checkpointService;
         }
 
-        [HttpGet("{toudId:long}")]
+        [HttpGet("{tourId:long}")]
         public ActionResult<PagedResult<CheckpointReadDto>> GetByTourId(long tourId)
         {
             var result = _checkpointService.GetByTourId(tourId);
@@ -34,6 +35,22 @@ namespace Explorer.API.Controllers.Author
         public ActionResult<CheckpointDto> Create([FromBody] CheckpointCreateDto checkpointDto)
         {
             var result = _checkpointService.Create(checkpointDto);
+            return CreateResponse(result);
+        }
+
+        [HttpPost("public")]
+        public ActionResult<CheckpointReadDto> CreatePublicCheckpoint([FromBody] CheckpointDto checkpointDto)
+
+        {
+            var userId = User.UserId();
+            var result = _checkpointService.CreatePublicCheckpoint(checkpointDto, userId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("nearby")]
+        public ActionResult<List<CheckpointDto>> GetNearbyPublicCheckpoints([FromQuery] double latitude, [FromQuery] double longitude, [FromQuery] double radius)
+        {
+            var result = _checkpointService.GetNearbyPublicCheckpoints(latitude, longitude, radius);
             return CreateResponse(result);
         }
 

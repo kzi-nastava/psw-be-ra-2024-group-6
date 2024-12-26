@@ -16,8 +16,8 @@ namespace Explorer.Tours.API.Public
         Result<BundleDto> Publish(long bundleId);
         Result<BundleDto> Archive(long bundleId);
         Result<BundleDto> Update(BundleDto bundle);
-
-
-
+        Result<List<BundleDto>> GetAll();
+        Result<BundleDto> Buy(BundleDto bundle,int userId);
+        public List<long> GetBundleIdsByTourId(long tourId);
     }
 }

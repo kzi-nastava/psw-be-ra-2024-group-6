@@ -9,15 +9,16 @@ namespace Explorer.Blog.API.Dtos
     public class BlogPictureDto
     {
         public int Id {  get; set; }
-        public string Url { get; set; }
+        public string Data { get; set; }
+
         public int BlogId { get; set; }
 
         
         public BlogPictureDto() { }
-        public BlogPictureDto(string url, int blogId)
+        public BlogPictureDto(int blogId, string data)
         {
-            Url = url;
             BlogId = blogId;
+            Data = data;
         }
         
     }

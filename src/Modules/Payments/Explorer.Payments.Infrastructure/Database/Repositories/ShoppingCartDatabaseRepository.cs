@@ -59,8 +59,8 @@ public class ShoppingCartDatabaseRepository : IShoppingCartRepository
 
     public ShoppingCart? GetByUserId(long id)
     {
-        var cart = _dbContext.ShoppingCarts.Where(t => t.UserId == id)
-            .Include(t => t.OrderItems)
+        var cart = _dbContext.ShoppingCarts.AsNoTracking().Where(t => t.UserId == id)
+            .Include(t => t.OrderItems).ThenInclude(o => o.Product)
             .FirstOrDefault();
 
         return cart;

@@ -35,9 +35,9 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
         }
 
         [Theory]
-        [InlineData("12345678", 20, -11, -1, "2025-12-12", "-11", true)]
-        [InlineData("11111111", 20, -11, -2, "2025-12-12", "-11", false)] // not author's tour
-        public void Creates(string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId, bool success)
+        [InlineData("12345678", 20, -11, -1, "2025-12-12", "-11",false, true)]
+        [InlineData("11111111", 20, -11, -2, "2025-12-12", "-11",false, false)] // not author's tour
+        public void Creates(string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId,bool used, bool success)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = createController(scope, userId);
@@ -50,7 +50,8 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
                 TourId = tourId,
                 ExpiresDate = expiresDate,
                 Code = code,
-                DiscountPercentage = discount
+                DiscountPercentage = discount,
+                Used = used
             };
 
             if (success)
@@ -74,9 +75,9 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
         }
 
         [Theory]
-        [InlineData(-1, "BBBBBBBB", 25, -11, -1, "2025-12-12", "-11", true)]
+        [InlineData(-1, "BBBBBBBB", 25, -11, -1, "2025-12-12", "-11",true)]
         [InlineData(-3, "ABBBBBBA", 10, -11, -2, "2025-12-12", "-22", false)] // Not authorized user
-        public void Updates(long id, string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId, bool success)
+        public void Updates(long id, string code, double discount, long authorId, long tourId, DateTime expiresDate, string userId,bool success)
         {
             using var scope = Factory.Services.CreateScope();
             var controller = createController(scope, userId);
@@ -88,7 +89,8 @@ namespace Explorer.Payments.Tests.Integration.ShoppingCart
                 TourId = tourId,
                 ExpiresDate = expiresDate,
                 Code = code,
-                DiscountPercentage = discount
+                DiscountPercentage = discount,
+                Used = false
             };
 
 

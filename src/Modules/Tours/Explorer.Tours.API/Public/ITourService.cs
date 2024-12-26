@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Explorer.Tours.API.Dtos;
 using TourCreateDto = Explorer.Tours.API.Dtos.TourDtos.TourCreateDto;
+using Explorer.Tours.API.Dtos.TourDtos.LocationDtos;
+using Explorer.Tours.API.Dtos.TourDtos.StatisticDtos;
 
 namespace Explorer.Tours.API.Public
 {
@@ -27,17 +29,15 @@ namespace Explorer.Tours.API.Public
         Result<TourReadDto> GetTourDetailsByTourId(long tourId,long userId);
         Result<List<TourCardDto>> GetAllTourCards(int page, int pageSize);
         Result<TourPreviewDto> GetTourPreview(long tourId);
-        Result<List<TourCardDto>> GetSearchedToursNearby(double latitude, double longitude, double radius);
-        Result<List<TourHoverMapDto>> FindToursOnMapNearby(double latitude, double longitude, double radius);
         //Result GetTourDetailsByTourId(int tourId);
 
 
         Result<List<TourCardDto>> GetBoughtTours(long userId);
-        Result <List<TourMapPreviewDto>> GetTourPreviewsOnMap(double latitude, double longitude);
         public Result<List<TourCardDto>> GetMostPopularTours(int count);
         public Result<List<DestinationTourDto>> GetToursForDestination(string city, string country, int page, int pageSize);
-        Result<List<AuthorLeaderboardDto>> GetAuthorLeaderboard(double latitude, double longitude, double radius);
-        Result<List<TourCardDto>> GetSortedTours(double latitude, double longitude, double radius,string criteria);
-        Result<List<TourCardDto>> GetFilteredTours(double latitude, double longitude, double radius,TourFilterDto tourFiltersDto);
+        public List<TourDto> GetToursByIds(List<int> tourIds);
+        public Result<AllTourStatisticsDto> GetAllTourStatistics(int authorId);
+        public Result<List<TourStatisticsPreviewDto>> GetTourStatisticsPreviews(int authorId);
+        public Result<TourStatisticsDto> GetTourStatistics(long tourId, long userId);
     }
 }
