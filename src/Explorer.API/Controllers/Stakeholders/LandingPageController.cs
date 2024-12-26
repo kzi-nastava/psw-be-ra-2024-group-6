@@ -20,10 +20,10 @@ namespace Explorer.API.Controllers.Stakeholders
         private readonly ITourService _tourService;
         private readonly IAuthorService _authorService;
         private readonly ICheckpointService _checkpointService;
-        private readonly IRatingService _ratingService;
+        private readonly Explorer.Stakeholders.Core.UseCases.RatingService _ratingService;
         private readonly IBlogService _blogService;
 
-        public LandingPageController(ITourService tourService, IAuthorService authorService, ICheckpointService checkpointService, IRatingService ratingService, IBlogService blogService)
+        public LandingPageController(ITourService tourService, IAuthorService authorService, ICheckpointService checkpointService, RatingService ratingService, IBlogService blogService)
         {
             _tourService = tourService;
             _authorService = authorService;

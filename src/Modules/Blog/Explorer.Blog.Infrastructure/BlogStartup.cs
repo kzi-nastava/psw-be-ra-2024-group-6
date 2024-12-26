@@ -29,12 +29,15 @@ public static class BlogStartup
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IBlogRepository, BlogDatabaseRepository>();
         services.AddScoped<ICommentRepository, CommentDatabaseRepository>();
+        services.AddScoped<IRatingRepository, RatingDatabaseRepository>();
+        services.AddScoped<IRatingService, RatingService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<BlogDomain.Blogs.Blog>), typeof(CrudDatabaseRepository<BlogDomain.Blogs.Blog, BlogContext>));
         services.AddScoped(typeof(ICrudRepository<Comment>), typeof(CrudDatabaseRepository<Comment, BlogContext>));
+        services.AddScoped(typeof(ICrudRepository<BlogRating>), typeof(CrudDatabaseRepository<BlogRating, BlogContext>));
         services.AddDbContext<BlogContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("blog"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "blog")));

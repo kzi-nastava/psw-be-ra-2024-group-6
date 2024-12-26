@@ -19,7 +19,7 @@ public class BlogProfile : Profile
         CreateMap<BlogPictureDto, BlogPicture>().ReverseMap();
 
         CreateMap<BlogDto, BlogHomeDto>()
-            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Pictures.First().Url))
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Pictures.First().Data))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
@@ -33,9 +33,11 @@ public class BlogProfile : Profile
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
-        CreateMap<RatingDto, Rating>()
+        CreateMap<BlogRatingDto, BlogRating>()
             .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => Enum.Parse<VoteType>(src.VoteType, true)))
             .ReverseMap()
             .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => src.VoteType.ToString()));
+
+        CreateMap<BlogRatingDto, BlogRating>().ReverseMap();
     }
 }

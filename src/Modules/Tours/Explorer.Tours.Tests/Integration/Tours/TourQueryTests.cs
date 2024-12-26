@@ -185,7 +185,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
             return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>(),
                 scope.ServiceProvider.GetRequiredService<IAuthorService>(),
                 scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
-                scope.ServiceProvider.GetRequiredService<IRatingService>(),
+                scope.ServiceProvider.GetRequiredService<Stakeholders.Core.UseCases.RatingService>(),
                 scope.ServiceProvider.GetRequiredService<IBlogService>())
             {
                 ControllerContext = BuildContext("-2")

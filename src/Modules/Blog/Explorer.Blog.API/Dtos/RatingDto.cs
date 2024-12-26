@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace Explorer.Blog.API.Dtos
 {
-    public class RatingDto
+    public class BlogRatingDto
     {
         public int UserId {  get; set; }
+        public int BlogId { get; set; }
         public string VoteType {  get; set; }
 
-        public RatingDto() { }
-        public RatingDto(int userId, string voteType) {
+        public BlogRatingDto() { }
+        public BlogRatingDto(int userId, string voteType, int blogId) {
             UserId = userId;
+            BlogId = blogId;
             VoteType = voteType;
         }
     }
