@@ -39,9 +39,32 @@ public class ShoppingCart : Entity
         return newItem;
     }
 
+    public OrderItem AddBundle(long bundleId,string name, double price)
+    {
+
+        if(BundleAlreadyInItems(bundleId))
+        {
+            return OrderItems.FirstOrDefault(t => t.ProductId == bundleId);
+        }
+
+        var newPrice = new Price(price);
+        var newProduct = new Product(newPrice,2,bundleId);
+        var newItem = new OrderItem(Id, name, newPrice, newProduct);
+        OrderItems.Add(newItem);
+        CalculateTotalPrice(price, true);
+        return newItem;
+
+    }
+
     private bool TourAlreadyInItems(long? tourId)
     {
-        return OrderItems.Any(item => item.ProductId == tourId);
+        return OrderItems.Any(item => item.ProductId == tourId && item.Product.ResourceTypeId == 1);
+    }
+
+    private bool BundleAlreadyInItems(long? bundleId)
+    {
+        return OrderItems.Any(item => item.ProductId == bundleId && item.Product.ResourceTypeId == 2);
+
     }
 
     public void RemoveItem(int itemId)
