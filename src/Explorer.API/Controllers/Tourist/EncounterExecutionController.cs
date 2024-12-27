@@ -13,10 +13,12 @@ namespace Explorer.API.Controllers.Tourist
     public class EncounterExecutionController : BaseApiController
     {
         private readonly IEncounterExecutionService _encounterExecutionService;
+        private readonly ITouristRankService _touristRankService;
 
-        public EncounterExecutionController(IEncounterExecutionService encounterExecutionService)
+        public EncounterExecutionController(IEncounterExecutionService encounterExecutionService,ITouristRankService touristRankService)
         {
             _encounterExecutionService = encounterExecutionService;
+            _touristRankService = touristRankService;
         }
 
         [HttpPost("startMisc/{encounterId:long}")]
@@ -63,6 +65,17 @@ namespace Explorer.API.Controllers.Tourist
             var result = _encounterExecutionService.UpdateSocialExecutionLocation(encounterExecutionId, location, User.UserId());
             return CreateResponse(result);
         }
+
+        [HttpGet("TouristRank")]
+        public ActionResult<TouristRankDto> GetLevel()
+        {
+            var result = _touristRankService.GetTouristRank(User.UserId());
+            return Ok(result);
+        }
+
+
+
+
 
     }
 }
