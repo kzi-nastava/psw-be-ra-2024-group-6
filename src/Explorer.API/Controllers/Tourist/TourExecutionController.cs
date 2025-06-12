@@ -81,6 +81,13 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
+        [HttpGet("completed-checkpoints/{tourExecutionId:int}")]
+        public ActionResult<List<CheckpointReadDto>> GetCompletedCheckpoints(int tourExecutionId)
+        {
+            var result = _tourExecutionService.GetCompletedCheckpoints(tourExecutionId);
+            return CreateResponse(result);
+        }
+
         [HttpPut("finalize")]
         public ActionResult<TourExecutionDto> FinalizeTourExecution([FromQuery] int tourExecutionId, [FromQuery] string status)
         {
@@ -149,7 +156,12 @@ namespace Explorer.API.Controllers.Tourist
             var result = _tourService.GetById(tourId);
             return CreateResponse(result);
         }
-
+        [HttpGet("get-by-tourid/{tourId:int}")]
+        public ActionResult<int> GetByTourId(int tourId)
+        {
+            var result = _tourExecutionService.GetByTourId(tourId, User.UserId());
+            return CreateResponse(result);
+        }
 
     }
 }

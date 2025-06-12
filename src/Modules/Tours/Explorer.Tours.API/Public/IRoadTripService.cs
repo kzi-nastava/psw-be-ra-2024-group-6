@@ -7,4 +7,5 @@ public interface IRoadTripService
 {
     public Result<RoadTripReadDto> CreateRoadTrip(RoadTripCreateDto roadTripCreateDto, int userId);
     public Result<List<RoadTripReadDto>> GetAllByTouristId(int touristId);
+    public Result<RoadTripReadDto> GetById(int id);
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos.TourDtos;
 using Explorer.Tours.API.Dtos.TourDtos.CheckpointsDtos;
 using Explorer.Tours.API.Dtos.TourDtos.DistanceDtos;
@@ -68,6 +69,16 @@ namespace Explorer.Tours.Core.UseCases
                 roadTripDtos.Add(new RoadTripReadDto((int)roadTrip.Id, roadTrip.Name, touristId, tours, publicCheckpoints, roadTrip.Difficulty.ToString(), _mapper.Map<DistanceDto>(roadTrip.TotalLength)));
             }
             return roadTripDtos;
+        }
+
+        public Result<RoadTripReadDto> GetById(int id)
+        {
+            var result = _roadTripRepository.Get(id);
+            if (result == null)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError("RoadTrip not found");
+            }
+            return _mapper.Map<RoadTripReadDto>(result);
         }
     }
 }

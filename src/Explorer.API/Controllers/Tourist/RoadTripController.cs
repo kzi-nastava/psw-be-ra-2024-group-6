@@ -30,5 +30,12 @@ namespace Explorer.API.Controllers.Tourist
             var result = _roadTripService.GetAllByTouristId(User.UserId());
             return CreateResponse(result);
         }
+
+        [HttpGet("{roadTripId:int}")]
+        public ActionResult<RoadTripReadDto> GetById(int roadTripId)
+        {
+            var result = _roadTripService.GetById(roadTripId);
+            return CreateResponse(result);
+        }
     }
 }

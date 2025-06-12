@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Explorer.Tours.Core.Domain.TourExecutions;
 public enum RoadtripExecutionStatus
@@ -58,5 +59,16 @@ public class RoadTripExecution : Entity
         {
             throw new ArgumentException($"Invalid status value: {status}");
         }
+    }
+
+    public void SetLastActivity(double longitude, double latitude)
+    {
+        this.LastActivity = DateTime.UtcNow;
+        this.Position = new TouristPosition(longitude, latitude);
+    }
+
+    public void CalculateCompletion(int completionCount)
+    {
+        this.Completion = Math.Round((double)completionCount / TourExecutionIds.Count * 100, 2);
     }
 }

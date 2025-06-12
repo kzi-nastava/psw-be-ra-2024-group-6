@@ -18,9 +18,26 @@ public class RoadTripExecutionDatabaseRepository : CrudDatabaseRepository<RoadTr
         _context = context;
     }
 
-    public RoadTripExecution GetByRoadTripId(long roadTripId)
+    public int GetTouristId(long roadTripExecutionId)
     {
-        var entity = _context.RoadTripExecutions.FirstOrDefault(rte => rte.RoadTripId == roadTripId);
-        return entity;
+        var entity = _context.RoadTripExecutions.FirstOrDefault(rte => rte.Id == roadTripExecutionId);
+        return entity.TouristId;
+    }
+
+    public ICollection<RoadTripExecution> GetByTouristId(int touristId)
+    {
+        return _context.RoadTripExecutions.Where(rte => rte.TouristId == touristId).ToList();
+    }
+
+    public RoadTripExecution GetByIdAndTouristId(int roadTripExecutionId, int touristId)
+    {
+        var roadTripExecution = _context.RoadTripExecutions.FirstOrDefault(rte => rte.Id == roadTripExecutionId && rte.TouristId == touristId);
+        return roadTripExecution;
+    }
+
+    public Boolean IsOneStarted()
+    {
+        var result = _context.RoadTripExecutions.Any(rte => rte.Status == RoadtripExecutionStatus.ONGOING);
+        return result;
     }
 }
