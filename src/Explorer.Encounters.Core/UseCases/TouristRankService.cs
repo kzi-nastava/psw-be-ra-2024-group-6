@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
+using Explorer.Encounters.Core.Domain;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 
@@ -13,10 +16,12 @@ namespace Explorer.Encounters.Core.UseCases
     public class TouristRankService : ITouristRankService
     {
         private readonly ITouristRankRepository _touristRankRepository;
+        private readonly IMapper _mapper;
 
-        public TouristRankService(ITouristRankRepository touristRankRepository)
+        public TouristRankService(ITouristRankRepository touristRankRepository,IMapper mapper)
         {
             _touristRankRepository = touristRankRepository;
+            _mapper = mapper;
         }
 
         public Result<bool> CanCreateEncounter(int touristId)
@@ -38,5 +43,13 @@ namespace Explorer.Encounters.Core.UseCases
             touristRank.AddExperiencePoints(xp);
             _touristRankRepository.Update(touristRank);
         }
+
+        public TouristRankDto GetTouristRank(int userId)
+        {
+            var touristRank = _touristRankRepository.GetByTouristId(userId);
+            return _mapper.Map<TouristRankDto>(touristRank);
+        }
+
+
     }
 }

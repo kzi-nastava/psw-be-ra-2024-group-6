@@ -110,6 +110,7 @@ namespace Explorer.Encounters.Core.UseCases
             }
 
             e.Complete();
+            _touristRankService.AddExperiencePoints(touristId, encounter.Xp);
             return Update(e);
         }
 
@@ -153,8 +154,13 @@ namespace Explorer.Encounters.Core.UseCases
             
             hiddenExecution.AddTimePassed(currentPosition.Latitude, currentPosition.Longitude, hiddenEncounter.HiddenLocation.Latitude, hiddenEncounter.HiddenLocation.Longitude);
 
-            if(hiddenExecution.Did30SecondsPass()) 
+            if (hiddenExecution.Did30SecondsPass())
+            {
                 hiddenExecution.Complete();
+                _touristRankService.AddExperiencePoints(touristId, hiddenEncounter.Xp);
+
+            }
+
 
             var result = Update(hiddenExecution);
 
