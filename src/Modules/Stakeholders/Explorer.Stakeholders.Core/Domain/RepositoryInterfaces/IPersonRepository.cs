@@ -13,6 +13,8 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
         Person GetByUserId(int userId);
 
         Person Update(Person person);
+        List<Follower> GetFollowers(Person person);
+        List<Follower> GetFollowings(Person person);
 
         List<Person> GetMostFollowedAuthors(List<long> authorsIds, int count = 4);
     }

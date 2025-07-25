@@ -30,7 +30,7 @@ public static class BlogStartup
         services.AddScoped<IBlogRepository, BlogDatabaseRepository>();
         services.AddScoped<ICommentRepository, CommentDatabaseRepository>();
         services.AddScoped<IRatingRepository, RatingDatabaseRepository>();
-        services.AddScoped<IRatingService, RatingService>();
+        services.AddScoped<IBlogRatingService, BlogRatingService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)

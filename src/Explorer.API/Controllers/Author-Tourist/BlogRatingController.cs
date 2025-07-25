@@ -11,10 +11,10 @@ namespace Explorer.API.Controllers.Author_Tourist
     [Route("api/blogratings")]
     public class BlogRatingController : BaseApiController
     {
-        private readonly IRatingService _ratingService;
+        private readonly IBlogRatingService _ratingService;
 
 
-        public BlogRatingController(IRatingService ratingService)
+        public BlogRatingController(IBlogRatingService ratingService)
         {
             _ratingService = ratingService;
         }
@@ -41,7 +41,7 @@ namespace Explorer.API.Controllers.Author_Tourist
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete([FromQuery] int id)
         {
             var deleteResult = _ratingService.Delete(id);
             return CreateResponse(deleteResult);

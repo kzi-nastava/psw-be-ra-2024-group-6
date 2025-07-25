@@ -54,5 +54,10 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
         }
 
+        public List<Bundle> GetByTourId(long tourId)
+        {
+            return _context.Bundles.Where(b => b.TourIds.Contains((int)tourId)).ToList();
+        }
+
     }
 }

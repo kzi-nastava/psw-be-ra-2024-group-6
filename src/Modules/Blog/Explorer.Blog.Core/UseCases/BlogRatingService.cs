@@ -14,13 +14,13 @@ using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 
 namespace Explorer.Blog.Core.UseCases
 {
-    public class RatingService : CrudService<BlogRatingDto, BlogRating>, IRatingService
+    public class BlogRatingService : CrudService<BlogRatingDto, BlogRating>, IBlogRatingService
     {
         private IBlogService _personService;
         private IMapper _mapper;
         private IRatingRepository _ratingRepository;
 
-        public RatingService(ICrudRepository<BlogRating> repository, IBlogService blogService, IMapper mapper,IRatingRepository ratingRepository) : base(
+        public BlogRatingService(ICrudRepository<BlogRating> repository, IBlogService blogService, IMapper mapper,IRatingRepository ratingRepository) : base(
             repository, mapper)
         {
             this._mapper = mapper;

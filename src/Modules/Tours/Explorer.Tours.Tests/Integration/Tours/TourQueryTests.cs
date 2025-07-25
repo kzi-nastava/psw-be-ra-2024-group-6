@@ -81,7 +81,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                  new ObjectCreateDto {
                         Description = "Test",
                         Name = "Test",
-                        ImageUrl = "Test",
+                        ImageData = "Test",
             Category = "WC",
             Location = new LocationCreateDto {
                         Latitude = 20,
@@ -94,6 +94,7 @@ namespace Explorer.Tours.Tests.Integration.Tours
                 TourInfo = new TourDto()
                 {
                     Description = "Test",
+                    ImageData = "Test",
                     Name = "Test",
                     Difficulty = "Easy",
                     Tags = new List<string> { "Test" },
@@ -186,7 +187,8 @@ namespace Explorer.Tours.Tests.Integration.Tours
                 scope.ServiceProvider.GetRequiredService<IAuthorService>(),
                 scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
                 scope.ServiceProvider.GetRequiredService<Stakeholders.Core.UseCases.RatingService>(),
-                scope.ServiceProvider.GetRequiredService<IBlogService>())
+                scope.ServiceProvider.GetRequiredService<IBlogService>(), scope.ServiceProvider.GetRequiredService<ITourSearchService>())
+
             {
                 ControllerContext = BuildContext("-2")
             };

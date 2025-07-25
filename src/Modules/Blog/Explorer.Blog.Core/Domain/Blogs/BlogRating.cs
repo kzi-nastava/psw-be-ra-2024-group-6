@@ -10,9 +10,9 @@ namespace Explorer.Blog.Core.Domain.Blogs
 {
     public class BlogRating : Entity
     {
-        public int UserId { get; }
-        public int BlogId { get; }
-        public VoteType VoteType { get; }
+        public int UserId { get; private set; }
+        public int BlogId { get; private set; }
+        public VoteType VoteType { get; private set; }
 
         [JsonConstructor]
         public BlogRating(int userId, VoteType voteType, int blogId)

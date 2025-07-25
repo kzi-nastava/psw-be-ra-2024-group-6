@@ -8,7 +8,7 @@ namespace Explorer.Blog.API.Dtos
 {
     public class BlogPictureDto
     {
-        public int Id { get; set; }
+        public int Id {  get; set; }
         public string Data { get; set; }
 
         public int BlogId { get; set; }

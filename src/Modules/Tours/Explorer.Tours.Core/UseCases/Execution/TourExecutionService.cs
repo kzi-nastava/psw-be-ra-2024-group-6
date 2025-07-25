@@ -18,10 +18,13 @@ namespace Explorer.Tours.Core.UseCases.Execution
     {
         private readonly ITourExecutionRepository _tourExecutionRepository;
         private readonly IInternalPurchaseTokenService _purchaseTokenService;
+        private readonly IMapper _mapper;
+
         public TourExecutionService(ITourExecutionRepository tourExecutionRepository, IInternalPurchaseTokenService _token, IMapper mapper) : base(mapper)
         {
             _tourExecutionRepository = tourExecutionRepository;
             _purchaseTokenService = _token;
+            _mapper = mapper;
 
         }
 
@@ -50,12 +53,10 @@ namespace Explorer.Tours.Core.UseCases.Execution
             }
         }
 
-
         private bool checkIfTouristBoughtTour(TourExecutionDto tourExecution)
         {
             return _purchaseTokenService.GetByUserAndTour(tourExecution.TouristId, tourExecution.TourId).Value != null;
         }
-
         public Result<TourExecutionDto> FinalizeTourExecution(int tourExecutionId, string status, int touristId)
         {
             try
@@ -184,6 +185,49 @@ namespace Explorer.Tours.Core.UseCases.Execution
             {
                 return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
             }
+        }
+
+        public int CalculateTourStartCount(long tourId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Count();
+        }
+
+        public int CalculateCompletedTourCount(long tourId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Where(te => te.Completion == 100).Count();
+        }
+
+        public int CountUniqueTourists(long tourId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Select(te => te.TouristId).Distinct().Count();
+        }
+
+        public int CountUniqueTouristsForCheckpoint(long tourId, long checkpointId)
+        {
+            return _tourExecutionRepository.GetByTourId(tourId).Where(te => te.CompletedCheckpoints.Any(ch => ch.CheckpointId == checkpointId)).Select(te => te.TouristId).Distinct().Count();
+        }
+
+        public int CountAllStartedTours(List<long> tourIds)
+        {
+            return _tourExecutionRepository.GetByTourIds(tourIds).Select(te => new { te.TouristId, te.TourId }).Distinct().Count();
+        }
+
+        public int CountAllFinishedTours(List<long> tourIds)
+        {
+            return _tourExecutionRepository.GetByTourIds(tourIds).Where(te => te.Completion == 100).Select(te => new { te.TouristId, te.TourId }).Distinct().Count();
+        }
+
+        public List<TourExecutionDto> GetTourExecutionsWithMaxCompletionPerSale(List<long> tourIds)
+        {
+            var result = _tourExecutionRepository
+                .GetByTourIds(tourIds)
+                .GroupBy(te => new { te.TouristId, te.TourId }) 
+                .Select(group => group
+                    .OrderByDescending(te => te.Completion) 
+                    .First() 
+                )
+                .ToList(); 
+            return _mapper.Map<List<TourExecutionDto>>(result);
         }
     }
 }

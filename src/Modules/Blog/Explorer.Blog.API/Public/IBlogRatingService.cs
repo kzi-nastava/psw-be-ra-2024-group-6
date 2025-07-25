@@ -10,7 +10,7 @@ using FluentResults;
 
 namespace Explorer.Blog.API.Public
 {
-    public interface IRatingService
+    public interface IBlogRatingService
     {
         Result<PagedResult<BlogRatingDto>> GetPaged(int page, int pageSize);
         Result<BlogRatingDto> Create(BlogRatingDto rating);

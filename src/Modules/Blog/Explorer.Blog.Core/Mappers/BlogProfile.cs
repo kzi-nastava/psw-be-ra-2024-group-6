@@ -28,15 +28,15 @@ public class BlogProfile : Profile
 
         CreateMap<BlogDetailsDto, BlogDomain.Blogs.Blog>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<Status>(src.Status, true)))
+            .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings))
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
             .ReverseMap()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings))
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
 
-        CreateMap<BlogRatingDto, BlogRating>()
-            .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => Enum.Parse<VoteType>(src.VoteType, true)))
-            .ReverseMap()
-            .ForMember(dest => dest.VoteType, opt => opt.MapFrom(src => src.VoteType.ToString()));
+        CreateMap<BlogRatingDto, BlogRating>().ReverseMap();
+
 
         CreateMap<BlogRatingDto, BlogRating>().ReverseMap();
     }

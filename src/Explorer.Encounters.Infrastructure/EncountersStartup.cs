@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Encounters.API.Internal;
 
 namespace Explorer.Encounters.Infrastructure
 {
@@ -32,6 +33,7 @@ namespace Explorer.Encounters.Infrastructure
             services.AddScoped<ITouristRankService, TouristRankService>();
             services.AddScoped<IEncounterService, EncounterService>();
             services.AddScoped<IEncounterExecutionService, EncounterExecutionService>();
+            services.AddScoped<IInternalEncounterService, InternalEncounterService>();
         }
 
         private static void SetupInfrastructure(IServiceCollection services)

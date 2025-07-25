@@ -17,7 +17,7 @@ namespace Explorer.Blog.Core.Domain.Blogs
         public Status Status { get; private set; }
         public int UserId { get; private set; }
         public List<BlogPicture> Pictures { get; private set; }
-        public List<BlogRating> Ratings { get; private set; } = new List<BlogRating>();
+        public List<BlogRating> Ratings { get; private set; }
         public List<Comment> Comments { get; private set; }
         public List<string> Tags { get; private set; }
 

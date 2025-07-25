@@ -11,9 +11,7 @@ namespace Explorer.Tours.API.Dtos.TourDtos
     public class TourCreateDto
     {
         public TourDto TourInfo { get; set; }
-
         public List<CheckpointCreateDto>? Checkpoints { get; set; }
-
         public List<ObjectCreateDto>? Objects { get; set; }
     }
 }
