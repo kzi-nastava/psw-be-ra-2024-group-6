@@ -42,7 +42,11 @@ namespace Explorer.Blog.Tests.Integration
             return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>(),
                 scope.ServiceProvider.GetRequiredService<IAuthorService>(),
                 scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+<<<<<<< HEAD
                 scope.ServiceProvider.GetRequiredService<Stakeholders.Core.UseCases.RatingService>(),
+=======
+                scope.ServiceProvider.GetRequiredService<IRatingService>(),
+>>>>>>> development
                 scope.ServiceProvider.GetRequiredService<IBlogService>(),scope.ServiceProvider.GetRequiredService<ITourSearchService>())
             {
                 ControllerContext = BuildContext("-2")

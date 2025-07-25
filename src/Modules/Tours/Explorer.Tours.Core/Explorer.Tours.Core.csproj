@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Explorer.Encounters.API\Explorer.Encounters.API.csproj" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+	 <ProjectReference Include="..\..\..\Explorer.Encounters.API\Explorer.Encounters.API.csproj" />
     <ProjectReference Include="..\..\Payments\Explorer.Payments.API\Explorer.Payments.API.csproj" />
     <ProjectReference Include="..\..\Payments\Explorer.Payments.Core\Explorer.Payments.Core.csproj" />
     <ProjectReference Include="..\Explorer.Tours.API\Explorer.Tours.API.csproj" />

@@ -40,7 +40,6 @@ public class Tour : Entity
     public List<Equipment> Equipment { get; private set; }
     public List<Review> Reviews { get; private set; }
 
-
     public Tour(string? name, string? description, string? imageData, Difficulty difficulty, List<string> tags, long authorId, Distance totalLength, List<TourDuration> durations,Price price)
     {
         Name = name;
