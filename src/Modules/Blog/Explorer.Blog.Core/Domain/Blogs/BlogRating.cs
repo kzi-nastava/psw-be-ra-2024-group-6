@@ -8,20 +8,22 @@ using System.Threading.Tasks;
 
 namespace Explorer.Blog.Core.Domain.Blogs
 {
-    public class Rating : ValueObject
+    public class BlogRating : Entity
     {
-        public int UserId { get; }
-        public VoteType VoteType { get; }
+        public int UserId { get; private set; }
+        public int BlogId { get; private set; }
+        public VoteType VoteType { get; private set; }
 
         [JsonConstructor]
-        public Rating(int userId, VoteType voteType)
+        public BlogRating(int userId, VoteType voteType, int blogId)
         {
             //Validate(userId, voteType);
             UserId = userId;
+            BlogId = blogId;
             VoteType = voteType;
         }
 
-        public Rating()
+        public BlogRating()
         {
 
         }
@@ -38,10 +40,10 @@ namespace Explorer.Blog.Core.Domain.Blogs
             }
         }
 
-        protected override IEnumerable<object> GetEqualityComponents()
+        /*protected override IEnumerable<object> GetEqualityComponents()
         {
             return new object[] { VoteType, UserId };
-        }
+        }*/
 
 
     }

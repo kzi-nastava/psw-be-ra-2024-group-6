@@ -17,15 +17,15 @@ namespace Explorer.Blog.Core.Domain.Blogs
         public Status Status { get; private set; }
         public int UserId { get; private set; }
         public List<BlogPicture> Pictures { get; private set; }
-        public List<Rating> Ratings { get; private set; } = new List<Rating>();
+        public List<BlogRating> Ratings { get; private set; }
         public List<Comment> Comments { get; private set; }
         public List<string> Tags { get; private set; }
 
         private Blog() {
-            Ratings = new List<Rating>();
+            Ratings = new List<BlogRating>();
         }
 
-        public Blog(string title, string description, Status status, int userId, List<BlogPicture> pictures = null, List<Rating> ratings = null, List<string> tags = null)
+        public Blog(string title, string description, Status status, int userId, List<BlogPicture> pictures = null, List<BlogRating> ratings = null, List<string> tags = null)
         {
             if (string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(description)) throw new ArgumentNullException("Invalid title.");
             if (status == null) throw new ArgumentNullException("Invalid status.");
@@ -35,7 +35,7 @@ namespace Explorer.Blog.Core.Domain.Blogs
             Status = status;
             UserId = userId;
             Pictures = pictures ?? new List<BlogPicture>();
-            Ratings = ratings ?? new List<Rating>();
+            Ratings = ratings ?? new List<BlogRating>();
             Comments = new List<Comment>();
             Tags = tags ?? new List<string>();
         }

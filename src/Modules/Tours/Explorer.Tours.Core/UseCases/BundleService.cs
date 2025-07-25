@@ -2,7 +2,6 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Internal;
-using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.Core.UseCases.Shopping;
@@ -34,15 +33,12 @@ namespace Explorer.Tours.Core.UseCases
         private readonly ITourRepository _tourRepository;
         private readonly IPaymentRecordService _paymentRecordService;
         private readonly ICheckpointRepository _checkpoinRepository;
-        
         public BundleService(IBundleRepository bundleRepository,
             IInternalPurchaseTokenService purchaseTokenRepository
             ,IInternalWalletService  walletRepository,
             ITourRepository tourRepository,
             IPaymentRecordService paymentRecordService ,
             ICheckpointRepository checkpointRepository,
-           
-
             IMapper mapper) : base( mapper)
         {
             _bundleRepository = bundleRepository;
@@ -51,7 +47,6 @@ namespace Explorer.Tours.Core.UseCases
             _tourRepository = tourRepository;
             _paymentRecordService = paymentRecordService;
             _checkpoinRepository = checkpointRepository;
-            
            
         }
 
@@ -105,6 +100,7 @@ namespace Explorer.Tours.Core.UseCases
                     }
                     
                 }
+
 
                 if (count == 0)
                 {
@@ -229,6 +225,7 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
+
                 List <Tour> tours = new List<Tour>();
                 foreach(int x in bundle.TourIds)
                 {
@@ -244,6 +241,7 @@ namespace Explorer.Tours.Core.UseCases
                 }
 
                 bundle.ImageData = CreateCollage(images);
+
                 var result = _bundleRepository.Create(MapToDomain(bundle));
                 return MapToDto(result);
             }

@@ -18,7 +18,7 @@ namespace Explorer.Blog.API.Dtos
         public List<CommentDto> Comments { get; set; }
         public string? Username {  get; set; }
         public List<string> Tags { get; set; }
-        //public List<RatingDto> Ratings { get; set; }
+        public List<BlogRatingDto> Ratings { get; set; }
     }
 
 }

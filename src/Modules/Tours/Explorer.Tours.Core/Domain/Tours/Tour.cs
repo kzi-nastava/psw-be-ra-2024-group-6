@@ -168,7 +168,7 @@ public class Tour : Entity
 
     public bool Archive()
     {
-        if(!CanArchive())
+        if (!CanArchive())
             return false;
         StatusChangeTime = DateTime.UtcNow;
         Status = Status.Archived;
@@ -180,7 +180,7 @@ public class Tour : Entity
         if (!CanPublish())
             return false;
 
-        StatusChangeTime=DateTime.UtcNow;
+        StatusChangeTime = DateTime.UtcNow;
         Status = Status.Published;
         return true;
 
@@ -188,7 +188,7 @@ public class Tour : Entity
 
     private bool ValidatePublishInfo()
     {
-        return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description)  && Tags.Count>0 && Durations.Count>0;
+        return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description) && Tags.Count > 0 && Durations.Count > 0;
     }
 
     private bool CanPublish()
@@ -246,7 +246,7 @@ public class Tour : Entity
 
     public bool IsUserAuthor(long userId)
     {
-        return AuthorId==userId;
+        return AuthorId == userId;
     }
 
     public bool IsTourNearby(double latitude, double longitude, double maxDistance)
@@ -264,9 +264,9 @@ public class Tour : Entity
     }
     public bool IsTourVisibleNearby(double latitude, double longitude, double maxDistance)
     {
-            double distance = Checkpoints.First().GetCheckpointDistance(latitude, longitude);
-            if (distance <= maxDistance)
-                return true;
+        double distance = Checkpoints.First().GetCheckpointDistance(latitude, longitude);
+        if (distance <= maxDistance)
+            return true;
         return false;
     }
     public void setReviews(List<Review> reviews)
@@ -276,9 +276,10 @@ public class Tour : Entity
 
     internal int GetNumberOfReviews()
     {
-        if(Reviews!=null)
+        if (Reviews != null)
             return Reviews.Count;
         return 0;
     }
 
 }
+

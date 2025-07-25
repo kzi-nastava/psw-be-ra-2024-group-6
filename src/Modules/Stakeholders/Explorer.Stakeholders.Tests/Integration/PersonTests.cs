@@ -160,8 +160,13 @@ namespace Explorer.Stakeholders.Tests.Integration
             return new LandingPageController(scope.ServiceProvider.GetRequiredService<ITourService>(),
                 scope.ServiceProvider.GetRequiredService<IAuthorService>(),
                 scope.ServiceProvider.GetRequiredService<ICheckpointService>(),
+<<<<<<< HEAD
+                scope.ServiceProvider.GetRequiredService <IRatingService > (),
+                scope.ServiceProvider.GetRequiredService<IBlogService>(),scope.ServiceProvider.GetRequiredService<ITourSearchService>()) 
+=======
                 scope.ServiceProvider.GetRequiredService<IRatingService>(),
                 scope.ServiceProvider.GetRequiredService<IBlogService>(),scope.ServiceProvider.GetRequiredService<ITourSearchService>())
+>>>>>>> development
             {
                 ControllerContext = BuildContext("-2")
             };

@@ -27,7 +27,12 @@ public class BlogContext : DbContext
             .WithMany(b => b.Comments)    
             .HasForeignKey(c => c.BlogId) 
             .OnDelete(DeleteBehavior.Cascade);
-        
+
+        modelBuilder.Entity<BlogRating>(entity =>
+        {
+           
+        });
+
         modelBuilder.HasDefaultSchema("blog");
     }    
 }
