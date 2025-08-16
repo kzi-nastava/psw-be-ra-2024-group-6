@@ -201,7 +201,7 @@ namespace Explorer.Tours.Core.UseCases
                 foreach (Tour tour in tours)
                 {
                     double avg = tour.GetAverageRating();
-                    TourAuthorCardDto tourAuthorCardDto = new TourAuthorCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                    TourAuthorCardDto tourAuthorCardDto = new TourAuthorCardDto(tour.Id, tour.Name,tour.ImageData, tour.Price.Amount,
                         tour.TotalLength.ToString(), avg, tour.Status.ToString(), tour.StatusChangeTime);
                     tourAuthorCardDtos.Add(tourAuthorCardDto);
                 }
@@ -295,7 +295,7 @@ namespace Explorer.Tours.Core.UseCases
                 var mostBoughtToursIds = _tokenService.GetMostBoughtToursIds(count);
                 var mostBoughtTours = _tourRepository.GetAllByIds(mostBoughtToursIds);
 
-                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                return mostBoughtTours.Select(tour => new TourCardDto(tour.Id, tour.Name,tour.ImageData, tour.Price.Amount,
                     mapper.Map<DistanceDto>(tour.TotalLength), tour.GetAverageRating(), tour.Difficulty.ToString(),
                     tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations))).ToList();
 
@@ -319,7 +319,7 @@ namespace Explorer.Tours.Core.UseCases
                 {
                     if (tour.IsNotPublished()) continue;
                     var firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
-                    result.Add(new DestinationTourDto(tour.Name, tour.Description, tour.Difficulty.ToString(),
+                    result.Add(new DestinationTourDto(tour.Name,tour.ImageData, tour.Description, tour.Difficulty.ToString(),
                         tour.Price.Amount, tour.TotalLength.ToString(), firstCp));
                 }
 
@@ -384,7 +384,7 @@ namespace Explorer.Tours.Core.UseCases
                 if (tour.Status == Status.Published)
                 {
                     double avg = tour.GetAverageRating();
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name,tour.ImageData, tour.Price.Amount,
                         mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(),
                         tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
 
@@ -405,7 +405,7 @@ namespace Explorer.Tours.Core.UseCases
             CheckpointReadDto firstCp = _checkpointService.GetByTourId(tour.Id).Value.First();
             List<string> durations = tour.Durations.Select(dur => dur.ToString()).ToList();
             List<TourReviewDto> reviewDtos = GetTourReviewsDtos(tour.Reviews);
-            TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name, tour.Description,
+            TourPreviewDto tourPreviewDto = new TourPreviewDto(tour.Id, tour.Name,tour.ImageData, tour.Description,
                 tour.Difficulty.ToString(), tour.Tags, tour.Price.Amount, author.UserId,
                 author.Name + " " + author.Surname, author.PictureURL,
                 tour.TotalLength.ToString(), durations, firstCp, reviewDtos);

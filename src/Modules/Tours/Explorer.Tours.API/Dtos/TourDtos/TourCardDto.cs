@@ -13,7 +13,7 @@ public class TourCardDto
     public long Id { get; set; }
     public string Name { get; set; }
     public double Price { get; set; }
-    //public string ImageUrl { get; set; }
+    public string ImageData { get; set; }
      public double AverageRating { get; set; }
      public DistanceDto Distance { get; set; }
      public List<TourDurationDto> Durations { get; set; }
@@ -21,10 +21,11 @@ public class TourCardDto
     public string Difficulty { get; set; }
 
 
-    public TourCardDto(long id, string name, double price, DistanceDto distance,double averageRating , string difficulty,int reviewsCount,List<TourDurationDto>durations)
+    public TourCardDto(long id, string name,string imageData, double price, DistanceDto distance,double averageRating , string difficulty,int reviewsCount,List<TourDurationDto>durations)
     {
         Durations = durations;
         Id = id;
+        ImageData= imageData;
         Name = name;
         Price = price;
         ReviewsCount = reviewsCount;

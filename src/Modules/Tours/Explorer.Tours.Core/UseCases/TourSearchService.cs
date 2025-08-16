@@ -49,7 +49,7 @@ namespace Explorer.Tours.Core.UseCases
             {
                 PersonDto author = _personService.GetByUserId((int)tour.AuthorId).Value;
                 toursOnSameLocationDtos.Add(new TourMapPreviewDto(tour.Id, author.Id, tour.Name, author.Surname,
-                    tour.Difficulty.ToString(), tour.Price.Amount, tour.GetAverageRating(), /*tour.Image*/"gas",
+                    tour.Difficulty.ToString(), tour.Price.Amount, tour.GetAverageRating(),tour.ImageData,
                     tour.GetNumberOfReviews(), author.Name, author.PictureURL,
                     mapper.Map<List<TourDurationDto>>(tour.Durations), mapper.Map<DistanceDto>(tour.TotalLength)));
             }
@@ -68,7 +68,7 @@ namespace Explorer.Tours.Core.UseCases
                 {
 
                     double avg = tour.GetAverageRating();
-                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                    TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name,tour.ImageData, tour.Price.Amount,
                         mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(),
                         tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
 
@@ -122,7 +122,7 @@ namespace Explorer.Tours.Core.UseCases
             {
 
                 double avg = tour.GetAverageRating();
-                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name,tour.ImageData, tour.Price.Amount,
                     mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(),
                     tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
                 tourCardDtos.Add(tourCardDto);
@@ -186,7 +186,7 @@ namespace Explorer.Tours.Core.UseCases
             {
 
                 double avg = tour.GetAverageRating();
-                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name, tour.Price.Amount,
+                TourCardDto tourCardDto = new TourCardDto(tour.Id, tour.Name,tour.ImageData, tour.Price.Amount,
                     mapper.Map<DistanceDto>(tour.TotalLength), avg, tour.Difficulty.ToString(),
                     tour.GetNumberOfReviews(), mapper.Map<List<TourDurationDto>>(tour.Durations));
                 tourCardDtos.Add(tourCardDto);
@@ -275,7 +275,7 @@ namespace Explorer.Tours.Core.UseCases
                 tour.Name,
                 tour.Price.Amount,
                 tour.Id,
-                /*tour.Image*/ "gas",
+                tour.ImageData,
                 isLocationUnique
             );
         }

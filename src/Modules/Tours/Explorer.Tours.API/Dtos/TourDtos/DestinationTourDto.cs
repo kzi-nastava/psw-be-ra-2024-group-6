@@ -16,12 +16,14 @@ namespace Explorer.Tours.API.Dtos.TourDtos
         public string Difficulty { get; set; }
         public double Price { get; set; }
         public string TotalLength { get; set; }
+        public string ImageData { get; set; }
         public CheckpointReadDto FirstCheckpoint { get; set; }
 
         public DestinationTourDto() {}
-        public DestinationTourDto(string name, string description, string difficulty, double price, string totalLength, CheckpointReadDto firstCheckpoint)
+        public DestinationTourDto(string name,string imageData, string description, string difficulty, double price, string totalLength, CheckpointReadDto firstCheckpoint)
         {
             Name = name;
+            ImageData = imageData;
             Description = description;
             Difficulty = difficulty;
             Price = price;

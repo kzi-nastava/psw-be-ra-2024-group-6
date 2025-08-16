@@ -13,16 +13,18 @@ namespace Explorer.Tours.API.Dtos.TourDtos
         public string Name { get; set; }
         public double Price { get; set; }
         public double AvarageRating { get; set; }
+        public string ImageData { get; set; }
         public string Status { get; set; }
         public DateTime StatusChangeTime { get; set; }
 
         public string Distance { get; set; }
 
 
-        public TourAuthorCardDto(long id, string name, double price, string distance, double avarageRating,string status,DateTime statusChangeTime)
+        public TourAuthorCardDto(long id, string name,string imageData, double price, string distance, double avarageRating,string status,DateTime statusChangeTime)
         {
             Id = id;
-            StatusChangeTime= statusChangeTime;
+            ImageData = imageData;
+            StatusChangeTime = statusChangeTime;
             Name = name;
             Price = price;
             Distance = distance;
